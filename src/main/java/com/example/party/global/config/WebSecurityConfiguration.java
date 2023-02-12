@@ -12,9 +12,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.example.party.global.config.security.JwtAccessDeniedHandler;
-import com.example.party.global.config.security.JwtEntryPoint;
-import com.example.party.global.config.security.JwtVerificationFilter;
+import com.example.party.global.security.JwtAccessDeniedHandler;
+import com.example.party.global.security.JwtEntryPoint;
+import com.example.party.global.security.JwtVerificationFilter;
 
 import lombok.RequiredArgsConstructor;
 

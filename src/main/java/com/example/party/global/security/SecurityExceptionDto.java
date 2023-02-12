@@ -1,4 +1,4 @@
-package com.example.party.global.config.security;
+package com.example.party.global.security;
 
 import lombok.Getter;
 
