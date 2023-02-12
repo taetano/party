@@ -56,8 +56,8 @@ public class User implements UserDetails {
 	private Status status;
 
 	// 연관관계
-	@OneToOne
-	@JoinColumn(name = "profile_id", referencedColumnName = "id")
+	@OneToOne(optional = false)
+	@JoinColumn(name = "profile_id", unique = true, referencedColumnName = "id")
 	private Profile profile;
 	@OneToMany(mappedBy = "user")
 	private List<Apply> applies;

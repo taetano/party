@@ -19,8 +19,8 @@ public class Profile {
 	private String img;
 	@Column(name = "comment")
 	private String comment;
-	@Column(name = "no_show_cnt")
+	@Column(name = "no_show_cnt", nullable = false)
 	private int noShowCnt;
-	@Column(name = "participation_cnt")
+	@Column(name = "participation_cnt", nullable = false)
 	private int participationCnt;
 }

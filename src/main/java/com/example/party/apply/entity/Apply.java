@@ -7,6 +7,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.example.party.apply.type.ApplyResult;
@@ -31,8 +32,10 @@ public class Apply {
 	private ApplyResult result;
 
 	// 연관관계
-	@ManyToOne
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "user_id")
 	private User user;
-	@ManyToOne
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "party_post_id")
 	private PartyPost partyPost;
 }

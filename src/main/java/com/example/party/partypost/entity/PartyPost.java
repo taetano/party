@@ -10,6 +10,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -52,7 +53,8 @@ public class PartyPost {
 	private LocalDateTime partyDate;
 
 	// 연관관계
-	@ManyToOne
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "user_id")
 	private User user;
 	@OneToMany(mappedBy = "partyPost")
 	private List<Apply> applies;
