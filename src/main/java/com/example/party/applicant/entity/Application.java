@@ -31,66 +31,75 @@ import lombok.NoArgsConstructor;
 @Table
 @Entity
 public class Application extends BaseEntity {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private Long id;
-	@Column(name = "is_cancel", nullable = false)
-	private boolean cancel;
 
-	// enum
-	@Enumerated(EnumType.STRING)
-	@Column(name = "status", nullable = false, columnDefinition = "ENUM('PENDING', 'ACCEPT', 'REJECT')")
-	private ApplicationStatus status;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id")
+  private Long id;
+  @Column(name = "is_cancel", nullable = false)
+  private boolean cancel;
 
-	// 연관관계
-	@ManyToOne(optional = false)
-	@JoinColumn(name = "user_id")
-	private User user;
-	@ManyToOne(optional = false)
-	@JoinColumn(name = "party_post_id")
-	private PartyPost partyPost;
+  // enum
+  @Enumerated(EnumType.STRING)
+  @Column(name = "status", nullable = false, columnDefinition = "ENUM('PENDING', 'ACCEPT', 'REJECT')")
+  private ApplicationStatus status;
 
-	public boolean canCancel(Long userId) {
-		return Objects.equals(this.user.getId(), userId);
-	}
+  // 연관관계
+  @ManyToOne(optional = false)
+  @JoinColumn(name = "user_id")
+  private User user;
+  @ManyToOne(optional = false)
+  @JoinColumn(name = "party_post_id")
+  private PartyPost partyPost;
 
-	public void cancel() {
-		this.cancel = true;
-	}
+  public Application(User user, PartyPost partyPost) {
+    this.cancel = false;
+    this.status = ApplicationStatus.PENDING;
+    this.user = user;
+    this.partyPost = partyPost;
+		this.created_at = LocalDateTime.now();
+  }
 
-	public String getNickname() {
-		return this.user.getNickname();
-	}
+  public boolean canCancel(Long userId) {
+    return Objects.equals(this.user.getId(), userId);
+  }
 
-	public String getProfileImg() {
-		return this.user.getProfileImg();
-	}
+  public void cancel() {
+    this.cancel = true;
+  }
 
-	public int getNoShowCnt() {
-		return this.user.getNoShowCnt();
-	}
+  public String getNickname() {
+    return this.user.getNickname();
+  }
 
-	public boolean canModify(Long userId) {
-		return Objects.equals(this.partyPost.getUser().getId(), userId);
-	}
+  public String getProfileImg() {
+    return this.user.getProfileImg();
+  }
 
-	public void accept() {
-		if (this.status != ApplicationStatus.PENDING) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "올바르지 않은 접근입니다.");
-		}
+  public int getNoShowCnt() {
+    return this.user.getNoShowCnt();
+  }
 
-		this.status = ApplicationStatus.ACCEPT;
-		this.modified_at = LocalDateTime.now();
-		this.user.increaseParticipationCnt();
-	}
+  public boolean canModify(Long userId) {
+    return Objects.equals(this.partyPost.getUser().getId(), userId);
+  }
 
-	public void reject() {
-		if (this.status != ApplicationStatus.PENDING) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "올바르지 않은 접근입니다.");
-		}
+  public void accept() {
+    if (this.status != ApplicationStatus.PENDING) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "올바르지 않은 접근입니다.");
+    }
 
-		this.status = ApplicationStatus.REJECT;
-		this.modified_at = LocalDateTime.now();
-	}
+    this.status = ApplicationStatus.ACCEPT;
+    this.modified_at = LocalDateTime.now();
+    this.user.increaseParticipationCnt();
+  }
+
+  public void reject() {
+    if (this.status != ApplicationStatus.PENDING) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "올바르지 않은 접근입니다.");
+    }
+
+    this.status = ApplicationStatus.REJECT;
+    this.modified_at = LocalDateTime.now();
+  }
 }
