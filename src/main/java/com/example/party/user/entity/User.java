@@ -23,6 +23,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.example.party.applicant.entity.Application;
 import com.example.party.partypost.entity.PartyPost;
+import com.example.party.user.dto.ProfileResponse;
 import com.example.party.user.type.Status;
 import com.example.party.user.type.UserRole;
 
@@ -118,5 +119,11 @@ public class User implements UserDetails {
 	@Override
 	public boolean isEnabled() {
 		return false;
+	}
+
+
+	public void updataProfile(String nickname, String phoneNum){
+		this.nickname = nickname;
+		this.phoneNum = phoneNum;
 	}
 }

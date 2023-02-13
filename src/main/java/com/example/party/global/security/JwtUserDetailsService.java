@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.example.party.user.entity.Profile;
 import com.example.party.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -15,10 +16,19 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class JwtUserDetailsService implements UserDetailsService {
 	private final UserRepository userRepository;
+	private final Profile profile;
+
+	public Profile getProfile() {
+		return profile;
+	}
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		return userRepository.findByEmail(email)
 			.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "해당 유저를 찾을 수 없습니다."));
 	}
+
+
+
+
 }
