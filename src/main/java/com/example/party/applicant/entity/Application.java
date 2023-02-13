@@ -70,7 +70,7 @@ public class Application {
 	}
 
 	public boolean canModify(Long userId) {
-		return Objects.equals(this.user.getId(), userId);
+		return Objects.equals(this.partyPost.getUser().getId(), userId);
 	}
 
 	public void accept() {

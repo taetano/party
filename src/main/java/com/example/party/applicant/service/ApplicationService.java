@@ -63,8 +63,15 @@ public class ApplicationService implements IApplicationService {
 	}
 
 	@Override
-	public DataResponseDto<?> acceptApplication(Long applicationId, User user) {
-		return null;
+	public DataResponseDto<ApplicationResponse> acceptApplication(Long applicationId, User user) {
+		Application application = getApplication(applicationId);
+
+		if (!application.canModify(user.getId())) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "권환이 없습니다.");
+		}
+		application.accept();
+		Application updatedApplication = applicationRepository.save(application);
+		return DataResponseDto.ok("참가 신청 수락 완료", new ApplicationResponse(updatedApplication));
 	}
 
 	@Override
