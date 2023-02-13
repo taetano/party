@@ -1,12 +1,9 @@
 package com.example.party.partypost.Dto;
 
-import com.example.party.applicant.entity.Application;
 import com.example.party.partypost.entity.PartyPost;
 import com.example.party.partypost.type.Status;
-import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.format.TextStyle;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -34,12 +31,12 @@ public class PartyPostResponse {
   //detailAddress
   private final String detailAddress;
   //plaice
-  private final String plaice;
+  private final String place;
   //applications(userid, nickname, profileImg)
   private final List<ApplicationResponse> applications;
 
   //생성자
-  PartyPostResponse(PartyPost partyPost) {
+  public PartyPostResponse(PartyPost partyPost) {
     this.id = partyPost.getId();
     this.title = partyPost.getTitle();
     this.content = partyPost.getContent();
@@ -49,7 +46,7 @@ public class PartyPostResponse {
     this.dayOfWeek = whichDayOfWeek(partyPost.getPartyDate());
     this.sigungu = "임시 시/군/구";
     this.detailAddress = "임시 detailAddress";
-    this.plaice = "임시 pliace";
+    this.place = "임시 place";
     this.applications = makeApplications(partyPost);
 
   }
