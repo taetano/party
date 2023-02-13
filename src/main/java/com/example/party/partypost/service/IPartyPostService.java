@@ -8,7 +8,7 @@ import com.example.party.partypost.Dto.PartyPostResponse;
 public interface IPartyPostService {
 
 	//모집글 작성
-	DataResponseDto<PartyPostResponse> createPartyPost();
+	PartyPostResponse createPartyPost(Long userId, PartyPostRequest request);
 
 	//모집글 수정
 	DataResponseDto<PartyPostResponse> updatePartyPost();

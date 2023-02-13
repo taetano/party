@@ -2,8 +2,8 @@ package com.example.party.partypost.entity;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -32,18 +32,28 @@ import lombok.NoArgsConstructor;
 public class PartyPost extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private Long id;
+	@Column(name = "party_post_id")
+	private Long partyPostId;
+	@Column(name = "userId", nullable = false)
+	private Long userId;
 	@Column(name = "title", nullable = false, length = 50)
 	private String title;
 	@Column(name = "content", nullable = false, columnDefinition = "TEXT")
 	private String content;
 	@Column(name = "view_cnt", nullable = false)
 	private int viewCnt;
+	@Column(name = "day", nullable = false)
+	private String day;
 	@Column(name = "max_member", nullable = false)
 	private byte maxMember;
-	@Column(name = "is_active", nullable = false)
-	private boolean active;
+	@Column(name = "eub_myeon_dong", nullable = false)
+	private String eubMyeonDong;
+	@Column(name = "address", nullable = false)
+	private String address;
+	@Column(name = "detail_address", nullable = false)
+	private String detailAddress;
+	@Column(name = "join_member", nullable = false)
+	private String joinMember;
 
 	// enum
 	@Enumerated(EnumType.STRING)
@@ -67,4 +77,16 @@ public class PartyPost extends BaseEntity {
 
 	// TODO: API 1차 작업완료 후
 	// 차단한 유저의 게시물 블라인드 처리 방식 생각
+
+	public PartyPost(Long userId, String title, String content, byte maxMember,
+			LocalDateTime partyDate, String eubMyeonDong, String address, String detailAddress) {
+		this.userId = userId;
+		this.title = title;
+		this.content = content;
+		this.maxMember = maxMember;
+		this.partyDate = partyDate;
+		this.eubMyeonDong = eubMyeonDong;
+		this.address = address;
+		this.detailAddress = detailAddress;
+	}
 }
