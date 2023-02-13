@@ -12,6 +12,12 @@ public interface IUserService {
 	ResponseDto signIn(LoginRequest loginRequest);
 	ResponseDto signOut(User user);
 	ResponseDto withdraw(User user);
+<<<<<<< HEAD
 	DataResponseDto<ProfileResponse> updateProfile(); // 예시
 	DataResponseDto<ProfileResponse> findProfile(); // 상대방 프로필 조회
+=======
+	DataResponseDto<ProfileResponse> updateProfile(); // 예시 , 프로필 수정
+	DataResponseDto<ProfileResponse> findProfile(); // 상대방 프로필 조회 , findOtherProfile
+	DataResponseDto<ProfileResponse> findMyProfile(); // 내 프로필 조회
+>>>>>>> 13c529d3369cf9b75198b58fc9760f1930d27509
 }
