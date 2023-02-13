@@ -15,36 +15,6 @@ public class PartyPostService implements IPartyPostService {
 
   private PartyPostRepository partyPostRepository;
 
-  @Override
-  public DataResponseDto<PartyPostResponse> createPartyPost() {
-    return null;
-  }
-
-  @Override
-  public DataResponseDto<PartyPostResponse> updatePartyPost() {
-    return null;
-  }
-
-  @Override
-  public ListResponseDto<PartyPostListResponse> findMyCreatedPartyList() {
-    return null;
-  }
-
-  @Override
-  public ListResponseDto<PartyPostListResponse> findMyJoinedPartyList() {
-    return null;
-  }
-
-  @Override
-  public DataResponseDto<?> toggleLikePartyPost() {
-    return null;
-  }
-
-  @Override
-  public DataResponseDto<?> deletePartyPost() {
-    return null;
-  }
-
   //모집글 전체 조회
   @Override
   @Transactional

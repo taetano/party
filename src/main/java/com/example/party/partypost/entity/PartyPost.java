@@ -1,6 +1,7 @@
 package com.example.party.partypost.entity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -20,8 +21,10 @@ import com.example.party.partypost.type.Status;
 import com.example.party.user.entity.User;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
