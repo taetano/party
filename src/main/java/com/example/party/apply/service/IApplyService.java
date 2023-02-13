@@ -8,4 +8,5 @@ public interface IApplyService {
 	ListResponseDto<?> findApplies();
 	DataResponseDto<?> acceptApply();
 	DataResponseDto<?> rejectApply();
+	DataResponseDto<?> applyParty(); // 모집참가신청
 }

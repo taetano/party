@@ -21,4 +21,7 @@ public interface IPartyPostService {
   
 	DataResponseDto<?> partyPostLike(); //모집게시물 좋아요
 
+	DataResponseDto<?> deletePartyPost(); //모집글 삭제
+
+
 }
