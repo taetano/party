@@ -9,14 +9,19 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import com.example.party.applicant.type.ApplicationStatus;
 import com.example.party.partypost.entity.PartyPost;
 import com.example.party.user.entity.User;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table
 @Entity
 public class Application {
 	@Id
@@ -28,7 +33,7 @@ public class Application {
 
 	// enum
 	@Enumerated(EnumType.STRING)
-	@Column(name = "result", nullable = false, columnDefinition = "ENUM('ACCEPT', 'REJECT')")
+	@Column(name = "status", nullable = false, columnDefinition = "ENUM('PENDING', 'ACCEPT', 'REJECT')")
 	private ApplicationStatus status;
 
 	// 연관관계
@@ -38,4 +43,6 @@ public class Application {
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "party_post_id")
 	private PartyPost partyPost;
+
+	//MODIFIED_AT 필요
 }

@@ -1,5 +1,5 @@
 package com.example.party.partypost.Dto;
 
-public class PartyPostResponse {
+public class PartyPostRespons {
 
 }
