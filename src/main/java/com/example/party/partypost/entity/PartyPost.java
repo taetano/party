@@ -15,7 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.example.party.apply.entity.Apply;
+import com.example.party.applicant.entity.Application;
 import com.example.party.partypost.type.Status;
 import com.example.party.user.entity.User;
 
@@ -57,7 +57,7 @@ public class PartyPost {
 	@JoinColumn(name = "user_id")
 	private User user;
 	@OneToMany(mappedBy = "partyPost")
-	private List<Apply> applies;
+	private List<Application> applications;
 
 	// TODO: API 1차 작업완료 후
 	// 차단한 유저의 게시물 블라인드 처리 방식 생각

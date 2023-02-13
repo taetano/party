@@ -13,17 +13,23 @@ public interface IPartyPostService {
 	//모집글 수정
 	DataResponseDto<PartyPostResponse> updatePartyPost();
 
-	//내가 작성한 모집글 리스트 조회
-	ListResponseDto<PartyPostListResponse> getAllCreatePartyList();
+	//내가 작성한 모집글 리스트 조회 ( 내가 파티장인 경우만 )
+	ListResponseDto<PartyPostListResponse> findMyCreatedPartyList();
 
-	//내가 참석한 모집글 리스트 조회
-	ListResponseDto<PartyPostListResponse> getAllJoinPartyList();
-  
-	DataResponseDto<?> partyPostLike(); //모집게시물 좋아요
+	//내가 참석한 모집글 리스트 조회( 내가 파티원인 경우만 )
+	ListResponseDto<PartyPostListResponse> findMyJoinedPartyList();
 
-	DataResponseDto<?> deletePartyPost(); //모집글 삭제
-	ListResponseDto<?> getAllPartyList(); // 모집글전체조회
-	DataResponseDto<?> showPartyPostDetail(); //모집글 상세 조회(개별 상세조회)
+	//모집게시물 좋아요 (*좋아요 취소도 포함되는 기능임)
+	DataResponseDto<?> toggleLikePartyPost();
+
+	//모집글 삭제
+	DataResponseDto<?> deletePartyPost();
+
+	//모집글전체조회
+	ListResponseDto<?> findPartyList();
+
+	//모집글 상세 조회(개별 상세조회)
+	DataResponseDto<?> getPartyPost();
 
 
 }

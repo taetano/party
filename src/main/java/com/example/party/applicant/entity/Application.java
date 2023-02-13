@@ -1,4 +1,4 @@
-package com.example.party.apply.entity;
+package com.example.party.applicant.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.example.party.apply.type.ApplyResult;
+import com.example.party.applicant.type.ApplicationStatus;
 import com.example.party.partypost.entity.PartyPost;
 import com.example.party.user.entity.User;
 
@@ -18,7 +18,7 @@ import lombok.Getter;
 
 @Getter
 @Entity
-public class Apply {
+public class Application {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -29,7 +29,7 @@ public class Apply {
 	// enum
 	@Enumerated(EnumType.STRING)
 	@Column(name = "result", nullable = false, columnDefinition = "ENUM('ACCEPT', 'REJECT')")
-	private ApplyResult result;
+	private ApplicationStatus status;
 
 	// 연관관계
 	@ManyToOne(optional = false)
