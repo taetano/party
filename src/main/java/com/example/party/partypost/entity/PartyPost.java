@@ -17,6 +17,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.example.party.applicant.entity.Application;
+import com.example.party.global.BaseEntity;
 import com.example.party.partypost.type.Status;
 import com.example.party.user.entity.User;
 
@@ -28,7 +29,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "party_post")
 @Entity(name = "partPost")
-public class PartyPost {
+public class PartyPost extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")

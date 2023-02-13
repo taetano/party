@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.example.party.applicant.type.ApplicationStatus;
+import com.example.party.global.BaseEntity;
 import com.example.party.partypost.entity.PartyPost;
 import com.example.party.user.entity.User;
 
@@ -24,17 +25,13 @@ import lombok.Getter;
 
 @Getter
 @Entity
-public class Application {
+public class Application extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
 	@Column(name = "is_cancel", nullable = false)
 	private boolean cancel;
-	@Column(name = "created_at", nullable = false)
-	private LocalDateTime createdAt;
-	@Column(name = "updated_at", nullable = false)
-	private LocalDateTime updated_at;
 
 	// enum
 	@Enumerated(EnumType.STRING)
@@ -79,7 +76,7 @@ public class Application {
 		}
 
 		this.status = ApplicationStatus.ACCEPT;
-		this.updated_at = LocalDateTime.now();
+		this.modified_at = LocalDateTime.now();
 		this.user.increaseParticipationCnt();
 	}
 
@@ -89,6 +86,6 @@ public class Application {
 		}
 
 		this.status = ApplicationStatus.REJECT;
-		this.updated_at = LocalDateTime.now();
+		this.modified_at = LocalDateTime.now();
 	}
 }
