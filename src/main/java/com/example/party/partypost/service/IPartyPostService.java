@@ -22,6 +22,8 @@ public interface IPartyPostService {
 	DataResponseDto<?> partyPostLike(); //모집게시물 좋아요
 
 	DataResponseDto<?> deletePartyPost(); //모집글 삭제
+	ListResponseDto<?> getAllPartyList(); // 모집글전체조회
+	DataResponseDto<?> showPartyPostDetail(); //모집글 상세 조회(개별 상세조회)
 
 
 }
