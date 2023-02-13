@@ -2,6 +2,7 @@ package com.example.party.partypost.entity;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,6 +17,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.example.party.applicant.entity.Application;
+import com.example.party.global.BaseEntity;
 import com.example.party.partypost.type.Status;
 import com.example.party.user.entity.User;
 
@@ -27,7 +29,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "party_post")
 @Entity(name = "partPost")
-public class PartyPost {
+public class PartyPost extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -58,6 +60,10 @@ public class PartyPost {
 	private User user;
 	@OneToMany(mappedBy = "partyPost")
 	private List<Application> applications;
+
+	public boolean isWrittenByMe(Long userId) {
+		return Objects.equals(this.user.getId(), userId);
+	}
 
 	// TODO: API 1차 작업완료 후
 	// 차단한 유저의 게시물 블라인드 처리 방식 생각

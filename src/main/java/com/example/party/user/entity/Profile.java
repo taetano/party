@@ -23,4 +23,9 @@ public class Profile {
 	private int noShowCnt;
 	@Column(name = "participation_cnt", nullable = false)
 	private int participationCnt;
+
+	public void increaseParticipationCnt() {
+		this.participationCnt = this.participationCnt + 1;
+	}
+
 }

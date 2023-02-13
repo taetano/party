@@ -22,6 +22,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.example.party.applicant.entity.Application;
+import com.example.party.global.BaseEntity;
 import com.example.party.partypost.entity.PartyPost;
 import com.example.party.user.type.Status;
 import com.example.party.user.type.UserRole;
@@ -33,7 +34,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class User implements UserDetails {
+public class User extends BaseEntity implements UserDetails {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -119,4 +120,9 @@ public class User implements UserDetails {
 	public boolean isEnabled() {
 		return false;
 	}
+
+	public void increaseParticipationCnt() {
+		this.profile.increaseParticipationCnt();
+	}
+
 }
