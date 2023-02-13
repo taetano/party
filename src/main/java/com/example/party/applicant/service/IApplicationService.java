@@ -11,9 +11,9 @@ public interface IApplicationService {
 
 	//모집 참가 신청취소
 	ResponseDto cancelApplication(Long applicationId, User user);
-	//참가신청자 리스트 조회(파티장 미포함. 내정보-나의모집글목록 상에서 사용)
 
-	ListResponseDto<?> getApplications(Long partPostId);
+	//참가신청자 리스트 조회(파티장 미포함. 내정보-나의모집글목록 상에서 사용)
+	ListResponseDto<?> getApplications(Long partPostId, User user);
 
 	//모집 참가 수락
 	DataResponseDto<?> acceptApplication(Long applicationId, User user);

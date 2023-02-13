@@ -2,6 +2,7 @@ package com.example.party.partypost.entity;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -58,6 +59,10 @@ public class PartyPost {
 	private User user;
 	@OneToMany(mappedBy = "partyPost")
 	private List<Application> applications;
+
+	public boolean isWrittenByMe(Long userId) {
+		return Objects.equals(this.user.getId(), userId);
+	}
 
 	// TODO: API 1차 작업완료 후
 	// 차단한 유저의 게시물 블라인드 처리 방식 생각
