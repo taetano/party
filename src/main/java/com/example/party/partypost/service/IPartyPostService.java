@@ -18,5 +18,7 @@ public interface IPartyPostService {
 
 	//내가 참석한 모집글 리스트 조회
 	ListResponseDto<PartyPostListResponse> getAllJoinPartyList();
+  
+	DataResponseDto<?> partyPostLike(); //모집게시물 좋아요
 
 }
