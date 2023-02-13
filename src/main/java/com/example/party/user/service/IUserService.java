@@ -3,7 +3,6 @@ package com.example.party.user.service;
 import com.example.party.global.dto.DataResponseDto;
 import com.example.party.global.dto.ResponseDto;
 import com.example.party.user.dto.LoginRequest;
-import com.example.party.user.dto.ProfileResponseDto;
 import com.example.party.user.dto.SignupReqest;
 import com.example.party.user.entity.User;
 
