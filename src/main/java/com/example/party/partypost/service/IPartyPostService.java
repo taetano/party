@@ -7,4 +7,6 @@ public interface IPartyPostService {
 	DataResponseDto<?> createPartyPost();
 	ListResponseDto<?> findPartyPosts();
 	DataResponseDto<?> findOne();
+	DataResponseDto<?> partyPostLike(); //모집게시물 좋아요
+
 }
