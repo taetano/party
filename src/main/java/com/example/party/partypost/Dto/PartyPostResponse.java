@@ -11,29 +11,19 @@ import lombok.Getter;
 
 @Getter
 public class PartyPostResponse {
-
-  //id
   private final Long id;
-  //title
   private final String title;
-  //content
   private final String content;
-  //status
   private final Status status;
-  //maxmember
+  private final LocalDateTime createdAt;
+  private final LocalDateTime modifiedAt;
   private final byte maxMember;
-  //partydate
   private final LocalDateTime partyDate;
-  //day (직접계산해서)
-  private final String dayOfWeek;
-  //sigungu
+  private final String dayOfWeek; //partyDate 로 직접 계산 (ex) 토
   private final String sigungu;
-  //detailAddress
   private final String detailAddress;
-  //plaice
   private final String place;
-  //applications(userid, nickname, profileImg)
-  private final List<ApplicationResponse> applications;
+  private final List<ApplicationResponse> applications; //applications(userid, nickname, profileImg)
 
   //생성자
   public PartyPostResponse(PartyPost partyPost) {
@@ -41,6 +31,8 @@ public class PartyPostResponse {
     this.title = partyPost.getTitle();
     this.content = partyPost.getContent();
     this.status = partyPost.getStatus();
+    this.createdAt = LocalDateTime.now(); // 임시값
+    this.modifiedAt = LocalDateTime.now(); // 임시값
     this.maxMember = partyPost.getMaxMember();
     this.partyDate = partyPost.getPartyDate();
     this.dayOfWeek = whichDayOfWeek(partyPost.getPartyDate());
