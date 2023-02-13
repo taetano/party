@@ -21,7 +21,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.example.party.apply.entity.Apply;
+import com.example.party.applicant.entity.Application;
 import com.example.party.partypost.entity.PartyPost;
 import com.example.party.user.type.Status;
 import com.example.party.user.type.UserRole;
@@ -60,7 +60,7 @@ public class User implements UserDetails {
 	@JoinColumn(name = "profile_id", unique = true, referencedColumnName = "id")
 	private Profile profile;
 	@OneToMany(mappedBy = "user")
-	private List<Apply> applies;
+	private List<Application> applies;
 	@OneToMany(mappedBy = "user")
 	private List<PartyPost> partyPosts;
 	@ManyToMany

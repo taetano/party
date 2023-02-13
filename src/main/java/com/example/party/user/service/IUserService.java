@@ -8,13 +8,18 @@ import com.example.party.user.dto.SignupReqest;
 import com.example.party.user.entity.User;
 
 public interface IUserService {
+	//회원가입
 	ResponseDto signUp(SignupReqest signupReqest);
+	//로그인
 	ResponseDto signIn(LoginRequest loginRequest);
+	//로그아웃
 	ResponseDto signOut(User user);
+	//회원탈퇴
 	ResponseDto withdraw(User user);
-
-	DataResponseDto<ProfileResponse> updateProfile(); // 예시 , 프로필 수정
-	DataResponseDto<ProfileResponse> findProfile(); // 상대방 프로필 조회 , findOtherProfile
-	DataResponseDto<ProfileResponse> findMyProfile(); // 내 프로필 조회
-
+	//프로필 수정
+	DataResponseDto<ProfileResponse> updateProfile();
+	//내 프로필 조회
+	DataResponseDto<ProfileResponse> getMyProfile();
+	//상대방 프로필 조회
+	DataResponseDto<ProfileResponse> getOtherProfile();
 }
