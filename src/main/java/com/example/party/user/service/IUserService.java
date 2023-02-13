@@ -4,12 +4,12 @@ import com.example.party.global.dto.DataResponseDto;
 import com.example.party.global.dto.ResponseDto;
 import com.example.party.user.dto.LoginRequest;
 import com.example.party.user.dto.ProfileResponse;
-import com.example.party.user.dto.SignupReqest;
+import com.example.party.user.dto.SignupRequest;
 import com.example.party.user.entity.User;
 
 public interface IUserService {
 	//회원가입
-	ResponseDto signUp(SignupReqest signupReqest);
+	ResponseDto signUp(SignupRequest signupRequest);
 	//로그인
 	ResponseDto signIn(LoginRequest loginRequest);
 	//로그아웃

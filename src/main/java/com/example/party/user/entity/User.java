@@ -44,6 +44,9 @@ public class User implements UserDetails {
 	private String password;
 	@Column(name = "nickname", nullable = false, unique = true, length = 10)
 	private String nickname;
+
+
+
 	@Column(name = "phone_number", nullable = false, length = 13, columnDefinition = "CHAR(13)")
 	private String phoneNum;
 
@@ -68,6 +71,7 @@ public class User implements UserDetails {
 		joinColumns = @JoinColumn(name = "user_id"),
 		inverseJoinColumns = @JoinColumn(name = "post_id")
 	)
+
 	private List<PartyPost> likePartyPosts;
 
 	public String getProfileImg() {
@@ -84,6 +88,14 @@ public class User implements UserDetails {
 
 	public int getParticipationCnt() {
 		return this.profile.getParticipationCnt();
+	}
+
+	public User(String email, String password, String nickname, String phoneNum, UserRole role) {
+		this.email = email;
+		this.password = password;
+		this.nickname = nickname;
+		this.phoneNum = phoneNum;
+		this.role = role;
 	}
 
 	@Override
