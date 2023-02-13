@@ -36,7 +36,8 @@ public class ApplicationService implements IApplicationService {
 	@Override
 	public ResponseDto cancelApplication(Long applicationId, User user) {
 		Application application = getApplication(applicationId);
-		if (!application.canCancel(user.getId())) {
+
+		if (!application.isWrittenByMe(user.getId())) {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "권환이 없습니다.");
 		}
 		application.cancel();
@@ -63,20 +64,27 @@ public class ApplicationService implements IApplicationService {
 	}
 
 	@Override
-	public DataResponseDto<ApplicationResponse> acceptApplication(Long applicationId, User user) {
+	public ResponseDto acceptApplication(Long applicationId, User user) {
 		Application application = getApplication(applicationId);
 
-		if (!application.canModify(user.getId())) {
+		if (!application.isSendToMe(user.getId())) {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "권환이 없습니다.");
 		}
 		application.accept();
-		Application updatedApplication = applicationRepository.save(application);
-		return DataResponseDto.ok("참가 신청 수락 완료", new ApplicationResponse(updatedApplication));
+
+		return ResponseDto.ok("참가 신청 수락 완료");
 	}
 
 	@Override
-	public DataResponseDto<?> rejectApplication(Long applicationId, User user) {
-		return null;
+	public ResponseDto rejectApplication(Long applicationId, User user) {
+		Application application = getApplication(applicationId);
+
+		if (!application.isSendToMe(user.getId())) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "권환이 없습니다.");
+		}
+		application.reject();
+
+		return ResponseDto.ok("참가 신청 거부 완료");
 	}
 
 	@Transactional(readOnly = true)

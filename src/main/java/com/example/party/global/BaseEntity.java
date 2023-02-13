@@ -9,6 +9,6 @@ import lombok.Getter;
 @Getter
 @MappedSuperclass
 public abstract class BaseEntity {
-	protected LocalDateTime created_at;
-	protected LocalDateTime modified_at;
+	protected LocalDateTime createdAt;
+	protected LocalDateTime modifiedAt;
 }

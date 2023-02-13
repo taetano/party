@@ -46,7 +46,7 @@ public class Application extends BaseEntity {
 	@JoinColumn(name = "party_post_id")
 	private PartyPost partyPost;
 
-	public boolean canCancel(Long userId) {
+	public boolean isWrittenByMe(Long userId) {
 		return Objects.equals(this.user.getId(), userId);
 	}
 
@@ -66,7 +66,7 @@ public class Application extends BaseEntity {
 		return this.user.getNoShowCnt();
 	}
 
-	public boolean canModify(Long userId) {
+	public boolean isSendToMe(Long userId) {
 		return Objects.equals(this.partyPost.getUser().getId(), userId);
 	}
 
@@ -76,7 +76,7 @@ public class Application extends BaseEntity {
 		}
 
 		this.status = ApplicationStatus.ACCEPT;
-		this.modified_at = LocalDateTime.now();
+		this.modifiedAt = LocalDateTime.now();
 		this.user.increaseParticipationCnt();
 	}
 
@@ -86,6 +86,6 @@ public class Application extends BaseEntity {
 		}
 
 		this.status = ApplicationStatus.REJECT;
-		this.modified_at = LocalDateTime.now();
+		this.modifiedAt = LocalDateTime.now();
 	}
 }

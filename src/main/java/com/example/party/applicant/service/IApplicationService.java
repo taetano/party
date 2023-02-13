@@ -16,9 +16,9 @@ public interface IApplicationService {
 	ListResponseDto<?> getApplications(Long partPostId, User user);
 
 	//모집 참가 수락
-	DataResponseDto<?> acceptApplication(Long applicationId, User user);
+	ResponseDto acceptApplication(Long applicationId, User user);
 
 	//모집 참가 거부
-	DataResponseDto<?> rejectApplication(Long applicationId, User user);
+	ResponseDto rejectApplication(Long applicationId, User user);
 
 }
