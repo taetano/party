@@ -32,18 +32,14 @@ import lombok.NoArgsConstructor;
 public class PartyPost extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "party_post_id")
-	private Long partyPostId;
-	@Column(name = "userId", nullable = false)
-	private Long userId;
+	@Column(name = "id")
+	private Long id;
 	@Column(name = "title", nullable = false, length = 50)
 	private String title;
 	@Column(name = "content", nullable = false, columnDefinition = "TEXT")
 	private String content;
 	@Column(name = "view_cnt", nullable = false)
 	private int viewCnt;
-	@Column(name = "day", nullable = false)
-	private String day;
 	@Column(name = "max_member", nullable = false)
 	private byte maxMember;
 	@Column(name = "eub_myeon_dong", nullable = false)
@@ -52,8 +48,8 @@ public class PartyPost extends BaseEntity {
 	private String address;
 	@Column(name = "detail_address", nullable = false)
 	private String detailAddress;
-	@Column(name = "join_member", nullable = false)
-	private String joinMember;
+	@Column(name = "is_active", nullable = false)
+	private boolean active;
 
 	// enum
 	@Enumerated(EnumType.STRING)
@@ -71,22 +67,26 @@ public class PartyPost extends BaseEntity {
 	@OneToMany(mappedBy = "partyPost")
 	private List<Application> applications;
 
+	public PartyPost(User user, String title, String content, byte maxMember, String eubMyeonDong,
+			String address, String detailAddress, LocalDateTime partyDate) {
+		this.user = user;
+		this.title = title;
+		this.content = content;
+		this.maxMember = maxMember;
+		this.eubMyeonDong = eubMyeonDong;
+		this.address = address;
+		this.detailAddress = detailAddress;
+		this.active = true;
+		this.status = Status.FINDING;
+		this.partyDate = partyDate;
+		this.closeDate = partyDate.minusMinutes(15);
+		this.created_at = LocalDateTime.now();
+	}
+
 	public boolean isWrittenByMe(Long userId) {
 		return Objects.equals(this.user.getId(), userId);
 	}
 
 	// TODO: API 1차 작업완료 후
 	// 차단한 유저의 게시물 블라인드 처리 방식 생각
-
-	public PartyPost(Long userId, String title, String content, byte maxMember,
-			LocalDateTime partyDate, String eubMyeonDong, String address, String detailAddress) {
-		this.userId = userId;
-		this.title = title;
-		this.content = content;
-		this.maxMember = maxMember;
-		this.partyDate = partyDate;
-		this.eubMyeonDong = eubMyeonDong;
-		this.address = address;
-		this.detailAddress = detailAddress;
-	}
 }
