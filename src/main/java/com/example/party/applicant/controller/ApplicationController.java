@@ -20,29 +20,38 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/applications")
 @RestController
 public class ApplicationController {
-	private final ApplicationService applicationService;
 
-	@PostMapping("/cancel/{applicationId}")
-	public ResponseEntity<ResponseDto> cancelApplication(@PathVariable Long applicationId,
-		@AuthenticationPrincipal User user) {
-		return ResponseEntity.ok(applicationService.cancelApplication(applicationId, user));
+  private final ApplicationService applicationService;
+
+	@PostMapping("join/{party-postId}")
+	public ResponseEntity<ResponseDto> createApplication(@PathVariable Long partyPostId,
+			@AuthenticationPrincipal User user) {
+		return ResponseEntity.ok(applicationService.createApplication(partyPostId,user));
 	}
 
-	@GetMapping("/{party-postId}")
-	public ResponseEntity<ListResponseDto<ApplicationResponse>> getApplications(
-		@PathVariable(name = "party-postId") Long partyPostId, @AuthenticationPrincipal User user) {
-		return ResponseEntity.ok(applicationService.getApplications(partyPostId, user));
-	}
+  @PostMapping("/cancel/{applicationId}")
+  public ResponseEntity<ResponseDto> cancelApplication(@PathVariable Long applicationId,
+      @AuthenticationPrincipal User user) {
+    return ResponseEntity.ok(applicationService.cancelApplication(applicationId, user));
+  }
 
-	@PostMapping("/accept/{applicationId}")
-	public ResponseEntity<ResponseDto> acceptApplication(@PathVariable Long applicationId,
-		@AuthenticationPrincipal User user) {
-		return ResponseEntity.ok(applicationService.acceptApplication(applicationId, user));
-	}
+  @GetMapping("/{party-postId}")
+  public ResponseEntity<ListResponseDto<ApplicationResponse>> getApplications(
+      @PathVariable(name = "party-postId") Long partyPostId, @AuthenticationPrincipal User user) {
+    return ResponseEntity.ok(applicationService.getApplications(partyPostId, user));
+  }
+
+  @PostMapping("/accept/{applicationId}")
+  public ResponseEntity<DataResponseDto<ApplicationResponse>> acceptApplication(
+      @PathVariable Long applicationId,
+      @AuthenticationPrincipal User user) {
+    return ResponseEntity.ok(applicationService.acceptApplication(applicationId, user));
+  }
 
 	@PostMapping("/reject/{applicationId}")
 	public ResponseEntity<ResponseDto> rejectApplication(@PathVariable Long applicationId,
 		@AuthenticationPrincipal User user) {
 		return ResponseEntity.ok(applicationService.rejectApplication(applicationId, user));
 	}
+
 }
