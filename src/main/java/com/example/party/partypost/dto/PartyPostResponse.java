@@ -1,4 +1,4 @@
-package com.example.party.partypost.Dto;
+package com.example.party.partypost.dto;
 
 import com.example.party.applicant.type.ApplicationResponse;
 import com.example.party.partypost.entity.PartyPost;

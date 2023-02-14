@@ -2,7 +2,7 @@ package com.example.party.partypost.entity;
 
 import com.example.party.applicant.entity.Application;
 import com.example.party.global.BaseEntity;
-import com.example.party.partypost.Dto.PartyPostRequest;
+import com.example.party.partypost.dto.PartyPostRequest;
 import com.example.party.partypost.type.Status;
 import com.example.party.user.entity.User;
 import java.time.LocalDateTime;

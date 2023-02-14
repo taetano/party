@@ -1,4 +1,4 @@
-package com.example.party.partypost.Dto;
+package com.example.party.partypost.dto;
 
 import com.example.party.partypost.entity.PartyPost;
 import com.example.party.partypost.type.Status;
@@ -7,6 +7,7 @@ import lombok.Getter;
 
 @Getter
 public class PartyPostListResponse {
+
   //title
   private final String title;
   //status
