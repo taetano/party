@@ -36,94 +36,94 @@ import lombok.NoArgsConstructor;
 @Entity
 public class User extends BaseEntity implements UserDetails {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
-  private Long id;
-  @Column(name = "email", nullable = false, unique = true, length = 50)
-  private String email;
-  @Column(name = "password", nullable = false, length = 60)
-  private String password;
-  @Column(name = "nickname", nullable = false, unique = true, length = 10)
-  private String nickname;
-  @Column(name = "phone_number", nullable = false, length = 13, columnDefinition = "CHAR(13)")
-  private String phoneNum;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "user_id")
+	private Long Id;
+	@Column(name = "email", nullable = false, unique = true, length = 50)
+	private String email;
+	@Column(name = "password", nullable = false, length = 60)
+	private String password;
+	@Column(name = "nickname", nullable = false, unique = true, length = 10)
+	private String nickname;
+	@Column(name = "phone_number", nullable = false, length = 13, columnDefinition = "CHAR(13)")
+	private String phoneNum;
 
-  // enum
-  @Enumerated(EnumType.STRING)
-  @Column(name = "role", nullable = false, length = 12)
-  private UserRole role;
-  @Enumerated(EnumType.STRING)
-  @Column(name = "status", nullable = false, columnDefinition = "ENUM('ACTIVE', 'SUSPENDED')")
-  private Status status;
+	// enum
+	@Enumerated(EnumType.STRING)
+	@Column(name = "role", nullable = false, length = 12)
+	private UserRole role;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "status", nullable = false, columnDefinition = "ENUM('ACTIVE', 'SUSPENDED')")
+	private Status status;
 
-  // 연관관계
-  @OneToOne(optional = false)
-  @JoinColumn(name = "profile_id", unique = true, referencedColumnName = "id")
-  private Profile profile;
-  @OneToMany(mappedBy = "user")
-  private List<Application> applies;
-  @OneToMany(mappedBy = "user")
-  private List<PartyPost> partyPosts;
-  @ManyToMany
-  @JoinTable(name = "likes",
-      joinColumns = @JoinColumn(name = "user_id"),
-      inverseJoinColumns = @JoinColumn(name = "post_id")
-  )
-  private List<PartyPost> likePartyPosts;
+	// 연관관계
+	@OneToOne(optional = false)
+	@JoinColumn(name = "profile_id", unique = true, referencedColumnName = "id")
+	private Profile profile;
+	@OneToMany(mappedBy = "user")
+	private List<Application> applies;
+	@OneToMany(mappedBy = "user")
+	private List<PartyPost> partyPosts;
+	@ManyToMany
+	@JoinTable(name = "likes",
+		joinColumns = @JoinColumn(name = "user_id"),
+		inverseJoinColumns = @JoinColumn(name = "post_id")
+	)
+	private List<PartyPost> likePartyPosts;
 
-  public String getProfileImg() {
-    return this.profile.getImg();
-  }
+	public String getProfileImg() {
+		return this.profile.getImg();
+	}
 
-  public String getComment() {
-    return this.profile.getComment();
-  }
+	public String getComment() {
+		return this.profile.getComment();
+	}
 
-  public int getNoShowCnt() {
-    return this.profile.getNoShowCnt();
-  }
+	public int getNoShowCnt() {
+		return this.profile.getNoShowCnt();
+	}
 
-  public int getParticipationCnt() {
-    return this.profile.getParticipationCnt();
-  }
+	public int getParticipationCnt() {
+		return this.profile.getParticipationCnt();
+	}
 
-  @Override
-  public Collection<? extends GrantedAuthority> getAuthorities() {
-    Collection<GrantedAuthority> authorities = new HashSet<>();
-    for (UserRole eachRole : UserRole.values()) {
-      authorities.add(new SimpleGrantedAuthority(eachRole.name()));
-    }
-    return authorities;
-  }
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		Collection<GrantedAuthority> authorities = new HashSet<>();
+		for (UserRole eachRole : UserRole.values()) {
+			authorities.add(new SimpleGrantedAuthority(eachRole.name()));
+		}
+		return authorities;
+	}
 
-  @Override
-  public String getUsername() {
-    return this.email;
-  }
+	@Override
+	public String getUsername() {
+		return this.email;
+	}
 
-  @Override
-  public boolean isAccountNonExpired() {
-    return false;
-  }
+	@Override
+	public boolean isAccountNonExpired() {
+		return false;
+	}
 
-  @Override
-  public boolean isAccountNonLocked() {
-    return false;
-  }
+	@Override
+	public boolean isAccountNonLocked() {
+		return false;
+	}
 
-  @Override
-  public boolean isCredentialsNonExpired() {
-    return false;
-  }
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return false;
+	}
 
-  @Override
-  public boolean isEnabled() {
-    return false;
-  }
+	@Override
+	public boolean isEnabled() {
+		return false;
+	}
 
-  public void increaseParticipationCnt() {
-    this.profile.increaseParticipationCnt();
-  }
-
+	public void increaseParticipationCnt() {
+		this.profile.increaseParticipationCnt();
+	}
+  
 }

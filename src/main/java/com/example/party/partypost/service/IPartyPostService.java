@@ -3,12 +3,14 @@ package com.example.party.partypost.service;
 import com.example.party.global.dto.DataResponseDto;
 import com.example.party.global.dto.ListResponseDto;
 import com.example.party.partypost.Dto.PartyPostListResponse;
+import com.example.party.partypost.Dto.PartyPostRequest;
 import com.example.party.partypost.Dto.PartyPostResponse;
+import com.example.party.user.entity.User;
 
 public interface IPartyPostService {
 
 	//모집글 작성
-	DataResponseDto<PartyPostResponse> createPartyPost();
+	DataResponseDto<PartyPostResponse> createPartyPost(User user, PartyPostRequest request);
 
 	//모집글 수정
 	DataResponseDto<PartyPostResponse> updatePartyPost();
