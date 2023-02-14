@@ -1,5 +1,6 @@
 package com.example.party.partypost.Dto;
 
+import com.example.party.applicant.type.ApplicationResponse;
 import com.example.party.partypost.entity.PartyPost;
 import com.example.party.partypost.type.Status;
 import java.time.LocalDateTime;
@@ -25,24 +26,6 @@ public class PartyPostResponse {
   private final String place;
   private final List<ApplicationResponse> applications; //applications(userid, nickname, profileImg)
 
-  //생성자
-  public PartyPostResponse(PartyPost partyPost) {
-    this.id = partyPost.getId();
-    this.title = partyPost.getTitle();
-    this.content = partyPost.getContent();
-    this.status = partyPost.getStatus();
-    this.createdAt = LocalDateTime.now(); // 임시값
-    this.modifiedAt = LocalDateTime.now(); // 임시값
-    this.maxMember = partyPost.getMaxMember();
-    this.partyDate = partyPost.getPartyDate();
-    this.dayOfWeek = whichDayOfWeek(partyPost.getPartyDate());
-    this.sigungu = "임시 시/군/구";
-    this.detailAddress = "임시 detailAddress";
-    this.place = "임시 place";
-    this.applications = makeApplications(partyPost);
-
-  }
-
   //partyDate 를 넣어주면 요일을 계산해주는 메소드 (ex) 토
   private String whichDayOfWeek(LocalDateTime partyDate) {
     return partyDate.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.KOREAN);
@@ -56,4 +39,20 @@ public class PartyPostResponse {
         Collectors.toList());
   }
 
+  public PartyPostResponse(PartyPost partyPost) {
+    this.id = partyPost.getId();
+    this.title = partyPost.getTitle();
+    this.content = partyPost.getContent();
+    this.viewCnt = partyPost.getViewCnt();
+    this.status = partyPost.getStatus();
+    this.partyDate = partyPost.getPartyDate();
+    this.closeDate = partyPost.getCloseDate();
+    this.day = partyDate.getDayOfWeek().getDisplayName(TextStyle.NARROW, Locale.KOREAN);
+    this.maxMember = partyPost.getMaxMember();
+    this.eubMyeonDong = partyPost.getEubMyeonDong();
+    this.address = partyPost.getAddress();
+    this.detailAddress = partyPost.getDetailAddress();
+    this.joinMember = partyPost.getApplications().stream().map(
+        ApplicationResponse::new).collect(Collectors.toList());
+  }
 }

@@ -1,9 +1,11 @@
 package com.example.party.partypost.entity;
 
+import com.example.party.partypost.Dto.PartyPostRequest;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -17,6 +19,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.example.party.applicant.entity.Application;
+import com.example.party.global.BaseEntity;
 import com.example.party.partypost.type.Status;
 import com.example.party.user.entity.User;
 
@@ -30,22 +33,28 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "party_post")
 @Entity(name = "partPost")
-public class PartyPost {
+public class PartyPost extends BaseEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
-  private Long id;
-  @Column(name = "title", nullable = false, length = 50)
-  private String title;
-  @Column(name = "content", nullable = false, columnDefinition = "TEXT")
-  private String content;
-  @Column(name = "view_cnt", nullable = false)
-  private int viewCnt;
-  @Column(name = "max_member", nullable = false)
-  private byte maxMember;
-  @Column(name = "is_active", nullable = false)
-  private boolean active;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
+	private Long id;
+	@Column(name = "title", nullable = false, length = 50)
+	private String title;
+	@Column(name = "content", nullable = false, columnDefinition = "TEXT")
+	private String content;
+	@Column(name = "view_cnt", nullable = false)
+	private int viewCnt;
+	@Column(name = "max_member", nullable = false)
+	private byte maxMember;
+	@Column(name = "eub_myeon_dong", nullable = false)
+	private String eubMyeonDong;
+	@Column(name = "address", nullable = false)
+	private String address;
+	@Column(name = "detail_address", nullable = false)
+	private String detailAddress;
+	@Column(name = "is_active", nullable = false)
+	private boolean active;
 
   // enum
   @Enumerated(EnumType.STRING)
@@ -62,9 +71,31 @@ public class PartyPost {
   private User user;
   @OneToMany(mappedBy = "partyPost")
   private List<Application> applications;
+ 
+  	public PartyPost(User user, String title, String content, byte maxMember, String eubMyeonDong,
+			String address, String detailAddress, LocalDateTime partyDate) {
+		this.user = user;
+		this.title = title;
+		this.content = content;
+		this.maxMember = maxMember;
+		this.eubMyeonDong = eubMyeonDong;
+		this.address = address;
+		this.detailAddress = detailAddress;
+		this.active = true;
+		this.status = Status.FINDING;
+		this.partyDate = partyDate;
+		this.closeDate = partyDate.minusMinutes(15);
+		this.created_at = LocalDateTime.now();
+	}
 
-  // TODO: API 1차 작업완료 후
-  // 차단한 유저의 게시물 블라인드 처리 방식 생각
+	//제목, 상세내용, 카테고리, 주소만 변경 가능 /현재 모임시작시간 & 모임마감시간 & 모집인원 변경 불가능
+	public void update(PartyPostRequest request) {
+		this.title = request.getTitle();
+		this.content = request.getContent();
+		this.eubMyeonDong = request.getEubMyeonDong();
+		this.address = request.getAddress();
+		this.detailAddress = request.getDetailAddress();
+	}
 
   // 메소드
   // 조회수 증가
@@ -92,5 +123,23 @@ public class PartyPost {
   //모집글 삭제(DB에서 삭제하지 않고, active 값으로 관리합니다)
   public void deletePartyPost(){
     this.active = false;
+
+	public boolean isWrittenByMe(Long userId) {
+		return Objects.equals(this.user.getId(), userId);
+	}
+
+  // 메소드
+  // 참가신청서 작성시 applications에 추가
+  public void addApplication(Application application){
+    this.applications.add(application);
+  }
+
+  // 이미 참가신청한 유저인지 확인
+  public boolean isAlreadyApplied(){
+
   }
 }
+  // TODO: API 1차 작업완료 후
+  // 차단한 유저의 게시물 블라인드 처리 방식 생각
+
+

@@ -1,5 +1,7 @@
 package com.example.party.global.dto;
 
+import org.springframework.http.HttpStatus;
+
 import lombok.Getter;
 
 @Getter
@@ -10,5 +12,9 @@ public class ResponseDto {
 	public ResponseDto(int code, String msg) {
 		this.code = code;
 		this.msg = msg;
+	}
+
+	public static ResponseDto ok(String msg) {
+		return new ResponseDto(HttpStatus.OK.value(), msg);
 	}
 }
