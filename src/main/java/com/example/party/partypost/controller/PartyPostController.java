@@ -8,6 +8,7 @@ import com.example.party.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,4 +34,8 @@ public class PartyPostController {
       @PathVariable Long partyPostId, @RequestBody PartyPostRequest request) {
     return ResponseEntity.ok(partyPostService.updatePartyPost(partyPostId, request));
   }
+
+  //내가 작성한 모집글 리스트 조회
+  @GetMapping("/api/party-posts/mylist")
+  public
 }
