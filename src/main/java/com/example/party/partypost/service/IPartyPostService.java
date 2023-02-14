@@ -2,6 +2,7 @@ package com.example.party.partypost.service;
 
 import com.example.party.global.dto.DataResponseDto;
 import com.example.party.global.dto.ListResponseDto;
+import com.example.party.global.dto.ResponseDto;
 import com.example.party.partypost.Dto.PartyPostListResponse;
 import com.example.party.partypost.Dto.PartyPostResponse;
 import com.example.party.user.entity.User;
@@ -41,4 +42,7 @@ public interface IPartyPostService {
 	//모집글 상세 조회(개별 상세조회)
 	@Transactional
 	DataResponseDto<PartyPostResponse> getPartyPost(Long postId, User user);
+
+  //모집글 삭제
+  ResponseDto deletePartyPost(Long partyPostId, User user);
 }
