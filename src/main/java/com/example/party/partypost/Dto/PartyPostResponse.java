@@ -9,24 +9,35 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
 public class PartyPostResponse {
-  private Long id;
-  private String title;
-  private String content;
-  private int viewCnt;
-  private Status status;
-  private LocalDateTime partyDate;
-  private LocalDateTime closeDate;
-  private String day;
-  private byte maxMember;
-  private String eubMyeonDong;
-  private String address;
-  private String detailAddress;
-  private List<ApplicationResponse> joinMember;
+  private final Long id;
+  private final String title;
+  private final String content;
+  private final Status status;
+  private final LocalDateTime createdAt;
+  private final LocalDateTime modifiedAt;
+  private final byte maxMember;
+  private final LocalDateTime partyDate;
+  private final String dayOfWeek; //partyDate 로 직접 계산 (ex) 토
+  private final String sigungu;
+  private final String detailAddress;
+  private final String place;
+  private final List<ApplicationResponse> applications; //applications(userid, nickname, profileImg)
+
+  //partyDate 를 넣어주면 요일을 계산해주는 메소드 (ex) 토
+  private String whichDayOfWeek(LocalDateTime partyDate) {
+    return partyDate.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.KOREAN);
+  }
+
+  //PartyPost Entity의 List<Application> 을 applicationDto 로 바꿔주는 메소드
+  private List<ApplicationResponse> makeApplications(PartyPost partyPost) {
+
+    return partyPost.getApplications().stream().map(
+        ApplicationResponse::new).collect(
+        Collectors.toList());
+  }
 
   public PartyPostResponse(PartyPost partyPost) {
     this.id = partyPost.getId();

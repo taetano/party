@@ -2,10 +2,12 @@ package com.example.party.partypost.service;
 
 import com.example.party.global.dto.DataResponseDto;
 import com.example.party.global.dto.ListResponseDto;
+import com.example.party.global.dto.ResponseDto;
 import com.example.party.partypost.Dto.PartyPostListResponse;
 import com.example.party.partypost.Dto.PartyPostRequest;
 import com.example.party.partypost.Dto.PartyPostResponse;
 import com.example.party.user.entity.User;
+import org.springframework.transaction.annotation.Transactional;
 
 public interface IPartyPostService {
 
@@ -34,4 +36,14 @@ public interface IPartyPostService {
 	DataResponseDto<?> getPartyPost();
 
 
+	//모집글 상세 조회(개별 상세조회)
+	@Transactional
+	DataResponseDto<PartyPostResponse> getPartyPost(Long postId);
+
+	//모집글 상세 조회(개별 상세조회)
+	@Transactional
+	DataResponseDto<PartyPostResponse> getPartyPost(Long postId, User user);
+
+  //모집글 삭제
+  ResponseDto deletePartyPost(Long partyPostId, User user);
 }

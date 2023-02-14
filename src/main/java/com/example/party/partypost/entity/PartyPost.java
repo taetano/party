@@ -2,6 +2,7 @@ package com.example.party.partypost.entity;
 
 import com.example.party.partypost.Dto.PartyPostRequest;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import java.util.Objects;
@@ -23,8 +24,10 @@ import com.example.party.partypost.type.Status;
 import com.example.party.user.entity.User;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -68,7 +71,7 @@ public class PartyPost extends BaseEntity {
   private User user;
   @OneToMany(mappedBy = "partyPost")
   private List<Application> applications;
-  
+ 
   	public PartyPost(User user, String title, String content, byte maxMember, String eubMyeonDong,
 			String address, String detailAddress, LocalDateTime partyDate) {
 		this.user = user;
@@ -93,6 +96,33 @@ public class PartyPost extends BaseEntity {
 		this.address = request.getAddress();
 		this.detailAddress = request.getDetailAddress();
 	}
+
+  // 메소드
+  // 조회수 증가
+  public void increaseViewCnt(User user) {
+    if (!this.user.equals(user)) {
+      this.viewCnt += 1;
+    }
+  }
+
+  //작성자인지 확인
+  public boolean isWriter(User user) {
+		return this.user.equals(user);
+  }
+
+  //모집마감전인지 확인
+  public boolean beforeCloseDate(LocalDateTime now) {
+    return this.closeDate.isAfter(now);
+  }
+
+	//참가신청한 모집자가 없는지 확인
+	public boolean haveNoApplications(){
+    return this.applications.isEmpty();
+	}
+
+  //모집글 삭제(DB에서 삭제하지 않고, active 값으로 관리합니다)
+  public void deletePartyPost(){
+    this.active = false;
 
 	public boolean isWrittenByMe(Long userId) {
 		return Objects.equals(this.user.getId(), userId);
