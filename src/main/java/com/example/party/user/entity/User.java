@@ -35,6 +35,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class User extends BaseEntity implements UserDetails {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "user_id")
@@ -124,5 +125,5 @@ public class User extends BaseEntity implements UserDetails {
 	public void increaseParticipationCnt() {
 		this.profile.increaseParticipationCnt();
 	}
-
+  
 }

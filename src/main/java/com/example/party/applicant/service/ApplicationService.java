@@ -1,5 +1,6 @@
 package com.example.party.applicant.service;
 
+import com.example.party.user.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,18 +26,47 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Service
 public class ApplicationService implements IApplicationService {
-	private final ApplicationRepository applicationRepository;
-	private final PartyPostRepository partyPostRepository;
 
-	@Override
-	public DataResponseDto<?> createApplication() {
-		return null;
-	}
+  private final ApplicationRepository applicationRepository;
+  private final PartyPostRepository partyPostRepository;
+  private final UserRepository userRepository;
+
+  //모집 참가 신청
+  @Override
+  public ResponseDto createApplication(Long partyPostId, User user) {
+    //1. partyPost 불러오기
+    PartyPost partyPost = partyPostRepository.findById(partyPostId).orElseThrow(
+        () -> new IllegalArgumentException("해당 postId의 partyPost 가 존재하지 않습니다")
+    );
+    //2. 검증
+    // user가 partypost의 작성자인지 확인
+    if(partyPost.isWrittenByMe(user.getId())){
+      throw new IllegalArgumentException("자신이 작성한 모집글에 참가신청할 수 없습니다");
+    }
+    // partypost 의 application 에 user가 있는지 확인
+
+
+    //3. Application 객체 생성
+      Application application = new Application(user, partyPost);
+
+    //4. 각 객체의 List 에 Application 저장
+    // partyPost 의 applications 에 application 넣기
+    // user 의 applies 에 application 넣기
+
+
+
+    //5. repository 에 save
+    applicationRepository.save(application);
+    //6.  DataResponseDto 생성 후 return
+    return new ResponseDto(HttpStatus.CREATED.value(), "참가 신청 완료");
+
+  }
 
 	@Override
 	public ResponseDto cancelApplication(Long applicationId, User user) {
 		Application application = getApplication(applicationId);
-		if (!application.canCancel(user.getId())) {
+
+		if (!application.isWrittenByMe(user.getId())) {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "권환이 없습니다.");
 		}
 		application.cancel();
@@ -63,20 +93,27 @@ public class ApplicationService implements IApplicationService {
 	}
 
 	@Override
-	public DataResponseDto<ApplicationResponse> acceptApplication(Long applicationId, User user) {
+	public ResponseDto acceptApplication(Long applicationId, User user) {
 		Application application = getApplication(applicationId);
 
-		if (!application.canModify(user.getId())) {
+		if (!application.isSendToMe(user.getId())) {
 			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "권환이 없습니다.");
 		}
 		application.accept();
-		Application updatedApplication = applicationRepository.save(application);
-		return DataResponseDto.ok("참가 신청 수락 완료", new ApplicationResponse(updatedApplication));
+
+		return ResponseDto.ok("참가 신청 수락 완료");
 	}
 
 	@Override
-	public DataResponseDto<?> rejectApplication(Long applicationId, User user) {
-		return null;
+	public ResponseDto rejectApplication(Long applicationId, User user) {
+		Application application = getApplication(applicationId);
+
+		if (!application.isSendToMe(user.getId())) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "권환이 없습니다.");
+		}
+		application.reject();
+
+		return ResponseDto.ok("참가 신청 거부 완료");
 	}
 
 	@Transactional(readOnly = true)
