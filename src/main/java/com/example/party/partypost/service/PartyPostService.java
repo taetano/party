@@ -40,8 +40,21 @@ public class PartyPostService implements IPartyPostService {
 
   //모집글 수정
   @Override
-  public DataResponseDto<PartyPostResponse> updatePartyPost() {
-    return null;
+  public DataResponseDto<PartyPostResponse> updatePartyPost(Long partyPostId, PartyPostRequest request) {
+
+    //1. PartyPost 생성
+    PartyPost partyPost = partyPostRepository.findById(partyPostId).orElseThrow(
+        () -> new IllegalArgumentException("존재하지 않는 게시물입니다.")
+    );
+
+    //2. 수정할 내용 받기
+    partyPost.update(request);
+
+    //3. partyPostResponse 생성
+    PartyPostResponse partyPostResponse = new PartyPostResponse(partyPost);
+
+    //4. DataResponseDto 생성 후 return
+    return new DataResponseDto<>(HttpStatus.OK.value(), "모집글 수정 완료", partyPostResponse);
   }
 
   //내가 작성한 모집글 조회 ( 내가 파티장인 경우만 )
