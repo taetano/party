@@ -6,9 +6,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 @Entity
 public class Profile {
 	@Id
@@ -24,8 +27,13 @@ public class Profile {
 	@Column(name = "participation_cnt", nullable = false)
 	private int participationCnt;
 
+	public void updateProfile(String img, String comment) {
+		this.img = img;
+		this.comment = comment;
+	}
+  
 	public void increaseParticipationCnt() {
 		this.participationCnt = this.participationCnt + 1;
 	}
-
+  
 }

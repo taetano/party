@@ -153,5 +153,25 @@ public class PartyPostService implements IPartyPostService {
       throw new IllegalArgumentException("참가신청자가 있는 경우 삭제할 수 없습니다");
     }
   }
+  
+  public DataResponseDto<String> toggleLikePartyPost(Long party_postId, Long userId) {
+		//모집글 찾기
+		PartyPost partyPost = partyPostRepository.findById(party_postId).orElseThrow(
+			() -> new IllegalArgumentException("해당 글이 존재 하지 않습니다.")
+		);
+		String partPostTitle = partyPost.getTitle(); //모집글 제목 입력
+		//유저 찾기
+		User user = userRepository.findById(userId).orElseThrow(
+			() -> new IllegalArgumentException("해당 유저가 존재 하지 않습니다.")
+		);
+
+		//좋아요 확인
+		if (!(user.getLikePartyPosts().add(partyPost))) {
+			user.getLikePartyPosts().remove(partyPost);
+			return new DataResponseDto(200, "모집글 좋아요 취소 완료", partPostTitle);
+		} else {
+			return new DataResponseDto(200, "모집글 좋아요 완료", partPostTitle);
+		}
+	}
 
 }

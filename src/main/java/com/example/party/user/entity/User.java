@@ -3,6 +3,7 @@ package com.example.party.user.entity;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,6 +31,7 @@ import com.example.party.user.type.UserRole;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -70,7 +72,7 @@ public class User extends BaseEntity implements UserDetails {
 		joinColumns = @JoinColumn(name = "user_id"),
 		inverseJoinColumns = @JoinColumn(name = "post_id")
 	)
-	private List<PartyPost> likePartyPosts;
+	private Set<PartyPost> likePartyPosts;
 
 	public String getProfileImg() {
 		return this.profile.getImg();
@@ -122,8 +124,13 @@ public class User extends BaseEntity implements UserDetails {
 		return false;
 	}
 
+	public void updataProfile(String nickname, String phoneNum){
+		this.nickname = nickname;
+		this.phoneNum = phoneNum;
+	}
+
 	public void increaseParticipationCnt() {
 		this.profile.increaseParticipationCnt();
 	}
-  
+
 }

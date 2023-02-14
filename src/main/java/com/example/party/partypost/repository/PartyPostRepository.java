@@ -18,4 +18,5 @@ Optional<PartyPost> findById(Long postId);
 
 public interface PartyPostRepository extends JpaRepository<PartyPost, Long> {
   List<PartyPost> findByUserId(User user, Pageable pageable);
+
 }
