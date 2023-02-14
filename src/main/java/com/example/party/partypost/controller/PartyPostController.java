@@ -26,7 +26,26 @@ public class PartyPostController {
 	private final PartyPostService partyPostService;
 	private final PartyPostRepository partyPostRepository;
 
-	@PostMapping("/likes/party-posts/{party_postId}")
+	
+  //모집글 작성
+  @PostMapping("/api/party-posts")
+  public ResponseEntity<DataResponseDto<PartyPostResponse>> createPartyPost(
+      @RequestBody PartyPostRequest request, @AuthenticationPrincipal User user) {
+    return ResponseEntity.ok(partyPostService.createPartyPost(user, request));
+  }
+
+  //모집글 수정
+  @PatchMapping("/api/party-posts/{partyPostId}")
+  public ResponseEntity<DataResponseDto<PartyPostResponse>> updatePartyPost(
+      @PathVariable Long partyPostId, @RequestBody PartyPostRequest request) {
+    return ResponseEntity.ok(partyPostService.updatePartyPost(partyPostId, request));
+  }
+
+  //내가 작성한 모집글 리스트 조회
+  @GetMapping("/api/party-posts/mylist")
+  public
+  
+  @PostMapping("/likes/party-posts/{party_postId}")
 	public DataResponseDto<String> toggleLikePartyPost(@PathVariable Long party_postId,
 		@AuthenticationPrincipal UserDetails userDetails) {
 		/*userDetails이용바람*/
@@ -34,4 +53,5 @@ public class PartyPostController {
 		//좋아요 기능
 		return partyPostService.toggleLikePartyPost(party_postId, test_id);
 	}
+
 }

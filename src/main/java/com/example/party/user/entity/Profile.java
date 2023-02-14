@@ -31,4 +31,9 @@ public class Profile {
 		this.img = img;
 		this.comment = comment;
 	}
+  
+	public void increaseParticipationCnt() {
+		this.participationCnt = this.participationCnt + 1;
+	}
+  
 }
