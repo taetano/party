@@ -48,6 +48,9 @@ public class User extends BaseEntity implements UserDetails {
 	private String password;
 	@Column(name = "nickname", nullable = false, unique = true, length = 10)
 	private String nickname;
+
+
+
 	@Column(name = "phone_number", nullable = false, length = 13, columnDefinition = "CHAR(13)")
 	private String phoneNum;
 
@@ -72,7 +75,9 @@ public class User extends BaseEntity implements UserDetails {
 		joinColumns = @JoinColumn(name = "user_id"),
 		inverseJoinColumns = @JoinColumn(name = "post_id")
 	)
-	private Set<PartyPost> likePartyPosts;
+
+private Set<PartyPost> likePartyPosts;
+
 
 	public String getProfileImg() {
 		return this.profile.getImg();
@@ -88,6 +93,19 @@ public class User extends BaseEntity implements UserDetails {
 
 	public int getParticipationCnt() {
 		return this.profile.getParticipationCnt();
+	}
+
+	public User(String email, String password, String nickname, String phoneNum, UserRole role, Status status) {
+		this.email = email;
+		this.password = password;
+		this.nickname = nickname;
+		this.phoneNum = phoneNum;
+		this.role = role;
+		this.status = status;
+	}
+
+	public void changeDORMANT() {
+		this.status = Status.DORMANT;
 	}
 
 	@Override

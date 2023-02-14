@@ -5,7 +5,6 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class LoginRequest {
-	private String email;
+public class WithdrawRequest {
 	private String password;
 }
