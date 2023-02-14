@@ -64,4 +64,10 @@ public class PartyPost {
 
 	// TODO: API 1차 작업완료 후
 	// 차단한 유저의 게시물 블라인드 처리 방식 생각
+
+	// 메소드
+	// 조회수 증가
+	public void increaseViewCnt(User user){
+		if(!this.user.equals(user)){this.viewCnt += 1;}
+	}
 }
