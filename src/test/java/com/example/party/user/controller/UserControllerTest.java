@@ -12,13 +12,18 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.example.party.global.dto.ResponseDto;
 import com.example.party.global.security.JwtUserDetailsService;
 import com.example.party.user.dto.ProfileRequest;
+import com.example.party.user.entity.User;
 import com.example.party.user.repository.ProfileRepository;
 import com.example.party.user.repository.UserRepository;
 import com.example.party.user.service.UserService;
+import com.example.party.user.type.Status;
+import com.example.party.user.type.UserRole;
+import com.example.party.util.JwtProvider;
 
 @ExtendWith(MockitoExtension.class)
 class UserControllerTest {
@@ -30,9 +35,15 @@ class UserControllerTest {
 	@InjectMocks
 	private UserService userService;
 
+	private PasswordEncoder passwordEncoder;
+	private JwtProvider jwtProvider;
+
 	@Test
 	@DisplayName("프로필 내용 수정")
 	void updateProfile() {
+
+		//User user = new User("sdsd", passwordEncoder.encode("123"), "1234", "1515", UserRole.ROLE_USER, Status.ACTIVE);
+
 		//given
 		ProfileRequest profileRequest = ProfileRequest.builder()
 			.nickName("김홍길동")
@@ -45,7 +56,6 @@ class UserControllerTest {
 		when(profileRepository.findById(any(Long.class))).thenReturn(Optional.empty());
 
 		ResponseDto responseDto = userService.updateProfile(profileRequest, anyLong());
-
 
 	}
 }

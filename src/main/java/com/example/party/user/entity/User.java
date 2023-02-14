@@ -3,6 +3,7 @@ package com.example.party.user.entity;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,13 +24,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.example.party.applicant.entity.Application;
 import com.example.party.partypost.entity.PartyPost;
-import com.example.party.user.dto.ProfileResponse;
 import com.example.party.user.type.Status;
 import com.example.party.user.type.UserRole;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -69,7 +70,7 @@ public class User implements UserDetails {
 		joinColumns = @JoinColumn(name = "user_id"),
 		inverseJoinColumns = @JoinColumn(name = "post_id")
 	)
-	private List<PartyPost> likePartyPosts;
+	private Set<PartyPost> likePartyPosts;
 
 	public String getProfileImg() {
 		return this.profile.getImg();

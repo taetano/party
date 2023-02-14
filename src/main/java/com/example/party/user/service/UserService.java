@@ -1,17 +1,15 @@
 package com.example.party.user.service;
 
-import java.util.Optional;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.example.party.global.dto.DataResponseDto;
 import com.example.party.global.dto.ResponseDto;
-import com.example.party.global.security.JwtUserDetailsService;
 import com.example.party.user.dto.LoginRequest;
+import com.example.party.user.dto.OtherProfileResponse;
 import com.example.party.user.dto.ProfileRequest;
-import com.example.party.user.dto.ProfileResponse;
+import com.example.party.user.dto.MyProfileResponse;
 import com.example.party.user.dto.SignupReqest;
 import com.example.party.user.entity.Profile;
 import com.example.party.user.entity.User;
@@ -49,7 +47,7 @@ public class UserService implements IUserService {
 		return null;
 	}
 
-	public DataResponseDto<ProfileResponse> updateProfile(ProfileRequest profileRequest, Long id) {
+	public DataResponseDto<MyProfileResponse> updateProfile(ProfileRequest profileRequest, Long id) {
 		User user = userRepository.findById(id)
 			.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "유저 찾기 실패")); //user 정보 조회
 		user.updataProfile(profileRequest.getNickName(), profileRequest.getPhoneNum()); //user 정보 수정
@@ -58,29 +56,33 @@ public class UserService implements IUserService {
 		Profile profile = profileRepository.findById(profileId)
 			.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "프로필 찾기 실패")); // 프로필 정보 조회
 		profile.updateProfile(profileRequest.getProFileUrl(), profileRequest.getComment()); // 프로필 정보 수정
-		ProfileResponse profileResponse = new ProfileResponse(user, profile); // profile 내용 입력
-		return new DataResponseDto(200, "프로필 정보 수정 완료", profileResponse);
+		MyProfileResponse myProfileResponse = new MyProfileResponse(user, profile); // profile 내용 입력
+
+		return new DataResponseDto(200, "프로필 정보 수정 완료", myProfileResponse);
 
 	}
 
-	public DataResponseDto<ProfileResponse> getMyProfile(Long id) {
+	public DataResponseDto<MyProfileResponse> getMyProfile(Long id) {
 		User user = userRepository.findById(id)
 			.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "유저 찾기 실패")); //user 정보 조회
+
 		Long profileId = user.getProfile().getId(); // 유저 정보를 이용한 프로필 id 찾기
 		Profile profile = profileRepository.findById(profileId)
 			.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "프로필 찾기 실패")); // 프로필 정보 조회
-		ProfileResponse profileResponse = new ProfileResponse(user, profile); // profile 내용 입력
-		return new DataResponseDto(200, "프로필 조회", profileResponse);
+		MyProfileResponse myProfileResponse = new MyProfileResponse(user, profile); // profile 내용 입력
+
+		return new DataResponseDto(200, "프로필 조회", myProfileResponse);
 	}
 
-
-	public DataResponseDto<ProfileResponse> getOtherProfile(Long id){
+	public DataResponseDto<MyProfileResponse> getOtherProfile(Long id) {
 		User user = userRepository.findById(id)
 			.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "유저 찾기 실패")); //user 정보 조회
+		
 		Long profileId = user.getProfile().getId(); // 유저 정보를 이용한 프로필 id 찾기
 		Profile profile = profileRepository.findById(profileId)
 			.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "프로필 찾기 실패")); // 프로필 정보 조회
-		ProfileResponse profileResponse = new ProfileResponse(user, profile); // profile 내용 입력
-		return new DataResponseDto(200, "프로필 조회", profileResponse);
+		OtherProfileResponse otherProfileResponse = new OtherProfileResponse(user, profile); // profile 내용 입력
+
+		return new DataResponseDto(200, "프로필 조회", otherProfileResponse);
 	}
 }

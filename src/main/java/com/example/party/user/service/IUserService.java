@@ -2,10 +2,9 @@ package com.example.party.user.service;
 
 import com.example.party.global.dto.DataResponseDto;
 import com.example.party.global.dto.ResponseDto;
-import com.example.party.global.security.JwtUserDetailsService;
 import com.example.party.user.dto.LoginRequest;
 import com.example.party.user.dto.ProfileRequest;
-import com.example.party.user.dto.ProfileResponse;
+import com.example.party.user.dto.MyProfileResponse;
 import com.example.party.user.dto.SignupReqest;
 import com.example.party.user.entity.User;
 
@@ -19,9 +18,9 @@ public interface IUserService {
 	//회원탈퇴
 	ResponseDto withdraw(User user);
 	//프로필 수정
-	DataResponseDto<ProfileResponse> updateProfile(ProfileRequest profileRequest, Long id);
+	DataResponseDto<?> updateProfile(ProfileRequest profileRequest, Long id);
 	//내 프로필 조회
-	DataResponseDto<ProfileResponse> getMyProfile(Long id);
+	DataResponseDto<?> getMyProfile(Long id);
 	//상대방 프로필 조회
-	DataResponseDto<ProfileResponse> getOtherProfile(Long id);
+	DataResponseDto<?> getOtherProfile(Long id);
 }
