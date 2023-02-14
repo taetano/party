@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.party.applicant.service.ApplicationService;
 import com.example.party.applicant.type.ApplicationResponse;
-import com.example.party.global.dto.DataResponseDto;
 import com.example.party.global.dto.ListResponseDto;
 import com.example.party.global.dto.ResponseDto;
 import com.example.party.user.entity.User;
@@ -48,5 +47,11 @@ public class ApplicationController {
       @AuthenticationPrincipal User user) {
     return ResponseEntity.ok(applicationService.acceptApplication(applicationId, user));
   }
+
+	@PostMapping("/reject/{applicationId}")
+	public ResponseEntity<ResponseDto> rejectApplication(@PathVariable Long applicationId,
+		@AuthenticationPrincipal User user) {
+		return ResponseEntity.ok(applicationService.rejectApplication(applicationId, user));
+	}
 
 }

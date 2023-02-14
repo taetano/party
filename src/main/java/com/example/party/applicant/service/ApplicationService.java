@@ -62,58 +62,65 @@ public class ApplicationService implements IApplicationService {
 
   }
 
-  @Override
-  public ResponseDto cancelApplication(Long applicationId, User user) {
-    Application application = getApplication(applicationId);
-    if (!application.canCancel(user.getId())) {
-      throw new ResponseStatusException(HttpStatus.FORBIDDEN, "권환이 없습니다.");
-    }
-    application.cancel();
+	@Override
+	public ResponseDto cancelApplication(Long applicationId, User user) {
+		Application application = getApplication(applicationId);
 
-    return ResponseDto.ok("참가 신청 취소 완료");
-  }
+		if (!application.isWrittenByMe(user.getId())) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "권환이 없습니다.");
+		}
+		application.cancel();
 
-  @Transactional(readOnly = true)
-  @Override
-  public ListResponseDto<ApplicationResponse> getApplications(Long partPostId, User user) {
-    PartyPost partyPost = partyPostRepository.findById(partPostId)
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "NOT FOUND"));
+		return ResponseDto.ok("참가 신청 취소 완료");
+	}
 
-    if (!partyPost.isWrittenByMe(user.getId())) {
-      throw new ResponseStatusException(HttpStatus.FORBIDDEN, "권환이 없습니다.");
-    }
+	@Transactional(readOnly = true)
+	@Override
+	public ListResponseDto<ApplicationResponse> getApplications(Long partPostId, User user) {
+		PartyPost partyPost = partyPostRepository.findById(partPostId)
+			.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "NOT FOUND"));
 
-    Pageable pageable = PageRequest.of(0, 10, Sort.by("createdAt").descending());
-    Page<ApplicationResponse> ret = applicationRepository.findAllByPartyPostAndCancelIsFalse(
-            partyPost.getId(),
-            pageable)
-        .map(ApplicationResponse::new);
+		if (!partyPost.isWrittenByMe(user.getId())) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "권환이 없습니다.");
+		}
 
-    return ListResponseDto.ok("참가신청자 목록 조회 완료", ret.getContent());
-  }
+		Pageable pageable = PageRequest.of(0, 10, Sort.by("createdAt").descending());
+		Page<ApplicationResponse> ret = applicationRepository.findAllByPartyPostAndCancelIsFalse(partyPost.getId(),
+				pageable)
+			.map(ApplicationResponse::new);
 
-  @Override
-  public DataResponseDto<ApplicationResponse> acceptApplication(Long applicationId, User user) {
-    Application application = getApplication(applicationId);
+		return ListResponseDto.ok("참가신청자 목록 조회 완료", ret.getContent());
+	}
 
-    if (!application.canModify(user.getId())) {
-      throw new ResponseStatusException(HttpStatus.FORBIDDEN, "권환이 없습니다.");
-    }
-    application.accept();
-    Application updatedApplication = applicationRepository.save(application);
-    return DataResponseDto.ok("참가 신청 수락 완료", new ApplicationResponse(updatedApplication));
-  }
+	@Override
+	public ResponseDto acceptApplication(Long applicationId, User user) {
+		Application application = getApplication(applicationId);
 
-  @Override
-  public DataResponseDto<?> rejectApplication(Long applicationId, User user) {
-    return null;
-  }
+		if (!application.isSendToMe(user.getId())) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "권환이 없습니다.");
+		}
+		application.accept();
 
-  @Transactional(readOnly = true)
-  public Application getApplication(Long applicationId) {
-    return applicationRepository.findById(applicationId)
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,
-            "application with id{" + applicationId + "} is not found"));
-  }
+		return ResponseDto.ok("참가 신청 수락 완료");
+	}
+
+	@Override
+	public ResponseDto rejectApplication(Long applicationId, User user) {
+		Application application = getApplication(applicationId);
+
+		if (!application.isSendToMe(user.getId())) {
+			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "권환이 없습니다.");
+		}
+		application.reject();
+
+		return ResponseDto.ok("참가 신청 거부 완료");
+	}
+
+	@Transactional(readOnly = true)
+	public Application getApplication(Long applicationId) {
+		return applicationRepository.findById(applicationId)
+			.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,
+				"application with id{" + applicationId + "} is not found"));
+	}
 
 }

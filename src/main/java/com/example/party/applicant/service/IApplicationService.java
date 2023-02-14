@@ -1,5 +1,6 @@
 package com.example.party.applicant.service;
 
+import com.example.party.applicant.type.ApplicationResponse;
 import com.example.party.global.dto.DataResponseDto;
 import com.example.party.global.dto.ListResponseDto;
 import com.example.party.global.dto.ResponseDto;
@@ -18,12 +19,12 @@ public interface IApplicationService {
 	ResponseDto cancelApplication(Long applicationId, User user);
 
 	//참가신청자 리스트 조회(파티장 미포함. 내정보-나의모집글목록 상에서 사용)
-	ListResponseDto<?> getApplications(Long partPostId, User user);
+	ListResponseDto<ApplicationResponse> getApplications(Long partyPostId, User user);
 
 	//모집 참가 수락
-	DataResponseDto<?> acceptApplication(Long applicationId, User user);
+	ResponseDto acceptApplication(Long applicationId, User user);
 
 	//모집 참가 거부
-	DataResponseDto<?> rejectApplication(Long applicationId, User user);
+	ResponseDto rejectApplication(Long applicationId, User user);
 
 }

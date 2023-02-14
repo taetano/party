@@ -60,9 +60,9 @@ public class Application extends BaseEntity {
 		this.created_at = LocalDateTime.now();
   }
 
-  public boolean canCancel(Long userId) {
-    return Objects.equals(this.user.getId(), userId);
-  }
+	public boolean isWrittenByMe(Long userId) {
+		return Objects.equals(this.user.getId(), userId);
+	}
 
   public void cancel() {
     this.cancel = true;
@@ -80,9 +80,9 @@ public class Application extends BaseEntity {
     return this.user.getNoShowCnt();
   }
 
-  public boolean canModify(Long userId) {
-    return Objects.equals(this.partyPost.getUser().getId(), userId);
-  }
+	public boolean isSendToMe(Long userId) {
+		return Objects.equals(this.partyPost.getUser().getId(), userId);
+	}
 
   public void accept() {
     if (this.status != ApplicationStatus.PENDING) {
@@ -102,4 +102,5 @@ public class Application extends BaseEntity {
     this.status = ApplicationStatus.REJECT;
     this.modified_at = LocalDateTime.now();
   }
+
 }
