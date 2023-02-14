@@ -11,6 +11,9 @@ public interface IApplicationService {
 
   DataResponseDto<?> createApplication(Long postId, Long userId);
 
+  //모집 참가 신청
+  DataResponseDto<String> createApplication(Long partyPostId, User user);
+
   //모집 참가 신청취소
 	ResponseDto cancelApplication(Long applicationId, User user);
 
