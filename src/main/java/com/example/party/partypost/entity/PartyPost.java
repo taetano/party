@@ -1,13 +1,9 @@
 package com.example.party.partypost.entity;
 
-import com.example.party.applicant.entity.Application;
-import com.example.party.global.BaseEntity;
-import com.example.party.partypost.dto.PartyPostRequest;
-import com.example.party.partypost.type.Status;
-import com.example.party.user.entity.User;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -19,6 +15,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.example.party.applicant.entity.Application;
+import com.example.party.global.BaseEntity;
+import com.example.party.partypost.dto.PartyPostRequest;
+import com.example.party.partypost.type.Status;
+import com.example.party.user.entity.User;
+
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -133,7 +136,11 @@ public class PartyPost extends BaseEntity {
 
   // 이미 참가신청한 유저인지 확인
   public boolean isAlreadyApplied() {
+    return false;
+  }
 
+  public void setId(Long id) {
+    this.id = id;
   }
 }
 // TODO: API 1차 작업완료 후
