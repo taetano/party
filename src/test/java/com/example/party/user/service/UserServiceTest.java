@@ -42,7 +42,7 @@ class UserServiceTest {
 	@DisplayName("회원가입")
 	void 회원가입_성공() {
 		// given
-		SignupRequest request =  SignupRequest.builder()
+		SignupRequest request = SignupRequest.builder()
 			.email("asd123@gmail.com")
 			.password("asd123!@#")
 			.nickname("김김김")
@@ -66,7 +66,7 @@ class UserServiceTest {
 	@DisplayName("회원가입")
 	void 중복된_이메일_실패() {
 		// given
-		SignupRequest request =  SignupRequest.builder()
+		SignupRequest request = SignupRequest.builder()
 			.email("asd123@gmail.com")
 			.password("asd123!@#")
 			.nickname("김김김")
@@ -79,7 +79,6 @@ class UserServiceTest {
 		String phoneNum = "123-1234-1234";
 		User user = new User(email, password, nickname, phoneNum
 			, UserRole.ROLE_USER, Status.ACTIVE);
-
 
 		when(userRepository.findByEmail(any(String.class)))
 			.thenReturn((Optional.of(user)));
@@ -98,7 +97,7 @@ class UserServiceTest {
 	@DisplayName("로그인")
 	void 로그인_성공() {
 		// given
-		LoginRequest request =  LoginRequest.builder()
+		LoginRequest request = LoginRequest.builder()
 			.email("asd123@gmail.com")
 			.password("asd123!@#")
 			.build();
@@ -128,7 +127,7 @@ class UserServiceTest {
 	@DisplayName("로그인")
 	void 입력값_다름_실패() {
 		// given
-		LoginRequest request =  LoginRequest.builder()
+		LoginRequest request = LoginRequest.builder()
 			.email("asd123@gmail.com")
 			.password("asd123!@#")
 			.build();
@@ -158,7 +157,7 @@ class UserServiceTest {
 	@DisplayName("로그인")
 	void 레포짓토리_이메일_없음() {
 		// given
-		LoginRequest request =  LoginRequest.builder()
+		LoginRequest request = LoginRequest.builder()
 			.email("asd123@gmail.com")
 			.password("asd123!@#")
 			.build();
@@ -187,7 +186,7 @@ class UserServiceTest {
 	@DisplayName("회원탈퇴")
 	void 회원탈퇴_성공() {
 		// given
-		WithdrawRequest request =  WithdrawRequest.builder()
+		WithdrawRequest request = WithdrawRequest.builder()
 			.password("asd123!@#")
 			.build();
 
@@ -198,11 +197,43 @@ class UserServiceTest {
 		User userDetails = new User(email, passwordEncoder.encode(password), nickname, phoneNum
 			, UserRole.ROLE_USER, Status.ACTIVE);
 
+		when(userRepository.findByEmail(any(String.class)))
+			.thenReturn((Optional.of(userDetails)));
+
 		// when
-		ResponseDto response = userService.withdraw(request, User userDetails);
+		ResponseDto response = userService.withdraw(userDetails, request);
 
 		// then
 		assertThat(response.getCode()).isEqualTo(200);
 		assertThat(response.getMsg()).isEqualTo("로그인 완료");
+	}
+
+	@Test
+	@DisplayName("회원탈퇴")
+	void 비밀번호_비일치() {
+		// given
+		WithdrawRequest request = WithdrawRequest.builder()
+			.password("asd12!")
+			.build();
+
+		String email = "asd123@gmail.com";
+		String password = "asd123!@#";
+		String nickname = "ㅁㄴㅇ";
+		String phoneNum = "123-1234-1234";
+		User userDetails = new User(email, passwordEncoder.encode(password), nickname, phoneNum
+			, UserRole.ROLE_USER, Status.ACTIVE);
+
+		userRepository.save(userDetails);
+
+		when(userRepository.findByEmail(any(String.class)))
+			.thenReturn((Optional.of(userDetails)));
+
+		// when
+		ResponseDto response = userService.withdraw(userDetails, request);
+
+		// then
+		assertThat(response.getCode()).isEqualTo(200);
+		assertThat(response.getMsg()).isEqualTo("로그인 완료");
+
 	}
 }
