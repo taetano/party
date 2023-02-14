@@ -8,6 +8,9 @@ import com.example.party.user.dto.LoginRequest;
 import com.example.party.user.dto.ProfileResponse;
 import com.example.party.user.dto.SignupRequest;
 import com.example.party.user.dto.WithdrawRequest;
+import com.example.party.user.dto.ProfileRequest;
+import com.example.party.user.dto.MyProfileResponse;
+import com.example.party.user.dto.SignupReqest;
 import com.example.party.user.entity.User;
 
 public interface IUserService {
@@ -20,9 +23,9 @@ public interface IUserService {
 	//회원탈퇴
 	ResponseDto withdraw(User user, WithdrawRequest withdrawRequest);
 	//프로필 수정
-	DataResponseDto<ProfileResponse> updateProfile();
+	DataResponseDto<?> updateProfile(ProfileRequest profileRequest, Long id);
 	//내 프로필 조회
-	DataResponseDto<ProfileResponse> getMyProfile();
+	DataResponseDto<?> getMyProfile(Long id);
 	//상대방 프로필 조회
-	DataResponseDto<ProfileResponse> getOtherProfile();
+	DataResponseDto<?> getOtherProfile(Long id);
 }

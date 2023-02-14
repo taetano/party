@@ -3,6 +3,7 @@ package com.example.party.user.entity;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,6 +23,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.example.party.applicant.entity.Application;
+import com.example.party.global.BaseEntity;
 import com.example.party.partypost.entity.PartyPost;
 import com.example.party.user.type.Status;
 import com.example.party.user.type.UserRole;
@@ -29,15 +31,17 @@ import com.example.party.user.type.UserRole;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class User implements UserDetails {
+public class User extends BaseEntity implements UserDetails {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private Long id;
+	@Column(name = "user_id")
+	private Long Id;
 	@Column(name = "email", nullable = false, unique = true, length = 50)
 	private String email;
 	@Column(name = "password", nullable = false, length = 60)
@@ -72,7 +76,8 @@ public class User implements UserDetails {
 		inverseJoinColumns = @JoinColumn(name = "post_id")
 	)
 
-	private List<PartyPost> likePartyPosts;
+private Set<PartyPost> likePartyPosts;
+
 
 	public String getProfileImg() {
 		return this.profile.getImg();
@@ -136,4 +141,14 @@ public class User implements UserDetails {
 	public boolean isEnabled() {
 		return false;
 	}
+
+	public void updataProfile(String nickname, String phoneNum){
+		this.nickname = nickname;
+		this.phoneNum = phoneNum;
+	}
+
+	public void increaseParticipationCnt() {
+		this.profile.increaseParticipationCnt();
+	}
+
 }
