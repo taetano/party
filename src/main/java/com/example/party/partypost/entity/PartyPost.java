@@ -31,6 +31,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "party_post")
 @Entity(name = "partPost")
 public class PartyPost extends BaseEntity {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -52,23 +53,23 @@ public class PartyPost extends BaseEntity {
 	@Column(name = "is_active", nullable = false)
 	private boolean active;
 
-	// enum
-	@Enumerated(EnumType.STRING)
-	@Column(name = "status", nullable = false, columnDefinition = "ENUM('FINDING', 'FOUND', 'NO_SHOW_REPORTING', 'END')")
-	private Status status;
-	@Column(name = "close_date", nullable = false)
-	private LocalDateTime closeDate;
-	@Column(name = "party_date", nullable = false)
-	private LocalDateTime partyDate;
+  // enum
+  @Enumerated(EnumType.STRING)
+  @Column(name = "status", nullable = false, columnDefinition = "ENUM('FINDING', 'FOUND', 'NO_SHOW_REPORTING', 'END')")
+  private Status status;
+  @Column(name = "close_date", nullable = false)
+  private LocalDateTime closeDate;
+  @Column(name = "party_date", nullable = false)
+  private LocalDateTime partyDate;
 
-	// 연관관계
-	@ManyToOne(optional = false)
-	@JoinColumn(name = "user_id")
-	private User user;
-	@OneToMany(mappedBy = "partyPost")
-	private List<Application> applications;
-
-	public PartyPost(User user, String title, String content, byte maxMember, String eubMyeonDong,
+  // 연관관계
+  @ManyToOne(optional = false)
+  @JoinColumn(name = "user_id")
+  private User user;
+  @OneToMany(mappedBy = "partyPost")
+  private List<Application> applications;
+  
+  	public PartyPost(User user, String title, String content, byte maxMember, String eubMyeonDong,
 			String address, String detailAddress, LocalDateTime partyDate) {
 		this.user = user;
 		this.title = title;
@@ -97,6 +98,18 @@ public class PartyPost extends BaseEntity {
 		return Objects.equals(this.user.getId(), userId);
 	}
 
-	// TODO: API 1차 작업완료 후
-	// 차단한 유저의 게시물 블라인드 처리 방식 생각
+  // 메소드
+  // 참가신청서 작성시 applications에 추가
+  public void addApplication(Application application){
+    this.applications.add(application);
+  }
+
+  // 이미 참가신청한 유저인지 확인
+  public boolean isAlreadyApplied(){
+
+  }
 }
+  // TODO: API 1차 작업완료 후
+  // 차단한 유저의 게시물 블라인드 처리 방식 생각
+
+
