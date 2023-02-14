@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.example.party.user.entity.User;
 import com.example.party.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;

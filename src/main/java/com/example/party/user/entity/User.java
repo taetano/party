@@ -90,12 +90,17 @@ public class User implements UserDetails {
 		return this.profile.getParticipationCnt();
 	}
 
-	public User(String email, String password, String nickname, String phoneNum, UserRole role) {
+	public User(String email, String password, String nickname, String phoneNum, UserRole role, Status status) {
 		this.email = email;
 		this.password = password;
 		this.nickname = nickname;
 		this.phoneNum = phoneNum;
 		this.role = role;
+		this.status = status;
+	}
+
+	public void changeDORMANT() {
+		this.status = Status.DORMANT;
 	}
 
 	@Override

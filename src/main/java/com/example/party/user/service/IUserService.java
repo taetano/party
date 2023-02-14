@@ -1,21 +1,24 @@
 package com.example.party.user.service;
 
+import javax.servlet.http.HttpServletResponse;
+
 import com.example.party.global.dto.DataResponseDto;
 import com.example.party.global.dto.ResponseDto;
 import com.example.party.user.dto.LoginRequest;
 import com.example.party.user.dto.ProfileResponse;
 import com.example.party.user.dto.SignupRequest;
+import com.example.party.user.dto.WithdrawRequest;
 import com.example.party.user.entity.User;
 
 public interface IUserService {
 	//회원가입
 	ResponseDto signUp(SignupRequest signupRequest);
 	//로그인
-	ResponseDto signIn(LoginRequest loginRequest);
+	ResponseDto signIn(LoginRequest loginRequest, HttpServletResponse response);
 	//로그아웃
 	ResponseDto signOut(User user);
 	//회원탈퇴
-	ResponseDto withdraw(User user);
+	ResponseDto withdraw(User user, WithdrawRequest withdrawRequest);
 	//프로필 수정
 	DataResponseDto<ProfileResponse> updateProfile();
 	//내 프로필 조회

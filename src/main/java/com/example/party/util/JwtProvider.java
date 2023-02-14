@@ -20,7 +20,7 @@ import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public final class JwtProvider {
+public class JwtProvider {
 	public static final String AUTHORIZATION_HEADER = "Authorization";
 	public static final String BEARER_PREFIX = "Bearer";
 	private static final Key KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256); // 임시로 작성해놓았습니다. 의견주시면 감사하겠습니다.
@@ -32,7 +32,6 @@ public final class JwtProvider {
 
 		return Jwts.builder()
 			.setSubject(user.getEmail())
-			.setClaims(generateClaims(user))
 			.setIssuedAt(curDate)
 			.setExpiration(expireDate)
 			.signWith(KEY)
@@ -80,19 +79,5 @@ public final class JwtProvider {
 	private static <T> T getClaimFromToken(String token, Function<Claims, T> claimResolver) {
 		final Claims claims = getAllClaims(token);
 		return claimResolver.apply(claims);
-	}
-
-
-	// mypage 정보를 서버까지 접근해서 줘야하나? 라는 생각을 해봤습니다.
-	private static Claims generateClaims(User user) {
-		Claims claims = Jwts.claims();
-		claims.put("id", user.getId());
-		claims.put("nickname", user.getNickname());
-		claims.put("phoneNum", user.getPhoneNum());
-		claims.put("profileImg", user.getProfileImg());
-		claims.put("comment", user.getComment());
-		claims.put("noShowCnt", user.getNoShowCnt());
-		claims.put("participationCnt", user.getParticipationCnt());
-		return claims;
 	}
 }
