@@ -1,5 +1,6 @@
 package com.example.party.partypost.entity;
 
+import com.example.party.partypost.Dto.PartyPostRequest;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -82,6 +83,15 @@ public class PartyPost extends BaseEntity {
 		this.partyDate = partyDate;
 		this.closeDate = partyDate.minusMinutes(15);
 		this.created_at = LocalDateTime.now();
+	}
+
+	//제목, 상세내용, 카테고리, 주소만 변경 가능 /현재 모임시작시간 & 모임마감시간 & 모집인원 변경 불가능
+	public void update(PartyPostRequest request) {
+		this.title = request.getTitle();
+		this.content = request.getContent();
+		this.eubMyeonDong = request.getEubMyeonDong();
+		this.address = request.getAddress();
+		this.detailAddress = request.getDetailAddress();
 	}
 
 	public boolean isWrittenByMe(Long userId) {

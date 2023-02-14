@@ -13,7 +13,7 @@ public interface IPartyPostService {
 	DataResponseDto<PartyPostResponse> createPartyPost(User user, PartyPostRequest request);
 
 	//모집글 수정
-	DataResponseDto<PartyPostResponse> updatePartyPost();
+	DataResponseDto<PartyPostResponse> updatePartyPost(Long partyPostId, PartyPostRequest request);
 
 	//내가 작성한 모집글 리스트 조회 ( 내가 파티장인 경우만 )
 	ListResponseDto<PartyPostListResponse> findMyCreatedPartyList();
