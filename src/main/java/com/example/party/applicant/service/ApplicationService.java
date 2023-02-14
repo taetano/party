@@ -33,19 +33,32 @@ public class ApplicationService implements IApplicationService {
 
   //모집 참가 신청
   @Override
-  public DataResponseDto<String> createApplication(Long partyPostId, User user) {
+  public ResponseDto createApplication(Long partyPostId, User user) {
     //1. partyPost 불러오기
     PartyPost partyPost = partyPostRepository.findById(partyPostId).orElseThrow(
         () -> new IllegalArgumentException("해당 postId의 partyPost 가 존재하지 않습니다")
     );
-    //2. Application 객체 생성
-    Application application = new Application(user, partyPost);
-    //3. repository에 save
+    //2. 검증
+    // user가 partypost의 작성자인지 확인
+    if(partyPost.isWrittenByMe(user.getId())){
+      throw new IllegalArgumentException("자신이 작성한 모집글에 참가신청할 수 없습니다");
+    }
+    // partypost 의 application 에 user가 있는지 확인
+
+
+    //3. Application 객체 생성
+      Application application = new Application(user, partyPost);
+
+    //4. 각 객체의 List 에 Application 저장
+    // partyPost 의 applications 에 application 넣기
+    // user 의 applies 에 application 넣기
+
+
+
+    //5. repository 에 save
     applicationRepository.save(application);
-    //4. Application 객체로 Response 에 보낼 Data 생성
-    String title = partyPost.getTitle();
-    //5.  DataResponseDto 생성 후 return
-    return new DataResponseDto<>(HttpStatus.CREATED.value(), "참가 신청 완료", title);
+    //6.  DataResponseDto 생성 후 return
+    return new ResponseDto(HttpStatus.CREATED.value(), "참가 신청 완료");
 
   }
 

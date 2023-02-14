@@ -30,41 +30,53 @@ import lombok.NoArgsConstructor;
 @Table(name = "party_post")
 @Entity(name = "partPost")
 public class PartyPost extends BaseEntity {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private Long id;
-	@Column(name = "title", nullable = false, length = 50)
-	private String title;
-	@Column(name = "content", nullable = false, columnDefinition = "TEXT")
-	private String content;
-	@Column(name = "view_cnt", nullable = false)
-	private int viewCnt;
-	@Column(name = "max_member", nullable = false)
-	private byte maxMember;
-	@Column(name = "is_active", nullable = false)
-	private boolean active;
 
-	// enum
-	@Enumerated(EnumType.STRING)
-	@Column(name = "status", nullable = false, columnDefinition = "ENUM('FINDING', 'FOUND', 'NO_SHOW_REPORTING', 'END')")
-	private Status status;
-	@Column(name = "close_date", nullable = false)
-	private LocalDateTime closeDate;
-	@Column(name = "party_date", nullable = false)
-	private LocalDateTime partyDate;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id")
+  private Long id;
+  @Column(name = "title", nullable = false, length = 50)
+  private String title;
+  @Column(name = "content", nullable = false, columnDefinition = "TEXT")
+  private String content;
+  @Column(name = "view_cnt", nullable = false)
+  private int viewCnt;
+  @Column(name = "max_member", nullable = false)
+  private byte maxMember;
+  @Column(name = "is_active", nullable = false)
+  private boolean active;
 
-	// 연관관계
-	@ManyToOne(optional = false)
-	@JoinColumn(name = "user_id")
-	private User user;
-	@OneToMany(mappedBy = "partyPost")
-	private List<Application> applications;
+  // enum
+  @Enumerated(EnumType.STRING)
+  @Column(name = "status", nullable = false, columnDefinition = "ENUM('FINDING', 'FOUND', 'NO_SHOW_REPORTING', 'END')")
+  private Status status;
+  @Column(name = "close_date", nullable = false)
+  private LocalDateTime closeDate;
+  @Column(name = "party_date", nullable = false)
+  private LocalDateTime partyDate;
 
-	public boolean isWrittenByMe(Long userId) {
-		return Objects.equals(this.user.getId(), userId);
-	}
+  // 연관관계
+  @ManyToOne(optional = false)
+  @JoinColumn(name = "user_id")
+  private User user;
+  @OneToMany(mappedBy = "partyPost")
+  private List<Application> applications;
 
-	// TODO: API 1차 작업완료 후
-	// 차단한 유저의 게시물 블라인드 처리 방식 생각
+  public boolean isWrittenByMe(Long userId) {
+    return Objects.equals(this.user.getId(), userId);
+  }
+  // 메소드
+  // 참가신청서 작성시 applications에 추가
+  public void addApplication(Application application){
+    this.applications.add(application);
+  }
+
+  // 이미 참가신청한 유저인지 확인
+  public boolean isAlreadyApplied(){
+
+  }
 }
+  // TODO: API 1차 작업완료 후
+  // 차단한 유저의 게시물 블라인드 처리 방식 생각
+
+

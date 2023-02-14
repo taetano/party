@@ -25,7 +25,7 @@ public class ApplicationController {
   private final ApplicationService applicationService;
 
 	@PostMapping("join/{party-postId}")
-	public ResponseEntity<DataResponseDto<String>> createApplication(@PathVariable Long partyPostId,
+	public ResponseEntity<ResponseDto> createApplication(@PathVariable Long partyPostId,
 			@AuthenticationPrincipal User user) {
 		return ResponseEntity.ok(applicationService.createApplication(partyPostId,user));
 	}
