@@ -10,9 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.example.party.applicant.entity.Application;
+import com.example.party.applicant.exception.ApplicationNotAvailableException;
 import com.example.party.applicant.exception.ApplicationNotFoundException;
 import com.example.party.applicant.repository.ApplicationRepository;
 import com.example.party.applicant.type.ApplicationResponse;
+import com.example.party.applicant.type.ApplicationStatus;
 import com.example.party.global.dto.ListResponseDto;
 import com.example.party.global.dto.ResponseDto;
 import com.example.party.global.exception.ForbiddenException;
@@ -96,6 +98,8 @@ public class ApplicationService implements IApplicationService {
 		if (!application.isSendToMe(user.getId())) {
 			throw new ForbiddenException();
 		}
+
+		validateApplication(application);
 		application.accept();
 
 		return ResponseDto.ok("참가 신청 수락 완료");
@@ -108,6 +112,8 @@ public class ApplicationService implements IApplicationService {
 		if (!application.isSendToMe(user.getId())) {
 			throw new ForbiddenException();
 		}
+
+		validateApplication(application);
 		application.reject();
 
 		return ResponseDto.ok("참가 신청 거부 완료");
@@ -119,4 +125,9 @@ public class ApplicationService implements IApplicationService {
 			.orElseThrow(ApplicationNotFoundException::new);
 	}
 
+	private static void validateApplication(Application application) {
+		if (application.getStatus() != ApplicationStatus.PENDING) {
+			throw new ApplicationNotAvailableException();
+		}
+	}
 }
