@@ -7,12 +7,12 @@ import lombok.Getter;
 
 @Getter
 public class MyProfileResponse {
-	private String email; //user
-	private String nickName; //user
-	private String phoneNum; //user
-	private String proFileUrl; //profile
-	private String comment; //profile
-	private int participationCount; //profile
+	private final String email; //user
+	private final String nickName; //user
+	private final String phoneNum; //user
+	private final String proFileUrl; //profile
+	private final String comment; //profile
+	private final int participationCount; //profile
 
 	public MyProfileResponse(MyProfileResponse myProfileResponse) {
 		this.email = myProfileResponse.getEmail();

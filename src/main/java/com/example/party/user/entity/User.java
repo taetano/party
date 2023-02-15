@@ -22,7 +22,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.example.party.applicant.entity.Application;
+import com.example.party.application.entity.Application;
 import com.example.party.global.BaseEntity;
 import com.example.party.partypost.entity.PartyPost;
 import com.example.party.user.type.Status;
@@ -99,6 +99,7 @@ public class User extends BaseEntity implements UserDetails {
 		this.phoneNum = phoneNum;
 		this.role = role;
 		this.status = status;
+		this.profile = new Profile();
 	}
 
 	public void changeDORMANT() {
@@ -146,6 +147,10 @@ public class User extends BaseEntity implements UserDetails {
 
 	public void increaseParticipationCnt() {
 		this.profile.increaseParticipationCnt();
+	}
+
+	public void setId(Long id) { // 테스트를 위한 추가
+		this.id = id;
 	}
 
 	//작성한 참가신청 목록 추가

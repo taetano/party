@@ -1,8 +1,9 @@
-package com.example.party.applicant.type;
+package com.example.party.application.dto;
 
 import java.time.LocalDateTime;
 
-import com.example.party.applicant.entity.Application;
+import com.example.party.application.entity.Application;
+import com.example.party.application.type.ApplicationStatus;
 
 import lombok.Getter;
 

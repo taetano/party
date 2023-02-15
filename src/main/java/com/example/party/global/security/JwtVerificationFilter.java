@@ -31,13 +31,13 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
 		JwtProvider.resolveToken(request)
 			.ifPresent((token) -> {
 
-			if(!JwtProvider.validationToken(token)) {
-				throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다.");
-			}
+				if (!JwtProvider.validationToken(token)) {
+					throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다.");
+				}
 
-			String email = JwtProvider.getEmailFromToken(token);
-			setAuthentication(email);
-		});
+				String email = JwtProvider.getEmailFromToken(token);
+				setAuthentication(email);
+			});
 
 		filterChain.doFilter(request, response);
 	}

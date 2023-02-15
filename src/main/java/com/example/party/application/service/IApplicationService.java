@@ -1,6 +1,6 @@
-package com.example.party.applicant.service;
+package com.example.party.application.service;
 
-import com.example.party.applicant.type.ApplicationResponse;
+import com.example.party.application.dto.ApplicationResponse;
 import com.example.party.global.dto.ListResponseDto;
 import com.example.party.global.dto.ResponseDto;
 import com.example.party.user.entity.User;

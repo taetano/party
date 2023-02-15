@@ -16,9 +16,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.example.party.applicant.entity.Application;
+import com.example.party.application.entity.Application;
 import com.example.party.global.BaseEntity;
-import com.example.party.partypost.dto.PartyPostRequest;
+import com.example.party.partypost.dto.UpdatePartyPostRequest;
 import com.example.party.partypost.type.Status;
 import com.example.party.user.entity.User;
 
@@ -87,7 +87,7 @@ public class PartyPost extends BaseEntity {
 	}
 
 	//제목, 상세내용, 카테고리, 주소만 변경 가능 /현재 모임시작시간 & 모임마감시간 & 모집인원 변경 불가능
-	public void update(PartyPostRequest request) {
+	public void update(UpdatePartyPostRequest request) {
 		this.title = request.getTitle();
 		this.content = request.getContent();
 		this.eubMyeonDong = request.getEubMyeonDong();
@@ -129,9 +129,18 @@ public class PartyPost extends BaseEntity {
 		checkMemberIsFull();
 	}
 
+	// 이미 참가신청한 유저인지 확인
+	public boolean isAlreadyApplied() {
+		return false;
+	}
+
 	//모집상태(FINDING)인지 확인
 	public boolean isFinding() {
 		return this.status == Status.FINDING;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	// (applications 의 인원+1)과 maxMember 가 일치하는 경우, status 를 FOUND 로 변경

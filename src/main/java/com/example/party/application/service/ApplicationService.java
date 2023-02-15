@@ -1,4 +1,4 @@
-package com.example.party.applicant.service;
+package com.example.party.application.service;
 
 import java.time.LocalDateTime;
 
@@ -11,11 +11,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.example.party.applicant.entity.Application;
-import com.example.party.applicant.repository.ApplicationRepository;
-import com.example.party.applicant.type.ApplicationResponse;
+import com.example.party.application.dto.ApplicationResponse;
+import com.example.party.application.entity.Application;
+import com.example.party.application.repository.ApplicationRepository;
 import com.example.party.global.dto.ListResponseDto;
 import com.example.party.global.dto.ResponseDto;
+import com.example.party.global.exception.ForbiddenException;
 import com.example.party.partypost.entity.PartyPost;
 import com.example.party.partypost.repository.PartyPostRepository;
 import com.example.party.user.entity.User;
@@ -60,7 +61,7 @@ public class ApplicationService implements IApplicationService {
 		Application application = getApplication(applicationId);
 
 		if (!application.isWrittenByMe(user.getId())) {
-			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "권환이 없습니다.");
+			throw new ForbiddenException();
 		}
 		application.cancel();
 
@@ -74,7 +75,7 @@ public class ApplicationService implements IApplicationService {
 			.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "NOT FOUND"));
 
 		if (!partyPost.isWrittenByMe(user.getId())) {
-			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "권환이 없습니다.");
+			throw new ForbiddenException();
 		}
 
 		Pageable pageable = PageRequest.of(0, 10, Sort.by("createdAt").descending());
@@ -91,7 +92,7 @@ public class ApplicationService implements IApplicationService {
 		Application application = getApplication(applicationId);
 
 		if (!application.isSendToMe(user.getId())) {
-			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "권환이 없습니다.");
+			throw new ForbiddenException();
 		}
 		application.accept();
 
@@ -103,7 +104,7 @@ public class ApplicationService implements IApplicationService {
 		Application application = getApplication(applicationId);
 
 		if (!application.isSendToMe(user.getId())) {
-			throw new ResponseStatusException(HttpStatus.FORBIDDEN, "권환이 없습니다.");
+			throw new ForbiddenException();
 		}
 		application.reject();
 

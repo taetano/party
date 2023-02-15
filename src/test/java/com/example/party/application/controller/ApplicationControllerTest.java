@@ -1,4 +1,4 @@
-package com.example.party.applicant.controller;
+package com.example.party.application.controller;
 
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -22,7 +22,7 @@ import org.springframework.security.access.SecurityConfig;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import com.example.party.applicant.service.ApplicationService;
+import com.example.party.application.service.ApplicationService;
 import com.example.party.global.dto.ListResponseDto;
 import com.example.party.global.dto.ResponseDto;
 import com.example.party.user.entity.User;

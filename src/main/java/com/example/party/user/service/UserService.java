@@ -36,7 +36,6 @@ public class UserService implements IUserService {
 	private final UserRepository userRepository;
 	private final ProfileRepository profileRepository;
 	private final PasswordEncoder passwordEncoder;
-	private final JwtProvider jwtProvider;
 
 	//회원가입
 	@Override
@@ -61,7 +60,7 @@ public class UserService implements IUserService {
 		User user = findByUser(loginRequest.getEmail());
 		confirmPassword(loginRequest.getPassword(), user.getPassword());
 		String generateToken = JwtProvider.generateToken(user);
-		response.addHeader(jwtProvider.AUTHORIZATION_HEADER, generateToken);
+		response.addHeader(JwtProvider.AUTHORIZATION_HEADER, generateToken);
 		return new ResponseDto(200, "로그인 완료");
 	}
 

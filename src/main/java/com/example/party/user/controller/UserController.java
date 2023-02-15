@@ -36,10 +36,9 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
 
 	private final UserService userService;
-	private final JwtProvider jwtProvider;
 
 	@PostMapping("/signup")
-	public ResponseEntity signup(@RequestBody @Valid SignupRequest signupRequest) {
+	public ResponseEntity<ResponseDto> signup(@RequestBody @Valid SignupRequest signupRequest) {
 		ResponseDto responseDto = userService.signUp(signupRequest);
 		HttpHeaders headers = new HttpHeaders();
 		return ResponseEntity.ok().headers(headers).body(responseDto);
@@ -54,9 +53,9 @@ public class UserController {
 	}
 
 	@PostMapping("/signout")
-	public ResponseEntity signout(@AuthenticationPrincipal User userDetails,
+	public ResponseEntity signOut(@AuthenticationPrincipal User userDetails,
 		HttpServletResponse response) {
-		response.setHeader(jwtProvider.AUTHORIZATION_HEADER, "");
+		response.setHeader(JwtProvider.AUTHORIZATION_HEADER, "");
 		userService.signOut(userDetails);
 		return new ResponseEntity<>("로그아웃 성공", HttpStatus.OK);
 	}
