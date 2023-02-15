@@ -1,18 +1,8 @@
 package com.example.party.user.controller;
 
-import com.example.party.global.dto.DataResponseDto;
-import com.example.party.global.dto.ResponseDto;
-import com.example.party.user.dto.LoginRequest;
-import com.example.party.user.dto.MyProfileResponse;
-import com.example.party.user.dto.ProfileRequest;
-import com.example.party.user.dto.SignupRequest;
-import com.example.party.user.dto.WithdrawRequest;
-import com.example.party.user.entity.User;
-import com.example.party.user.service.UserService;
-import com.example.party.util.JwtProvider;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,13 +17,26 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.party.global.dto.DataResponseDto;
+import com.example.party.global.dto.ResponseDto;
+import com.example.party.user.dto.LoginRequest;
+import com.example.party.user.dto.MyProfileResponse;
+import com.example.party.user.dto.ProfileRequest;
+import com.example.party.user.dto.SignupRequest;
+import com.example.party.user.dto.WithdrawRequest;
+import com.example.party.user.entity.User;
+import com.example.party.user.service.UserService;
+import com.example.party.util.JwtProvider;
+
+import lombok.RequiredArgsConstructor;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
 public class UserController {
 
   private final UserService userService;
-  private final JwtProvider jwtProvider;
+  // private final JwtProvider jwtProvider;
 
   @PostMapping("/signup")
   public ResponseEntity signup(@RequestBody @Valid SignupRequest signupRequest) {
@@ -51,9 +54,9 @@ public class UserController {
   }
 
   @PostMapping("/signout")
-  public ResponseEntity signout(@AuthenticationPrincipal User userDetails,
+  public ResponseEntity signOut(@AuthenticationPrincipal User userDetails,
       HttpServletResponse response) {
-    response.setHeader(jwtProvider.AUTHORIZATION_HEADER, "");
+    response.setHeader(JwtProvider.AUTHORIZATION_HEADER, "");
     userService.signOut(userDetails);
     return new ResponseEntity<>("로그아웃 성공", HttpStatus.OK);
   }

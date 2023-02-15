@@ -1,5 +1,14 @@
 package com.example.party.user.service;
 
+import java.util.Optional;
+
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
 import com.example.party.global.dto.DataResponseDto;
 import com.example.party.global.dto.ResponseDto;
 import com.example.party.user.dto.LoginRequest;
@@ -15,14 +24,9 @@ import com.example.party.user.repository.UserRepository;
 import com.example.party.user.type.Status;
 import com.example.party.user.type.UserRole;
 import com.example.party.util.JwtProvider;
-import java.util.Optional;
-import javax.servlet.http.HttpServletResponse;
+
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 
 @Slf4j
@@ -33,7 +37,7 @@ public class UserService implements IUserService {
   private final UserRepository userRepository;
   private final ProfileRepository profileRepository;
   private final PasswordEncoder passwordEncoder;
-  private final JwtProvider jwtProvider;
+  // private final JwtProvider jwtProvider;
 
   //회원가입
   @Override
@@ -58,8 +62,13 @@ public class UserService implements IUserService {
     User user = findByUser(loginRequest.getEmail());
     confirmPassword(loginRequest.getPassword(), user.getPassword());
     String generateToken = JwtProvider.generateToken(user);
-    response.addHeader(jwtProvider.AUTHORIZATION_HEADER, generateToken);
+    response.addHeader(JwtProvider.AUTHORIZATION_HEADER, generateToken);
     return new ResponseDto(200, "로그인 완료");
+  }
+
+  @Override
+  public ResponseDto signOut(User user) {
+    return null;
   }
 
   //회원탈퇴
