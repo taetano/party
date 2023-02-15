@@ -67,7 +67,7 @@ public class PartyPostService implements IPartyPostService {
 		// 1.모집글 전체 불러오기 (페이지 추가)
 		Pageable pageable = PageRequest.of(0, 10, Sort.by("createdAt").descending());
 		//2. Page<partyPost> 를 Page<PartyPostListResponse> 로 변경
-		Page<PartyPostListResponse> page = partyPostRepository.findAllAndActiveIsTrue(pageable).map(
+		Page<PartyPostListResponse> page = partyPostRepository.findAllByActiveIsTrue(pageable).map(
 			PartyPostListResponse::new);
 		// 3.ListResponseDto 생성 후 리턴
 		return new ListResponseDto<>(HttpStatus.OK.value(), "모집글 조회 완료", page.getContent());

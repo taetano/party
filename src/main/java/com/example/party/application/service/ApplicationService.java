@@ -80,7 +80,7 @@ public class ApplicationService implements IApplicationService {
 
 		Pageable pageable = PageRequest.of(0, 10, Sort.by("createdAt").descending());
 		Page<ApplicationResponse> ret = applicationRepository.findAllByPartyPostAndCancelIsFalse(
-				partyPost.getId(),
+				partyPost,
 				pageable)
 			.map(ApplicationResponse::new);
 
@@ -139,8 +139,7 @@ public class ApplicationService implements IApplicationService {
 		}
 
 		//(4) 중복검사
-		if (applicationRepository.existsByPartyPost_partyPostIdAndUser_userId(partyPost.getId(),
-			user.getId())) {
+		if (applicationRepository.existsByPartyPostAndUser(partyPost, user)) {
 			throw new IllegalArgumentException("이미 신청한 모집글입니다");
 		}
 	}

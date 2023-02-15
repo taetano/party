@@ -72,7 +72,7 @@ class ApplicationServiceTest {
 			Page<Application> applications = applications();
 			given(partyPostRepository.findById(anyLong()))
 				.willReturn(Optional.of(partyPost));
-			given(applicationRepository.findAllByPartyPostAndCancelIsFalse(anyLong(), any(Pageable.class)))
+			given(applicationRepository.findAllByPartyPostAndCancelIsFalse(any(PartyPost.class), any(Pageable.class)))
 				.willReturn(applications);
 
 			//  when
