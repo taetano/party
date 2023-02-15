@@ -103,4 +103,7 @@ public class Application extends BaseEntity {
 		this.modifiedAt = LocalDateTime.now();
 	}
 
+	public void setId(Long id) {
+		this.id = id;
+	}
 }

@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.party.applicant.service.ApplicationService;
 import com.example.party.applicant.type.ApplicationResponse;
-import com.example.party.global.dto.DataResponseDto;
 import com.example.party.global.dto.ListResponseDto;
 import com.example.party.global.dto.ResponseDto;
 import com.example.party.user.entity.User;
@@ -25,7 +24,7 @@ public class ApplicationController {
 	private final ApplicationService applicationService;
 
 	@PostMapping("join/{party-postId}")
-	public ResponseEntity<ResponseDto> createApplication(@PathVariable Long partyPostId,
+	public ResponseEntity<ResponseDto> createApplication(@PathVariable(name = "party-postId") Long partyPostId,
 		@AuthenticationPrincipal User user) {
 		return ResponseEntity.ok(applicationService.createApplication(partyPostId, user));
 	}
@@ -43,10 +42,10 @@ public class ApplicationController {
 	}
 
 	@PostMapping("/accept/{applicationId}")
-	public ResponseEntity<DataResponseDto<ApplicationResponse>> acceptApplication(
+	public ResponseEntity<ResponseDto> acceptApplication(
 		@PathVariable Long applicationId,
 		@AuthenticationPrincipal User user) {
-		return null;
+		return ResponseEntity.ok(applicationService.acceptApplication(applicationId, user));
 	}
 
 	@PostMapping("/reject/{applicationId}")

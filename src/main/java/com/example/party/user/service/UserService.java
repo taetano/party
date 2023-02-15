@@ -33,27 +33,26 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class UserService implements IUserService {
 
-	private final UserRepository userRepository;
-	private final ProfileRepository profileRepository;
-	private final PasswordEncoder passwordEncoder;
-	private final JwtProvider jwtProvider;
+  private final UserRepository userRepository;
+  private final ProfileRepository profileRepository;
+  private final PasswordEncoder passwordEncoder;
 
-	//회원가입
-	@Override
-	public ResponseDto signUp(SignupRequest signupRequest) {
-		Optional<User> users = userRepository.findByEmail(signupRequest.getEmail());
-		if (users.isPresent()) {
-			throw new IllegalArgumentException("유저가 존재합니다");
-		}
+  //회원가입
+  @Override
+  public ResponseDto signUp(SignupRequest signupRequest) {
+    Optional<User> users = userRepository.findByEmail(signupRequest.getEmail());
+    if (users.isPresent()) {
+      throw new IllegalArgumentException("유저가 존재합니다");
+    }
 
-		String userEmail = signupRequest.getEmail();
-		String password = passwordEncoder.encode(signupRequest.getPassword());
-		User user = new User(userEmail, password, signupRequest.getNickname(),
-			signupRequest.getPhoneNum()
-			, UserRole.ROLE_USER, Status.ACTIVE);
-		userRepository.save(user);
-		return new ResponseDto(201, "회원가입 완료");
-	}
+    String userEmail = signupRequest.getEmail();
+    String password = passwordEncoder.encode(signupRequest.getPassword());
+    User user = new User(userEmail, password, signupRequest.getNickname(),
+        signupRequest.getPhoneNum()
+        , UserRole.ROLE_USER, Status.ACTIVE);
+    userRepository.save(user);
+    return new ResponseDto(201, "회원가입 완료");
+  }
 
 	//로그인
 	@Override
@@ -61,7 +60,7 @@ public class UserService implements IUserService {
 		User user = findByUser(loginRequest.getEmail());
 		confirmPassword(loginRequest.getPassword(), user.getPassword());
 		String generateToken = JwtProvider.generateToken(user);
-		response.addHeader(jwtProvider.AUTHORIZATION_HEADER, generateToken);
+      response.addHeader(JwtProvider.AUTHORIZATION_HEADER, generateToken);
 		return new ResponseDto(200, "로그인 완료");
 	}
 

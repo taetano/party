@@ -1,14 +1,10 @@
 package com.example.party.user.entity;
 
-import com.example.party.applicant.entity.Application;
-import com.example.party.global.BaseEntity;
-import com.example.party.partypost.entity.PartyPost;
-import com.example.party.user.type.Status;
-import com.example.party.user.type.UserRole;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -21,12 +17,20 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.example.party.applicant.entity.Application;
+import com.example.party.global.BaseEntity;
+import com.example.party.partypost.entity.PartyPost;
+import com.example.party.user.type.Status;
+import com.example.party.user.type.UserRole;
+
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -97,6 +101,7 @@ public class User extends BaseEntity implements UserDetails {
     this.phoneNum = phoneNum;
     this.role = role;
     this.status = status;
+    this.profile = new Profile();
   }
 
   public void changeDORMANT() {
@@ -146,4 +151,7 @@ public class User extends BaseEntity implements UserDetails {
     this.profile.increaseParticipationCnt();
   }
 
+  public void setId(Long id) { // 테스트를 위한 추가
+    this.id = id;
+  }
 }

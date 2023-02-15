@@ -9,5 +9,5 @@ import com.example.party.user.entity.User;
 public interface UserRepository extends JpaRepository<User, Long> {
 	Optional<User> findByEmail(String email);
 
-	Optional<User> findByUserId(Long userId);
+	// Optional<User> findByUserId(Long userId);
 }
