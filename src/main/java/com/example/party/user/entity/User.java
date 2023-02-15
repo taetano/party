@@ -25,6 +25,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.example.party.application.entity.Application;
 import com.example.party.global.BaseEntity;
 import com.example.party.partypost.entity.PartyPost;
+import com.example.party.user.dto.ProfileRequest;
 import com.example.party.user.type.Status;
 import com.example.party.user.type.UserRole;
 
@@ -140,9 +141,12 @@ public class User extends BaseEntity implements UserDetails {
 		return false;
 	}
 
-	public void updataProfile(String nickname, String phoneNum) {
-		this.nickname = nickname;
-		this.phoneNum = phoneNum;
+	public void updataProfile(ProfileRequest profileRequest) {
+		this.nickname = profileRequest.getNickName();
+		this.phoneNum = profileRequest.getPhoneNum();
+		//프로필 수정을 user에서 처리
+		this.profile.updateProfile(profileRequest.getProFileUrl(), profileRequest.getComment());
+
 	}
 
 	public void increaseParticipationCnt() {

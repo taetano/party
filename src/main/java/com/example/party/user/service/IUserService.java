@@ -28,7 +28,7 @@ public interface IUserService {
 	DataResponseDto<?> updateProfile(ProfileRequest profileRequest, Long id);
 
 	//내 프로필 조회
-	DataResponseDto<?> getMyProfile(Long id);
+	DataResponseDto<?> getMyProfile(User user);
 
 	//상대방 프로필 조회
 	DataResponseDto<?> getOtherProfile(Long id);

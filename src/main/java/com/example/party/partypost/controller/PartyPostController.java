@@ -2,7 +2,6 @@ package com.example.party.partypost.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -64,11 +63,9 @@ public class PartyPostController {
 	//모집게시물 좋아요 (*좋아요 취소도 포함되는 기능임)
 	@PostMapping("/{party-postId}")
 	public DataResponseDto<String> toggleLikePartyPost(@PathVariable(name = "party-postId") Long partyPostId,
-		@AuthenticationPrincipal UserDetails userDetails) {
-		/*userDetails이용바람*/
-		Long test_id = 0L; //임시 userDetails id값으로 바꾸기
+		@AuthenticationPrincipal User user) {
 		//좋아요 기능
-		return partyPostService.toggleLikePartyPost(partyPostId, test_id);
+		return partyPostService.toggleLikePartyPost(partyPostId, user.getId());
 	}
 
 	//모집글전체조회
