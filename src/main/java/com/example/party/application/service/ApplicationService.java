@@ -13,14 +13,15 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.example.party.application.dto.ApplicationResponse;
 import com.example.party.application.entity.Application;
+import com.example.party.application.exception.ApplicationNotAvailableException;
 import com.example.party.application.repository.ApplicationRepository;
+import com.example.party.application.type.ApplicationStatus;
 import com.example.party.global.dto.ListResponseDto;
 import com.example.party.global.dto.ResponseDto;
 import com.example.party.global.exception.ForbiddenException;
 import com.example.party.partypost.entity.PartyPost;
 import com.example.party.partypost.repository.PartyPostRepository;
 import com.example.party.user.entity.User;
-import com.example.party.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,7 +32,6 @@ public class ApplicationService implements IApplicationService {
 
 	private final ApplicationRepository applicationRepository;
 	private final PartyPostRepository partyPostRepository;
-	private final UserRepository userRepository;
 
 	//모집 참가 신청
 	@Override
@@ -94,6 +94,8 @@ public class ApplicationService implements IApplicationService {
 		if (!application.isSendToMe(user.getId())) {
 			throw new ForbiddenException();
 		}
+
+		validateApplication(application);
 		application.accept();
 
 		return ResponseDto.ok("참가 신청 수락 완료");
@@ -106,6 +108,8 @@ public class ApplicationService implements IApplicationService {
 		if (!application.isSendToMe(user.getId())) {
 			throw new ForbiddenException();
 		}
+
+		validateApplication(application);
 		application.reject();
 
 		return ResponseDto.ok("참가 신청 거부 완료");
@@ -138,6 +142,12 @@ public class ApplicationService implements IApplicationService {
 		if (applicationRepository.existsByPartyPost_partyPostIdAndUser_userId(partyPost.getId(),
 			user.getId())) {
 			throw new IllegalArgumentException("이미 신청한 모집글입니다");
+		}
+	}
+
+	private static void validateApplication(Application application) {
+		if (application.getStatus() != ApplicationStatus.PENDING) {
+			throw new ApplicationNotAvailableException();
 		}
 	}
 }

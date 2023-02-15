@@ -14,9 +14,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
-
 import com.example.party.application.type.ApplicationStatus;
 import com.example.party.global.BaseEntity;
 import com.example.party.partypost.entity.PartyPost;
@@ -85,20 +82,12 @@ public class Application extends BaseEntity {
 	}
 
 	public void accept() {
-		if (this.status != ApplicationStatus.PENDING) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "올바르지 않은 접근입니다.");
-		}
-
 		this.status = ApplicationStatus.ACCEPT;
 		this.modifiedAt = LocalDateTime.now();
 		this.user.increaseParticipationCnt();
 	}
 
 	public void reject() {
-		if (this.status != ApplicationStatus.PENDING) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "올바르지 않은 접근입니다.");
-		}
-
 		this.status = ApplicationStatus.REJECT;
 		this.modifiedAt = LocalDateTime.now();
 	}
