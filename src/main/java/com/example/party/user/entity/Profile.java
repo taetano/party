@@ -23,8 +23,20 @@ public class Profile {
 	private String comment;
 	@Column(name = "no_show_cnt", nullable = false)
 	private int noShowCnt;
+
 	@Column(name = "participation_cnt", nullable = false)
 	private int participationCnt;
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Profile(String img, String comment, int noShowCnt, int participationCnt) {
+		this.img = img;
+		this.comment = comment;
+		this.noShowCnt = noShowCnt;
+		this.participationCnt = participationCnt;
+	}
 
 	public void updateProfile(String img, String comment) {
 		this.img = img;

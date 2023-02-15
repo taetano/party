@@ -80,7 +80,7 @@ public class UserController {
 	@GetMapping("/profile")
 	public DataResponseDto<MyProfileResponse> getMyProfile(@AuthenticationPrincipal
 	User user) {
-		return userService.getMyProfile(user.getId());
+		return userService.getMyProfile(user);
 	}
 
 	@GetMapping("/profile/{userId}")
