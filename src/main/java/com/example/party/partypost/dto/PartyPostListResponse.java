@@ -12,22 +12,19 @@ public class PartyPostListResponse {
   private final String title;
   //status
   private final Status status;
-  //createdAt
-  private final LocalDateTime createdAt;
-  //modifiedAt
-  private final LocalDateTime modifiedAt;
   //maxMember
   private final byte maxMember;
-  //partyDate
+  //partyDate(모임시작시간)
   private final LocalDateTime partyDate;
+  //closeDate(모집마감시간)
+  private final LocalDateTime closeDate;
   //address
   private final String address;
 
   public PartyPostListResponse(PartyPost partyPost) {
     this.title = partyPost.getTitle();
     this.status = partyPost.getStatus();
-    this.createdAt = partyPost.getCreatedAt();
-    this.modifiedAt = partyPost.getModifiedAt();
+    this.closeDate = partyPost.getCloseDate();
     this.maxMember = partyPost.getMaxMember();
     this.partyDate = partyPost.getPartyDate();
     this.address = partyPost.getAddress();

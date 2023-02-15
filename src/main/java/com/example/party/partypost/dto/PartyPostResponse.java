@@ -29,19 +29,6 @@ public class PartyPostResponse {
   private final int viewCnt;
   private final List<ApplicationResponse> joinMember;
 
-  //partyDate 를 넣어주면 요일을 계산해주는 메소드 (ex) 토
-  private String whichDayOfWeek(LocalDateTime partyDate) {
-    return partyDate.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.KOREAN);
-  }
-
-  //PartyPost Entity의 List<Application> 을 applicationDto 로 바꿔주는 메소드
-  private List<ApplicationResponse> makeApplications(PartyPost partyPost) {
-
-    return partyPost.getApplications().stream().map(
-        ApplicationResponse::new).collect(
-        Collectors.toList());
-  }
-
   //생성자
   public PartyPostResponse(PartyPost partyPost) {
     this.id = partyPost.getId();
