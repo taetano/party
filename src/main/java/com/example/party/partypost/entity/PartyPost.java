@@ -41,7 +41,7 @@ public class PartyPost extends BaseEntity {
   @Column(name = "view_cnt", nullable = false)
   private int viewCnt;
   @Column(name = "max_member", nullable = false)
-  private byte maxMember;
+  private byte maxMember; // MYSQL DB 상에
   @Column(name = "eub_myeon_dong", nullable = false)
   private String eubMyeonDong;
   @Column(name = "address", nullable = false)
@@ -101,11 +101,6 @@ public class PartyPost extends BaseEntity {
     }
   }
 
-  //작성자인지 확인
-  public boolean isWriter(User user) {
-    return this.user.equals(user);
-  }
-
   //모집마감전인지 확인
   public boolean beforeCloseDate(LocalDateTime now) {
     return this.closeDate.isAfter(now);
@@ -126,15 +121,25 @@ public class PartyPost extends BaseEntity {
     return Objects.equals(this.user.getId(), userId);
   }
 
-  // 참가신청서 작성시 applications에 추가
+  // 들어온 참가신청을 applications 에 추가
   public void addApplication(Application application) {
     this.applications.add(application);
+    checkMemberIsFull();
   }
 
-  // 이미 참가신청한 유저인지 확인
-  public boolean isAlreadyApplied() {
-
+  //모집상태(FINDING)인지 확인
+  public boolean isFinding() {
+    return this.status == Status.FINDING;
   }
+
+  // (applications 의 인원+1)과 maxMember 가 일치하는 경우, status 를 FOUND 로 변경
+  private void checkMemberIsFull() {
+    int acceptedMembers = this.applications.size();
+    if (this.maxMember == acceptedMembers + 1) {
+      this.status = Status.FOUND;
+    }
+  }
+
 }
 // TODO: API 1차 작업완료 후
 // 차단한 유저의 게시물 블라인드 처리 방식 생각

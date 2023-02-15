@@ -1,8 +1,11 @@
 package com.example.party.applicant.entity;
 
+import com.example.party.applicant.type.ApplicationStatus;
+import com.example.party.global.BaseEntity;
+import com.example.party.partypost.entity.PartyPost;
+import com.example.party.user.entity.User;
 import java.time.LocalDateTime;
 import java.util.Objects;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -13,18 +16,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
-
-import com.example.party.applicant.type.ApplicationStatus;
-import com.example.party.global.BaseEntity;
-import com.example.party.partypost.entity.PartyPost;
-import com.example.party.user.entity.User;
-
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -57,12 +53,12 @@ public class Application extends BaseEntity {
     this.status = ApplicationStatus.PENDING;
     this.user = user;
     this.partyPost = partyPost;
-		this.created_at = LocalDateTime.now();
+    this.createdAt = LocalDateTime.now();
   }
 
-	public boolean isWrittenByMe(Long userId) {
-		return Objects.equals(this.user.getId(), userId);
-	}
+  public boolean isWrittenByMe(Long userId) {
+    return Objects.equals(this.user.getId(), userId);
+  }
 
   public void cancel() {
     this.cancel = true;
@@ -80,9 +76,9 @@ public class Application extends BaseEntity {
     return this.user.getNoShowCnt();
   }
 
-	public boolean isSendToMe(Long userId) {
-		return Objects.equals(this.partyPost.getUser().getId(), userId);
-	}
+  public boolean isSendToMe(Long userId) {
+    return Objects.equals(this.partyPost.getUser().getId(), userId);
+  }
 
   public void accept() {
     if (this.status != ApplicationStatus.PENDING) {
@@ -90,7 +86,7 @@ public class Application extends BaseEntity {
     }
 
     this.status = ApplicationStatus.ACCEPT;
-    this.modified_at = LocalDateTime.now();
+    this.modifiedAt = LocalDateTime.now();
     this.user.increaseParticipationCnt();
   }
 
@@ -100,7 +96,7 @@ public class Application extends BaseEntity {
     }
 
     this.status = ApplicationStatus.REJECT;
-    this.modified_at = LocalDateTime.now();
+    this.modifiedAt = LocalDateTime.now();
   }
 
 }

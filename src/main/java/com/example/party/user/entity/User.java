@@ -146,4 +146,8 @@ public class User extends BaseEntity implements UserDetails {
     this.profile.increaseParticipationCnt();
   }
 
+  //작성한 참가신청 목록 추가
+  public void addApplication(Application application) {
+    this.applies.add(application);
+  }
 }
