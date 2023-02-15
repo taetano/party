@@ -3,6 +3,7 @@ package com.example.party.partypost.entity;
 import com.example.party.applicant.entity.Application;
 import com.example.party.global.BaseEntity;
 import com.example.party.partypost.dto.PartyPostRequest;
+import com.example.party.partypost.dto.UpdatePartyPostRequest;
 import com.example.party.partypost.type.Status;
 import com.example.party.user.entity.User;
 import java.time.LocalDateTime;
@@ -85,7 +86,7 @@ public class PartyPost extends BaseEntity {
   }
 
   //제목, 상세내용, 카테고리, 주소만 변경 가능 /현재 모임시작시간 & 모임마감시간 & 모집인원 변경 불가능
-  public void update(PartyPostRequest request) {
+  public void update(UpdatePartyPostRequest request) {
     this.title = request.getTitle();
     this.content = request.getContent();
     this.eubMyeonDong = request.getEubMyeonDong();

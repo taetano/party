@@ -7,10 +7,6 @@ import com.example.party.global.dto.ResponseDto;
 import com.example.party.user.entity.User;
 
 public interface IApplicationService {
-	// 모집 참가 신청
-	DataResponseDto<?> createApplication();
-
-  DataResponseDto<?> createApplication(Long postId, Long userId);
 
   //모집 참가 신청
   ResponseDto createApplication(Long partyPostId, User user);

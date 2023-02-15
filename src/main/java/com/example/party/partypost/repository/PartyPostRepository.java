@@ -17,6 +17,6 @@ public interface PartyPostRepository extends JpaRepository<PartyPost, Long> {
   Optional<PartyPost> findById(Long postId);
 
   //내가 작성한 모집글 리스트 조회
-  List<PartyPost> findByUserId(User user, Pageable pageable);
+  List<PartyPost> findByUserId(Long userId, Pageable pageable);
 
 }
