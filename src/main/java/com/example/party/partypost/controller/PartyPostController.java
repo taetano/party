@@ -46,33 +46,34 @@ public class PartyPostController {
   }
 
   //내가 작성한 모집글 리스트 조회
-  @GetMapping("/api/party-posts/mylist")
-  public
+//  @GetMapping("/api/party-posts/mylist")
+//  public
 
   @PostMapping("/likes/party-posts/{party_postId}")
   public DataResponseDto<String> toggleLikePartyPost(@PathVariable Long party_postId,
       @AuthenticationPrincipal UserDetails userDetails) {
-    /*userDetails이용바람*/
-    Long test_id = 0l; //임시 userDetails id값으로 바꾸기
+    /*userDetails 이용바람*/
+    Long test_id = 0l; //임시 userDetails id 값으로 바꾸기
     //좋아요 기능
     return partyPostService.toggleLikePartyPost(party_postId, test_id);
   }
 
   //모집글전체조회
-  @GetMapping("")
+  @GetMapping()
   public ResponseEntity<ListResponseDto<PartyPostListResponse>> findPartyList() {
     return ResponseEntity.ok(partyPostService.findPartyList());
   }
 
   //모집글 상세 조회(개별 상세조회)
-  @GetMapping("/{party-postId}")
-  public ResponseEntity<DataResponseDto> getPartyPost(@PathVariable Long partyPostId,
+  @GetMapping("/{partyPostId}")
+  public ResponseEntity<DataResponseDto<PartyPostResponse>> getPartyPost(
+      @PathVariable Long partyPostId,
       @AuthenticationPrincipal User user) {
     return ResponseEntity.ok(partyPostService.getPartyPost(partyPostId, user));
   }
 
   //모집글 삭제
-  @DeleteMapping("/{party-postId}")
+  @DeleteMapping("/{partyPostId}")
   public ResponseEntity<ResponseDto> deletePartyPost(@PathVariable Long partyPostId,
       @AuthenticationPrincipal User user) {
     return ResponseEntity.ok(partyPostService.deletePartyPost(partyPostId, user));

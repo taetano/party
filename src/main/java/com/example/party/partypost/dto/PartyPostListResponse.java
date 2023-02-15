@@ -26,10 +26,10 @@ public class PartyPostListResponse {
   public PartyPostListResponse(PartyPost partyPost) {
     this.title = partyPost.getTitle();
     this.status = partyPost.getStatus();
-    this.createdAt = LocalDateTime.now(); // 임시값
-    this.modifiedAt = LocalDateTime.now(); // 임시값
+    this.createdAt = partyPost.getCreatedAt();
+    this.modifiedAt = partyPost.getModifiedAt();
     this.maxMember = partyPost.getMaxMember();
     this.partyDate = partyPost.getPartyDate();
-    this.address = "(임시주소)서울시 마포구 연남동"; //임시값
+    this.address = partyPost.getAddress();
   }
 }

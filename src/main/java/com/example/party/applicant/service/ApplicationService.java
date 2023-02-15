@@ -36,7 +36,7 @@ public class ApplicationService implements IApplicationService {
     PartyPost partyPost = partyPostRepository.findById(partyPostId).orElseThrow(
         () -> new IllegalArgumentException("해당 postId의 partyPost 가 존재하지 않습니다")
     );
-    //2. 검증 단계가 있을 것
+    //2. Application 이 작성 가능한지 검증
     checkBeforeCreateApplication(partyPost, user);
     //3. Application 객체 생성
     Application application = new Application(user, partyPost);
@@ -121,11 +121,11 @@ public class ApplicationService implements IApplicationService {
       throw new IllegalArgumentException("내가 작성한 모집글에 참가신청할 수 없습니다");
     }
 
-    //(2) partyPost가 모집마감시간전인지 확인
+    //(2) partyPost 가 모집마감시간전인지 확인
     if (!partyPost.beforeCloseDate(LocalDateTime.now())) {
       throw new IllegalArgumentException("모집 마감시간이 지나, 참가신청할 수 없습니다");
     }
-    //(3) partyPost가 FINDING 인지 확인
+    //(3) partyPost 가 FINDING 인지 확인
     if (!partyPost.isFinding()) {
       throw new IllegalArgumentException("모집글이 모집 중인 상태가 아닙니다");
     }

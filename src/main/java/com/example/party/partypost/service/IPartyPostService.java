@@ -26,19 +26,8 @@ public interface IPartyPostService {
   //모집게시물 좋아요 (*좋아요 취소도 포함되는 기능임)
   DataResponseDto<String> toggleLikePartyPost(Long party_postId, Long userId);
 
-  //모집글 삭제
-  DataResponseDto<?> deletePartyPost();
-
   //모집글전체조회
   ListResponseDto<?> findPartyList();
-
-  //모집글 상세 조회(개별 상세조회)
-  DataResponseDto<?> getPartyPost();
-
-
-  //모집글 상세 조회(개별 상세조회)
-  @Transactional
-  DataResponseDto<PartyPostResponse> getPartyPost(Long postId);
 
   //모집글 상세 조회(개별 상세조회)
   @Transactional
