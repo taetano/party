@@ -1,15 +1,5 @@
 package com.example.party.partypost.controller;
 
-import com.example.party.global.dto.DataResponseDto;
-import com.example.party.global.dto.ListResponseDto;
-import com.example.party.global.dto.ResponseDto;
-import com.example.party.partypost.dto.PartyPostListResponse;
-import com.example.party.partypost.dto.PartyPostRequest;
-import com.example.party.partypost.dto.PartyPostResponse;
-import com.example.party.partypost.repository.PartyPostRepository;
-import com.example.party.partypost.service.PartyPostService;
-import com.example.party.user.entity.User;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,6 +11,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.example.party.global.dto.DataResponseDto;
+import com.example.party.global.dto.ListResponseDto;
+import com.example.party.global.dto.ResponseDto;
+import com.example.party.partypost.dto.PartyPostListResponse;
+import com.example.party.partypost.dto.PartyPostRequest;
+import com.example.party.partypost.dto.PartyPostResponse;
+import com.example.party.partypost.repository.PartyPostRepository;
+import com.example.party.partypost.service.PartyPostService;
+import com.example.party.user.entity.User;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
@@ -45,9 +47,6 @@ public class PartyPostController {
     return ResponseEntity.ok(partyPostService.updatePartyPost(partyPostId, request));
   }
 
-  //내가 작성한 모집글 리스트 조회
-  @GetMapping("/api/party-posts/mylist")
-  public
 
   @PostMapping("/likes/party-posts/{party_postId}")
   public DataResponseDto<String> toggleLikePartyPost(@PathVariable Long party_postId,

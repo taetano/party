@@ -5,12 +5,9 @@ import javax.servlet.http.HttpServletResponse;
 import com.example.party.global.dto.DataResponseDto;
 import com.example.party.global.dto.ResponseDto;
 import com.example.party.user.dto.LoginRequest;
-import com.example.party.user.dto.ProfileResponse;
+import com.example.party.user.dto.ProfileRequest;
 import com.example.party.user.dto.SignupRequest;
 import com.example.party.user.dto.WithdrawRequest;
-import com.example.party.user.dto.ProfileRequest;
-import com.example.party.user.dto.MyProfileResponse;
-import com.example.party.user.dto.SignupReqest;
 import com.example.party.user.entity.User;
 
 public interface IUserService {

@@ -1,5 +1,16 @@
 package com.example.party.partypost.service;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.example.party.global.dto.DataResponseDto;
 import com.example.party.global.dto.ListResponseDto;
 import com.example.party.global.dto.ResponseDto;
@@ -10,17 +21,9 @@ import com.example.party.partypost.entity.PartyPost;
 import com.example.party.partypost.repository.PartyPostRepository;
 import com.example.party.user.entity.User;
 import com.example.party.user.repository.UserRepository;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -65,6 +68,16 @@ public class PartyPostService implements IPartyPostService {
     return new ListResponseDto<>(HttpStatus.OK.value(), "모집글 조회 완료", partyPostDtoList);
   }
 
+  @Override
+  public DataResponseDto<?> getPartyPost() {
+    return null;
+  }
+
+  @Override
+  public DataResponseDto<PartyPostResponse> getPartyPost(Long postId) {
+    return null;
+  }
+
   //모집글 상세 조회(개별 상세조회)
   @Override
   @Transactional
@@ -103,6 +116,11 @@ public class PartyPostService implements IPartyPostService {
     return new DataResponseDto<>(HttpStatus.OK.value(), "모집글 수정 완료", partyPostResponse);
   }
 
+  @Override
+  public ListResponseDto<PartyPostListResponse> findMyCreatedPartyList() {
+    return null;
+  }
+
   //모집글 삭제
   @Override
   public ResponseDto deletePartyPost(Long partyPostId, User user) {
@@ -119,16 +137,17 @@ public class PartyPostService implements IPartyPostService {
   }
 
   //내가 작성한 모집글 조회 ( 내가 파티장인 경우만 )
-  @Override
+  // @Override
   public ListResponseDto<PartyPostListResponse> findMyCreatedPartyList(User user, int page) {
     Pageable pageable = PageRequest.of(page - 1, 5, Sort.by(Sort.Direction.DESC, "modifiedAt"));
 
     //리스트 생성
     List<PartyPost> list = partyPostRepository.findByUserId(user, pageable);
-    List<PartyPostResponse> myCreatedPartyList = list.stream()
-        .filter(partyPost -> partyPost.getUserId().equals(user))
-        .map(partyPost -> new PartyPostResponse(partyPost)).collect(Collectors.toList());
-    return myCreatedPartyList;
+    // List<PartyPostResponse> myCreatedPartyList = list.stream()
+    //     .filter(partyPost -> partyPost.getUserId().equals(user))
+    //     .map(partyPost -> new PartyPostResponse(partyPost)).collect(Collectors.toList());
+    // return myCreatedPartyList;  - 임시 주석 처리 했습니다. 최찬호
+    return null;
   }
 
   //내가 참석한 모집글 조회 ( 내가 파티원인 경우만 )
@@ -156,6 +175,11 @@ public class PartyPostService implements IPartyPostService {
     } else {
       return new DataResponseDto(200, "모집글 좋아요 완료", partPostTitle);
     }
+  }
+
+  @Override
+  public DataResponseDto<?> deletePartyPost() {
+    return null;
   }
 
   //private 메소드
