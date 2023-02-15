@@ -10,11 +10,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.example.party.global.security.JwtAccessDeniedHandler;
 import com.example.party.global.security.JwtEntryPoint;
-import com.example.party.global.security.JwtVerificationFilter;
 
 import lombok.RequiredArgsConstructor;
 
@@ -34,11 +32,10 @@ public class WebSecurityConfiguration {
 	}
 
 	@Bean
-	public JwtVerificationFilter jwtVerificationFilter() {
-		return new JwtVerificationFilter(userDetailsService);
-	}
+	// public JwtVerificationFilter jwtVerificationFilter() {
+	// 	return new JwtVerificationFilter(userDetailsService);
+	// }
 
-	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
@@ -55,7 +52,7 @@ public class WebSecurityConfiguration {
 		http.csrf().disable()
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			.and()
-			.addFilterBefore(jwtVerificationFilter(), UsernamePasswordAuthenticationFilter.class)
+			// .addFilterBefore(jwtVerificationFilter(), UsernamePasswordAuthenticationFilter.class)
 			.exceptionHandling(config -> config
 				.authenticationEntryPoint(entryPoint())
 				.accessDeniedHandler(accessDeniedHandler())

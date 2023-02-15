@@ -2,12 +2,11 @@ package com.example.party.util;
 
 import java.security.Key;
 import java.util.Date;
-import java.util.Optional;
 import java.util.function.Function;
 
 import javax.servlet.http.HttpServletRequest;
 
-
+import com.example.party.global.type.JwtEnum;
 import com.example.party.user.entity.User;
 
 import io.jsonwebtoken.Claims;
@@ -25,6 +24,7 @@ public class JwtProvider {
 	public static final String BEARER_PREFIX = "Bearer";
 	private static final Key KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256); // 임시로 작성해놓았습니다. 의견주시면 감사하겠습니다.
 	private static final int expire = 60 * 60 * 24 * 1000;
+	private static final Long refreshExpire = 7 * 24 * 60 * 60 * 1000L;
 
 	public static String generateToken(User user) {
 		Date curDate = new Date();
@@ -38,34 +38,47 @@ public class JwtProvider {
 			.compact();
 	}
 
-	public static Optional<String> resolveToken(HttpServletRequest request) {
+	public static String refreshToken(User user) {
+		Date curDate = new Date();
+		Date RefreshExpireDate = new Date(curDate.getTime() + refreshExpire);
+
+		return Jwts.builder()
+			.setSubject(user.getEmail())
+			.setIssuedAt(curDate)
+			.setExpiration(RefreshExpireDate)
+			.signWith(KEY)
+			.compact();
+	}
+
+	public static String resolveToken(HttpServletRequest request) {
 		String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
 
 		if (bearerToken != null && bearerToken.startsWith(BEARER_PREFIX)) {
-			return Optional.of(bearerToken.substring(6));
+			return bearerToken.substring(7);
 		}
 
-		return Optional.empty();
+		return null;
 	}
 
 	public static String getEmailFromToken(String token) {
 		return getClaimFromToken(token, Claims::getSubject);
 	}
 
-	public static boolean validationToken(String token) {
+	public static JwtEnum validationToken(String token) {
 		try {
 			Jwts.parserBuilder().setSigningKey(KEY).build().parseClaimsJwt(token);
-			return true;
+			return JwtEnum.ACCESS;
 		} catch (SecurityException | MalformedJwtException e) {
 			log.info("유효하지 않은 JWT 서명 입니다.");
 		} catch (ExpiredJwtException e) {
 			log.info("만료된 JWT 토큰 입니다.");
+			return JwtEnum.EXPIRED;
 		} catch (UnsupportedJwtException e) {
 			log.info("지원되지 않은 JWT 토큰 입니다.");
 		} catch (IllegalArgumentException e) {
 			log.info("잘못된 JWT 토큰 입니다.");
 		}
-		return false;
+		return JwtEnum.DENIED;
 	}
 
 	private static Claims getAllClaims(String token) {
@@ -79,5 +92,20 @@ public class JwtProvider {
 	private static <T> T getClaimFromToken(String token, Function<Claims, T> claimResolver) {
 		final Claims claims = getAllClaims(token);
 		return claimResolver.apply(claims);
+	}
+
+	// accessToken 남은 유효시간
+	public Long getExpiration(String accessToken) {
+
+		Date expiration = Jwts.parserBuilder()
+			.setSigningKey(KEY)
+			.build()
+			.parseClaimsJws(accessToken)
+			.getBody()
+			.getExpiration();
+
+		// 현재 시간
+		Long now = new Date().getTime();
+		return (expiration.getTime() - now);
 	}
 }
