@@ -1,4 +1,4 @@
-package com.example.party.applicant.type;
+package com.example.party.application.type;
 
 public enum ApplicationStatus {
 	PENDING, //보류중

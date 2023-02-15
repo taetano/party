@@ -2,11 +2,11 @@ package com.example.party.util;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.Optional;
 import java.util.function.Function;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.example.party.global.type.JwtEnum;
 import com.example.party.user.entity.User;
 
 import io.jsonwebtoken.Claims;
@@ -50,35 +50,34 @@ public class JwtProvider {
 			.compact();
 	}
 
-	public static String resolveToken(HttpServletRequest request) {
+	public static Optional<String> resolveToken(HttpServletRequest request) {
 		String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
 
 		if (bearerToken != null && bearerToken.startsWith(BEARER_PREFIX)) {
-			return bearerToken.substring(7);
+			return Optional.of(bearerToken.substring(6));
 		}
 
-		return null;
+		return Optional.empty();
 	}
 
 	public static String getEmailFromToken(String token) {
 		return getClaimFromToken(token, Claims::getSubject);
 	}
 
-	public static JwtEnum validationToken(String token) {
+	public static boolean validationToken(String token) {
 		try {
 			Jwts.parserBuilder().setSigningKey(KEY).build().parseClaimsJwt(token);
-			return JwtEnum.ACCESS;
+			return true;
 		} catch (SecurityException | MalformedJwtException e) {
 			log.info("유효하지 않은 JWT 서명 입니다.");
 		} catch (ExpiredJwtException e) {
 			log.info("만료된 JWT 토큰 입니다.");
-			return JwtEnum.EXPIRED;
 		} catch (UnsupportedJwtException e) {
 			log.info("지원되지 않은 JWT 토큰 입니다.");
 		} catch (IllegalArgumentException e) {
 			log.info("잘못된 JWT 토큰 입니다.");
 		}
-		return JwtEnum.DENIED;
+		return false;
 	}
 
 	private static Claims getAllClaims(String token) {
