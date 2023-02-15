@@ -42,10 +42,10 @@ public class ApplicationController {
   }
 
   @PostMapping("/accept/{applicationId}")
-  public ResponseEntity<DataResponseDto<ApplicationResponse>> acceptApplication(
-      @PathVariable Long applicationId,
-      @AuthenticationPrincipal User user) {
-    return ResponseEntity.ok(applicationService.acceptApplication(applicationId, user));
+  public ResponseEntity<ResponseDto> acceptApplication(
+	  @PathVariable Long applicationId,
+	  @AuthenticationPrincipal User user) {
+	  return ResponseEntity.ok(applicationService.acceptApplication(applicationId, user));
   }
 
 	@PostMapping("/reject/{applicationId}")
