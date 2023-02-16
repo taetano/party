@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class SignupRequest {
 	@Pattern(regexp = "^[A-Za-z0-9+_.-]+@{1}(.{1}){2,50}$",

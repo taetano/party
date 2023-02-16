@@ -26,6 +26,9 @@ import com.example.party.partypost.dto.UpdatePartyPostRequest;
 import com.example.party.partypost.entity.PartyPost;
 import com.example.party.partypost.exception.IsNotWritterException;
 import com.example.party.partypost.exception.PartyPostNotFoundException;
+import com.example.party.partypost.exception.PartyPostNotDeletableException;
+import com.example.party.partypost.exception.PartyPostNotFoundException;
+import com.example.party.partypost.exception.PostNotFoundException;
 import com.example.party.partypost.repository.PartyPostRepository;
 import com.example.party.user.entity.User;
 import com.example.party.user.repository.UserRepository;
@@ -84,9 +87,9 @@ public class PartyPostService implements IPartyPostService {
 	public DataResponseDto<PartyPostResponse> getPartyPost(Long partyPostId, User user) {
 		//1. partyPostId의 partyPost 를 가져오기
 		PartyPost partyPost = partyPostRepository.findById(partyPostId)
-			.orElseThrow(() -> new IllegalArgumentException("해당하는 postId의 partyPost 가 존재하지 않습니다."));
+			.orElseThrow(PartyPostNotFoundException::new);
 
-		//2. 조회자!=작성자 인경우 조회한 partyPost의 조회수 올려주기
+		//2. 조회자!=작성자 인경우 조회한 partyPost 의 조회수 올려주기
 		partyPost.increaseViewCnt(user);
 
 		//2. PartyPostResponse Dto 생성
@@ -107,7 +110,7 @@ public class PartyPostService implements IPartyPostService {
 		);
 
 		//2. 작성자인지 확인
-		if(!partyPost.isWrittenByMe(user.getId())) {
+		if (!partyPost.isWrittenByMe(user.getId())) {
 			throw new IsNotWritterException();
 		}
 
@@ -174,7 +177,7 @@ public class PartyPostService implements IPartyPostService {
 	public DataResponseDto<String> toggleLikePartyPost(Long partyPostId, Long userId) {
 		//모집글 찾기
 		PartyPost partyPost = partyPostRepository.findById(partyPostId).orElseThrow(
-			() -> new IllegalArgumentException("해당 글이 존재 하지 않습니다.")
+			() -> new PostNotFoundException()
 		);
 		String partPostTitle = partyPost.getTitle(); //모집글 제목 입력
 		//유저 찾기
@@ -196,15 +199,15 @@ public class PartyPostService implements IPartyPostService {
 	private void canDeletePartyPost(User user, PartyPost partyPost) {
 		//1. 작성자인지 확인
 		if (!partyPost.isWrittenByMe(user.getId())) {
-			throw new IllegalArgumentException("작성자만 모집글을 삭제할 수 있습니다");
+			throw new PartyPostNotDeletableException("작성자만 모집글을 삭제할 수 있습니다");
 		}
 		//2. 모집마감전인지 확인
 		if (!partyPost.beforeCloseDate(LocalDateTime.now())) {
-			throw new IllegalArgumentException("모집마감시간이 지나면 모집글을 삭제할 수 없습니다");
+			throw new PartyPostNotDeletableException("모집마감시간이 지나면 모집글을 삭제할 수 없습니다");
 		}
 		//3. 참가신청한 모집자가 없는지 확인
 		if (!partyPost.haveNoApplications()) {
-			throw new IllegalArgumentException("참가신청자가 있는 경우 삭제할 수 없습니다");
+			throw new PartyPostNotDeletableException("참가신청자가 있는 경우 삭제할 수 없습니다");
 		}
 	}
 
