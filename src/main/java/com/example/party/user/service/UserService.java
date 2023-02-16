@@ -18,6 +18,7 @@ import com.example.party.user.dto.OtherProfileResponse;
 import com.example.party.user.dto.ProfileRequest;
 import com.example.party.user.dto.SignupRequest;
 import com.example.party.user.dto.WithdrawRequest;
+import com.example.party.user.entity.Profile;
 import com.example.party.user.entity.User;
 import com.example.party.user.exception.EmailOverlapException;
 import com.example.party.user.repository.ProfileRepository;
@@ -48,9 +49,10 @@ public class UserService implements IUserService {
 
 		String userEmail = signupRequest.getEmail();
 		String password = passwordEncoder.encode(signupRequest.getPassword());
+		Profile profile = new Profile();
+		profileRepository.save(profile);
 		User user = new User(userEmail, password, signupRequest.getNickname(),
-			signupRequest.getPhoneNum()
-			, UserRole.ROLE_USER, Status.ACTIVE);
+			signupRequest.getPhoneNum(), UserRole.ROLE_USER, Status.ACTIVE, profile);
 		userRepository.save(user);
 		return new ResponseDto(201, "회원가입 완료");
 	}
@@ -76,7 +78,7 @@ public class UserService implements IUserService {
 	public ResponseDto withdraw(User userDetails, WithdrawRequest withdrawRequest) {
 		User user = findByUser(userDetails.getEmail());
 		confirmPassword(withdrawRequest.getPassword(), user.getPassword());
-		user.changeDORMANT();
+		user.DormantState();
 		return new ResponseDto(200, "회원탈퇴 완료");
 	}
 
@@ -117,5 +119,4 @@ public class UserService implements IUserService {
 			throw new LoginException();
 		}
 	}
-
 }

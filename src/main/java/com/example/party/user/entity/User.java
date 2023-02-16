@@ -93,17 +93,17 @@ public class User extends BaseEntity implements UserDetails {
 	}
 
 	public User(String email, String password, String nickname, String phoneNum, UserRole role,
-		Status status) {
+		Status status, Profile profile) {
 		this.email = email;
 		this.password = password;
 		this.nickname = nickname;
 		this.phoneNum = phoneNum;
 		this.role = role;
 		this.status = status;
-		this.profile = new Profile();
+		this.profile = profile;
 	}
 
-	public void changeDORMANT() {
+	public void DormantState() {
 		this.status = Status.DORMANT;
 	}
 

@@ -37,6 +37,7 @@ public class UserController {
 
 	private final UserService userService;
 
+	//회원가입
 	@PostMapping("/signup")
 	public ResponseEntity<ResponseDto> signup(@RequestBody @Valid SignupRequest signupRequest) {
 		ResponseDto responseDto = userService.signUp(signupRequest);
@@ -44,6 +45,7 @@ public class UserController {
 		return ResponseEntity.ok().headers(headers).body(responseDto);
 	}
 
+	//로그인
 	@PostMapping("/signin")
 	public ResponseEntity signin(@RequestBody LoginRequest loginRequest,
 		HttpServletResponse response) {
@@ -52,6 +54,7 @@ public class UserController {
 		return ResponseEntity.ok().headers(headers).body(responseDto);
 	}
 
+	//로그아웃
 	@PostMapping("/signout")
 	public ResponseEntity signOut(@AuthenticationPrincipal User userDetails,
 		HttpServletResponse response) {
@@ -60,6 +63,7 @@ public class UserController {
 		return new ResponseEntity<>("로그아웃 성공", HttpStatus.OK);
 	}
 
+	//회원탈퇴
 	@DeleteMapping("/withdraw")
 	public ResponseEntity withdraw(@RequestBody WithdrawRequest withdrawRequest,
 		@AuthenticationPrincipal User userDetails) {
