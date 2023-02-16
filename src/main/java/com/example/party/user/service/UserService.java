@@ -11,13 +11,16 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.example.party.global.dto.DataResponseDto;
 import com.example.party.global.dto.ResponseDto;
+import com.example.party.global.exception.LoginException;
 import com.example.party.user.dto.LoginRequest;
 import com.example.party.user.dto.MyProfileResponse;
 import com.example.party.user.dto.OtherProfileResponse;
 import com.example.party.user.dto.ProfileRequest;
 import com.example.party.user.dto.SignupRequest;
 import com.example.party.user.dto.WithdrawRequest;
+import com.example.party.user.entity.Profile;
 import com.example.party.user.entity.User;
+import com.example.party.user.exception.EmailOverlapException;
 import com.example.party.user.repository.ProfileRepository;
 import com.example.party.user.repository.UserRepository;
 import com.example.party.user.type.Status;
@@ -41,14 +44,16 @@ public class UserService implements IUserService {
 	public ResponseDto signUp(SignupRequest signupRequest) {
 		Optional<User> users = userRepository.findByEmail(signupRequest.getEmail());
 		if (users.isPresent()) {
-			throw new IllegalArgumentException("유저가 존재합니다");
+			throw new EmailOverlapException();
 		}
 
 		String userEmail = signupRequest.getEmail();
 		String password = passwordEncoder.encode(signupRequest.getPassword());
+		Profile profile = new Profile();
+		profileRepository.save(profile);
 		User user = new User(userEmail, password, signupRequest.getNickname(),
 			signupRequest.getPhoneNum()
-			, UserRole.ROLE_USER, Status.ACTIVE);
+			, UserRole.ROLE_USER, Status.ACTIVE, profile);
 		userRepository.save(user);
 		return new ResponseDto(201, "회원가입 완료");
 	}
@@ -105,14 +110,13 @@ public class UserService implements IUserService {
 	//private 메소드
 	//repository에서 user 찾기
 	private User findByUser(String email) {
-		return userRepository.findByEmail(email)
-			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 이메일"));
+		return userRepository.findByEmail(email).orElseThrow(LoginException::new);
 	}
 
 	//비밀번호 확인
 	private void confirmPassword(String requestPassword, String savedPassword) {
 		if (!passwordEncoder.matches(requestPassword, savedPassword)) {
-			throw new IllegalArgumentException("비밀번호 불일치");
+			throw new LoginException();
 		}
 	}
 
