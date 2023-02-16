@@ -11,8 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class SignupRequest {
 	@Pattern(regexp = "^[A-Za-z0-9+_.-]+@{1}(.{1}){2,50}$",
 		message = "대소문자, 숫자, 1개의 .과 @ 사용한 최소 2자 최대 50자")
