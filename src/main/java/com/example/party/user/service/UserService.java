@@ -74,13 +74,13 @@ public class UserService implements IUserService {
 		return generateToken + "," + refreshToken;
 	}
 
-	//로그아웃
-	@Override
-	public ResponseDto signOut(User user) {
-		// 이후 security 에 url 보안 설정 필요합니다.
-		ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
-		return ResponseDto.ok("회원 탈퇴 완료");
-	}
+  //로그아웃
+  @Override
+  public ResponseDto signOut(User user) {
+	  // 이후 security 에 url 보안 설정 필요합니다.
+	  redisTemplate.opsForValue().getOperations().delete(RT_TOKEN + user.getId());
+	  return ResponseDto.ok("회원 탈퇴 완료");
+  }
 
 	//회원탈퇴
 	@Override

@@ -13,8 +13,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.example.party.application.dto.ApplicationResponse;
 import com.example.party.application.entity.Application;
-import com.example.party.application.exception.ApplicationNotGeneraleException;
 import com.example.party.application.exception.ApplicationNotAvailableException;
+import com.example.party.application.exception.ApplicationNotGeneraleException;
 import com.example.party.application.repository.ApplicationRepository;
 import com.example.party.application.type.ApplicationStatus;
 import com.example.party.global.dto.ListResponseDto;
