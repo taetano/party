@@ -84,8 +84,8 @@ public class UserService implements IUserService {
 	public ResponseDto updateProfile(ProfileRequest profileRequest, User user) {
 		user.updataProfile(profileRequest); //user 정보 수정
 		MyProfileResponse myProfileResponse = new MyProfileResponse(user); // profile 내용 입력
+		userRepository.save(user); //변경한 user 저장
 		return DataResponseDto.ok("프로필 정보 수정 완료", myProfileResponse); //결과값 반환
-
 	}
 
 	//내 프로필 조회
