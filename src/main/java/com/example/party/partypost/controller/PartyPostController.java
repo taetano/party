@@ -42,8 +42,8 @@ public class PartyPostController {
 	//모집글 수정
 	@PatchMapping("/{party-postId}")
 	public ResponseEntity<DataResponseDto<PartyPostResponse>> updatePartyPost(
-		@PathVariable(name = "party-postId") Long partyPostId, @RequestBody UpdatePartyPostRequest request) {
-		return ResponseEntity.ok(partyPostService.updatePartyPost(partyPostId, request));
+		@PathVariable(name = "party-postId") Long partyPostId, @RequestBody UpdatePartyPostRequest request, @AuthenticationPrincipal User user) {
+		return ResponseEntity.ok(partyPostService.updatePartyPost(partyPostId, request, user));
 	}
 
 	//내가 작성한 모집글 리스트 조회

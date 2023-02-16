@@ -18,6 +18,7 @@ import javax.persistence.Table;
 
 import com.example.party.application.entity.Application;
 import com.example.party.global.BaseEntity;
+import com.example.party.partypost.dto.PartyPostRequest;
 import com.example.party.partypost.dto.UpdatePartyPostRequest;
 import com.example.party.partypost.type.Status;
 import com.example.party.user.entity.User;
@@ -70,17 +71,14 @@ public class PartyPost extends BaseEntity {
 	private List<Application> applications;
 
 	//생성자
-	public PartyPost(User user, String title, String content, byte maxMember, String eubMyeonDong,
-		String address, String detailAddress, LocalDateTime partyDate) {
+	public PartyPost(User user, PartyPostRequest request, LocalDateTime partyDate) {
 		this.user = user;
-		this.title = title;
-		this.content = content;
-		this.maxMember = maxMember;
-		this.eubMyeonDong = eubMyeonDong;
-		this.address = address;
-		this.detailAddress = detailAddress;
-		this.active = true;
-		this.status = Status.FINDING;
+		this.title = request.getTitle();
+		this.content = request.getContent();
+		this.maxMember = request.getMaxMember();
+		this.eubMyeonDong = request.getEubMyeonDong();
+		this.address = request.getAddress();
+		this.detailAddress = request.getDetailAddress();
 		this.partyDate = partyDate;
 		this.closeDate = partyDate.minusMinutes(15);
 		this.createdAt = LocalDateTime.now();
