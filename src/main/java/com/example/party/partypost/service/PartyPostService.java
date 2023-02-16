@@ -1,6 +1,7 @@
 package com.example.party.partypost.service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,10 +46,14 @@ public class PartyPostService implements IPartyPostService {
 	@Override
 	public DataResponseDto<PartyPostResponse> createPartyPost(User user, PartyPostRequest request) {
 
+		//예시: "2023-02-16 12:00"
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+		LocalDateTime partyDate = LocalDateTime.parse(request.getPartyDate(), formatter);
+
 		//1. PartyPost 객체 생성
 		PartyPost partyPost = new PartyPost(user, request.getTitle(), request.getContent(),
 			request.getMaxMember(), request.getEubMyeonDong(), request.getAddress(),
-			request.getDetailAddress(), request.getPartyDate());
+			request.getDetailAddress(), partyDate);
 
 		//2. repository 에 저장
 		partyPostRepository.save(partyPost);

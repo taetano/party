@@ -23,7 +23,7 @@ public class ApplicationController {
 
 	private final ApplicationService applicationService;
 
-	@PostMapping("join/{party-postId}")
+	@PostMapping("/join/{party-postId}")
 	public ResponseEntity<ResponseDto> createApplication(@PathVariable(name = "party-postId") Long partyPostId,
 		@AuthenticationPrincipal User user) {
 		return ResponseEntity.ok(applicationService.createApplication(partyPostId, user));
