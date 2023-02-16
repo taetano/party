@@ -17,4 +17,8 @@ public class ResponseDto {
 	public static ResponseDto ok(String msg) {
 		return new ResponseDto(HttpStatus.OK.value(), msg);
 	}
+
+	public static ResponseDto create(String msg) {
+		return new ResponseDto(HttpStatus.CREATED.value(), msg);
+	}
 }

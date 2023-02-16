@@ -23,8 +23,6 @@ import com.example.party.user.entity.User;
 import com.example.party.user.exception.EmailOverlapException;
 import com.example.party.user.repository.ProfileRepository;
 import com.example.party.user.repository.UserRepository;
-import com.example.party.user.type.Status;
-import com.example.party.user.type.UserRole;
 import com.example.party.util.JwtProvider;
 
 import lombok.AllArgsConstructor;
@@ -47,14 +45,12 @@ public class UserService implements IUserService {
 			throw new EmailOverlapException();
 		}
 
-		String userEmail = signupRequest.getEmail();
 		String password = passwordEncoder.encode(signupRequest.getPassword());
 		Profile profile = new Profile();
 		profileRepository.save(profile);
-		User user = new User(userEmail, password, signupRequest.getNickname(),
-			signupRequest.getPhoneNum(), UserRole.ROLE_USER, Status.ACTIVE, profile);
+		User user = new User(signupRequest, password, profile);
 		userRepository.save(user);
-		return new ResponseDto(201, "회원가입 완료");
+		return ResponseDto.create("회원가입 완료");
 	}
 
 	//로그인
@@ -64,7 +60,7 @@ public class UserService implements IUserService {
 		confirmPassword(loginRequest.getPassword(), user.getPassword());
 		String generateToken = JwtProvider.generateToken(user);
 		response.addHeader(JwtProvider.AUTHORIZATION_HEADER, generateToken);
-		return new ResponseDto(200, "로그인 완료");
+		return ResponseDto.ok("로그인 완료");
 	}
 
 	//로그아웃
@@ -79,7 +75,7 @@ public class UserService implements IUserService {
 		User user = findByUser(userDetails.getEmail());
 		confirmPassword(withdrawRequest.getPassword(), user.getPassword());
 		user.DormantState();
-		return new ResponseDto(200, "회원탈퇴 완료");
+		return ResponseDto.ok("회원탈퇴 완료");
 	}
 
 	//프로필 수정

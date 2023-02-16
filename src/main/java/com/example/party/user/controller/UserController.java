@@ -47,7 +47,7 @@ public class UserController {
 
 	//로그인
 	@PostMapping("/signin")
-	public ResponseEntity signin(@RequestBody LoginRequest loginRequest,
+	public ResponseEntity<ResponseDto> signin(@RequestBody LoginRequest loginRequest,
 		HttpServletResponse response) {
 		ResponseDto responseDto = userService.signIn(loginRequest, response);
 		HttpHeaders headers = new HttpHeaders();
@@ -56,7 +56,7 @@ public class UserController {
 
 	//로그아웃
 	@PostMapping("/signout")
-	public ResponseEntity signOut(@AuthenticationPrincipal User userDetails,
+	public ResponseEntity<?> signOut(@AuthenticationPrincipal User userDetails,
 		HttpServletResponse response) {
 		response.setHeader(JwtProvider.AUTHORIZATION_HEADER, "");
 		userService.signOut(userDetails);
@@ -65,7 +65,7 @@ public class UserController {
 
 	//회원탈퇴
 	@DeleteMapping("/withdraw")
-	public ResponseEntity withdraw(@RequestBody WithdrawRequest withdrawRequest,
+	public ResponseEntity<ResponseDto> withdraw(@RequestBody WithdrawRequest withdrawRequest,
 		@AuthenticationPrincipal User userDetails) {
 		ResponseDto responseDto = userService.withdraw(userDetails, withdrawRequest);
 		HttpHeaders headers = new HttpHeaders();
