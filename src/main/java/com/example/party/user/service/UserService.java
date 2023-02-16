@@ -78,13 +78,13 @@ public class UserService implements IUserService {
 		return generateToken + "," + refreshToken;
 	}
 
-  //로그아웃
-  @Override
-  public ResponseDto signOut(User user) {
-	  // 이후 security 에 url 보안 설정 필요합니다.
-	  ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
-	  return ResponseDto.ok("회원 탈퇴 완료");
-  }
+	//로그아웃
+	@Override
+	public ResponseDto signOut(User user) {
+		// 이후 security 에 url 보안 설정 필요합니다.
+		ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
+		return ResponseDto.ok("회원 탈퇴 완료");
+	}
 
 	//회원탈퇴
 	@Override
@@ -97,27 +97,27 @@ public class UserService implements IUserService {
 
 	//프로필 수정
 	public DataResponseDto<MyProfileResponse> updateProfile(ProfileRequest profileRequest, Long id) {
-      User user = userRepository.findById(id)
-          .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "유저 찾기 실패")); //user 정보 조회
-      user.updataProfile(profileRequest); //user 정보 수정
-      MyProfileResponse myProfileResponse = new MyProfileResponse(user); // profile 내용 입력
-      return new DataResponseDto(200, "프로필 정보 수정 완료", myProfileResponse);
+		User user = userRepository.findById(id)
+			.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "유저 찾기 실패")); //user 정보 조회
+		user.updataProfile(profileRequest); //user 정보 수정
+		MyProfileResponse myProfileResponse = new MyProfileResponse(user); // profile 내용 입력
+		return new DataResponseDto(200, "프로필 정보 수정 완료", myProfileResponse);
 
-    }
+	}
 
-  //내 프로필 조회
-  public DataResponseDto<MyProfileResponse> getMyProfile(User user) {
-    MyProfileResponse myProfileResponse = new MyProfileResponse(user); // profile 내용 입력
-    return new DataResponseDto(200, "내 프로필 조회", myProfileResponse);
-  }
+	//내 프로필 조회
+	public DataResponseDto<MyProfileResponse> getMyProfile(User user) {
+		MyProfileResponse myProfileResponse = new MyProfileResponse(user); // profile 내용 입력
+		return new DataResponseDto(200, "내 프로필 조회", myProfileResponse);
+	}
 
 	//상대방 프로필 조회
 	public DataResponseDto<MyProfileResponse> getOtherProfile(Long id) {
-      User user = userRepository.findById(id)
-          .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "유저 찾기 실패")); //user 정보 조회
-      OtherProfileResponse otherProfileResponse = new OtherProfileResponse(user); // profile 내용 입력
-      return new DataResponseDto(200, "타 프로필 조회", otherProfileResponse);
-    }
+		User user = userRepository.findById(id)
+			.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "유저 찾기 실패")); //user 정보 조회
+		OtherProfileResponse otherProfileResponse = new OtherProfileResponse(user); // profile 내용 입력
+		return new DataResponseDto(200, "타 프로필 조회", otherProfileResponse);
+	}
 
 	//private 메소드
 	//repository에서 user 찾기

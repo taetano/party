@@ -23,6 +23,8 @@ import com.example.party.partypost.dto.PartyPostRequest;
 import com.example.party.partypost.dto.PartyPostResponse;
 import com.example.party.partypost.dto.UpdatePartyPostRequest;
 import com.example.party.partypost.entity.PartyPost;
+import com.example.party.partypost.exception.PartyPostNotDeletableException;
+import com.example.party.partypost.exception.PartyPostNotFoundException;
 import com.example.party.partypost.exception.PostNotFoundException;
 import com.example.party.partypost.repository.PartyPostRepository;
 import com.example.party.user.entity.User;
@@ -39,8 +41,8 @@ import lombok.extern.slf4j.Slf4j;
 public class PartyPostService implements IPartyPostService {
 
 	private final PartyPostRepository partyPostRepository;
-  private final UserRepository userRepository;
-  private final ApplicationRepository applicationRepository;
+	private final UserRepository userRepository;
+	private final ApplicationRepository applicationRepository;
 
 	//모집글 작성
 	@Override
@@ -51,7 +53,7 @@ public class PartyPostService implements IPartyPostService {
 			request.getMaxMember(), request.getEubMyeonDong(), request.getAddress(),
 			request.getDetailAddress(), request.getPartyDate());
 
-      //2. repository 에 저장
+		//2. repository 에 저장
 		partyPostRepository.save(partyPost);
 
 		//3. partyPostResponse 생성
@@ -65,14 +67,14 @@ public class PartyPostService implements IPartyPostService {
 	@Override
 	@Transactional
 	public ListResponseDto<PartyPostListResponse> findPartyList() {
-      // 1.모집글 전체 불러오기 (페이지 추가)
-      Pageable pageable = PageRequest.of(0, 10, Sort.by("createdAt").descending());
-      //2. Page<partyPost> 를 Page<PartyPostListResponse> 로 변경
-      Page<PartyPostListResponse> page = partyPostRepository.findAllByActiveIsTrue(pageable).map(
-          PartyPostListResponse::new);
-      // 3.ListResponseDto 생성 후 리턴
-      return new ListResponseDto<>(HttpStatus.OK.value(), "모집글 조회 완료", page.getContent());
-    }
+		// 1.모집글 전체 불러오기 (페이지 추가)
+		Pageable pageable = PageRequest.of(0, 10, Sort.by("createdAt").descending());
+		//2. Page<partyPost> 를 Page<PartyPostListResponse> 로 변경
+		Page<PartyPostListResponse> page = partyPostRepository.findAllByActiveIsTrue(pageable).map(
+			PartyPostListResponse::new);
+		// 3.ListResponseDto 생성 후 리턴
+		return new ListResponseDto<>(HttpStatus.OK.value(), "모집글 조회 완료", page.getContent());
+	}
 
 	//모집글 상세 조회(개별 상세조회)
 	@Override
@@ -80,9 +82,9 @@ public class PartyPostService implements IPartyPostService {
 	public DataResponseDto<PartyPostResponse> getPartyPost(Long partyPostId, User user) {
 		//1. partyPostId의 partyPost 를 가져오기
 		PartyPost partyPost = partyPostRepository.findById(partyPostId)
-			.orElseThrow(() -> new IllegalArgumentException("해당하는 postId의 partyPost 가 존재하지 않습니다."));
+			.orElseThrow(PartyPostNotFoundException::new);
 
-		//2. 조회자!=작성자 인경우 조회한 partyPost의 조회수 올려주기
+		//2. 조회자!=작성자 인경우 조회한 partyPost 의 조회수 올려주기
 		partyPost.increaseViewCnt(user);
 
 		//2. PartyPostResponse Dto 생성
@@ -92,20 +94,20 @@ public class PartyPostService implements IPartyPostService {
 		return new DataResponseDto<>(HttpStatus.OK.value(), "모집글 상세 조회 완료", partyPostResponse);
 	}
 
-  //모집글 수정
-  @Override
-  public DataResponseDto<PartyPostResponse> updatePartyPost(Long partyPostId,
-      UpdatePartyPostRequest request) {
+	//모집글 수정
+	@Override
+	public DataResponseDto<PartyPostResponse> updatePartyPost(Long partyPostId,
+		UpdatePartyPostRequest request) {
 
-    //1. PartyPost 불러오기
-    PartyPost partyPost = partyPostRepository.findById(partyPostId).orElseThrow(
-        () -> new IllegalArgumentException("존재하지 않는 게시물입니다.")
-    );
+		//1. PartyPost 불러오기
+		PartyPost partyPost = partyPostRepository.findById(partyPostId).orElseThrow(
+			() -> new IllegalArgumentException("존재하지 않는 게시물입니다.")
+		);
 
-    //2. 수정할 내용 받기
-    partyPost.update(request);
+		//2. 수정할 내용 받기
+		partyPost.update(request);
 
-    //3. partyPostResponse 생성
+		//3. partyPostResponse 생성
 		PartyPostResponse partyPostResponse = new PartyPostResponse(partyPost);
 
 		//4. DataResponseDto 생성 후 return
@@ -117,7 +119,7 @@ public class PartyPostService implements IPartyPostService {
 	public ResponseDto deletePartyPost(Long partyPostId, User user) {
 		//1. partyPost 객체 가져오기
 		PartyPost partyPost = partyPostRepository.findById(partyPostId).orElseThrow(
-			() -> new IllegalArgumentException("해당 partyPost가 존재하지 않습니다")
+			PartyPostNotFoundException::new
 		);
 		//2. 삭제 가능한지 확인 (작성자인지 / 모집마감전인지 / 참가신청한 모집자가 없는지)
 		canDeletePartyPost(user, partyPost);
@@ -127,51 +129,51 @@ public class PartyPostService implements IPartyPostService {
 		return new ResponseDto(HttpStatus.OK.value(), "모집글 상세 조회 완료");
 	}
 
-  //내가 작성한 모집글 조회 ( 내가 파티장인 경우만 )
-  @Override
-  public ListResponseDto<MyPartyPostListResponse> findMyCreatedPartyList(User user, int page) {
-    Pageable pageable = PageRequest.of(page - 1, 5, Sort.by(Sort.Direction.DESC, "modifiedAt"));
+	//내가 작성한 모집글 조회 ( 내가 파티장인 경우만 )
+	@Override
+	public ListResponseDto<MyPartyPostListResponse> findMyCreatedPartyList(User user, int page) {
+		Pageable pageable = PageRequest.of(page - 1, 5, Sort.by(Sort.Direction.DESC, "modifiedAt"));
 
-    //1. user가 작성한 partyPost의 리스트
-    List<PartyPost> partyPostList = partyPostRepository.findByUserId(user.getId(), pageable);
+		//1. user가 작성한 partyPost의 리스트
+		List<PartyPost> partyPostList = partyPostRepository.findByUserId(user.getId(), pageable);
 
-    //2. partyPost DTO의 LIST 생성
-    List<MyPartyPostListResponse> myPartyPostDtoList = partyPostList.stream()
-        .filter(partyPost -> partyPost.getUser().equals(user))
-        .map(MyPartyPostListResponse::new).collect(Collectors.toList());
+		//2. partyPost DTO의 LIST 생성
+		List<MyPartyPostListResponse> myPartyPostDtoList = partyPostList.stream()
+			.filter(partyPost -> partyPost.getUser().equals(user))
+			.map(MyPartyPostListResponse::new).collect(Collectors.toList());
 
-    //3. DataResponseDto 생성 후 return
-    return new ListResponseDto<>(HttpStatus.OK.value(), "내가 작성한 모집글 조회 완료", myPartyPostDtoList);
-  }
+		//3. DataResponseDto 생성 후 return
+		return new ListResponseDto<>(HttpStatus.OK.value(), "내가 작성한 모집글 조회 완료", myPartyPostDtoList);
+	}
 
-  //내가 신청한 모집글 조회 ( 내가 파티원인 경우만/ 파티장인 경우 제외 )
-  @Override
-  public ListResponseDto<MyPartyPostListResponse> findMyJoinedPartyList(User user, int page) {
-    Pageable pageable = PageRequest.of(page - 1, 5, Sort.by(Sort.Direction.DESC, "modifiedAt"));
+	//내가 신청한 모집글 조회 ( 내가 파티원인 경우만/ 파티장인 경우 제외 )
+	@Override
+	public ListResponseDto<MyPartyPostListResponse> findMyJoinedPartyList(User user, int page) {
+		Pageable pageable = PageRequest.of(page - 1, 5, Sort.by(Sort.Direction.DESC, "modifiedAt"));
 
-    //1. user가 신청한 application의 리스트
-    List<Application> applicationList = applicationRepository.findByUserId(user.getId(), pageable);
+		//1. user가 신청한 application의 리스트
+		List<Application> applicationList = applicationRepository.findByUserId(user.getId(), pageable);
 
-    //2. partyPost DTO의 LIST 생성
-    List<MyPartyPostListResponse> myPartyPostDtoList = applicationList.stream()
-        .map(Application::getPartyPost)
-        .map(MyPartyPostListResponse::new).collect(Collectors.toList());
+		//2. partyPost DTO의 LIST 생성
+		List<MyPartyPostListResponse> myPartyPostDtoList = applicationList.stream()
+			.map(Application::getPartyPost)
+			.map(MyPartyPostListResponse::new).collect(Collectors.toList());
 
-    //3. DataResponseDto 생성 후 return
-    return new ListResponseDto<>(HttpStatus.OK.value(), "내가 참가한 모집글 조회 완료", myPartyPostDtoList);
-  }
+		//3. DataResponseDto 생성 후 return
+		return new ListResponseDto<>(HttpStatus.OK.value(), "내가 참가한 모집글 조회 완료", myPartyPostDtoList);
+	}
 
-  //모집게시물 좋아요 (*좋아요 취소도 포함되는 기능임)
-  public DataResponseDto<String> toggleLikePartyPost(Long partyPostId, Long userId) {
-    //모집글 찾기
-    PartyPost partyPost = partyPostRepository.findById(partyPostId).orElseThrow(
-		() -> new PostNotFoundException()
-    );
-    String partPostTitle = partyPost.getTitle(); //모집글 제목 입력
-    //유저 찾기
-    User user = userRepository.findById(userId).orElseThrow(
-        () -> new IllegalArgumentException("해당 유저가 존재 하지 않습니다.")
-    );
+	//모집게시물 좋아요 (*좋아요 취소도 포함되는 기능임)
+	public DataResponseDto<String> toggleLikePartyPost(Long partyPostId, Long userId) {
+		//모집글 찾기
+		PartyPost partyPost = partyPostRepository.findById(partyPostId).orElseThrow(
+			() -> new PostNotFoundException()
+		);
+		String partPostTitle = partyPost.getTitle(); //모집글 제목 입력
+		//유저 찾기
+		User user = userRepository.findById(userId).orElseThrow(
+			() -> new IllegalArgumentException("해당 유저가 존재 하지 않습니다.")
+		);
 
 		//좋아요 확인
 		if (!(user.getLikePartyPosts().add(partyPost))) {
@@ -186,16 +188,16 @@ public class PartyPostService implements IPartyPostService {
 	//삭제가능여부 확인
 	private void canDeletePartyPost(User user, PartyPost partyPost) {
 		//1. 작성자인지 확인
-      if (!partyPost.isWrittenByMe(user.getId())) {
-        throw new IllegalArgumentException("작성자만 모집글을 삭제할 수 있습니다");
-      }
+		if (!partyPost.isWrittenByMe(user.getId())) {
+			throw new PartyPostNotDeletableException("작성자만 모집글을 삭제할 수 있습니다");
+		}
 		//2. 모집마감전인지 확인
 		if (!partyPost.beforeCloseDate(LocalDateTime.now())) {
-			throw new IllegalArgumentException("모집마감시간이 지나면 모집글을 삭제할 수 없습니다");
+			throw new PartyPostNotDeletableException("모집마감시간이 지나면 모집글을 삭제할 수 없습니다");
 		}
 		//3. 참가신청한 모집자가 없는지 확인
 		if (!partyPost.haveNoApplications()) {
-			throw new IllegalArgumentException("참가신청자가 있는 경우 삭제할 수 없습니다");
+			throw new PartyPostNotDeletableException("참가신청자가 있는 경우 삭제할 수 없습니다");
 		}
 	}
 
