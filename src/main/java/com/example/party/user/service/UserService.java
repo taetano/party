@@ -82,7 +82,7 @@ public class UserService implements IUserService {
   @Override
   public ResponseDto signOut(User user) {
 	  // 이후 security 에 url 보안 설정 필요합니다.
-	  ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
+	  redisTemplate.opsForValue().getOperations().delete(RT_TOKEN + user.getId());
 	  return ResponseDto.ok("회원 탈퇴 완료");
   }
 
