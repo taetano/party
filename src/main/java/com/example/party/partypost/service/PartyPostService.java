@@ -147,7 +147,7 @@ public class PartyPostService implements IPartyPostService {
 		//2. partyPost DTO의 LIST 생성
 		List<MyPartyPostListResponse> myPartyPostDtoList = myPartyPostList.stream()
 			.filter(partyPost -> partyPost.getUser().getId().equals(user.getId()))
-			.map(partyPost -> new MyPartyPostListResponse(partyPost)).collect(Collectors.toList());
+			.map(MyPartyPostListResponse::new).collect(Collectors.toList());
 
 		//3. DataResponseDto 생성 후 return
 		return ListResponseDto.ok("내가 작성한 모집글 조회 완료", myPartyPostDtoList);
@@ -163,6 +163,7 @@ public class PartyPostService implements IPartyPostService {
 
 		//2. partyPost DTO의 LIST 생성
 		List<MyPartyPostListResponse> myApplicationDtoList = myApplicationList.stream()
+			.filter(application -> application.getUser().getId().equals(user.getId()))
 			.map(Application::getPartyPost)
 			.map(MyPartyPostListResponse::new).collect(Collectors.toList());
 
