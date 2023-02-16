@@ -65,7 +65,7 @@ public class PartyPostController {
 	public DataResponseDto<String> toggleLikePartyPost(@PathVariable(name = "party-postId") Long partyPostId,
 		@AuthenticationPrincipal User user) {
 		//좋아요 기능
-		return partyPostService.toggleLikePartyPost(partyPostId, user.getId());
+		return partyPostService.toggleLikePartyPost(partyPostId, user);
 	}
 
 	//모집글전체조회

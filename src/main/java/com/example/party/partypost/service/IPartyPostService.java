@@ -27,7 +27,7 @@ public interface IPartyPostService {
 	ListResponseDto<MyPartyPostListResponse> findMyJoinedPartyList(User user, int page);
 
 	//모집게시물 좋아요 (*좋아요 취소도 포함되는 기능임)
-	DataResponseDto<String> toggleLikePartyPost(Long party_postId, Long userId);
+	DataResponseDto<String> toggleLikePartyPost(Long party_postId, User user);
 
 	//모집글 삭제
 	ResponseDto deletePartyPost(Long partyPostId, User user);
