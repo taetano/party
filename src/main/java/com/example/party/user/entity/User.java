@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -65,7 +66,7 @@ public class User extends BaseEntity implements UserDetails {
 	@OneToOne(optional = false)
 	@JoinColumn(name = "profile_id", unique = true, referencedColumnName = "id")
 	private Profile profile;
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
 	private List<Application> applies;
 	@OneToMany(mappedBy = "user")
 	private List<PartyPost> partyPosts;
@@ -144,7 +145,7 @@ public class User extends BaseEntity implements UserDetails {
 	public void updataProfile(ProfileRequest profileRequest) {
 		this.nickname = profileRequest.getNickName();
 		this.phoneNum = profileRequest.getPhoneNum();
-		//프로필 수정을 user에서 처리
+		//프로필 수정을 user 에서 처리
 		this.profile.updateProfile(profileRequest.getProFileUrl(), profileRequest.getComment());
 
 	}
