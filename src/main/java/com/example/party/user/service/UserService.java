@@ -17,6 +17,7 @@ import com.example.party.user.dto.OtherProfileResponse;
 import com.example.party.user.dto.ProfileRequest;
 import com.example.party.user.dto.SignupRequest;
 import com.example.party.user.dto.WithdrawRequest;
+import com.example.party.user.entity.Profile;
 import com.example.party.user.entity.User;
 import com.example.party.user.repository.ProfileRepository;
 import com.example.party.user.repository.UserRepository;
@@ -46,9 +47,11 @@ public class UserService implements IUserService {
 
 		String userEmail = signupRequest.getEmail();
 		String password = passwordEncoder.encode(signupRequest.getPassword());
+		Profile profile = new Profile();
+		profileRepository.save(profile);
 		User user = new User(userEmail, password, signupRequest.getNickname(),
 			signupRequest.getPhoneNum()
-			, UserRole.ROLE_USER, Status.ACTIVE);
+			, UserRole.ROLE_USER, Status.ACTIVE, profile);
 		userRepository.save(user);
 		return new ResponseDto(201, "회원가입 완료");
 	}
