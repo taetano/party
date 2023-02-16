@@ -2,7 +2,6 @@ package com.example.party.user.service;
 
 import javax.servlet.http.HttpServletResponse;
 
-import com.example.party.global.dto.DataResponseDto;
 import com.example.party.global.dto.ResponseDto;
 import com.example.party.user.dto.LoginRequest;
 import com.example.party.user.dto.ProfileRequest;
@@ -25,11 +24,11 @@ public interface IUserService {
 	ResponseDto withdraw(User user, WithdrawRequest withdrawRequest);
 
 	//프로필 수정
-	DataResponseDto<?> updateProfile(ProfileRequest profileRequest, Long id);
+	ResponseDto updateProfile(ProfileRequest profileRequest, User user);
 
 	//내 프로필 조회
-	DataResponseDto<?> getMyProfile(User user);
+	ResponseDto getMyProfile(User user);
 
 	//상대방 프로필 조회
-	DataResponseDto<?> getOtherProfile(Long id);
+	ResponseDto getOtherProfile(Long id);
 }

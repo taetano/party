@@ -17,10 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.party.global.dto.DataResponseDto;
 import com.example.party.global.dto.ResponseDto;
 import com.example.party.user.dto.LoginRequest;
-import com.example.party.user.dto.MyProfileResponse;
 import com.example.party.user.dto.ProfileRequest;
 import com.example.party.user.dto.SignupRequest;
 import com.example.party.user.dto.WithdrawRequest;
@@ -70,21 +68,20 @@ public class UserController {
 
 	//프로필 정보 수정
 	@PatchMapping("/profile")
-	public DataResponseDto<MyProfileResponse> updateProfile(
+	public ResponseEntity<ResponseDto> updateProfile(
 		@Validated @RequestBody ProfileRequest profileRequest,
-		@AuthenticationPrincipal
-		User user) {
-		return userService.updateProfile(profileRequest, user.getId());
+		@AuthenticationPrincipal User user) {
+		return ResponseEntity.ok(userService.updateProfile(profileRequest, user));
 	}
 
 	@GetMapping("/profile")
-	public DataResponseDto<MyProfileResponse> getMyProfile(@AuthenticationPrincipal
+	public ResponseEntity<ResponseDto> getMyProfile(@AuthenticationPrincipal
 	User user) {
-		return userService.getMyProfile(user);
+		return ResponseEntity.ok(userService.getMyProfile(user));
 	}
 
 	@GetMapping("/profile/{userId}")
-	public DataResponseDto<MyProfileResponse> getOtherProfile(@PathVariable Long userId) {
-		return userService.getOtherProfile(userId);
+	public ResponseEntity<ResponseDto> getOtherProfile(@PathVariable Long userId) {
+		return ResponseEntity.ok(userService.getOtherProfile(userId));
 	}
 }
