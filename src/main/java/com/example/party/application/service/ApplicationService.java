@@ -14,12 +14,14 @@ import org.springframework.web.server.ResponseStatusException;
 import com.example.party.application.dto.ApplicationResponse;
 import com.example.party.application.entity.Application;
 import com.example.party.application.exception.ApplicationNotAvailableException;
+import com.example.party.application.exception.ApplicationNotGeneraleException;
 import com.example.party.application.repository.ApplicationRepository;
 import com.example.party.application.type.ApplicationStatus;
 import com.example.party.global.dto.ListResponseDto;
 import com.example.party.global.dto.ResponseDto;
 import com.example.party.global.exception.ForbiddenException;
 import com.example.party.partypost.entity.PartyPost;
+import com.example.party.partypost.exception.PartyPostNotFoundException;
 import com.example.party.partypost.repository.PartyPostRepository;
 import com.example.party.user.entity.User;
 
@@ -38,7 +40,7 @@ public class ApplicationService implements IApplicationService {
 	public ResponseDto createApplication(Long partyPostId, User user) {
 		//1. partyPost 불러오기
 		PartyPost partyPost = partyPostRepository.findById(partyPostId).orElseThrow(
-			() -> new IllegalArgumentException("해당 postId의 partyPost 가 존재하지 않습니다")
+			PartyPostNotFoundException::new
 		);
 		//2. Application 이 작성 가능한지 검증
 		checkBeforeCreateApplication(partyPost, user);
@@ -52,7 +54,7 @@ public class ApplicationService implements IApplicationService {
 		//5. repository 에 save
 		applicationRepository.save(application);
 		//6.  DataResponseDto 생성 후 return
-		return new ResponseDto(HttpStatus.CREATED.value(), "참가 신청 완료");
+		return ResponseDto.ok("참가 신청 완료");
 
 	}
 
@@ -126,21 +128,21 @@ public class ApplicationService implements IApplicationService {
 	private void checkBeforeCreateApplication(PartyPost partyPost, User user) {
 		//(1) 내가 작성자인지 확인
 		if (partyPost.isWrittenByMe(user.getId())) {
-			throw new IllegalArgumentException("내가 작성한 모집글에 참가신청할 수 없습니다");
+			throw new ApplicationNotGeneraleException("내가 작성한 모집글에 참가신청할 수 없습니다");
 		}
 
 		//(2) partyPost 가 모집마감시간전인지 확인
 		if (!partyPost.beforeCloseDate(LocalDateTime.now())) {
-			throw new IllegalArgumentException("모집 마감시간이 지나, 참가신청할 수 없습니다");
+			throw new ApplicationNotGeneraleException("모집 마감시간이 지나, 참가신청할 수 없습니다");
 		}
 		//(3) partyPost 가 FINDING 인지 확인
 		if (!partyPost.isFinding()) {
-			throw new IllegalArgumentException("모집글이 모집 중인 상태가 아닙니다");
+			throw new ApplicationNotGeneraleException("모집글이 모집 중인 상태가 아닙니다");
 		}
 
 		//(4) 중복검사
 		if (applicationRepository.existsByPartyPostAndUser(partyPost, user)) {
-			throw new IllegalArgumentException("이미 신청한 모집글입니다");
+			throw new ApplicationNotGeneraleException("이미 신청한 모집글입니다");
 		}
 	}
 

@@ -2,13 +2,16 @@ package com.example.party.user.service;
 
 import java.util.Optional;
 
-import javax.servlet.http.HttpServletResponse;
-
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.example.party.global.dto.DataResponseDto;
 import com.example.party.global.dto.ResponseDto;
+import com.example.party.global.exception.LoginException;
 import com.example.party.user.dto.LoginRequest;
 import com.example.party.user.dto.MyProfileResponse;
 import com.example.party.user.dto.OtherProfileResponse;
@@ -17,11 +20,10 @@ import com.example.party.user.dto.SignupRequest;
 import com.example.party.user.dto.WithdrawRequest;
 import com.example.party.user.entity.Profile;
 import com.example.party.user.entity.User;
+import com.example.party.user.exception.EmailOverlapException;
 import com.example.party.user.exception.UserNotFoundException;
 import com.example.party.user.repository.ProfileRepository;
 import com.example.party.user.repository.UserRepository;
-import com.example.party.user.type.Status;
-import com.example.party.user.type.UserRole;
 import com.example.party.util.JwtProvider;
 
 import lombok.AllArgsConstructor;
@@ -32,42 +34,53 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class UserService implements IUserService {
 
+	private static final String RT_TOKEN = "rTKey";
 	private final UserRepository userRepository;
 	private final ProfileRepository profileRepository;
 	private final PasswordEncoder passwordEncoder;
+	private final RedisTemplate<String, String> redisTemplate;
 
 	//회원가입
 	@Override
 	public ResponseDto signUp(SignupRequest signupRequest) {
 		Optional<User> users = userRepository.findByEmail(signupRequest.getEmail());
 		if (users.isPresent()) {
-			throw new IllegalArgumentException("유저가 존재합니다");
+			throw new EmailOverlapException();
 		}
+
+		String password = passwordEncoder.encode(signupRequest.getPassword());
 		Profile profile = new Profile();
 		profileRepository.save(profile);
-		String userEmail = signupRequest.getEmail();
-		String password = passwordEncoder.encode(signupRequest.getPassword());
-		User user = new User(userEmail, password, signupRequest.getNickname(),
-			signupRequest.getPhoneNum()
-			, UserRole.ROLE_USER, Status.ACTIVE, profile);
+		User user = new User(signupRequest, password, profile);
 		userRepository.save(user);
-		return new ResponseDto(201, "회원가입 완료");
+		return ResponseDto.create("회원가입 완료");
 	}
 
 	//로그인
 	@Override
-	public ResponseDto signIn(LoginRequest loginRequest, HttpServletResponse response) {
+	public String signIn(LoginRequest loginRequest) {
 		User user = findByUser(loginRequest.getEmail());
 		confirmPassword(loginRequest.getPassword(), user.getPassword());
-		String generateToken = JwtProvider.generateToken(user);
-		response.addHeader(JwtProvider.AUTHORIZATION_HEADER, generateToken);
-		return new ResponseDto(200, "로그인 완료");
+		ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
+
+		if (valueOperations.get(RT_TOKEN + user.getId()) != null) { // JwtVerificationFilter 45번째 줄
+			redisTemplate.delete(RT_TOKEN + user.getId());
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "중복 로그인");
+		}
+
+		String generateToken = JwtProvider.accessToken(user.getEmail(), user.getId());
+		String refreshToken = JwtProvider.refreshToken(user.getEmail(), user.getId());
+
+		valueOperations.set(RT_TOKEN + user.getId(), refreshToken);
+		return generateToken + "," + refreshToken;
 	}
 
 	//로그아웃
 	@Override
 	public ResponseDto signOut(User user) {
-		return null;
+		// 이후 security 에 url 보안 설정 필요합니다.
+		redisTemplate.opsForValue().getOperations().delete(RT_TOKEN + user.getId());
+		return ResponseDto.ok("회원 탈퇴 완료");
 	}
 
 	//회원탈퇴
@@ -75,8 +88,8 @@ public class UserService implements IUserService {
 	public ResponseDto withdraw(User userDetails, WithdrawRequest withdrawRequest) {
 		User user = findByUser(userDetails.getEmail());
 		confirmPassword(withdrawRequest.getPassword(), user.getPassword());
-		user.changeDORMANT();
-		return new ResponseDto(200, "회원탈퇴 완료");
+		user.DormantState();
+		return ResponseDto.ok("회원탈퇴 완료");
 	}
 
 	//프로필 수정
@@ -106,14 +119,13 @@ public class UserService implements IUserService {
 	//repository에서 user 찾기
 	private User findByUser(String email) {
 		return userRepository.findByEmail(email)
-			.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 이메일"));
+			.orElseThrow(LoginException::new);
 	}
 
 	//비밀번호 확인
 	private void confirmPassword(String requestPassword, String savedPassword) {
 		if (!passwordEncoder.matches(requestPassword, savedPassword)) {
-			throw new IllegalArgumentException("비밀번호 불일치");
+			throw new LoginException();
 		}
 	}
-
 }

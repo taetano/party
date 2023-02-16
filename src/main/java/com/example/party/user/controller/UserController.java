@@ -1,10 +1,12 @@
 package com.example.party.user.controller;
 
+import static com.example.party.util.JwtProvider.*;
+
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
@@ -24,7 +26,6 @@ import com.example.party.user.dto.SignupRequest;
 import com.example.party.user.dto.WithdrawRequest;
 import com.example.party.user.entity.User;
 import com.example.party.user.service.UserService;
-import com.example.party.util.JwtProvider;
 
 import lombok.RequiredArgsConstructor;
 
@@ -35,6 +36,7 @@ public class UserController {
 
 	private final UserService userService;
 
+	//회원가입
 	@PostMapping("/signup")
 	public ResponseEntity<ResponseDto> signup(@RequestBody @Valid SignupRequest signupRequest) {
 		ResponseDto responseDto = userService.signUp(signupRequest);
@@ -42,24 +44,31 @@ public class UserController {
 		return ResponseEntity.ok().headers(headers).body(responseDto);
 	}
 
+	//로그인
 	@PostMapping("/signin")
-	public ResponseEntity signin(@RequestBody LoginRequest loginRequest,
-		HttpServletResponse response) {
-		ResponseDto responseDto = userService.signIn(loginRequest, response);
+	public ResponseEntity<ResponseDto> signIn(@RequestBody LoginRequest loginRequest) {
+		String[] token = userService.signIn(loginRequest).split(",");
 		HttpHeaders headers = new HttpHeaders();
-		return ResponseEntity.ok().headers(headers).body(responseDto);
+		headers.setBearerAuth(token[0]);
+		headers.add("Set-Cookie", String.format("rfToken=%s; Max-Age=604800; Path=/; HttpOnly=true;", token[1]));
+		return ResponseEntity.ok().headers(headers).body(ResponseDto.ok("로그인 완료"));
 	}
 
+	//로그아웃
 	@PostMapping("/signout")
-	public ResponseEntity signOut(@AuthenticationPrincipal User userDetails,
+	public ResponseEntity<ResponseDto> signOut(@AuthenticationPrincipal User userDetails,
 		HttpServletResponse response) {
-		response.setHeader(JwtProvider.AUTHORIZATION_HEADER, "");
-		userService.signOut(userDetails);
-		return new ResponseEntity<>("로그아웃 성공", HttpStatus.OK);
+		Cookie cookie = new Cookie("rfToken", null);
+		cookie.setMaxAge(0);
+		response.setHeader(AUTHORIZATION_HEADER, "");
+		response.addCookie(cookie);
+		System.out.println(userDetails);
+		return ResponseEntity.ok(userService.signOut(userDetails));
 	}
 
+	//회원탈퇴
 	@DeleteMapping("/withdraw")
-	public ResponseEntity withdraw(@RequestBody WithdrawRequest withdrawRequest,
+	public ResponseEntity<ResponseDto> withdraw(@RequestBody WithdrawRequest withdrawRequest,
 		@AuthenticationPrincipal User userDetails) {
 		ResponseDto responseDto = userService.withdraw(userDetails, withdrawRequest);
 		HttpHeaders headers = new HttpHeaders();

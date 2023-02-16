@@ -26,6 +26,7 @@ import com.example.party.application.entity.Application;
 import com.example.party.global.BaseEntity;
 import com.example.party.partypost.entity.PartyPost;
 import com.example.party.user.dto.ProfileRequest;
+import com.example.party.user.dto.SignupRequest;
 import com.example.party.user.type.Status;
 import com.example.party.user.type.UserRole;
 
@@ -92,18 +93,17 @@ public class User extends BaseEntity implements UserDetails {
 		return this.profile.getParticipationCnt();
 	}
 
-	public User(String email, String password, String nickname, String phoneNum, UserRole role,
-		Status status, Profile profile) {
-		this.email = email;
+	public User(SignupRequest signupRequest, String password, Profile profile) {
+		this.email = signupRequest.getEmail();
 		this.password = password;
-		this.nickname = nickname;
-		this.phoneNum = phoneNum;
-		this.role = role;
-		this.status = status;
+		this.nickname = signupRequest.getNickname();
+		this.phoneNum = signupRequest.getPhoneNum();
+		this.role = UserRole.ROLE_USER;
+		this.status = Status.ACTIVE;
 		this.profile = profile;
 	}
 
-	public void changeDORMANT() {
+	public void DormantState() {
 		this.status = Status.DORMANT;
 	}
 

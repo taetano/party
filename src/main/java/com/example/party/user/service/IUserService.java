@@ -1,7 +1,5 @@
 package com.example.party.user.service;
 
-import javax.servlet.http.HttpServletResponse;
-
 import com.example.party.global.dto.ResponseDto;
 import com.example.party.user.dto.LoginRequest;
 import com.example.party.user.dto.ProfileRequest;
@@ -15,7 +13,7 @@ public interface IUserService {
 	ResponseDto signUp(SignupRequest signupRequest);
 
 	//로그인
-	ResponseDto signIn(LoginRequest loginRequest, HttpServletResponse response);
+	String signIn(LoginRequest loginRequest);
 
 	//로그아웃
 	ResponseDto signOut(User user);
