@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Login Page</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #F7B718;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 2rem;
+            box-sizing: border-box;
+            background-color: #FFFFFF;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .logo {
+            margin: 0;
+            color: #FFFFFF;
+            font-size: 3rem;
+            font-weight: bold;
+            text-align: center;
+            padding: 2rem 0;
+            background-color: #000000;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        input[type=text], input[type=password] {
+            width: 100%;
+            padding: 1rem 2rem;
+            margin: 1rem 0;
+            box-sizing: border-box;
+            border: none;
+            border-radius: 20px;
+            background-color: #EEEEEE;
+            color: #33312E;
+            font-size: 1.2rem;
+            outline: none;
+        }
+
+        input[type=submit] {
+            background-color: #000000;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 20px;
+            padding: 1rem 2rem;
+            margin: 1rem 0;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        a {
+            color: #BBBBBB;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 class="logo">지 금 놀 자</h1>
+    <form>
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" placeholder="Enter your username">
+
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="Enter your password">
+
+        <input type="submit" value="Login">
+    </form>
+    <p><a href="#">Forgot password?</a></p>
+</div>
+</body>
+</html>

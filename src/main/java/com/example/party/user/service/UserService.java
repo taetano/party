@@ -4,10 +4,8 @@ import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.example.party.global.dto.DataResponseDto;
 import com.example.party.global.dto.ResponseDto;
@@ -19,6 +17,7 @@ import com.example.party.user.dto.SignupRequest;
 import com.example.party.user.dto.WithdrawRequest;
 import com.example.party.user.entity.Profile;
 import com.example.party.user.entity.User;
+import com.example.party.user.exception.UserNotFindException;
 import com.example.party.user.repository.ProfileRepository;
 import com.example.party.user.repository.UserRepository;
 import com.example.party.user.type.Status;
@@ -83,7 +82,7 @@ public class UserService implements IUserService {
 	//프로필 수정
 	public DataResponseDto<MyProfileResponse> updateProfile(ProfileRequest profileRequest, Long id) {
 		User user = userRepository.findById(id)
-			.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "유저 찾기 실패")); //user 정보 조회
+			.orElseThrow(() -> new UserNotFindException()); //user 정보 조회
 		user.updataProfile(profileRequest); //user 정보 수정
 		MyProfileResponse myProfileResponse = new MyProfileResponse(user); // profile 내용 입력
 		return new DataResponseDto(200, "프로필 정보 수정 완료", myProfileResponse);
@@ -99,7 +98,8 @@ public class UserService implements IUserService {
 	//상대방 프로필 조회
 	public DataResponseDto<MyProfileResponse> getOtherProfile(Long id) {
 		User user = userRepository.findById(id)
-			.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "유저 찾기 실패")); //user 정보 조회
+			.orElseThrow(() -> new UserNotFindException()); //user 정보 조회
+
 		OtherProfileResponse otherProfileResponse = new OtherProfileResponse(user); // profile 내용 입력
 		return new DataResponseDto(200, "타 프로필 조회", otherProfileResponse);
 	}

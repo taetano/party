@@ -23,6 +23,7 @@ import com.example.party.partypost.dto.PartyPostRequest;
 import com.example.party.partypost.dto.PartyPostResponse;
 import com.example.party.partypost.dto.UpdatePartyPostRequest;
 import com.example.party.partypost.entity.PartyPost;
+import com.example.party.partypost.exception.PartyPostNotFindException;
 import com.example.party.partypost.repository.PartyPostRepository;
 import com.example.party.user.entity.User;
 import com.example.party.user.repository.UserRepository;
@@ -164,7 +165,7 @@ public class PartyPostService implements IPartyPostService {
 	public DataResponseDto<String> toggleLikePartyPost(Long partyPostId, User user) {
 		//모집글 찾기
 		PartyPost partyPost = partyPostRepository.findById(partyPostId).orElseThrow(
-			() -> new IllegalArgumentException("해당 글이 존재 하지 않습니다.")
+			() -> new PartyPostNotFindException()
 		);
 		String partPostTitle = partyPost.getTitle(); //모집글 제목 입력
 
