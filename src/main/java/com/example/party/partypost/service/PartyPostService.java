@@ -1,6 +1,7 @@
 package com.example.party.partypost.service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,6 +24,8 @@ import com.example.party.partypost.dto.PartyPostRequest;
 import com.example.party.partypost.dto.PartyPostResponse;
 import com.example.party.partypost.dto.UpdatePartyPostRequest;
 import com.example.party.partypost.entity.PartyPost;
+import com.example.party.partypost.exception.IsNotWritterException;
+import com.example.party.partypost.exception.PartyPostNotFoundException;
 import com.example.party.partypost.exception.PartyPostNotDeletableException;
 import com.example.party.partypost.exception.PartyPostNotFoundException;
 import com.example.party.partypost.exception.PostNotFoundException;
@@ -48,10 +51,12 @@ public class PartyPostService implements IPartyPostService {
 	@Override
 	public DataResponseDto<PartyPostResponse> createPartyPost(User user, PartyPostRequest request) {
 
+		//예시: "2023-02-16 12:00"
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+		LocalDateTime partyDate = LocalDateTime.parse(request.getPartyDate(), formatter);
+
 		//1. PartyPost 객체 생성
-		PartyPost partyPost = new PartyPost(user, request.getTitle(), request.getContent(),
-			request.getMaxMember(), request.getEubMyeonDong(), request.getAddress(),
-			request.getDetailAddress(), request.getPartyDate());
+		PartyPost partyPost = new PartyPost(user, request, partyDate);
 
 		//2. repository 에 저장
 		partyPostRepository.save(partyPost);
@@ -60,7 +65,7 @@ public class PartyPostService implements IPartyPostService {
 		PartyPostResponse partyPostResponse = new PartyPostResponse(partyPost);
 
 		//4. DataResponseDto 생성 후 return
-		return new DataResponseDto<>(HttpStatus.OK.value(), "모집글 작성 완료", partyPostResponse);
+		return new DataResponseDto<>(201, "모집글 작성 완료", partyPostResponse);
 	}
 
 	//모집글 전체 조회
@@ -73,7 +78,7 @@ public class PartyPostService implements IPartyPostService {
 		Page<PartyPostListResponse> page = partyPostRepository.findAllByActiveIsTrue(pageable).map(
 			PartyPostListResponse::new);
 		// 3.ListResponseDto 생성 후 리턴
-		return new ListResponseDto<>(HttpStatus.OK.value(), "모집글 조회 완료", page.getContent());
+		return ListResponseDto.ok("모집글 조회 완료", page.getContent());
 	}
 
 	//모집글 상세 조회(개별 상세조회)
@@ -91,27 +96,32 @@ public class PartyPostService implements IPartyPostService {
 		PartyPostResponse partyPostResponse = new PartyPostResponse(partyPost);
 
 		//3. DataResponseDto 생성하고 (2) 를 넣어준 후 return
-		return new DataResponseDto<>(HttpStatus.OK.value(), "모집글 상세 조회 완료", partyPostResponse);
+		return DataResponseDto.ok("모집글 상세 조회 완료", partyPostResponse);
 	}
 
 	//모집글 수정
 	@Override
 	public DataResponseDto<PartyPostResponse> updatePartyPost(Long partyPostId,
-		UpdatePartyPostRequest request) {
+		UpdatePartyPostRequest request, User user) {
 
 		//1. PartyPost 불러오기
 		PartyPost partyPost = partyPostRepository.findById(partyPostId).orElseThrow(
-			() -> new IllegalArgumentException("존재하지 않는 게시물입니다.")
+			PartyPostNotFoundException::new
 		);
 
-		//2. 수정할 내용 받기
+		//2. 작성자인지 확인
+		if (!partyPost.isWrittenByMe(user.getId())) {
+			throw new IsNotWritterException();
+		}
+
+		//3. 수정할 내용 받기
 		partyPost.update(request);
 
-		//3. partyPostResponse 생성
+		//4. partyPostResponse 생성
 		PartyPostResponse partyPostResponse = new PartyPostResponse(partyPost);
 
-		//4. DataResponseDto 생성 후 return
-		return new DataResponseDto<>(HttpStatus.OK.value(), "모집글 수정 완료", partyPostResponse);
+		//5. DataResponseDto 생성 후 return
+		return DataResponseDto.ok("모집글 수정 완료", partyPostResponse);
 	}
 
 	//모집글 삭제
@@ -126,7 +136,7 @@ public class PartyPostService implements IPartyPostService {
 
 		//3. 2가 통과한 경우 삭제 진행
 		partyPost.deletePartyPost();
-		return new ResponseDto(HttpStatus.OK.value(), "모집글 상세 조회 완료");
+		return ResponseDto.ok("모집글 상세 조회 완료");
 	}
 
 	//내가 작성한 모집글 조회 ( 내가 파티장인 경우만 )
@@ -143,7 +153,7 @@ public class PartyPostService implements IPartyPostService {
 			.map(MyPartyPostListResponse::new).collect(Collectors.toList());
 
 		//3. DataResponseDto 생성 후 return
-		return new ListResponseDto<>(HttpStatus.OK.value(), "내가 작성한 모집글 조회 완료", myPartyPostDtoList);
+		return ListResponseDto.ok("내가 작성한 모집글 조회 완료", myPartyPostDtoList);
 	}
 
 	//내가 신청한 모집글 조회 ( 내가 파티원인 경우만/ 파티장인 경우 제외 )
@@ -160,7 +170,7 @@ public class PartyPostService implements IPartyPostService {
 			.map(MyPartyPostListResponse::new).collect(Collectors.toList());
 
 		//3. DataResponseDto 생성 후 return
-		return new ListResponseDto<>(HttpStatus.OK.value(), "내가 참가한 모집글 조회 완료", myPartyPostDtoList);
+		return ListResponseDto.ok("내가 참가한 모집글 조회 완료", myPartyPostDtoList);
 	}
 
 	//모집게시물 좋아요 (*좋아요 취소도 포함되는 기능임)

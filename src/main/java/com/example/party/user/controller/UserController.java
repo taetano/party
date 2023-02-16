@@ -23,6 +23,7 @@ import com.example.party.global.dto.DataResponseDto;
 import com.example.party.global.dto.ResponseDto;
 import com.example.party.user.dto.LoginRequest;
 import com.example.party.user.dto.MyProfileResponse;
+import com.example.party.user.dto.OtherProfileResponse;
 import com.example.party.user.dto.ProfileRequest;
 import com.example.party.user.dto.SignupRequest;
 import com.example.party.user.dto.WithdrawRequest;
@@ -89,7 +90,7 @@ public class UserController {
 	}
 
 	@GetMapping("/profile/{userId}")
-	public DataResponseDto<MyProfileResponse> getOtherProfile(@PathVariable Long userId) {
+	public DataResponseDto<OtherProfileResponse> getOtherProfile(@PathVariable Long userId) {
 		return userService.getOtherProfile(userId);
 	}
 }

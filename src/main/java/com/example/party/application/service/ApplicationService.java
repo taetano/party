@@ -54,7 +54,7 @@ public class ApplicationService implements IApplicationService {
 		//5. repository 에 save
 		applicationRepository.save(application);
 		//6.  DataResponseDto 생성 후 return
-		return new ResponseDto(HttpStatus.CREATED.value(), "참가 신청 완료");
+		return ResponseDto.ok("참가 신청 완료");
 
 	}
 

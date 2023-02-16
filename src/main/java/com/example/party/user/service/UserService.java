@@ -92,7 +92,7 @@ public class UserService implements IUserService {
 		User user = findByUser(userDetails.getEmail());
 		confirmPassword(withdrawRequest.getPassword(), user.getPassword());
 		user.changeDORMANT();
-		return new ResponseDto(200, "회원탈퇴 완료");
+		return ResponseDto.ok("회원탈퇴 완료");
 	}
 
 	//프로필 수정
@@ -101,22 +101,22 @@ public class UserService implements IUserService {
 			.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "유저 찾기 실패")); //user 정보 조회
 		user.updataProfile(profileRequest); //user 정보 수정
 		MyProfileResponse myProfileResponse = new MyProfileResponse(user); // profile 내용 입력
-		return new DataResponseDto(200, "프로필 정보 수정 완료", myProfileResponse);
+		return DataResponseDto.ok("프로필 정보 수정 완료", myProfileResponse);
 
 	}
 
 	//내 프로필 조회
 	public DataResponseDto<MyProfileResponse> getMyProfile(User user) {
 		MyProfileResponse myProfileResponse = new MyProfileResponse(user); // profile 내용 입력
-		return new DataResponseDto(200, "내 프로필 조회", myProfileResponse);
+		return DataResponseDto.ok("내 프로필 조회", myProfileResponse);
 	}
 
 	//상대방 프로필 조회
-	public DataResponseDto<MyProfileResponse> getOtherProfile(Long id) {
+	public DataResponseDto<OtherProfileResponse> getOtherProfile(Long id) {
 		User user = userRepository.findById(id)
 			.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "유저 찾기 실패")); //user 정보 조회
 		OtherProfileResponse otherProfileResponse = new OtherProfileResponse(user); // profile 내용 입력
-		return new DataResponseDto(200, "타 프로필 조회", otherProfileResponse);
+		return DataResponseDto.ok("타 프로필 조회", otherProfileResponse);
 	}
 
 	//private 메소드
