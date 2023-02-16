@@ -142,12 +142,12 @@ public class PartyPostService implements IPartyPostService {
 		Pageable pageable = PageRequest.of(page - 1, 5, Sort.by(Sort.Direction.DESC, "modifiedAt"));
 
 		//1. user가 작성한 partyPost의 리스트
-		List<PartyPost> partyPostList = partyPostRepository.findByUserId(user.getId(), pageable);
+		List<PartyPost> myPartyPostList = partyPostRepository.findByUserId(user.getId(), pageable);
 
 		//2. partyPost DTO의 LIST 생성
-		List<MyPartyPostListResponse> myPartyPostDtoList = partyPostList.stream()
-			.filter(partyPost -> partyPost.getUser().equals(user))
-			.map(MyPartyPostListResponse::new).collect(Collectors.toList());
+		List<MyPartyPostListResponse> myPartyPostDtoList = myPartyPostList.stream()
+			.filter(partyPost -> partyPost.getUser().getId().equals(user.getId()))
+			.map(partyPost -> new MyPartyPostListResponse(partyPost)).collect(Collectors.toList());
 
 		//3. DataResponseDto 생성 후 return
 		return ListResponseDto.ok("내가 작성한 모집글 조회 완료", myPartyPostDtoList);
@@ -159,15 +159,15 @@ public class PartyPostService implements IPartyPostService {
 		Pageable pageable = PageRequest.of(page - 1, 5, Sort.by(Sort.Direction.DESC, "modifiedAt"));
 
 		//1. user가 신청한 application의 리스트
-		List<Application> applicationList = applicationRepository.findByUserId(user.getId(), pageable);
+		List<Application> myApplicationList = applicationRepository.findByUserId(user.getId(), pageable);
 
 		//2. partyPost DTO의 LIST 생성
-		List<MyPartyPostListResponse> myPartyPostDtoList = applicationList.stream()
+		List<MyPartyPostListResponse> myApplicationDtoList = myApplicationList.stream()
 			.map(Application::getPartyPost)
 			.map(MyPartyPostListResponse::new).collect(Collectors.toList());
 
 		//3. DataResponseDto 생성 후 return
-		return ListResponseDto.ok("내가 참가한 모집글 조회 완료", myPartyPostDtoList);
+		return ListResponseDto.ok("내가 참가한 모집글 조회 완료", myApplicationDtoList);
 	}
 
 	//모집게시물 좋아요 (*좋아요 취소도 포함되는 기능임)
