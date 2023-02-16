@@ -1,4 +1,4 @@
-package com.example.party.global.config;
+package com.example.party.redis;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -6,15 +6,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
-import lombok.RequiredArgsConstructor;
-
-@RequiredArgsConstructor
 @Configuration
-@EnableRedisRepositories
-public class RedisRepositoryConfig {
+public class RedisConfig {
 	@Value("${spring.redis.host}")
 	private String host;
 
@@ -26,13 +21,12 @@ public class RedisRepositoryConfig {
 		return new LettuceConnectionFactory(host, port);
 	}
 
-	// setKeySerializer, setValueSerializer 설정으로 redis-cli를 통해 직접 데이터를 보는게 가능하다.
 	@Bean
-	public RedisTemplate<String, Object> redisTemplate() {
-		RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
-		redisTemplate.setKeySerializer(new StringRedisSerializer());
-		redisTemplate.setValueSerializer(new StringRedisSerializer());
+	public RedisTemplate<String, String> redisTemplate() {
+		RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
 		redisTemplate.setConnectionFactory(redisConnectionFactory());
+		redisTemplate.setKeySerializer(new StringRedisSerializer()); // redis-cli을 통해 직접 데이터를 보려고 할 때 알아볼 수 없는 형태로 출력
+		redisTemplate.setValueSerializer(new StringRedisSerializer());
 		return redisTemplate;
 	}
 }
