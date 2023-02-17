@@ -92,7 +92,7 @@ public class PartyPostController {
 
 	// 모집글 검색
 	@GetMapping("/search/{postsearchText}")
-	public ListResponseDto<SearchPartyPostListResponse> searchPartPost(
+	public ListResponseDto<SearchPartyPostListResponse> searchPartyPost(
 		@PathVariable(name = "postsearchText") String SearchText,
 		@RequestParam(name = "page", defaultValue = "1") int page) {
 		return partyPostService.searchPartyPost(SearchText, page);
