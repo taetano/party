@@ -2,7 +2,6 @@ package com.example.party.category.service;
 
 import com.example.party.category.dto.CategoryRequest;
 import com.example.party.category.dto.CategoryResponse;
-import com.example.party.category.entity.Category;
 import com.example.party.global.dto.DataResponseDto;
 import com.example.party.global.dto.ListResponseDto;
 import com.example.party.global.dto.ResponseDto;

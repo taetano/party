@@ -65,7 +65,6 @@ public class CategoryService implements ICategoryService{
 			throw new DuplicateNameNotAllowException();
 		}
 
-		// checkDuplicateNames(category.getName());
 		category.update(request);
 
 		CategoryResponse categoryResponse = new CategoryResponse(category);
@@ -83,13 +82,4 @@ public class CategoryService implements ICategoryService{
 
 		return ResponseDto.ok("카테고리 삭제 완료");
 	}
-
-	// //private 메소드
-	// //카테고리 이름 중복 확인
-	// private void checkDuplicateNames(String name) {
-	// 	// if (category.getName.equals(name)) {
-	// 	if (categoryRepository.findByName(name)) {
-	// 		throw new DuplicateNameNotAllowException();
-	// 	}
-	// }
 }
