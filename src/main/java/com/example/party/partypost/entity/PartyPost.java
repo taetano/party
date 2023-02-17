@@ -1,6 +1,8 @@
 package com.example.party.partypost.entity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -75,6 +77,7 @@ public class PartyPost extends BaseEntity {
 		this.user = user;
 		this.title = request.getTitle();
 		this.content = request.getContent();
+		this.status = Status.FINDING;
 		this.maxMember = request.getMaxMember();
 		this.eubMyeonDong = request.getEubMyeonDong();
 		this.address = request.getAddress();
@@ -82,6 +85,8 @@ public class PartyPost extends BaseEntity {
 		this.partyDate = partyDate;
 		this.closeDate = partyDate.minusMinutes(15);
 		this.createdAt = LocalDateTime.now();
+		this.applications = Collections.emptyList();
+		this.active = true;
 	}
 
 	//제목, 상세내용, 카테고리, 주소만 변경 가능 /현재 모임시작시간 & 모임마감시간 & 모집인원 변경 불가능
