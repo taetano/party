@@ -133,7 +133,7 @@ public class PartyPostService implements IPartyPostService {
 
 		//3. 2가 통과한 경우 삭제 진행
 		partyPost.deletePartyPost();
-		return ResponseDto.ok("모집글 상세 조회 완료");
+		return ResponseDto.ok("모집글 삭제 완료");
 	}
 
 	//내가 작성한 모집글 조회 ( 내가 파티장인 경우만 )
@@ -178,9 +178,10 @@ public class PartyPostService implements IPartyPostService {
 			() -> new PartyPostNotFoundException()
 		);
 		String partPostTitle = partyPost.getTitle(); //모집글 제목 입력
+		User userT = userRepository.save(user);
 		//좋아요 확인
-		if (!(user.getLikePartyPosts().add(partyPost))) {
-			user.getLikePartyPosts().remove(partyPost);
+		if (!(userT.getLikePartyPosts().add(partyPost))) {
+			userT.getLikePartyPosts().remove(partyPost);
 			return new DataResponseDto(200, "모집글 좋아요 취소 완료", partPostTitle);
 		} else {
 			return new DataResponseDto(200, "모집글 좋아요 완료", partPostTitle);
@@ -194,7 +195,12 @@ public class PartyPostService implements IPartyPostService {
 		if (!partyPost.isWrittenByMe(user.getId())) {
 			throw new PartyPostNotDeletableException("작성자만 모집글을 삭제할 수 있습니다");
 		}
-		//2. 모집마감전인지 확인
+		//2. 모집글이 이미 삭제 상태인지 확인
+		if (!partyPost.isActive()){
+			throw new PartyPostNotDeletableException("이미 삭제처리된 모집글입니다.");
+		}
+
+		//3. 모집마감전인지 확인
 		if (!partyPost.beforeCloseDate(LocalDateTime.now())) {
 			throw new PartyPostNotDeletableException("모집마감시간이 지나면 모집글을 삭제할 수 없습니다");
 		}
