@@ -24,8 +24,8 @@ import com.example.party.partypost.dto.PartyPostResponse;
 import com.example.party.partypost.dto.UpdatePartyPostRequest;
 import com.example.party.partypost.entity.PartyPost;
 import com.example.party.partypost.exception.IsNotWritterException;
-import com.example.party.partypost.exception.PartyPostNotFoundException;
 import com.example.party.partypost.exception.PartyPostNotDeletableException;
+import com.example.party.partypost.exception.PartyPostNotFoundException;
 import com.example.party.partypost.repository.PartyPostRepository;
 import com.example.party.user.entity.User;
 import com.example.party.user.repository.UserRepository;
@@ -133,7 +133,7 @@ public class PartyPostService implements IPartyPostService {
 
 		//3. 2가 통과한 경우 삭제 진행
 		partyPost.deletePartyPost();
-		return ResponseDto.ok("모집글 상세 조회 완료");
+		return ResponseDto.ok("모집글 삭제 완료");
 	}
 
 	//내가 작성한 모집글 조회 ( 내가 파티장인 경우만 )
@@ -142,11 +142,11 @@ public class PartyPostService implements IPartyPostService {
 		Pageable pageable = PageRequest.of(page - 1, 5, Sort.by(Sort.Direction.DESC, "modifiedAt"));
 
 		//1. user가 작성한 partyPost의 리스트
-		List<PartyPost> partyPostList = partyPostRepository.findByUserId(user.getId(), pageable);
+		List<PartyPost> myPartyPostList = partyPostRepository.findByUserId(user.getId(), pageable);
 
 		//2. partyPost DTO의 LIST 생성
-		List<MyPartyPostListResponse> myPartyPostDtoList = partyPostList.stream()
-			.filter(partyPost -> partyPost.getUser().equals(user))
+		List<MyPartyPostListResponse> myPartyPostDtoList = myPartyPostList.stream()
+			.filter(partyPost -> partyPost.getUser().getId().equals(user.getId()))
 			.map(MyPartyPostListResponse::new).collect(Collectors.toList());
 
 		//3. DataResponseDto 생성 후 return
@@ -159,15 +159,16 @@ public class PartyPostService implements IPartyPostService {
 		Pageable pageable = PageRequest.of(page - 1, 5, Sort.by(Sort.Direction.DESC, "modifiedAt"));
 
 		//1. user가 신청한 application의 리스트
-		List<Application> applicationList = applicationRepository.findByUserId(user.getId(), pageable);
+		List<Application> myApplicationList = applicationRepository.findByUserId(user.getId(), pageable);
 
 		//2. partyPost DTO의 LIST 생성
-		List<MyPartyPostListResponse> myPartyPostDtoList = applicationList.stream()
+		List<MyPartyPostListResponse> myApplicationDtoList = myApplicationList.stream()
+			.filter(application -> application.getUser().getId().equals(user.getId()))
 			.map(Application::getPartyPost)
 			.map(MyPartyPostListResponse::new).collect(Collectors.toList());
 
 		//3. DataResponseDto 생성 후 return
-		return ListResponseDto.ok("내가 참가한 모집글 조회 완료", myPartyPostDtoList);
+		return ListResponseDto.ok("내가 참가한 모집글 조회 완료", myApplicationDtoList);
 	}
 
 	//모집게시물 좋아요 (*좋아요 취소도 포함되는 기능임)
@@ -177,9 +178,10 @@ public class PartyPostService implements IPartyPostService {
 			() -> new PartyPostNotFoundException()
 		);
 		String partPostTitle = partyPost.getTitle(); //모집글 제목 입력
+		User userT = userRepository.save(user);
 		//좋아요 확인
-		if (!(user.getLikePartyPosts().add(partyPost))) {
-			user.getLikePartyPosts().remove(partyPost);
+		if (!(userT.getLikePartyPosts().add(partyPost))) {
+			userT.getLikePartyPosts().remove(partyPost);
 			return new DataResponseDto(200, "모집글 좋아요 취소 완료", partPostTitle);
 		} else {
 			return new DataResponseDto(200, "모집글 좋아요 완료", partPostTitle);
@@ -193,7 +195,12 @@ public class PartyPostService implements IPartyPostService {
 		if (!partyPost.isWrittenByMe(user.getId())) {
 			throw new PartyPostNotDeletableException("작성자만 모집글을 삭제할 수 있습니다");
 		}
-		//2. 모집마감전인지 확인
+		//2. 모집글이 이미 삭제 상태인지 확인
+		if (!partyPost.isActive()) {
+			throw new PartyPostNotDeletableException("이미 삭제처리된 모집글입니다.");
+		}
+
+		//3. 모집마감전인지 확인
 		if (!partyPost.beforeCloseDate(LocalDateTime.now())) {
 			throw new PartyPostNotDeletableException("모집마감시간이 지나면 모집글을 삭제할 수 없습니다");
 		}
