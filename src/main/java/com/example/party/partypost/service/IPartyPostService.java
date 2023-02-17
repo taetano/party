@@ -39,5 +39,5 @@ public interface IPartyPostService {
 	@Transactional
 	DataResponseDto<PartyPostResponse> getPartyPost(Long postId, User user);
 
-	ListResponseDto<PartyPostListResponse> SearchPartPost(String string, int page);
+	ListResponseDto<PartyPostListResponse> SearchPartyPost(String string, int page);
 }

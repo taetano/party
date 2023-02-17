@@ -99,7 +99,7 @@ public class PartyPostService implements IPartyPostService {
 	//문자 검색으로 제목,지역명으로 모집글 조회
 	@Override
 	@Transactional
-	public ListResponseDto<PartyPostListResponse> SearchPartPost(String string, int page) {
+	public ListResponseDto<PartyPostListResponse> SearchPartyPost(String string, int page) {
 		Pageable pageable = PageRequest.of(page - 1, 20);
 
 		//1.검색 문자에 맞는 리스트 조회
