@@ -24,8 +24,8 @@ import com.example.party.partypost.dto.PartyPostResponse;
 import com.example.party.partypost.dto.UpdatePartyPostRequest;
 import com.example.party.partypost.entity.PartyPost;
 import com.example.party.partypost.exception.IsNotWritterException;
-import com.example.party.partypost.exception.PartyPostNotFoundException;
 import com.example.party.partypost.exception.PartyPostNotDeletableException;
+import com.example.party.partypost.exception.PartyPostNotFoundException;
 import com.example.party.partypost.repository.PartyPostRepository;
 import com.example.party.user.entity.User;
 import com.example.party.user.repository.UserRepository;
@@ -93,6 +93,22 @@ public class PartyPostService implements IPartyPostService {
 
 		//3. DataResponseDto 생성하고 (2) 를 넣어준 후 return
 		return DataResponseDto.ok("모집글 상세 조회 완료", partyPostResponse);
+	}
+
+	//문자 검색으로 제목,지역명으로 모집글 조회
+	@Override
+	@Transactional
+	public ListResponseDto<PartyPostListResponse> SearchPartyPost(String string, int page) {
+		Pageable pageable = PageRequest.of(page - 1, 20);
+
+		//1.검색 문자에 맞는 리스트 조회
+		List<PartyPost> partyPostList = partyPostRepository.findByTitleContainingOrAddressContaining(string, string,
+			pageable);
+
+		List<PartyPostListResponse> partyPostListResponses = partyPostList.stream()
+			.map(PartyPostListResponse::new).collect(Collectors.toList());
+
+		return ListResponseDto.ok("모집글 검색 완료", partyPostListResponses);
 	}
 
 	//모집글 수정

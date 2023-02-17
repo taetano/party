@@ -67,7 +67,7 @@ public class User extends BaseEntity implements UserDetails {
 	@OneToOne(optional = false)
 	@JoinColumn(name = "profile_id", unique = true, referencedColumnName = "id")
 	private Profile profile;
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
 	private List<Application> applies;
 	@OneToMany(mappedBy = "user")
 	private List<PartyPost> partyPosts;
