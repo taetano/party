@@ -89,4 +89,10 @@ public class PartyPostController {
 		return ResponseEntity.ok(partyPostService.deletePartyPost(partyPostId, user));
 	}
 
+	@GetMapping("/search/{postsearchText}")
+	public ListResponseDto<PartyPostListResponse> SearchPartPost(
+		@PathVariable(name = "postsearchText") String SearchText,
+		@RequestParam(name = "page", defaultValue = "1") int page) {
+		return partyPostService.SearchPartyPost(SearchText, page);
+	}
 }

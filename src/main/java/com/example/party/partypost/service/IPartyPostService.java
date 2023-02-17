@@ -38,4 +38,6 @@ public interface IPartyPostService {
 	//모집글 상세 조회(개별 상세조회)
 	@Transactional
 	DataResponseDto<PartyPostResponse> getPartyPost(Long postId, User user);
+
+	ListResponseDto<PartyPostListResponse> SearchPartyPost(String string, int page);
 }
