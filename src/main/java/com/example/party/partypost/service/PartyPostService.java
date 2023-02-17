@@ -37,7 +37,6 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Transactional
 @RequiredArgsConstructor
-
 public class PartyPostService implements IPartyPostService {
 
 	private final PartyPostRepository partyPostRepository;
@@ -196,7 +195,7 @@ public class PartyPostService implements IPartyPostService {
 			throw new PartyPostNotDeletableException("작성자만 모집글을 삭제할 수 있습니다");
 		}
 		//2. 모집글이 이미 삭제 상태인지 확인
-		if (!partyPost.isActive()){
+		if (!partyPost.isActive()) {
 			throw new PartyPostNotDeletableException("이미 삭제처리된 모집글입니다.");
 		}
 
