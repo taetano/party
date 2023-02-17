@@ -23,4 +23,5 @@ public interface PartyPostRepository extends JpaRepository<PartyPost, Long> {
 	//제목 혹은 주소 값이 검색문자에 포함시에 모집글 리스트 조회
 	List<PartyPost> findByTitleContainingOrAddressContaining(String title, String address, Pageable pageable);
 
+	List<PartyPost> findFirst20ByOrderByViewCntDesc();
 }

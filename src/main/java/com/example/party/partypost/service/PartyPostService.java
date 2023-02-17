@@ -21,6 +21,7 @@ import com.example.party.partypost.dto.MyPartyPostListResponse;
 import com.example.party.partypost.dto.PartyPostListResponse;
 import com.example.party.partypost.dto.PartyPostRequest;
 import com.example.party.partypost.dto.PartyPostResponse;
+import com.example.party.partypost.dto.SearchPartyPostListResponse;
 import com.example.party.partypost.dto.UpdatePartyPostRequest;
 import com.example.party.partypost.entity.PartyPost;
 import com.example.party.partypost.exception.IsNotWritterException;
@@ -99,17 +100,33 @@ public class PartyPostService implements IPartyPostService {
 	//문자 검색으로 제목,지역명으로 모집글 조회
 	@Override
 	@Transactional
-	public ListResponseDto<PartyPostListResponse> SearchPartyPost(String string, int page) {
+	public ListResponseDto<SearchPartyPostListResponse> searchPartyPost(String string, int page) {
 		Pageable pageable = PageRequest.of(page - 1, 20);
 
 		//1.검색 문자에 맞는 리스트 조회
 		List<PartyPost> partyPostList = partyPostRepository.findByTitleContainingOrAddressContaining(string, string,
 			pageable);
 
-		List<PartyPostListResponse> partyPostListResponses = partyPostList.stream()
-			.map(PartyPostListResponse::new).collect(Collectors.toList());
+		List<SearchPartyPostListResponse> partyPostListResponses = partyPostList.stream()
+			.map(SearchPartyPostListResponse::new).collect(Collectors.toList());
 
 		return ListResponseDto.ok("모집글 검색 완료", partyPostListResponses);
+	}
+
+	@Override
+	public ListResponseDto<SearchPartyPostListResponse> findHotPartyPost() {
+		Pageable pageable = PageRequest.of(0, 20, Sort.by("view_cnt"));
+
+		List<PartyPost> partyPostList = partyPostRepository.findFirst20ByOrderByViewCntDesc();
+
+		//1.검색 문자에 맞는 리스트 조회
+		// List<PartyPost> partyPostList = partyPostRepository.findByTitleContainingOrAddressContaining(string, string,
+		// 	pageable);
+
+		List<SearchPartyPostListResponse> partyPostListResponses = partyPostList.stream()
+			.map(SearchPartyPostListResponse::new).collect(Collectors.toList());
+
+		return ListResponseDto.ok("핫한 모집글 조회 완료", partyPostListResponses);
 	}
 
 	//모집글 수정
