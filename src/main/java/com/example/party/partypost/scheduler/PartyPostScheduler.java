@@ -20,7 +20,7 @@ public class PartyPostScheduler {
 	@Scheduled(cron = "0 * * * * ?") // 매 1분 간격으로 실행
 	public void CloseFindingStatusPartyPost() {
 		System.out.println(LocalDateTime.now()+"  : 1분 지났어");
-		partyPostRepository.changeStatusToFound();
+		partyPostRepository.changeStatusToFoundWhenCloseDate();
 
 	}
 }
