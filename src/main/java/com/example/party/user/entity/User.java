@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,6 +19,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import org.hibernate.annotations.BatchSize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -144,7 +146,7 @@ public class User extends BaseEntity implements UserDetails {
 	public void updataProfile(ProfileRequest profileRequest) {
 		this.nickname = profileRequest.getNickName();
 		this.phoneNum = profileRequest.getPhoneNum();
-		//프로필 수정을 user에서 처리
+		//프로필 수정을 user 에서 처리
 		this.profile.updateProfile(profileRequest.getProFileUrl(), profileRequest.getComment());
 
 	}
