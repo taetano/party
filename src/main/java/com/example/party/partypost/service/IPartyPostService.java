@@ -9,6 +9,7 @@ import com.example.party.partypost.dto.MyPartyPostListResponse;
 import com.example.party.partypost.dto.PartyPostListResponse;
 import com.example.party.partypost.dto.PartyPostRequest;
 import com.example.party.partypost.dto.PartyPostResponse;
+import com.example.party.partypost.dto.SearchPartyPostListResponse;
 import com.example.party.partypost.dto.UpdatePartyPostRequest;
 import com.example.party.user.entity.User;
 
@@ -39,5 +40,7 @@ public interface IPartyPostService {
 	@Transactional
 	DataResponseDto<PartyPostResponse> getPartyPost(Long postId, User user);
 
-	ListResponseDto<PartyPostListResponse> SearchPartyPost(String string, int page);
+	ListResponseDto<SearchPartyPostListResponse> searchPartyPost(String string, int page);
+
+	ListResponseDto<SearchPartyPostListResponse> findHotPartyPost();
 }

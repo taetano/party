@@ -19,6 +19,7 @@ import com.example.party.partypost.dto.MyPartyPostListResponse;
 import com.example.party.partypost.dto.PartyPostListResponse;
 import com.example.party.partypost.dto.PartyPostRequest;
 import com.example.party.partypost.dto.PartyPostResponse;
+import com.example.party.partypost.dto.SearchPartyPostListResponse;
 import com.example.party.partypost.dto.UpdatePartyPostRequest;
 import com.example.party.partypost.service.PartyPostService;
 import com.example.party.user.entity.User;
@@ -89,10 +90,17 @@ public class PartyPostController {
 		return ResponseEntity.ok(partyPostService.deletePartyPost(partyPostId, user));
 	}
 
+	// 모집글 검색
 	@GetMapping("/search/{postsearchText}")
-	public ListResponseDto<PartyPostListResponse> SearchPartPost(
+	public ListResponseDto<SearchPartyPostListResponse> searchPartPost(
 		@PathVariable(name = "postsearchText") String SearchText,
 		@RequestParam(name = "page", defaultValue = "1") int page) {
-		return partyPostService.SearchPartyPost(SearchText, page);
+		return partyPostService.searchPartyPost(SearchText, page);
+	}
+
+	//조회수 많은 핫한 모집글 조회
+	@GetMapping("/hot")
+	public ListResponseDto<SearchPartyPostListResponse> findHotPartyPost() {
+		return partyPostService.findHotPartyPost();
 	}
 }
