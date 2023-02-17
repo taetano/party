@@ -60,7 +60,7 @@ public class CategoryService implements ICategoryService{
 			() -> new CategoryNotFoundException()
 		);
 
-		Optional<Category> found = categoryRepository.findByName(category.getName());
+		Optional<Category> found = categoryRepository.findByName(request.getName());
 		if(found.isPresent()) {
 			throw new DuplicateNameNotAllowException();
 		}
