@@ -32,7 +32,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "party_post")
-@Entity(name = "partPost")
+@Entity(name = "partyPost")
 public class PartyPost extends BaseEntity {
 
 	@Id
