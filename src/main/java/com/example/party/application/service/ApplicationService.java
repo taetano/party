@@ -2,6 +2,8 @@ package com.example.party.application.service;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.EntityManager;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +26,8 @@ import com.example.party.partypost.entity.PartyPost;
 import com.example.party.partypost.exception.PartyPostNotFoundException;
 import com.example.party.partypost.repository.PartyPostRepository;
 import com.example.party.user.entity.User;
+import com.example.party.user.exception.UserNotFoundException;
+import com.example.party.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -34,25 +38,30 @@ public class ApplicationService implements IApplicationService {
 
 	private final ApplicationRepository applicationRepository;
 	private final PartyPostRepository partyPostRepository;
+	private final UserRepository userRepository;
 
 	//모집 참가 신청
 	@Override
 	public ResponseDto createApplication(Long partyPostId, User user) {
+		//0. 받아온 user 를 영속성 컨텍스트에 저장
+		User user1 = userRepository.save(user);
+
 		//1. partyPost 불러오기
 		PartyPost partyPost = partyPostRepository.findById(partyPostId).orElseThrow(
 			PartyPostNotFoundException::new
 		);
 		//2. Application 이 작성 가능한지 검증
-		checkBeforeCreateApplication(partyPost, user);
+		checkBeforeCreateApplication(partyPost, user1);
 		//3. Application 객체 생성
-		Application application = new Application(user, partyPost);
+		Application application = new Application(user1, partyPost);
 
-		//4. 각 객체의 List 에 Application 저장
-		partyPost.addApplication(application);
-		user.addApplication(application);
-
-		//5. repository 에 save
+		//4. repository 에 save
 		applicationRepository.save(application);
+
+		//5. 각 객체의 List 에 Application 저장
+		partyPost.addApplication(application);
+		user1.addApplication(application);
+
 		//6.  DataResponseDto 생성 후 return
 		return ResponseDto.ok("참가 신청 완료");
 

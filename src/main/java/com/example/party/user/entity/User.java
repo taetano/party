@@ -19,6 +19,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import org.hibernate.annotations.BatchSize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -66,7 +67,7 @@ public class User extends BaseEntity implements UserDetails {
 	@OneToOne(optional = false)
 	@JoinColumn(name = "profile_id", unique = true, referencedColumnName = "id")
 	private Profile profile;
-	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "user")
 	private List<Application> applies;
 	@OneToMany(mappedBy = "user")
 	private List<PartyPost> partyPosts;
