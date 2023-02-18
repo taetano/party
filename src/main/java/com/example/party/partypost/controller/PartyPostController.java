@@ -72,13 +72,16 @@ public class PartyPostController {
 
 	//모집글전체조회
 	@GetMapping()
-	public ResponseEntity<ListResponseDto<PartyPostListResponse>> findPartyList() {
-		return ResponseEntity.ok(partyPostService.findPartyList());
+	public ResponseEntity<ListResponseDto<PartyPostListResponse>> findPartyList(
+		@RequestParam int page
+	) {
+		return ResponseEntity.ok(partyPostService.findPartyList(page-1));
 	}
 
 	//모집글 상세 조회(개별 상세조회)
 	@GetMapping("/{party-postId}")
-	public ResponseEntity<DataResponseDto<PartyPostResponse>> getPartyPost(@PathVariable(name = "party-postId") Long partyPostId,
+	public ResponseEntity<DataResponseDto<PartyPostResponse>> getPartyPost(
+		@PathVariable(name = "party-postId") Long partyPostId,
 		@AuthenticationPrincipal User user) {
 		return ResponseEntity.ok(partyPostService.getPartyPost(partyPostId, user));
 	}
