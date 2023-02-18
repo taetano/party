@@ -1,4 +1,4 @@
-package com.example.party.partypost.entity;
+package com.example.party.global;
 
 import java.time.LocalDateTime;
 
@@ -15,13 +15,12 @@ import lombok.Getter;
 @Getter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public class TimeStamp {
-
+public class TimeStamped {
 	@CreatedDate
-	@Column(nullable = false)
-	private LocalDateTime createdAt;
+	@Column(updatable = false)
+	protected LocalDateTime createdAt;
 
 	@LastModifiedDate
-	@Column(nullable = false)
-	private LocalDateTime modifiedAt;
+	@Column
+	protected LocalDateTime modifiedAt;
 }

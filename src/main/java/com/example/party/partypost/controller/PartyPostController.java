@@ -19,6 +19,7 @@ import com.example.party.partypost.dto.MyPartyPostListResponse;
 import com.example.party.partypost.dto.PartyPostListResponse;
 import com.example.party.partypost.dto.PartyPostRequest;
 import com.example.party.partypost.dto.PartyPostResponse;
+import com.example.party.partypost.dto.SearchPartyPostListResponse;
 import com.example.party.partypost.dto.UpdatePartyPostRequest;
 import com.example.party.partypost.service.PartyPostService;
 import com.example.party.user.entity.User;
@@ -62,7 +63,7 @@ public class PartyPostController {
 	}
 
 	//모집게시물 좋아요 (*좋아요 취소도 포함되는 기능임)
-	@PostMapping("/{party-postId}")
+	@PostMapping("/{party-postId}/likes")
 	public DataResponseDto<String> toggleLikePartyPost(@PathVariable(name = "party-postId") Long partyPostId,
 		@AuthenticationPrincipal User user) {
 		//좋아요 기능
@@ -71,13 +72,16 @@ public class PartyPostController {
 
 	//모집글전체조회
 	@GetMapping()
-	public ResponseEntity<ListResponseDto<PartyPostListResponse>> findPartyList() {
-		return ResponseEntity.ok(partyPostService.findPartyList());
+	public ResponseEntity<ListResponseDto<PartyPostListResponse>> findPartyList(
+		@RequestParam int page
+	) {
+		return ResponseEntity.ok(partyPostService.findPartyList(page-1));
 	}
 
 	//모집글 상세 조회(개별 상세조회)
 	@GetMapping("/{party-postId}")
-	public ResponseEntity<DataResponseDto> getPartyPost(@PathVariable(name = "party-postId") Long partyPostId,
+	public ResponseEntity<DataResponseDto<PartyPostResponse>> getPartyPost(
+		@PathVariable(name = "party-postId") Long partyPostId,
 		@AuthenticationPrincipal User user) {
 		return ResponseEntity.ok(partyPostService.getPartyPost(partyPostId, user));
 	}
@@ -89,10 +93,17 @@ public class PartyPostController {
 		return ResponseEntity.ok(partyPostService.deletePartyPost(partyPostId, user));
 	}
 
+	// 모집글 검색
 	@GetMapping("/search/{postsearchText}")
-	public ListResponseDto<PartyPostListResponse> SearchPartPost(
+	public ListResponseDto<SearchPartyPostListResponse> searchPartyPost(
 		@PathVariable(name = "postsearchText") String SearchText,
 		@RequestParam(name = "page", defaultValue = "1") int page) {
-		return partyPostService.SearchPartyPost(SearchText, page);
+		return partyPostService.searchPartyPost(SearchText, page);
+	}
+
+	//조회수 많은 핫한 모집글 조회
+	@GetMapping("/hot")
+	public ListResponseDto<SearchPartyPostListResponse> findHotPartyPost() {
+		return partyPostService.findHotPartyPost();
 	}
 }
