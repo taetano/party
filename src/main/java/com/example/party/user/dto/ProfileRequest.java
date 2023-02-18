@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class ProfileRequest {
-	private String nickName; //user
+	private String nickname; //user
 	private String phoneNum; //user
-	private String proFileUrl; //profile
+	private String profileImg; //profile
 	private String comment; //profile
 
 }

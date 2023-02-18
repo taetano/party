@@ -1,7 +1,6 @@
 package com.example.party.partypost.entity;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -19,7 +18,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.example.party.application.entity.Application;
-import com.example.party.global.BaseEntity;
+import com.example.party.global.TimeStamped;
 import com.example.party.partypost.dto.PartyPostRequest;
 import com.example.party.partypost.dto.UpdatePartyPostRequest;
 import com.example.party.partypost.type.Status;
@@ -33,7 +32,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "party_post")
 @Entity(name = "partyPost")
-public class PartyPost extends BaseEntity {
+public class PartyPost extends TimeStamped {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -84,7 +83,6 @@ public class PartyPost extends BaseEntity {
 		this.detailAddress = request.getDetailAddress();
 		this.partyDate = partyDate;
 		this.closeDate = partyDate.minusMinutes(15);
-		this.createdAt = LocalDateTime.now();
 		this.applications = Collections.emptyList();
 		this.active = true;
 	}
