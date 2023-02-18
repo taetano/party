@@ -119,7 +119,7 @@ public class UserService implements IUserService {
 	//repository에서 user 찾기
 	private User findByUser(String email) {
 		return userRepository.findByEmail(email)
-			.orElseThrow(LoginException::new);
+			.orElseThrow(UserNotFoundException::new);
 	}
 
 	//비밀번호 확인

@@ -39,9 +39,7 @@ public class UserController {
 	//회원가입
 	@PostMapping("/signup")
 	public ResponseEntity<ResponseDto> signup(@RequestBody @Valid SignupRequest signupRequest) {
-		ResponseDto responseDto = userService.signUp(signupRequest);
-		HttpHeaders headers = new HttpHeaders();
-		return ResponseEntity.ok().headers(headers).body(responseDto);
+		return ResponseEntity.ok(userService.signUp(signupRequest));
 	}
 
 	//로그인
@@ -70,9 +68,7 @@ public class UserController {
 	@DeleteMapping("/withdraw")
 	public ResponseEntity<ResponseDto> withdraw(@RequestBody WithdrawRequest withdrawRequest,
 		@AuthenticationPrincipal User userDetails) {
-		ResponseDto responseDto = userService.withdraw(userDetails, withdrawRequest);
-		HttpHeaders headers = new HttpHeaders();
-		return ResponseEntity.ok().headers(headers).body(responseDto);
+		return ResponseEntity.ok(userService.withdraw(userDetails, withdrawRequest));
 	}
 
 	//프로필 정보 수정
