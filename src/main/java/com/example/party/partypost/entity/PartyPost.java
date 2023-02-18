@@ -45,7 +45,7 @@ public class PartyPost extends TimeStamped {
 	@Column(name = "view_cnt", nullable = false)
 	private int viewCnt;
 	@Column(name = "max_member", nullable = false)
-	private byte maxMember; // MYSQL DB 상에
+	private byte maxMember;
 	@Column(name = "eub_myeon_dong", nullable = false)
 	private String eubMyeonDong;
 	@Column(name = "address", nullable = false)
@@ -54,6 +54,8 @@ public class PartyPost extends TimeStamped {
 	private String detailAddress;
 	@Column(name = "is_active", nullable = false)
 	private boolean active;
+	@Column(name ="accepted_cnt", nullable=false)
+	private byte acceptedMember;
 
 	// enum
 	@Enumerated(EnumType.STRING)

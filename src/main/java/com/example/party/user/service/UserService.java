@@ -21,6 +21,7 @@ import com.example.party.user.dto.WithdrawRequest;
 import com.example.party.user.entity.Profile;
 import com.example.party.user.entity.User;
 import com.example.party.user.exception.EmailOverlapException;
+import com.example.party.user.exception.ExistNicknameException;
 import com.example.party.user.exception.UserNotFoundException;
 import com.example.party.user.repository.ProfileRepository;
 import com.example.party.user.repository.UserRepository;
@@ -43,10 +44,19 @@ public class UserService implements IUserService {
 	//회원가입
 	@Override
 	public ResponseDto signUp(SignupRequest signupRequest) {
+		if(userRepository.existsUserByNickname(signupRequest.getNickname())){
+			throw new ExistNicknameException();
+		} // nickname 중복검사 추가
+
 		Optional<User> users = userRepository.findByEmail(signupRequest.getEmail());
 		if (users.isPresent()) {
 			throw new EmailOverlapException();
 		}
+		// 위 로직을 아래처럼 바꾸는게 어떨까요 위의 경우 Optional 로 받기 때문에 DB를 전체 다 훑지만,
+		// exists 함수의 경우 하나라도 있으면 검색을 멈춰서 더 효율적일 것 같습니다!
+		// if(userRepository.existsUserByEmail(signupRequest.getEmail())){
+		// 	throw new EmailOverlapException();
+		// }]
 
 		String password = passwordEncoder.encode(signupRequest.getPassword());
 		Profile profile = new Profile();
@@ -119,7 +129,7 @@ public class UserService implements IUserService {
 	}
 
 	//private 메소드
-	//repository에서 user 찾기
+	//repository 에서 user 찾기
 	private User findByUser(String email) {
 		return userRepository.findByEmail(email)
 			.orElseThrow(LoginException::new);
