@@ -77,9 +77,7 @@ public class CategoryService implements ICategoryService{
 		Category category = categoryRepository.findById(categoryId).orElseThrow(
 			() -> new CategoryNotFoundException()
 		);
-
-		categoryRepository.deleteById(category.getId());
-
+		category.deleteCategory();
 		return ResponseDto.ok("카테고리 삭제 완료");
 	}
 }

@@ -7,7 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -31,6 +30,8 @@ public class Category extends BaseEntity {
 	private Long id;
 	@Column(name = "name", nullable = false, unique = true)
 	private String name;
+	@Column(name = "active", nullable = false)
+	private Boolean active;
 
 	@OneToMany(mappedBy = "category")
 	private List<PartyPost> partyPostList;
@@ -38,6 +39,7 @@ public class Category extends BaseEntity {
 	//생성자
 	public Category(CategoryRequest request) {
 		this.name = request.getName();
+		this.active = true;
 	}
 
 	//카테고리 수정
@@ -46,5 +48,10 @@ public class Category extends BaseEntity {
 	}
 
 	public void deleteCategory() {
+		this.active = false;
+	}
+
+	public boolean isActive() {
+		return this.active;
 	}
 }

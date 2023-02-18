@@ -16,7 +16,7 @@ import com.example.party.user.entity.User;
 public interface IPartyPostService {
 
 	//모집글 작성
-	DataResponseDto<PartyPostResponse> createPartyPost(User user, PartyPostRequest request, Category category);
+	DataResponseDto<PartyPostResponse> createPartyPost(User user, PartyPostRequest request);
 
 	//모집글 수정
 	DataResponseDto<PartyPostResponse> updatePartyPost(Long partyPostId, UpdatePartyPostRequest request, User user);

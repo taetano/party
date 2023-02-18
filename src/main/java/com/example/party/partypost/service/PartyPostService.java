@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.party.application.entity.Application;
 import com.example.party.application.repository.ApplicationRepository;
 import com.example.party.category.entity.Category;
+import com.example.party.category.exception.CategoryNotFoundException;
+import com.example.party.category.repository.CategoryRepository;
 import com.example.party.global.dto.DataResponseDto;
 import com.example.party.global.dto.ListResponseDto;
 import com.example.party.global.dto.ResponseDto;
@@ -24,6 +26,7 @@ import com.example.party.partypost.dto.PartyPostRequest;
 import com.example.party.partypost.dto.PartyPostResponse;
 import com.example.party.partypost.dto.UpdatePartyPostRequest;
 import com.example.party.partypost.entity.PartyPost;
+import com.example.party.category.exception.CategoryNotActiveException;
 import com.example.party.partypost.exception.IsNotWritterException;
 import com.example.party.partypost.exception.PartyPostNotDeletableException;
 import com.example.party.partypost.exception.PartyPostNotFoundException;
@@ -44,25 +47,30 @@ public class PartyPostService implements IPartyPostService {
 	private final PartyPostRepository partyPostRepository;
 	private final UserRepository userRepository;
 	private final ApplicationRepository applicationRepository;
+	private final CategoryRepository categoryRepository;
 
 	//모집글 작성
 	@Override
-	public DataResponseDto<PartyPostResponse> createPartyPost(User user, PartyPostRequest request, Category category) {
+	public DataResponseDto<PartyPostResponse> createPartyPost(User user, PartyPostRequest request) { // 인자 달라질 수 있습니다
 
 		//예시: "2023-02-16 12:00"
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 		LocalDateTime partyDate = LocalDateTime.parse(request.getPartyDate(), formatter);
-
-		//1. PartyPost 객체 생성
+		//1. category 찾기
+		Category category = categoryRepository.findById(request.getCategoryId()).orElseThrow(
+			() -> new CategoryNotFoundException()
+		);
+		//2. category 활성화 상태 확인
+		if(!category.isActive()) {
+			throw new CategoryNotActiveException();
+		}
+		//3. PartyPost 객체 생성
 		PartyPost partyPost = new PartyPost(user, request, partyDate, category);
-
-		//2. repository 에 저장
+		//4. repository 에 저장
 		partyPostRepository.save(partyPost);
-
-		//3. partyPostResponse 생성
+		//5. partyPostResponse 생성
 		PartyPostResponse partyPostResponse = new PartyPostResponse(partyPost);
-
-		//4. DataResponseDto 생성 후 return
+		//6. DataResponseDto 생성 후 return
 		return new DataResponseDto<>(201, "모집글 작성 완료", partyPostResponse);
 	}
 
@@ -226,5 +234,4 @@ public class PartyPostService implements IPartyPostService {
 			throw new PartyPostNotDeletableException("참가신청자가 있는 경우 삭제할 수 없습니다");
 		}
 	}
-
 }

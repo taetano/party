@@ -43,8 +43,6 @@ public class PartyPost extends BaseEntity {
 	private String title;
 	@Column(name = "content", nullable = false, columnDefinition = "TEXT")
 	private String content;
-	// @Column(name ="categoryName", nullable = false)
-	// private String categoryName;
 	@Column(name = "view_cnt", nullable = false)
 	private int viewCnt;
 	@Column(name = "max_member", nullable = false)
@@ -82,7 +80,6 @@ public class PartyPost extends BaseEntity {
 		this.user = user;
 		this.title = request.getTitle();
 		this.content = request.getContent();
-		// this.categoryName = request.getCategoryName();
 		this.category = category;
 		this.status = Status.FINDING;
 		this.maxMember = request.getMaxMember();
