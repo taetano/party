@@ -1,5 +1,6 @@
 package com.example.party.partypost.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,11 +23,15 @@ public interface PartyPostRepository extends JpaRepository<PartyPost, Long> {
 	//내가 작성한 모집글 리스트 조회
 	List<PartyPost> findByUserId(Long userId, Pageable pageable);
 
-	//현재 active:true, status:'FINDING' 상태고 close_date 가 [현재] 이전인 게시글을 FOUND 로 바꿈
+	// FOUND -> NO_SHOW_REPORTING (모임시작시간이 되면 변경)
 	@Modifying
-	@Query(value = "UPDATE  partyPost p SET p.status = 'FOUND' WHERE  p.active = true AND p.status = 'FINDING'  AND p.closeDate <= CURRENT_TIMESTAMP")
-	void changeStatusToFoundWhenCloseDate();
+	@Query(value = "UPDATE partyPost p SET p.status = 'NO_SHOW_REPORTING' WHERE p.active = true AND p.status = 'FOUND' AND p.partyDate<=CURRENT_TIMESTAMP")
+	void changeStatusFoundToNoShow();
 
+	//NO_SHOW_REPORTING > END (모임시간 후 1시간 지나면 변경)
+	@Modifying
+	@Query(value = "UPDATE partyPost p SET p.status = 'END' WHERE p.active = true AND p.status = 'NO_SHOW_REPORTING' AND p.partyDate<=:beforeHourFromNow")
+	void changeStatusNoShowToEnd(LocalDateTime beforeHourFromNow);
 
 	//제목 혹은 주소 값이 검색문자에 포함시에 모집글 리스트 조회
 	List<PartyPost> findByTitleContainingOrAddressContaining(String title, String address, Pageable pageable);
