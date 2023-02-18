@@ -143,11 +143,11 @@ public class User extends TimeStamped implements UserDetails {
 		return false;
 	}
 
-	public void updataProfile(ProfileRequest profileRequest) {
-		this.nickname = profileRequest.getNickName();
+	public void updateProfile(ProfileRequest profileRequest) {
+		this.nickname = profileRequest.getNickname();
 		this.phoneNum = profileRequest.getPhoneNum();
 		//프로필 수정을 user 에서 처리
-		this.profile.updateProfile(profileRequest.getProFileUrl(), profileRequest.getComment());
+		this.profile.updateProfile(profileRequest.getProfileImg(), profileRequest.getComment());
 
 	}
 
