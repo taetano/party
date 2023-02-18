@@ -1,14 +1,19 @@
 package com.example.party.category.entity;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.example.party.category.dto.CategoryRequest;
 import com.example.party.global.BaseEntity;
+import com.example.party.partypost.entity.PartyPost;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -26,6 +31,9 @@ public class Category extends BaseEntity {
 	private Long id;
 	@Column(name = "name", nullable = false, unique = true)
 	private String name;
+
+	@OneToMany(mappedBy = "category")
+	private List<PartyPost> partyPostList;
 
 	//생성자
 	public Category(CategoryRequest request) {

@@ -2,6 +2,7 @@ package com.example.party.partypost.service;
 
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.party.category.entity.Category;
 import com.example.party.global.dto.DataResponseDto;
 import com.example.party.global.dto.ListResponseDto;
 import com.example.party.global.dto.ResponseDto;
@@ -15,7 +16,7 @@ import com.example.party.user.entity.User;
 public interface IPartyPostService {
 
 	//모집글 작성
-	DataResponseDto<PartyPostResponse> createPartyPost(User user, PartyPostRequest request);
+	DataResponseDto<PartyPostResponse> createPartyPost(User user, PartyPostRequest request, Category category);
 
 	//모집글 수정
 	DataResponseDto<PartyPostResponse> updatePartyPost(Long partyPostId, UpdatePartyPostRequest request, User user);

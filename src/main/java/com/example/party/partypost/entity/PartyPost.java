@@ -1,7 +1,6 @@
 package com.example.party.partypost.entity;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -19,6 +18,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.example.party.application.entity.Application;
+import com.example.party.category.entity.Category;
 import com.example.party.global.BaseEntity;
 import com.example.party.partypost.dto.PartyPostRequest;
 import com.example.party.partypost.dto.UpdatePartyPostRequest;
@@ -43,6 +43,8 @@ public class PartyPost extends BaseEntity {
 	private String title;
 	@Column(name = "content", nullable = false, columnDefinition = "TEXT")
 	private String content;
+	// @Column(name ="categoryName", nullable = false)
+	// private String categoryName;
 	@Column(name = "view_cnt", nullable = false)
 	private int viewCnt;
 	@Column(name = "max_member", nullable = false)
@@ -71,12 +73,17 @@ public class PartyPost extends BaseEntity {
 	private User user;
 	@OneToMany(mappedBy = "partyPost")
 	private List<Application> applications;
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "category_id")
+	private Category category;
 
 	//생성자
-	public PartyPost(User user, PartyPostRequest request, LocalDateTime partyDate) {
+	public PartyPost(User user, PartyPostRequest request, LocalDateTime partyDate, Category category) {
 		this.user = user;
 		this.title = request.getTitle();
 		this.content = request.getContent();
+		// this.categoryName = request.getCategoryName();
+		this.category = category;
 		this.status = Status.FINDING;
 		this.maxMember = request.getMaxMember();
 		this.eubMyeonDong = request.getEubMyeonDong();
@@ -153,7 +160,6 @@ public class PartyPost extends BaseEntity {
 			this.status = Status.FOUND;
 		}
 	}
-
 }
 // TODO: API 1차 작업완료 후
 // 차단한 유저의 게시물 블라인드 처리 방식 생각

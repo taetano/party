@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.party.category.entity.Category;
 import com.example.party.global.dto.DataResponseDto;
 import com.example.party.global.dto.ListResponseDto;
 import com.example.party.global.dto.ResponseDto;
@@ -35,8 +36,8 @@ public class PartyPostController {
 	//모집글 작성
 	@PostMapping("")
 	public ResponseEntity<DataResponseDto<PartyPostResponse>> createPartyPost(
-		@RequestBody PartyPostRequest request, @AuthenticationPrincipal User user) {
-		return ResponseEntity.ok(partyPostService.createPartyPost(user, request));
+		@RequestBody PartyPostRequest request, @AuthenticationPrincipal User user, Category category) {
+		return ResponseEntity.ok(partyPostService.createPartyPost(user, request, category));
 	}
 
 	//모집글 수정

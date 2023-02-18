@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.party.application.entity.Application;
 import com.example.party.application.repository.ApplicationRepository;
+import com.example.party.category.entity.Category;
 import com.example.party.global.dto.DataResponseDto;
 import com.example.party.global.dto.ListResponseDto;
 import com.example.party.global.dto.ResponseDto;
@@ -46,14 +47,14 @@ public class PartyPostService implements IPartyPostService {
 
 	//모집글 작성
 	@Override
-	public DataResponseDto<PartyPostResponse> createPartyPost(User user, PartyPostRequest request) {
+	public DataResponseDto<PartyPostResponse> createPartyPost(User user, PartyPostRequest request, Category category) {
 
 		//예시: "2023-02-16 12:00"
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 		LocalDateTime partyDate = LocalDateTime.parse(request.getPartyDate(), formatter);
 
 		//1. PartyPost 객체 생성
-		PartyPost partyPost = new PartyPost(user, request, partyDate);
+		PartyPost partyPost = new PartyPost(user, request, partyDate, category);
 
 		//2. repository 에 저장
 		partyPostRepository.save(partyPost);
