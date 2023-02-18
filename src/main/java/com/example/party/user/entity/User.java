@@ -146,9 +146,6 @@ public class User extends TimeStamped implements UserDetails {
 	public void updateProfile(ProfileRequest profileRequest) {
 		this.nickname = profileRequest.getNickname();
 		this.phoneNum = profileRequest.getPhoneNum();
-		//프로필 수정을 user 에서 처리
-		this.profile.updateProfile(profileRequest.getProfileImg(), profileRequest.getComment());
-
 	}
 
 	public void increaseParticipationCnt() {
