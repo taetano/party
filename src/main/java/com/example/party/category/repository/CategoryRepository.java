@@ -12,7 +12,7 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 	//카테고리 조회
 	List<Category> findAll();
 
-	Optional<Category> findByName(String name);
-
 	Optional<Category> findById(Long Id);
+
+	boolean existsCategoryByName(String name);
 }

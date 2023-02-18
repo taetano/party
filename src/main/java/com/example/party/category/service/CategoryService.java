@@ -34,8 +34,7 @@ public class CategoryService implements ICategoryService{
 	public DataResponseDto<CategoryResponse> createCategory(CategoryRequest request) {
 		Category category = new Category(request);
 
-		Optional<Category> found = categoryRepository.findByName(category.getName());
-		if(found.isPresent()) {
+		if(categoryRepository.existsCategoryByName(category.getName())) {
 			throw new DuplicateNameNotAllowException();
 		}
 
@@ -60,8 +59,7 @@ public class CategoryService implements ICategoryService{
 			() -> new CategoryNotFoundException()
 		);
 
-		Optional<Category> found = categoryRepository.findByName(request.getName());
-		if(found.isPresent()) {
+		if(categoryRepository.existsCategoryByName(request.getName())) {
 			throw new DuplicateNameNotAllowException();
 		}
 
