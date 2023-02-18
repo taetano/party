@@ -1,7 +1,6 @@
 package com.example.party.category.service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -43,7 +42,7 @@ public class CategoryService implements ICategoryService{
 		return new DataResponseDto<>(201, "카테고리 생성 완료", categoryResponse);
 	}
 
-	//카테고리 조회
+	//카테고리 전체 조회
 	@Override
 	public ListResponseDto<CategoryResponse> getCategory() {
 		List<Category> categoryList = categoryRepository.findAll();

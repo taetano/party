@@ -121,6 +121,26 @@ public class PartyPostService implements IPartyPostService {
 		return ListResponseDto.ok("모집글 검색 완료", partyPostListResponses);
 	}
 
+	//카테고리명 별로 모집글 조회
+	@Override
+	public ListResponseDto<PartyPostListResponse> searchPartyPostByCategory(Long categoryId, int page) {
+		Pageable pageable = PageRequest.of(page - 1, 20);
+
+		Category category = categoryRepository.findById(categoryId).orElseThrow(
+			() -> new CategoryNotFoundException()
+		);
+
+		if(!category.isActive()) {
+			throw new CategoryNotActiveException();
+		}
+
+		List<PartyPost> partyPostList = partyPostRepository.findByCategoryId(categoryId, pageable);
+		List<PartyPostListResponse> partyPostListResponses = partyPostList.stream()
+			.map(PartyPostListResponse::new).collect(Collectors.toList());
+
+		return ListResponseDto.ok("모집글 검색 완료", partyPostListResponses);
+	}
+
 	//모집글 수정
 	@Override
 	public DataResponseDto<PartyPostResponse> updatePartyPost(Long partyPostId,

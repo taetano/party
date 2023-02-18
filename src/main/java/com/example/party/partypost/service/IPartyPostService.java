@@ -41,4 +41,7 @@ public interface IPartyPostService {
 	DataResponseDto<PartyPostResponse> getPartyPost(Long postId, User user);
 
 	ListResponseDto<PartyPostListResponse> SearchPartyPost(String string, int page);
+
+	//카테고리명 별로 모집글 조회
+	ListResponseDto<PartyPostListResponse> searchPartyPostByCategory(Long categoryId, int page);
 }
