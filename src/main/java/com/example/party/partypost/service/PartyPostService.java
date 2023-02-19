@@ -42,7 +42,6 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Transactional
 @RequiredArgsConstructor
-
 public class PartyPostService implements IPartyPostService {
 
 	private final PartyPostRepository partyPostRepository;
