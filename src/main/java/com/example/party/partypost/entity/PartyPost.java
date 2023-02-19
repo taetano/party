@@ -18,8 +18,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.example.party.application.entity.Application;
-import com.example.party.global.TimeStamped;
 import com.example.party.category.entity.Category;
+import com.example.party.global.TimeStamped;
 import com.example.party.partypost.dto.PartyPostRequest;
 import com.example.party.partypost.dto.UpdatePartyPostRequest;
 import com.example.party.partypost.type.Status;
@@ -149,6 +149,13 @@ public class PartyPost extends TimeStamped {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public void increaseAcceptedCnt() {
+		byte curMember = (byte)(this.acceptedMember + 1);
+		if (curMember == this.maxMember) {
+			this.status = Status.FOUND;
+		}
 	}
 
 	// (applications 의 인원+1)과 maxMember 가 일치하는 경우, status 를 FOUND 로 변경

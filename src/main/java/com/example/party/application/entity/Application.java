@@ -1,6 +1,5 @@
 package com.example.party.application.entity;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 import javax.persistence.Column;
@@ -83,6 +82,7 @@ public class Application extends TimeStamped {
 	public void accept() {
 		this.status = ApplicationStatus.ACCEPT;
 		this.user.increaseParticipationCnt();
+		this.partyPost.increaseAcceptedCnt();
 	}
 
 	public void reject() {

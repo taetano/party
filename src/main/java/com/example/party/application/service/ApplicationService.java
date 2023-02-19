@@ -2,8 +2,6 @@ package com.example.party.application.service;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.EntityManager;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.example.party.application.dto.ApplicationResponse;
 import com.example.party.application.entity.Application;
 import com.example.party.application.exception.ApplicationNotAvailableException;
+import com.example.party.application.exception.ApplicationNotFoundException;
 import com.example.party.application.exception.ApplicationNotGeneraleException;
 import com.example.party.application.repository.ApplicationRepository;
 import com.example.party.application.type.ApplicationStatus;
@@ -26,7 +25,6 @@ import com.example.party.partypost.entity.PartyPost;
 import com.example.party.partypost.exception.PartyPostNotFoundException;
 import com.example.party.partypost.repository.PartyPostRepository;
 import com.example.party.user.entity.User;
-import com.example.party.user.exception.UserNotFoundException;
 import com.example.party.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -129,8 +127,7 @@ public class ApplicationService implements IApplicationService {
 	@Transactional(readOnly = true)
 	public Application getApplication(Long applicationId) {
 		return applicationRepository.findById(applicationId)
-			.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,
-				"application with id{" + applicationId + "} is not found"));
+			.orElseThrow(ApplicationNotFoundException::new);
 	}
 
 	//참가신청 작성 전 조건 검증 메소드
