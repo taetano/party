@@ -33,7 +33,7 @@ public interface IPartyPostService {
 	ResponseDto deletePartyPost(Long partyPostId, User user);
 
 	//모집글전체조회
-	ListResponseDto<PartyPostListResponse> findPartyList();
+	ListResponseDto<PartyPostListResponse> findPartyList(User user);
 
 	//모집글 상세 조회(개별 상세조회)
 	@Transactional

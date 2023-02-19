@@ -27,6 +27,7 @@ import com.example.party.partypost.exception.IsNotWritterException;
 import com.example.party.partypost.exception.PartyPostNotDeletableException;
 import com.example.party.partypost.exception.PartyPostNotFoundException;
 import com.example.party.partypost.repository.PartyPostRepository;
+import com.example.party.restrictions.entity.Block;
 import com.example.party.user.entity.User;
 import com.example.party.user.repository.UserRepository;
 
@@ -68,14 +69,20 @@ public class PartyPostService implements IPartyPostService {
 	//모집글 전체 조회
 	@Override
 	@Transactional
-	public ListResponseDto<PartyPostListResponse> findPartyList() {
+	public ListResponseDto<PartyPostListResponse> findPartyList(User user) {
+		// 로그인한 유저 블랙리스트
+		List<Block> blockList = user.getBlocks();
 		// 1.모집글 전체 불러오기 (페이지 추가)
 		Pageable pageable = PageRequest.of(0, 10, Sort.by("createdAt").descending());
 		//2. Page<partyPost> 를 Page<PartyPostListResponse> 로 변경
-		Page<PartyPostListResponse> page = partyPostRepository.findAllByActiveIsTrue(pageable).map(
-			PartyPostListResponse::new);
+		Page<PartyPost> postPage = partyPostRepository.findAllByActiveIsTrue(pageable);
+		// postPage filter 적용
+		List<PartyPostListResponse> filteredPosts = postPage.stream()
+			.filter(post -> !blockList.contains(post.getUser().getEmail()))
+			.map(PartyPostListResponse::new)
+			.collect(Collectors.toList());
 		// 3.ListResponseDto 생성 후 리턴
-		return ListResponseDto.ok("모집글 조회 완료", page.getContent());
+		return ListResponseDto.ok("모집글 조회 완료", filteredPosts);
 	}
 
 	//모집글 상세 조회(개별 상세조회)

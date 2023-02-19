@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.party.global.dto.ListResponseDto;
 import com.example.party.global.dto.ResponseDto;
 import com.example.party.restrictions.service.RestrictionsService;
 import com.example.party.user.entity.User;
@@ -36,7 +37,7 @@ public class RestrictionsController {
 
 	//차단리스트 조회
 	@GetMapping("/block")
-	public ResponseEntity<?> getBLockedUsers(@AuthenticationPrincipal User user) {
+	public ResponseEntity<ListResponseDto<?>> getBLockedUsers(@AuthenticationPrincipal User user) {
 		return ResponseEntity.ok(restrictionsService.blocks(user));
 	}
 }
