@@ -41,7 +41,12 @@ public interface IPartyPostService {
 	@Transactional
 	DataResponseDto<PartyPostResponse> getPartyPost(Long postId, User user);
 
-	ListResponseDto<SearchPartyPostListResponse> searchPartyPost(String string, int page);
+	// 검색단어로 모집글 리스트 조회
+	ListResponseDto<SearchPartyPostListResponse> searchPartyPost(String searchText, int page);
 
+	// 조회수 많은 모집글 리스트 조회
 	ListResponseDto<SearchPartyPostListResponse> findHotPartyPost();
+
+	// 읍면동으로 가까운 모집글 리스트 조회
+	ListResponseDto<SearchPartyPostListResponse> findNearPartyPost(String eubMyeonDong);
 }

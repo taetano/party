@@ -75,7 +75,7 @@ public class PartyPostController {
 	public ResponseEntity<ListResponseDto<PartyPostListResponse>> findPartyList(
 		@RequestParam int page
 	) {
-		return ResponseEntity.ok(partyPostService.findPartyList(page-1));
+		return ResponseEntity.ok(partyPostService.findPartyList(page - 1));
 	}
 
 	//모집글 상세 조회(개별 상세조회)
@@ -105,5 +105,12 @@ public class PartyPostController {
 	@GetMapping("/hot")
 	public ListResponseDto<SearchPartyPostListResponse> findHotPartyPost() {
 		return partyPostService.findHotPartyPost();
+	}
+
+	//유저의 읍면동을 검색해서 가까운 모집글 검색
+	@GetMapping("/near/{EubMyeonDong}")
+	public ListResponseDto<SearchPartyPostListResponse> findNearPartyPost(
+		@PathVariable(name = "EubMyeonDong") String eubMyeonDong) {
+		return partyPostService.findNearPartyPost(eubMyeonDong);
 	}
 }

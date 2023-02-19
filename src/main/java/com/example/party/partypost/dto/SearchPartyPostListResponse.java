@@ -11,6 +11,8 @@ import lombok.Getter;
 @Getter
 public class SearchPartyPostListResponse {
 
+	//postId
+	private final Long postId;
 	//title
 	private final String title;
 	//status
@@ -25,6 +27,7 @@ public class SearchPartyPostListResponse {
 	private String eubMyeonDong;
 
 	public SearchPartyPostListResponse(PartyPost partyPost) {
+		this.postId = partyPost.getId();
 		this.title = partyPost.getTitle();
 		this.status = partyPost.getStatus();
 		this.maxMember = partyPost.getMaxMember();

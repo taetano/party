@@ -2,8 +2,6 @@ package com.example.party.application.service;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.EntityManager;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,7 +24,6 @@ import com.example.party.partypost.entity.PartyPost;
 import com.example.party.partypost.exception.PartyPostNotFoundException;
 import com.example.party.partypost.repository.PartyPostRepository;
 import com.example.party.user.entity.User;
-import com.example.party.user.exception.UserNotFoundException;
 import com.example.party.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -81,8 +78,8 @@ public class ApplicationService implements IApplicationService {
 
 	@Transactional(readOnly = true)
 	@Override
-	public ListResponseDto<ApplicationResponse> getApplications(Long partPostId, User user) {
-		PartyPost partyPost = partyPostRepository.findById(partPostId)
+	public ListResponseDto<ApplicationResponse> getApplications(Long partyPostId, User user) {
+		PartyPost partyPost = partyPostRepository.findById(partyPostId)
 			.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "NOT FOUND"));
 
 		if (!partyPost.isWrittenByMe(user.getId())) {
