@@ -11,7 +11,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.example.party.category.dto.CategoryRequest;
-import com.example.party.global.BaseEntity;
+import com.example.party.global.TimeStamped;
 import com.example.party.partypost.entity.PartyPost;
 
 import lombok.AccessLevel;
@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "category")
 @Entity(name = "category")
-public class Category extends BaseEntity {
+public class Category extends TimeStamped {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

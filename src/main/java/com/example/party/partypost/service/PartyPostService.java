@@ -24,6 +24,7 @@ import com.example.party.partypost.dto.MyPartyPostListResponse;
 import com.example.party.partypost.dto.PartyPostListResponse;
 import com.example.party.partypost.dto.PartyPostRequest;
 import com.example.party.partypost.dto.PartyPostResponse;
+import com.example.party.partypost.dto.SearchPartyPostListResponse;
 import com.example.party.partypost.dto.UpdatePartyPostRequest;
 import com.example.party.partypost.entity.PartyPost;
 import com.example.party.category.exception.CategoryNotActiveException;
@@ -61,7 +62,7 @@ public class PartyPostService implements IPartyPostService {
 			() -> new CategoryNotFoundException()
 		);
 		//2. category 활성화 상태 확인
-		if(!category.isActive()) {
+		if (!category.isActive()) {
 			throw new CategoryNotActiveException();
 		}
 		//3. PartyPost 객체 생성
@@ -77,14 +78,14 @@ public class PartyPostService implements IPartyPostService {
 	//모집글 전체 조회
 	@Override
 	@Transactional
-	public ListResponseDto<PartyPostListResponse> findPartyList() {
+	public ListResponseDto<PartyPostListResponse> findPartyList(int page) {
 		// 1.모집글 전체 불러오기 (페이지 추가)
-		Pageable pageable = PageRequest.of(0, 10, Sort.by("createdAt").descending());
+		Pageable pageable = PageRequest.of(page, 10, Sort.by("createdAt").descending());
 		//2. Page<partyPost> 를 Page<PartyPostListResponse> 로 변경
-		Page<PartyPostListResponse> page = partyPostRepository.findAllByActiveIsTrue(pageable).map(
+		Page<PartyPostListResponse> pageResponse = partyPostRepository.findAllByActiveIsTrue(pageable).map(
 			PartyPostListResponse::new);
 		// 3.ListResponseDto 생성 후 리턴
-		return ListResponseDto.ok("모집글 조회 완료", page.getContent());
+		return ListResponseDto.ok("모집글 조회 완료", pageResponse.getContent());
 	}
 
 	//모집글 상세 조회(개별 상세조회)
@@ -108,15 +109,15 @@ public class PartyPostService implements IPartyPostService {
 	//문자 검색으로 제목,지역명으로 모집글 조회
 	@Override
 	@Transactional
-	public ListResponseDto<PartyPostListResponse> SearchPartyPost(String string, int page) {
+	public ListResponseDto<SearchPartyPostListResponse> searchPartyPost(String string, int page) {
 		Pageable pageable = PageRequest.of(page - 1, 20);
 
 		//1.검색 문자에 맞는 리스트 조회
 		List<PartyPost> partyPostList = partyPostRepository.findByTitleContainingOrAddressContaining(string, string,
 			pageable);
 
-		List<PartyPostListResponse> partyPostListResponses = partyPostList.stream()
-			.map(PartyPostListResponse::new).collect(Collectors.toList());
+		List<SearchPartyPostListResponse> partyPostListResponses = partyPostList.stream()
+			.map(SearchPartyPostListResponse::new).collect(Collectors.toList());
 
 		return ListResponseDto.ok("모집글 검색 완료", partyPostListResponses);
 	}
@@ -130,7 +131,7 @@ public class PartyPostService implements IPartyPostService {
 			() -> new CategoryNotFoundException()
 		);
 
-		if(!category.isActive()) {
+		if (!category.isActive()) {
 			throw new CategoryNotActiveException();
 		}
 
@@ -139,6 +140,22 @@ public class PartyPostService implements IPartyPostService {
 			.map(PartyPostListResponse::new).collect(Collectors.toList());
 
 		return ListResponseDto.ok("모집글 검색 완료", partyPostListResponses);
+	}
+
+	@Override
+	public ListResponseDto<SearchPartyPostListResponse> findHotPartyPost() {
+		Pageable pageable = PageRequest.of(0, 20, Sort.by("view_cnt"));
+
+		List<PartyPost> partyPostList = partyPostRepository.findFirst20ByOrderByViewCntDesc();
+
+		//1.검색 문자에 맞는 리스트 조회
+		// List<PartyPost> partyPostList = partyPostRepository.findByTitleContainingOrAddressContaining(string, string,
+		// 	pageable);
+
+		List<SearchPartyPostListResponse> partyPostListResponses = partyPostList.stream()
+			.map(SearchPartyPostListResponse::new).collect(Collectors.toList());
+
+		return ListResponseDto.ok("핫한 모집글 조회 완료", partyPostListResponses);
 	}
 
 	//모집글 수정
