@@ -96,4 +96,11 @@ public class PartyPostController {
 		@RequestParam(name = "page", defaultValue = "1") int page) {
 		return partyPostService.SearchPartyPost(SearchText, page);
 	}
+
+	//카테고리명 별로 모집글 조회
+	@GetMapping("/categories/{categoryId}")
+	public ResponseEntity<ListResponseDto<PartyPostListResponse>> searchPartyPostByCategory(
+		@PathVariable Long categoryId, @RequestParam int page) {
+		return ResponseEntity.ok(partyPostService.searchPartyPostByCategory(categoryId, page));
+	}
 }

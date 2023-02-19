@@ -43,13 +43,6 @@ public class CategoryController {
 		return ResponseEntity.ok(categoryService.getCategory());
 	}
 
-	//카테고리명 별로 모집글 조회
-	@GetMapping("/{categoryId}")
-	public ResponseEntity<ListResponseDto<PartyPostListResponse>> searchPartyPostByCategory(
-		@PathVariable Long categoryId, @RequestParam int page) {
-		return ResponseEntity.ok(partyPostService.searchPartyPostByCategory(categoryId, page));
-	}
-
 	//카테고리 수정
 	@PatchMapping("/{categoryId}")
 	public ResponseEntity<DataResponseDto<CategoryResponse>> updateCategory(
