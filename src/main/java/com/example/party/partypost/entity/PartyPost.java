@@ -19,7 +19,7 @@ import javax.persistence.Table;
 
 import com.example.party.application.entity.Application;
 import com.example.party.category.entity.Category;
-import com.example.party.global.TimeStamped;
+import com.example.party.global.common.TimeStamped;
 import com.example.party.partypost.dto.PartyPostRequest;
 import com.example.party.partypost.dto.UpdatePartyPostRequest;
 import com.example.party.partypost.type.Status;

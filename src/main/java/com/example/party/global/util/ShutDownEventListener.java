@@ -1,4 +1,4 @@
-package com.example.party.util;
+package com.example.party.global.util;
 
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextClosedEvent;

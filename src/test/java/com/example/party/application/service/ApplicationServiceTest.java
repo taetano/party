@@ -6,8 +6,6 @@ import static com.example.party.fixture.UserFixture.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
-import java.time.LocalDateTime;
-import java.time.Month;
 import java.util.Optional;
 
 import org.junit.jupiter.api.DisplayName;
@@ -26,8 +24,8 @@ import com.example.party.application.dto.ApplicationResponse;
 import com.example.party.application.entity.Application;
 import com.example.party.application.repository.ApplicationRepository;
 import com.example.party.application.type.ApplicationStatus;
-import com.example.party.global.dto.ListResponseDto;
-import com.example.party.global.dto.ResponseDto;
+import com.example.party.global.common.ApiResponse;
+import com.example.party.global.common.DataApiResponse;
 import com.example.party.partypost.entity.PartyPost;
 import com.example.party.partypost.repository.PartyPostRepository;
 import com.example.party.user.entity.User;
@@ -57,7 +55,7 @@ class ApplicationServiceTest {
 				.willReturn(Optional.of(application));
 
 			//  when
-			ResponseDto result = applicationService.cancelApplication(application.getId(), applicants());
+			ApiResponse result = applicationService.cancelApplication(application.getId(), applicants());
 
 			//  then
 			verify(applicationRepository).findById(anyLong());
@@ -76,7 +74,7 @@ class ApplicationServiceTest {
 				.willReturn(applications);
 
 			//  when
-			ListResponseDto<ApplicationResponse> ret =
+			DataApiResponse<ApplicationResponse> ret =
 				applicationService.getApplications(partyPost.getId(), writer());
 
 			//  then

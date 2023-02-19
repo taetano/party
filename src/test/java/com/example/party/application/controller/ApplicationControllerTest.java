@@ -23,8 +23,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import com.example.party.application.service.ApplicationService;
-import com.example.party.global.dto.ListResponseDto;
-import com.example.party.global.dto.ResponseDto;
+import com.example.party.global.common.ApiResponse;
+import com.example.party.global.common.DataApiResponse;
 import com.example.party.user.entity.User;
 
 @WebMvcTest(
@@ -63,7 +63,7 @@ class ApplicationControllerTest {
 		void cancelApplication() throws Exception {
 			//  given
 			given(applicationService.cancelApplication(anyLong(), any(User.class)))
-				.willReturn(ResponseDto.ok("테스트 성공"));
+				.willReturn(ApiResponse.ok("테스트 성공"));
 			//  when
 			ResultActions actions = mockMvc.perform(post(getUrlTemplate("/cancel/"))
 				.contentType(MediaType.APPLICATION_JSON));
@@ -81,7 +81,7 @@ class ApplicationControllerTest {
 			//  given
 			// 	List<ApplicationResponse> applications = List.of(new ApplicationResponse(data1), new ApplicationResponse(data2));
 			given(applicationService.getApplications(anyLong(), any(User.class)))
-				.willReturn(ListResponseDto.ok("테스트 성공", Collections.emptyList()));
+				.willReturn(DataApiResponse.ok("테스트 성공", Collections.emptyList()));
 
 			//  when
 			ResultActions actions = mockMvc.perform(get(getUrlTemplate(""))
@@ -99,7 +99,7 @@ class ApplicationControllerTest {
 		void acceptApplication() throws Exception {
 			//  given
 			given(applicationService.acceptApplication(anyLong(), any(User.class)))
-				.willReturn(ResponseDto.ok("테스트 성공"));
+				.willReturn(ApiResponse.ok("테스트 성공"));
 
 			//  when
 			ResultActions actions = mockMvc.perform(post(getUrlTemplate("/accept"))
@@ -117,7 +117,7 @@ class ApplicationControllerTest {
 		void rejectApplication() throws Exception {
 			//  given
 			given(applicationService.rejectApplication(anyLong(), any(User.class)))
-				.willReturn(ResponseDto.ok("테스트 성공"));
+				.willReturn(ApiResponse.ok("테스트 성공"));
 
 			//  when
 			ResultActions actions = mockMvc.perform(post(getUrlTemplate("/reject"))

@@ -1,6 +1,6 @@
 package com.example.party.user.controller;
 
-import static com.example.party.util.JwtProvider.*;
+import static com.example.party.global.util.JwtProvider.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.party.global.dto.ResponseDto;
+import com.example.party.global.common.ApiResponse;
 import com.example.party.user.dto.LoginRequest;
 import com.example.party.user.dto.ProfileRequest;
 import com.example.party.user.dto.SignupRequest;
@@ -38,25 +38,25 @@ public class UserController {
 
 	//회원가입
 	@PostMapping("/signup")
-	public ResponseEntity<ResponseDto> signup(@RequestBody @Valid SignupRequest signupRequest) {
-		ResponseDto responseDto = userService.signUp(signupRequest);
+	public ResponseEntity<ApiResponse> signup(@RequestBody @Valid SignupRequest signupRequest) {
+		ApiResponse apiResponse = userService.signUp(signupRequest);
 		HttpHeaders headers = new HttpHeaders();
-		return ResponseEntity.ok().headers(headers).body(responseDto);
+		return ResponseEntity.ok().headers(headers).body(apiResponse);
 	}
 
 	//로그인
 	@PostMapping("/signin")
-	public ResponseEntity<ResponseDto> signIn(@RequestBody LoginRequest loginRequest) {
+	public ResponseEntity<ApiResponse> signIn(@RequestBody LoginRequest loginRequest) {
 		String[] token = userService.signIn(loginRequest).split(",");
 		HttpHeaders headers = new HttpHeaders();
 		headers.setBearerAuth(token[0]);
 		headers.add("Set-Cookie", String.format("rfToken=%s; Max-Age=604800; Path=/; HttpOnly=true;", token[1]));
-		return ResponseEntity.ok().headers(headers).body(ResponseDto.ok("로그인 완료"));
+		return ResponseEntity.ok().headers(headers).body(ApiResponse.ok("로그인 완료"));
 	}
 
 	//로그아웃
 	@PostMapping("/signout")
-	public ResponseEntity<ResponseDto> signOut(@AuthenticationPrincipal User userDetails,
+	public ResponseEntity<ApiResponse> signOut(@AuthenticationPrincipal User userDetails,
 		HttpServletResponse response) {
 		Cookie cookie = new Cookie("rfToken", null);
 		cookie.setMaxAge(0);
@@ -68,29 +68,29 @@ public class UserController {
 
 	//회원탈퇴
 	@DeleteMapping("/withdraw")
-	public ResponseEntity<ResponseDto> withdraw(@RequestBody WithdrawRequest withdrawRequest,
+	public ResponseEntity<ApiResponse> withdraw(@RequestBody WithdrawRequest withdrawRequest,
 		@AuthenticationPrincipal User userDetails) {
-		ResponseDto responseDto = userService.withdraw(userDetails, withdrawRequest);
+		ApiResponse apiResponse = userService.withdraw(userDetails, withdrawRequest);
 		HttpHeaders headers = new HttpHeaders();
-		return ResponseEntity.ok().headers(headers).body(responseDto);
+		return ResponseEntity.ok().headers(headers).body(apiResponse);
 	}
 
 	//프로필 정보 수정
 	@PatchMapping("/profile")
-	public ResponseEntity<ResponseDto> updateProfile(
+	public ResponseEntity<ApiResponse> updateProfile(
 		@Validated @RequestBody ProfileRequest profileRequest,
 		@AuthenticationPrincipal User user) {
 		return ResponseEntity.ok(userService.updateProfile(profileRequest, user));
 	}
 
 	@GetMapping("/profile")
-	public ResponseEntity<ResponseDto> getMyProfile(@AuthenticationPrincipal
+	public ResponseEntity<ApiResponse> getMyProfile(@AuthenticationPrincipal
 	User user) {
 		return ResponseEntity.ok(userService.getMyProfile(user));
 	}
 
 	@GetMapping("/profile/{userId}")
-	public ResponseEntity<ResponseDto> getOtherProfile(@PathVariable Long userId) {
+	public ResponseEntity<ApiResponse> getOtherProfile(@PathVariable Long userId) {
 		return ResponseEntity.ok(userService.getOtherProfile(userId));
 	}
 }

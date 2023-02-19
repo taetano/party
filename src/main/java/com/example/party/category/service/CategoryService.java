@@ -12,9 +12,9 @@ import com.example.party.category.entity.Category;
 import com.example.party.category.exception.CategoryNotFoundException;
 import com.example.party.category.exception.DuplicateNameNotAllowException;
 import com.example.party.category.repository.CategoryRepository;
-import com.example.party.global.dto.DataResponseDto;
-import com.example.party.global.dto.ListResponseDto;
-import com.example.party.global.dto.ResponseDto;
+import com.example.party.global.common.ApiResponse;
+import com.example.party.global.common.DataApiResponse;
+import com.example.party.global.common.ItemApiResponse;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,51 +30,51 @@ public class CategoryService implements ICategoryService{
 
 	//카테고리 생성
 	@Override
-	public DataResponseDto<CategoryResponse> createCategory(CategoryRequest request) {
+	public ItemApiResponse<CategoryResponse> createCategory(CategoryRequest request) {
 		Category category = new Category(request);
 
-		if(categoryRepository.existsCategoryByName(category.getName())) {
+		if (categoryRepository.existsCategoryByName(category.getName())) {
 			throw new DuplicateNameNotAllowException();
 		}
 
 		categoryRepository.save(category);
 		CategoryResponse categoryResponse = new CategoryResponse(category);
-		return new DataResponseDto<>(201, "카테고리 생성 완료", categoryResponse);
+		return new ItemApiResponse<>(201, "카테고리 생성 완료", categoryResponse);
 	}
 
 	//카테고리 전체 조회
 	@Override
-	public ListResponseDto<CategoryResponse> getCategory() {
+	public DataApiResponse<CategoryResponse> getCategory() {
 		List<Category> categoryList = categoryRepository.findAll();
 		List<CategoryResponse> allCategoryList = categoryList.stream().map(
 			category -> new CategoryResponse(category)).collect(Collectors.toList());
-		return ListResponseDto.ok("카테고리 조회 완료", allCategoryList);
+		return DataApiResponse.ok("카테고리 조회 완료", allCategoryList);
 	}
 
 	//카테고리 수정
 	@Override
-	public DataResponseDto<CategoryResponse> updateCategory(Long categoryId, CategoryRequest request) {
+	public ItemApiResponse<CategoryResponse> updateCategory(Long categoryId, CategoryRequest request) {
 		Category category = categoryRepository.findById(categoryId).orElseThrow(
 			() -> new CategoryNotFoundException()
 		);
 
-		if(categoryRepository.existsCategoryByName(request.getName())) {
+		if (categoryRepository.existsCategoryByName(request.getName())) {
 			throw new DuplicateNameNotAllowException();
 		}
 
 		category.update(request);
 
 		CategoryResponse categoryResponse = new CategoryResponse(category);
-		return DataResponseDto.ok("카테고리 수정 완료", categoryResponse);
+		return ItemApiResponse.ok("카테고리 수정 완료", categoryResponse);
 	}
 
 	//카테고리 삭제
 	@Override
-	public ResponseDto deleteCategory(Long categoryId) {
+	public ApiResponse deleteCategory(Long categoryId) {
 		Category category = categoryRepository.findById(categoryId).orElseThrow(
 			() -> new CategoryNotFoundException()
 		);
 		category.deleteCategory();
-		return ResponseDto.ok("카테고리 삭제 완료");
+		return ApiResponse.ok("카테고리 삭제 완료");
 	}
 }

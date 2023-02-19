@@ -15,11 +15,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.party.application.entity.Application;
 import com.example.party.application.repository.ApplicationRepository;
 import com.example.party.category.entity.Category;
+import com.example.party.category.exception.CategoryNotActiveException;
 import com.example.party.category.exception.CategoryNotFoundException;
 import com.example.party.category.repository.CategoryRepository;
-import com.example.party.global.dto.DataResponseDto;
-import com.example.party.global.dto.ListResponseDto;
-import com.example.party.global.dto.ResponseDto;
+import com.example.party.global.common.ApiResponse;
+import com.example.party.global.common.DataApiResponse;
+import com.example.party.global.common.ItemApiResponse;
 import com.example.party.partypost.dto.MyPartyPostListResponse;
 import com.example.party.partypost.dto.PartyPostListResponse;
 import com.example.party.partypost.dto.PartyPostRequest;
@@ -27,7 +28,6 @@ import com.example.party.partypost.dto.PartyPostResponse;
 import com.example.party.partypost.dto.SearchPartyPostListResponse;
 import com.example.party.partypost.dto.UpdatePartyPostRequest;
 import com.example.party.partypost.entity.PartyPost;
-import com.example.party.category.exception.CategoryNotActiveException;
 import com.example.party.partypost.exception.IsNotWritterException;
 import com.example.party.partypost.exception.PartyPostNotDeletableException;
 import com.example.party.partypost.exception.PartyPostNotFoundException;
@@ -51,7 +51,7 @@ public class PartyPostService implements IPartyPostService {
 
 	//모집글 작성
 	@Override
-	public DataResponseDto<PartyPostResponse> createPartyPost(User user, PartyPostRequest request) { // 인자 달라질 수 있습니다
+	public ItemApiResponse<PartyPostResponse> createPartyPost(User user, PartyPostRequest request) { // 인자 달라질 수 있습니다
 
 		//예시: "2023-02-16 12:00"
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -71,26 +71,26 @@ public class PartyPostService implements IPartyPostService {
 		//5. partyPostResponse 생성
 		PartyPostResponse partyPostResponse = new PartyPostResponse(partyPost);
 		//6. DataResponseDto 생성 후 return
-		return new DataResponseDto<>(201, "모집글 작성 완료", partyPostResponse);
+		return new ItemApiResponse<>(201, "모집글 작성 완료", partyPostResponse);
 	}
 
 	//모집글 전체 조회
 	@Override
 	@Transactional
-	public ListResponseDto<PartyPostListResponse> findPartyList(int page) {
+	public DataApiResponse<PartyPostListResponse> findPartyList(int page) {
 		// 1.모집글 전체 불러오기 (페이지 추가)
 		Pageable pageable = PageRequest.of(page, 10, Sort.by("createdAt").descending());
 		//2. Page<partyPost> 를 Page<PartyPostListResponse> 로 변경
 		Page<PartyPostListResponse> pageResponse = partyPostRepository.findAllByActiveIsTrue(pageable).map(
 			PartyPostListResponse::new);
 		// 3.ListResponseDto 생성 후 리턴
-		return ListResponseDto.ok("모집글 조회 완료", pageResponse.getContent());
+		return DataApiResponse.ok("모집글 조회 완료", pageResponse.getContent());
 	}
 
 	//모집글 상세 조회(개별 상세조회)
 	@Override
 	@Transactional
-	public DataResponseDto<PartyPostResponse> getPartyPost(Long partyPostId, User user) {
+	public ItemApiResponse<PartyPostResponse> getPartyPost(Long partyPostId, User user) {
 		//1. partyPostId의 partyPost 를 가져오기
 		PartyPost partyPost = partyPostRepository.findById(partyPostId)
 			.orElseThrow(PartyPostNotFoundException::new);
@@ -102,13 +102,13 @@ public class PartyPostService implements IPartyPostService {
 		PartyPostResponse partyPostResponse = new PartyPostResponse(partyPost);
 
 		//3. DataResponseDto 생성하고 (2) 를 넣어준 후 return
-		return DataResponseDto.ok("모집글 상세 조회 완료", partyPostResponse);
+		return ItemApiResponse.ok("모집글 상세 조회 완료", partyPostResponse);
 	}
 
 	//문자 검색으로 제목,지역명으로 모집글 조회
 	@Override
 	@Transactional
-	public ListResponseDto<SearchPartyPostListResponse> searchPartyPost(String string, int page) {
+	public DataApiResponse<SearchPartyPostListResponse> searchPartyPost(String string, int page) {
 		Pageable pageable = PageRequest.of(page - 1, 20);
 
 		//1.검색 문자에 맞는 리스트 조회
@@ -118,12 +118,12 @@ public class PartyPostService implements IPartyPostService {
 		List<SearchPartyPostListResponse> partyPostListResponses = partyPostList.stream()
 			.map(SearchPartyPostListResponse::new).collect(Collectors.toList());
 
-		return ListResponseDto.ok("모집글 검색 완료", partyPostListResponses);
+		return DataApiResponse.ok("모집글 검색 완료", partyPostListResponses);
 	}
 
 	//카테고리명 별로 모집글 조회
 	@Override
-	public ListResponseDto<PartyPostListResponse> searchPartyPostByCategory(Long categoryId, int page) {
+	public DataApiResponse<PartyPostListResponse> searchPartyPostByCategory(Long categoryId, int page) {
 		Pageable pageable = PageRequest.of(page - 1, 20);
 
 		Category category = categoryRepository.findById(categoryId).orElseThrow(
@@ -138,11 +138,11 @@ public class PartyPostService implements IPartyPostService {
 		List<PartyPostListResponse> partyPostListResponses = partyPostList.stream()
 			.map(PartyPostListResponse::new).collect(Collectors.toList());
 
-		return ListResponseDto.ok("모집글 검색 완료", partyPostListResponses);
+		return DataApiResponse.ok("모집글 검색 완료", partyPostListResponses);
 	}
 
 	@Override
-	public ListResponseDto<SearchPartyPostListResponse> findHotPartyPost() {
+	public DataApiResponse<SearchPartyPostListResponse> findHotPartyPost() {
 		Pageable pageable = PageRequest.of(0, 20, Sort.by("view_cnt"));
 
 		List<PartyPost> partyPostList = partyPostRepository.findFirst20ByOrderByViewCntDesc();
@@ -154,12 +154,12 @@ public class PartyPostService implements IPartyPostService {
 		List<SearchPartyPostListResponse> partyPostListResponses = partyPostList.stream()
 			.map(SearchPartyPostListResponse::new).collect(Collectors.toList());
 
-		return ListResponseDto.ok("핫한 모집글 조회 완료", partyPostListResponses);
+		return DataApiResponse.ok("핫한 모집글 조회 완료", partyPostListResponses);
 	}
 
 	//모집글 수정
 	@Override
-	public DataResponseDto<PartyPostResponse> updatePartyPost(Long partyPostId,
+	public ItemApiResponse<PartyPostResponse> updatePartyPost(Long partyPostId,
 		UpdatePartyPostRequest request, User user) {
 
 		//1. PartyPost 불러오기
@@ -179,12 +179,12 @@ public class PartyPostService implements IPartyPostService {
 		PartyPostResponse partyPostResponse = new PartyPostResponse(partyPost);
 
 		//5. DataResponseDto 생성 후 return
-		return DataResponseDto.ok("모집글 수정 완료", partyPostResponse);
+		return ItemApiResponse.ok("모집글 수정 완료", partyPostResponse);
 	}
 
 	//모집글 삭제
 	@Override
-	public ResponseDto deletePartyPost(Long partyPostId, User user) {
+	public ApiResponse deletePartyPost(Long partyPostId, User user) {
 		//1. partyPost 객체 가져오기
 		PartyPost partyPost = partyPostRepository.findById(partyPostId).orElseThrow(
 			PartyPostNotFoundException::new
@@ -194,12 +194,12 @@ public class PartyPostService implements IPartyPostService {
 
 		//3. 2가 통과한 경우 삭제 진행
 		partyPost.deletePartyPost();
-		return ResponseDto.ok("모집글 삭제 완료");
+		return ApiResponse.ok("모집글 삭제 완료");
 	}
 
 	//내가 작성한 모집글 조회 ( 내가 파티장인 경우만 )
 	@Override
-	public ListResponseDto<MyPartyPostListResponse> findMyCreatedPartyList(User user, int page) {
+	public DataApiResponse<MyPartyPostListResponse> findMyCreatedPartyList(User user, int page) {
 		Pageable pageable = PageRequest.of(page - 1, 5, Sort.by(Sort.Direction.DESC, "modifiedAt"));
 
 		//1. user가 작성한 partyPost의 리스트
@@ -211,12 +211,12 @@ public class PartyPostService implements IPartyPostService {
 			.map(MyPartyPostListResponse::new).collect(Collectors.toList());
 
 		//3. DataResponseDto 생성 후 return
-		return ListResponseDto.ok("내가 작성한 모집글 조회 완료", myPartyPostDtoList);
+		return DataApiResponse.ok("내가 작성한 모집글 조회 완료", myPartyPostDtoList);
 	}
 
 	//내가 신청한 모집글 조회 ( 내가 파티원인 경우만/ 파티장인 경우 제외 )
 	@Override
-	public ListResponseDto<MyPartyPostListResponse> findMyJoinedPartyList(User user, int page) {
+	public DataApiResponse<MyPartyPostListResponse> findMyJoinedPartyList(User user, int page) {
 		Pageable pageable = PageRequest.of(page - 1, 5, Sort.by(Sort.Direction.DESC, "modifiedAt"));
 
 		//1. user가 신청한 application의 리스트
@@ -229,11 +229,11 @@ public class PartyPostService implements IPartyPostService {
 			.map(MyPartyPostListResponse::new).collect(Collectors.toList());
 
 		//3. DataResponseDto 생성 후 return
-		return ListResponseDto.ok("내가 참가한 모집글 조회 완료", myApplicationDtoList);
+		return DataApiResponse.ok("내가 참가한 모집글 조회 완료", myApplicationDtoList);
 	}
 
 	//모집게시물 좋아요 (*좋아요 취소도 포함되는 기능임)
-	public DataResponseDto<String> toggleLikePartyPost(Long partyPostId, User user) {
+	public ItemApiResponse<String> toggleLikePartyPost(Long partyPostId, User user) {
 		//모집글 찾기
 		PartyPost partyPost = partyPostRepository.findById(partyPostId).orElseThrow(
 			() -> new PartyPostNotFoundException()
@@ -243,9 +243,9 @@ public class PartyPostService implements IPartyPostService {
 		//좋아요 확인
 		if (!(userT.getLikePartyPosts().add(partyPost))) {
 			userT.getLikePartyPosts().remove(partyPost);
-			return new DataResponseDto(200, "모집글 좋아요 취소 완료", partPostTitle);
+			return new ItemApiResponse(200, "모집글 좋아요 취소 완료", partPostTitle);
 		} else {
-			return new DataResponseDto(200, "모집글 좋아요 완료", partPostTitle);
+			return new ItemApiResponse(200, "모집글 좋아요 완료", partPostTitle);
 		}
 	}
 

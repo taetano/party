@@ -8,16 +8,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.party.category.dto.CategoryRequest;
 import com.example.party.category.dto.CategoryResponse;
 import com.example.party.category.service.CategoryService;
-import com.example.party.global.dto.DataResponseDto;
-import com.example.party.global.dto.ListResponseDto;
-import com.example.party.global.dto.ResponseDto;
-import com.example.party.partypost.dto.PartyPostListResponse;
+import com.example.party.global.common.ApiResponse;
+import com.example.party.global.common.DataApiResponse;
+import com.example.party.global.common.ItemApiResponse;
 import com.example.party.partypost.service.PartyPostService;
 
 import lombok.RequiredArgsConstructor;
@@ -32,27 +30,27 @@ public class CategoryController {
 
 	//카테고리 작성
 	@PostMapping("")
-	public ResponseEntity<DataResponseDto<CategoryResponse>> createCategory(
+	public ResponseEntity<ItemApiResponse<CategoryResponse>> createCategory(
 		@RequestBody CategoryRequest request) {
 		return ResponseEntity.ok(categoryService.createCategory(request));
 	}
 
 	//카테고리 조회
 	@GetMapping("")
-	public ResponseEntity<ListResponseDto<CategoryResponse>> getCategory() {
+	public ResponseEntity<DataApiResponse<CategoryResponse>> getCategory() {
 		return ResponseEntity.ok(categoryService.getCategory());
 	}
 
 	//카테고리 수정
 	@PatchMapping("/{categoryId}")
-	public ResponseEntity<DataResponseDto<CategoryResponse>> updateCategory(
+	public ResponseEntity<ItemApiResponse<CategoryResponse>> updateCategory(
 		@PathVariable(name = "categoryId") Long categoryId, @RequestBody CategoryRequest request) {
 		return ResponseEntity.ok(categoryService.updateCategory(categoryId, request));
 	}
 
 	//카테고리 삭제
 	@DeleteMapping("/{categoryId}")
-	public ResponseEntity<ResponseDto> deleteCategory(@PathVariable(name = "categoryId") Long categoryId) {
+	public ResponseEntity<ApiResponse> deleteCategory(@PathVariable(name = "categoryId") Long categoryId) {
 		return ResponseEntity.ok(categoryService.deleteCategory(categoryId));
 	}
 }

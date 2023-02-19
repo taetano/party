@@ -9,9 +9,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.example.party.global.dto.DataResponseDto;
-import com.example.party.global.dto.ResponseDto;
+import com.example.party.global.common.ApiResponse;
+import com.example.party.global.common.ItemApiResponse;
 import com.example.party.global.exception.LoginException;
+import com.example.party.global.util.JwtProvider;
 import com.example.party.user.dto.LoginRequest;
 import com.example.party.user.dto.MyProfileResponse;
 import com.example.party.user.dto.OtherProfileResponse;
@@ -25,7 +26,6 @@ import com.example.party.user.exception.ExistNicknameException;
 import com.example.party.user.exception.UserNotFoundException;
 import com.example.party.user.repository.ProfileRepository;
 import com.example.party.user.repository.UserRepository;
-import com.example.party.util.JwtProvider;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,8 +43,8 @@ public class UserService implements IUserService {
 
 	//회원가입
 	@Override
-	public ResponseDto signUp(SignupRequest signupRequest) {
-		if(userRepository.existsUserByNickname(signupRequest.getNickname())){
+	public ApiResponse signUp(SignupRequest signupRequest) {
+		if (userRepository.existsUserByNickname(signupRequest.getNickname())) {
 			throw new ExistNicknameException();
 		} // nickname 중복검사 추가
 
@@ -63,7 +63,7 @@ public class UserService implements IUserService {
 		profileRepository.save(profile);
 		User user = new User(signupRequest, password, profile);
 		userRepository.save(user);
-		return ResponseDto.create("회원가입 완료");
+		return ApiResponse.create("회원가입 완료");
 	}
 
 	//로그인
@@ -87,45 +87,45 @@ public class UserService implements IUserService {
 
 	//로그아웃
 	@Override
-	public ResponseDto signOut(User user) {
+	public ApiResponse signOut(User user) {
 		// 이후 security 에 url 보안 설정 필요합니다.
 		redisTemplate.opsForValue().getOperations().delete(RT_TOKEN + user.getId());
-		return ResponseDto.ok("회원 탈퇴 완료");
+		return ApiResponse.ok("회원 탈퇴 완료");
 	}
 
 	//회원탈퇴
 	@Override
-	public ResponseDto withdraw(User userDetails, WithdrawRequest withdrawRequest) {
+	public ApiResponse withdraw(User userDetails, WithdrawRequest withdrawRequest) {
 		User user = findByUser(userDetails.getEmail());
 		confirmPassword(withdrawRequest.getPassword(), user.getPassword());
 		user.DormantState();
-		return ResponseDto.ok("회원탈퇴 완료");
+		return ApiResponse.ok("회원탈퇴 완료");
 	}
 
 	//프로필 수정
 	@Override
-	public ResponseDto updateProfile(ProfileRequest profileRequest, User user) {
+	public ApiResponse updateProfile(ProfileRequest profileRequest, User user) {
 		Profile profile = user.getProfile();
-		profile.updateProfile(profileRequest.getProfileImg(),profileRequest.getComment());
+		profile.updateProfile(profileRequest.getProfileImg(), profileRequest.getComment());
 		user.updateProfile(profileRequest); //user 정보 수정
 		profileRepository.save(profile);
 		userRepository.save(user); //변경한 user 저장
 		MyProfileResponse myProfileResponse = new MyProfileResponse(user); // profile 내용 입력
-		return DataResponseDto.ok("프로필 정보 수정 완료", myProfileResponse); //결과값 반환
+		return ItemApiResponse.ok("프로필 정보 수정 완료", myProfileResponse); //결과값 반환
 	}
 
 	//내 프로필 조회
-	public ResponseDto getMyProfile(User user) {
+	public ApiResponse getMyProfile(User user) {
 		MyProfileResponse myProfileResponse = new MyProfileResponse(user); // profile 내용 입력
-		return DataResponseDto.ok("내 프로필 조회", myProfileResponse); //결과값 반환
+		return ItemApiResponse.ok("내 프로필 조회", myProfileResponse); //결과값 반환
 	}
 
 	//상대방 프로필 조회
-	public ResponseDto getOtherProfile(Long id) {
+	public ApiResponse getOtherProfile(Long id) {
 		User user = userRepository.findById(id)
 			.orElseThrow(() -> new UserNotFoundException()); //user 정보 조회
 		OtherProfileResponse otherProfileResponse = new OtherProfileResponse(user); // profile 내용 입력
-		return DataResponseDto.ok("타 프로필 조회", otherProfileResponse); //결과값 반환
+		return ItemApiResponse.ok("타 프로필 조회", otherProfileResponse); //결과값 반환
 	}
 
 	//private 메소드

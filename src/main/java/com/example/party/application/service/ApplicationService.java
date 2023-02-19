@@ -18,8 +18,8 @@ import com.example.party.application.exception.ApplicationNotFoundException;
 import com.example.party.application.exception.ApplicationNotGeneraleException;
 import com.example.party.application.repository.ApplicationRepository;
 import com.example.party.application.type.ApplicationStatus;
-import com.example.party.global.dto.ListResponseDto;
-import com.example.party.global.dto.ResponseDto;
+import com.example.party.global.common.ApiResponse;
+import com.example.party.global.common.DataApiResponse;
 import com.example.party.global.exception.ForbiddenException;
 import com.example.party.partypost.entity.PartyPost;
 import com.example.party.partypost.exception.PartyPostNotFoundException;
@@ -40,7 +40,7 @@ public class ApplicationService implements IApplicationService {
 
 	//모집 참가 신청
 	@Override
-	public ResponseDto createApplication(Long partyPostId, User user) {
+	public ApiResponse createApplication(Long partyPostId, User user) {
 		//0. 받아온 user 를 영속성 컨텍스트에 저장
 		User user1 = userRepository.save(user);
 
@@ -61,12 +61,12 @@ public class ApplicationService implements IApplicationService {
 		user1.addApplication(application);
 
 		//6.  DataResponseDto 생성 후 return
-		return ResponseDto.ok("참가 신청 완료");
+		return ApiResponse.ok("참가 신청 완료");
 
 	}
 
 	@Override
-	public ResponseDto cancelApplication(Long applicationId, User user) {
+	public ApiResponse cancelApplication(Long applicationId, User user) {
 		Application application = getApplication(applicationId);
 
 		if (!application.isWrittenByMe(user.getId())) {
@@ -74,12 +74,12 @@ public class ApplicationService implements IApplicationService {
 		}
 		application.cancel();
 
-		return ResponseDto.ok("참가 신청 취소 완료");
+		return ApiResponse.ok("참가 신청 취소 완료");
 	}
 
 	@Transactional(readOnly = true)
 	@Override
-	public ListResponseDto<ApplicationResponse> getApplications(Long partPostId, User user) {
+	public DataApiResponse<ApplicationResponse> getApplications(Long partPostId, User user) {
 		PartyPost partyPost = partyPostRepository.findById(partPostId)
 			.orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "NOT FOUND"));
 
@@ -93,11 +93,11 @@ public class ApplicationService implements IApplicationService {
 				pageable)
 			.map(ApplicationResponse::new);
 
-		return ListResponseDto.ok("참가신청자 목록 조회 완료", ret.getContent());
+		return DataApiResponse.ok("참가신청자 목록 조회 완료", ret.getContent());
 	}
 
 	@Override
-	public ResponseDto acceptApplication(Long applicationId, User user) {
+	public ApiResponse acceptApplication(Long applicationId, User user) {
 		Application application = getApplication(applicationId);
 
 		if (!application.isSendToMe(user.getId())) {
@@ -107,11 +107,11 @@ public class ApplicationService implements IApplicationService {
 		validateApplication(application);
 		application.accept();
 
-		return ResponseDto.ok("참가 신청 수락 완료");
+		return ApiResponse.ok("참가 신청 수락 완료");
 	}
 
 	@Override
-	public ResponseDto rejectApplication(Long applicationId, User user) {
+	public ApiResponse rejectApplication(Long applicationId, User user) {
 		Application application = getApplication(applicationId);
 
 		if (!application.isSendToMe(user.getId())) {
@@ -121,7 +121,7 @@ public class ApplicationService implements IApplicationService {
 		validateApplication(application);
 		application.reject();
 
-		return ResponseDto.ok("참가 신청 거부 완료");
+		return ApiResponse.ok("참가 신청 거부 완료");
 	}
 
 	@Transactional(readOnly = true)
