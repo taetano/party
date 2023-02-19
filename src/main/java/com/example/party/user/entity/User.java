@@ -28,6 +28,7 @@ import com.example.party.application.entity.Application;
 import com.example.party.global.BaseEntity;
 import com.example.party.partypost.entity.PartyPost;
 import com.example.party.restrictions.entity.Block;
+import com.example.party.restrictions.entity.Report;
 import com.example.party.user.dto.ProfileRequest;
 import com.example.party.user.dto.SignupRequest;
 import com.example.party.user.type.Status;
@@ -78,6 +79,9 @@ public class User extends BaseEntity implements UserDetails {
 		inverseJoinColumns = @JoinColumn(name = "post_id")
 	)
 	private Set<PartyPost> likePartyPosts;
+
+	@OneToMany(mappedBy = "reporter")
+	private List<Report> reports = new ArrayList<>();
 
 	@OneToMany(mappedBy = "blocker")
 	private List<Block> blocks = new ArrayList<>();
@@ -177,5 +181,17 @@ public class User extends BaseEntity implements UserDetails {
 
 	public List<Block> getBlocks() {
 		return blocks;
+	}
+
+	public void addReports(Report report) {
+		this.reports.add(report);
+	}
+
+	public void removeBlocks(Report report) {
+		this.reports.remove(report);
+	}
+
+	public List<Report> getReports() {
+		return reports;
 	}
 }
