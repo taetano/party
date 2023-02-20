@@ -10,8 +10,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.party.global.dto.ListResponseDto;
-import com.example.party.global.dto.ResponseDto;
+import com.example.party.global.common.ApiResponse;
+import com.example.party.global.common.DataApiResponse;
+import com.example.party.restrictions.dto.BlockResponse;
 import com.example.party.restrictions.dto.ReportPostRequest;
 import com.example.party.restrictions.dto.ReportUserRequest;
 import com.example.party.restrictions.service.RestrictionsService;
@@ -28,41 +29,41 @@ public class RestrictionsController {
 
 	//차단등록
 	@PostMapping("/block/{userId}")
-	public ResponseEntity<ResponseDto> blockUser(@PathVariable Long userId,
+	public ResponseEntity<ApiResponse> blockUser(@PathVariable Long userId,
 		@AuthenticationPrincipal User user) {
 		return ResponseEntity.ok(restrictionsService.blockUser(userId, user));
 	}
 
 	//차단해제
 	@DeleteMapping("/block/{userId}")
-	public ResponseEntity<ResponseDto> unBlockUser(@PathVariable Long userId,
+	public ResponseEntity<ApiResponse> unBlockUser(@PathVariable Long userId,
 		@AuthenticationPrincipal User user) {
 		return ResponseEntity.ok(restrictionsService.unBlockUser(userId, user));
 	}
 
 	//차단리스트 조회
 	@GetMapping("/block")
-	public ResponseEntity<ListResponseDto<?>> getBLockedUsers(@AuthenticationPrincipal User user) {
+	public ResponseEntity<DataApiResponse<BlockResponse>> getBLockedUsers(@AuthenticationPrincipal User user) {
 		return ResponseEntity.ok(restrictionsService.blocks(user));
 	}
 
 	//유저 신고
 	@PostMapping("/report/users")
-	public ResponseEntity<ResponseDto> usersReport(@RequestBody ReportUserRequest request,
+	public ResponseEntity<ApiResponse> usersReport(@RequestBody ReportUserRequest request,
 		@AuthenticationPrincipal User user) {
 		return ResponseEntity.ok(restrictionsService.reportUsers(user, request));
 	}
 
 	//게시글 신고
 	@PostMapping("/report/party-posts")
-	public ResponseEntity<ResponseDto> postsReport(@RequestBody ReportPostRequest request,
+	public ResponseEntity<ApiResponse> postsReport(@RequestBody ReportPostRequest request,
 		@AuthenticationPrincipal User user) {
 		return ResponseEntity.ok(restrictionsService.reportPosts(user, request));
 	}
 
 	//노쇼 신고
 	@PostMapping("/noShow/{userId}")
-	public ResponseEntity<ResponseDto> noShowReport(@PathVariable Long userId,
+	public ResponseEntity<ApiResponse> noShowReport(@PathVariable Long userId,
 		@AuthenticationPrincipal User user) {
 		return ResponseEntity.ok(restrictionsService.reportNoShow(user, userId));
 	}

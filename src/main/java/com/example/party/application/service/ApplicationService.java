@@ -112,11 +112,7 @@ public class ApplicationService implements IApplicationService {
 
 		//Accept 된 유저만 넘어감
 		Party party = partyRepository.findById(application.getPartyPost().getId())
-			.orElseThrow(() -> new IllegalArgumentException(""));
-		int maxMember = party.getPartyPost().getMaxMember();
-		if (maxMember <= party.getUsers().size()) {
-			throw new IllegalArgumentException("파티가 꽉찼습니다");
-		}
+			.orElseThrow(PartyPostNotFoundException::new);
 		party.addUsers(user);
 		partyRepository.save(party);
 		return ApiResponse.ok("참가 신청 수락 완료");

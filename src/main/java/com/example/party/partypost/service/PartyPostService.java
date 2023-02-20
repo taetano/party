@@ -61,21 +61,19 @@ public class PartyPostService implements IPartyPostService {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 		LocalDateTime partyDate = LocalDateTime.parse(request.getPartyDate(), formatter);
 		//1. category 찾기
-		Category category = categoryRepository.findById(request.getCategoryId()).orElseThrow(
-			() -> new CategoryNotFoundException()
-		);
+		Category category = categoryRepository.findById(request.getCategoryId())
+			.orElseThrow(CategoryNotFoundException::new);
 		//2. category 활성화 상태 확인
 		if (!category.isActive()) {
 			throw new CategoryNotActiveException();
 		}
 		//3. PartyPost 객체 생성
 		PartyPost partyPost = new PartyPost(user, request, partyDate, category);
-		//4. repository 에 저장
-		partyPostRepository.save(partyPost);
 		//Party 객체 생성
 		Party party = new Party(partyPost);
 		party.addUsers(user);
-		partyRepository.save(party);
+		//4. repository 에 저장
+		partyPostRepository.save(partyPost);
 		//5. partyPostResponse 생성
 		PartyPostResponse partyPostResponse = new PartyPostResponse(partyPost);
 		//6. DataResponseDto 생성 후 return

@@ -44,7 +44,7 @@ public class Party {
 		this.users.add(user);
 	}
 
-	public void removeUsers(User user) {
-		this.users.remove(user);
-	}
+	// public void removeUsers(User user) {
+	// 	this.users.remove(user);
+	// }
 }

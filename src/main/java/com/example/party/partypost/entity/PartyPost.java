@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -15,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.example.party.application.entity.Application;
@@ -55,7 +57,7 @@ public class PartyPost extends TimeStamped {
 	private String detailAddress;
 	@Column(name = "is_active", nullable = false)
 	private boolean active;
-	@Column(name ="accepted_cnt", nullable=false)
+	@Column(name = "accepted_cnt", nullable = false)
 	private byte acceptedMember;
 
 	// enum
@@ -76,6 +78,8 @@ public class PartyPost extends TimeStamped {
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "category_id")
 	private Category category;
+	@OneToOne(cascade = CascadeType.PERSIST)
+	private Party party;
 
 	//생성자
 	public PartyPost(User user, PartyPostRequest request, LocalDateTime partyDate, Category category) {
