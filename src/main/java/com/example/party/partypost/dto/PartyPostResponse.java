@@ -7,6 +7,7 @@ import java.util.Locale;
 import java.util.stream.Collectors;
 
 import com.example.party.application.dto.ApplicationResponse;
+import com.example.party.category.entity.Category;
 import com.example.party.partypost.entity.PartyPost;
 import com.example.party.partypost.type.Status;
 
@@ -18,9 +19,8 @@ public class PartyPostResponse {
 	private final Long id;
 	private final String title;
 	private final String content;
+	private final Long categoryId;
 	private final Status status;
-	private final LocalDateTime createdAt;
-	private final LocalDateTime modifiedAt;
 	private final byte maxMember;
 	private final LocalDateTime partyDate;
 	private final LocalDateTime closeDate;
@@ -29,6 +29,8 @@ public class PartyPostResponse {
 	private final String address;
 	private final String detailAddress;
 	private final int viewCnt;
+	private final LocalDateTime createdAt;
+	private final LocalDateTime modifiedAt;
 	private final List<ApplicationResponse> joinMember;
 
 	//생성자
@@ -36,10 +38,9 @@ public class PartyPostResponse {
 		this.id = partyPost.getId();
 		this.title = partyPost.getTitle();
 		this.content = partyPost.getContent();
+		this.categoryId = partyPost.getCategory().getId();
 		this.viewCnt = partyPost.getViewCnt();
 		this.status = partyPost.getStatus();
-		this.createdAt = partyPost.getCreatedAt();
-		this.modifiedAt = partyPost.getModifiedAt();
 		this.maxMember = partyPost.getMaxMember();
 		this.partyDate = partyPost.getPartyDate();
 		this.closeDate = partyPost.getCloseDate();
@@ -47,6 +48,8 @@ public class PartyPostResponse {
 		this.eubMyeonDong = partyPost.getEubMyeonDong();
 		this.address = partyPost.getAddress();
 		this.detailAddress = partyPost.getDetailAddress();
+		this.createdAt = partyPost.getCreatedAt();
+		this.modifiedAt = partyPost.getModifiedAt();
 		this.joinMember = partyPost.getApplications().stream().map(
 			ApplicationResponse::new).collect(Collectors.toList());
 	}

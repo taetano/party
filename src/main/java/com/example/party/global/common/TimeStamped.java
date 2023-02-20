@@ -1,4 +1,4 @@
-package com.example.party.global;
+package com.example.party.global.common;
 
 import java.time.LocalDateTime;
 
