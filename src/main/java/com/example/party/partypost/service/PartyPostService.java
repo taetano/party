@@ -157,6 +157,19 @@ public class PartyPostService implements IPartyPostService {
 		return DataApiResponse.ok("핫한 모집글 조회 완료", partyPostListResponses);
 	}
 
+	@Override
+	public DataApiResponse<SearchPartyPostListResponse> findNearPartyPost(String eubMyeonDong) {
+		Pageable pageable = PageRequest.of(0, 20); //페이지 갯수 지정
+
+		//1.검색 문자에 맞는 리스트 조회
+		List<PartyPost> partyPostList = partyPostRepository.findByEubMyeonDongContaining(eubMyeonDong);
+
+		List<SearchPartyPostListResponse> partyPostListResponses = partyPostList.stream()
+			.map(SearchPartyPostListResponse::new).collect(Collectors.toList());
+
+		return DataApiResponse.ok("주변 모집글 조회 완료", partyPostListResponses);
+	}
+
 	//모집글 수정
 	@Override
 	public ItemApiResponse<PartyPostResponse> updatePartyPost(Long partyPostId,
@@ -238,14 +251,14 @@ public class PartyPostService implements IPartyPostService {
 		PartyPost partyPost = partyPostRepository.findById(partyPostId).orElseThrow(
 			() -> new PartyPostNotFoundException()
 		);
-		String partPostTitle = partyPost.getTitle(); //모집글 제목 입력
+		String partyPostTitle = partyPost.getTitle(); //모집글 제목 입력
 		User userT = userRepository.save(user);
 		//좋아요 확인
 		if (!(userT.getLikePartyPosts().add(partyPost))) {
 			userT.getLikePartyPosts().remove(partyPost);
-			return new ItemApiResponse(200, "모집글 좋아요 취소 완료", partPostTitle);
+			return new ItemApiResponse(200, "모집글 좋아요 취소 완료", partyPostTitle);
 		} else {
-			return new ItemApiResponse(200, "모집글 좋아요 완료", partPostTitle);
+			return new ItemApiResponse(200, "모집글 좋아요 완료", partyPostTitle);
 		}
 	}
 
@@ -270,4 +283,5 @@ public class PartyPostService implements IPartyPostService {
 			throw new PartyPostNotDeletableException("참가신청자가 있는 경우 삭제할 수 없습니다");
 		}
 	}
+
 }

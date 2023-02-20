@@ -41,10 +41,14 @@ public interface IPartyPostService {
 	@Transactional
 	ItemApiResponse<PartyPostResponse> getPartyPost(Long postId, User user);
 
-	DataApiResponse<SearchPartyPostListResponse> searchPartyPost(String string, int page);
+	// 검색단어로 모집글 리스트 조회
+	DataApiResponse<SearchPartyPostListResponse> searchPartyPost(String searchText, int page);
 
 	DataApiResponse<SearchPartyPostListResponse> findHotPartyPost();
 
 	//카테고리명 별로 모집글 조회
 	DataApiResponse<PartyPostListResponse> searchPartyPostByCategory(Long categoryId, int page);
+
+	// 읍면동으로 가까운 모집글 리스트 조회
+	DataApiResponse<SearchPartyPostListResponse> findNearPartyPost(String eubMyeonDong);
 }
