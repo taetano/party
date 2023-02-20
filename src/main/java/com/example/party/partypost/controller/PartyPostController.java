@@ -12,13 +12,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.party.global.dto.DataResponseDto;
-import com.example.party.global.dto.ListResponseDto;
-import com.example.party.global.dto.ResponseDto;
+import com.example.party.global.common.ApiResponse;
+import com.example.party.global.common.DataApiResponse;
+import com.example.party.global.common.ItemApiResponse;
 import com.example.party.partypost.dto.MyPartyPostListResponse;
 import com.example.party.partypost.dto.PartyPostListResponse;
 import com.example.party.partypost.dto.PartyPostRequest;
 import com.example.party.partypost.dto.PartyPostResponse;
+import com.example.party.partypost.dto.SearchPartyPostListResponse;
 import com.example.party.partypost.dto.UpdatePartyPostRequest;
 import com.example.party.partypost.service.PartyPostService;
 import com.example.party.user.entity.User;
@@ -34,14 +35,14 @@ public class PartyPostController {
 
 	//모집글 작성
 	@PostMapping("")
-	public ResponseEntity<DataResponseDto<PartyPostResponse>> createPartyPost(
+	public ResponseEntity<ItemApiResponse<PartyPostResponse>> createPartyPost(
 		@RequestBody PartyPostRequest request, @AuthenticationPrincipal User user) {
 		return ResponseEntity.ok(partyPostService.createPartyPost(user, request));
 	}
 
 	//모집글 수정
 	@PatchMapping("/{party-postId}")
-	public ResponseEntity<DataResponseDto<PartyPostResponse>> updatePartyPost(
+	public ResponseEntity<ItemApiResponse<PartyPostResponse>> updatePartyPost(
 		@PathVariable(name = "party-postId") Long partyPostId, @RequestBody UpdatePartyPostRequest request,
 		@AuthenticationPrincipal User user) {
 		return ResponseEntity.ok(partyPostService.updatePartyPost(partyPostId, request, user));
@@ -49,21 +50,21 @@ public class PartyPostController {
 
 	//내가 작성한 모집글 리스트 조회
 	@GetMapping("/mylist")
-	public ResponseEntity<ListResponseDto<MyPartyPostListResponse>> findMyCreatedPartyList(
+	public ResponseEntity<DataApiResponse<MyPartyPostListResponse>> findMyCreatedPartyList(
 		@AuthenticationPrincipal User user, @RequestParam int page) {
 		return ResponseEntity.ok(partyPostService.findMyCreatedPartyList(user, page));
 	}
 
 	//내가 신청한 모집글 리스트 조회
 	@GetMapping("/my-join-list")
-	public ResponseEntity<ListResponseDto<MyPartyPostListResponse>> findMyJoinedPartyList(
+	public ResponseEntity<DataApiResponse<MyPartyPostListResponse>> findMyJoinedPartyList(
 		@AuthenticationPrincipal User user, @RequestParam int page) {
 		return ResponseEntity.ok(partyPostService.findMyJoinedPartyList(user, page));
 	}
 
 	//모집게시물 좋아요 (*좋아요 취소도 포함되는 기능임)
-	@PostMapping("/{party-postId}")
-	public DataResponseDto<String> toggleLikePartyPost(@PathVariable(name = "party-postId") Long partyPostId,
+	@PostMapping("/{party-postId}/likes")
+	public ItemApiResponse<String> toggleLikePartyPost(@PathVariable(name = "party-postId") Long partyPostId,
 		@AuthenticationPrincipal User user) {
 		//좋아요 기능
 		return partyPostService.toggleLikePartyPost(partyPostId, user);
@@ -71,22 +72,52 @@ public class PartyPostController {
 
 	//모집글전체조회
 	@GetMapping()
-	public ResponseEntity<ListResponseDto<PartyPostListResponse>> findPartyList(@AuthenticationPrincipal User user) {
-		return ResponseEntity.ok(partyPostService.findPartyList(user));
+	public ResponseEntity<DataApiResponse<PartyPostListResponse>> findPartyList(
+		@RequestParam int page, @AuthenticationPrincipal User user
+	) {
+		return ResponseEntity.ok(partyPostService.findPartyList(page - 1, user));
 	}
 
 	//모집글 상세 조회(개별 상세조회)
 	@GetMapping("/{party-postId}")
-	public ResponseEntity<DataResponseDto> getPartyPost(@PathVariable(name = "party-postId") Long partyPostId,
+	public ResponseEntity<ItemApiResponse<PartyPostResponse>> getPartyPost(
+		@PathVariable(name = "party-postId") Long partyPostId,
 		@AuthenticationPrincipal User user) {
 		return ResponseEntity.ok(partyPostService.getPartyPost(partyPostId, user));
 	}
 
 	//모집글 삭제
 	@DeleteMapping("/{party-postId}")
-	public ResponseEntity<ResponseDto> deletePartyPost(@PathVariable(name = "party-postId") Long partyPostId,
+	public ResponseEntity<ApiResponse> deletePartyPost(@PathVariable(name = "party-postId") Long partyPostId,
 		@AuthenticationPrincipal User user) {
 		return ResponseEntity.ok(partyPostService.deletePartyPost(partyPostId, user));
 	}
 
+	// 모집글 검색
+	@GetMapping("/search/{postsearchText}")
+	public DataApiResponse<SearchPartyPostListResponse> searchPartyPost(
+		@PathVariable(name = "postsearchText") String SearchText,
+		@RequestParam(name = "page", defaultValue = "1") int page) {
+		return partyPostService.searchPartyPost(SearchText, page);
+	}
+
+	//조회수 많은 핫한 모집글 조회
+	@GetMapping("/hot")
+	public DataApiResponse<SearchPartyPostListResponse> findHotPartyPost() {
+		return partyPostService.findHotPartyPost();
+	}
+
+	//카테고리명 별로 모집글 조회
+	@GetMapping("/categories/{categoryId}")
+	public ResponseEntity<DataApiResponse<PartyPostListResponse>> searchPartyPostByCategory(
+		@PathVariable Long categoryId, @RequestParam int page) {
+		return ResponseEntity.ok(partyPostService.searchPartyPostByCategory(categoryId, page));
+	}
+
+	//유저의 읍면동을 검색해서 가까운 모집글 검색
+	@GetMapping("/near/{EubMyeonDong}")
+	public DataApiResponse<SearchPartyPostListResponse> findNearPartyPost(
+		@PathVariable(name = "EubMyeonDong") String eubMyeonDong) {
+		return partyPostService.findNearPartyPost(eubMyeonDong);
+	}
 }

@@ -12,11 +12,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.example.party.global.util.JwtProvider;
 import com.example.party.user.dto.ProfileRequest;
 import com.example.party.user.repository.ProfileRepository;
 import com.example.party.user.repository.UserRepository;
 import com.example.party.user.service.UserService;
-import com.example.party.util.JwtProvider;
 
 @ExtendWith(MockitoExtension.class)
 class UserControllerTest {
@@ -39,9 +39,9 @@ class UserControllerTest {
 
 		//given
 		ProfileRequest profileRequest = ProfileRequest.builder()
-			.nickName("김홍길동")
+			.nickname("김홍길동")
 			.phoneNum("010-1234-4321")
-			.proFileUrl("00")
+			.profileImg("00")
 			.comment("프로필 내용을 수정합니다.")
 			.build();
 

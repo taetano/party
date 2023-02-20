@@ -1,6 +1,5 @@
 package com.example.party.application.entity;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 import javax.persistence.Column;
@@ -15,7 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.example.party.application.type.ApplicationStatus;
-import com.example.party.global.BaseEntity;
+import com.example.party.global.common.TimeStamped;
 import com.example.party.partypost.entity.PartyPost;
 import com.example.party.user.entity.User;
 
@@ -27,7 +26,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table
 @Entity
-public class Application extends BaseEntity {
+public class Application extends TimeStamped {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,7 +53,6 @@ public class Application extends BaseEntity {
 		this.status = ApplicationStatus.PENDING;
 		this.user = user;
 		this.partyPost = partyPost;
-		this.createdAt = LocalDateTime.now();
 	}
 
 	public boolean isWrittenByMe(Long userId) {
@@ -83,13 +81,12 @@ public class Application extends BaseEntity {
 
 	public void accept() {
 		this.status = ApplicationStatus.ACCEPT;
-		this.modifiedAt = LocalDateTime.now();
 		this.user.increaseParticipationCnt();
+		this.partyPost.increaseAcceptedCnt();
 	}
 
 	public void reject() {
 		this.status = ApplicationStatus.REJECT;
-		this.modifiedAt = LocalDateTime.now();
 	}
 
 	public void setId(Long id) {

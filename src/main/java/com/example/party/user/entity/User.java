@@ -10,7 +10,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -25,9 +24,10 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.example.party.application.entity.Application;
-import com.example.party.global.BaseEntity;
 import com.example.party.restrictions.entity.Block;
 import com.example.party.restrictions.entity.UserReport;
+import com.example.party.global.common.TimeStamped;
+import com.example.party.partypost.entity.PartyPost;
 import com.example.party.user.dto.ProfileRequest;
 import com.example.party.user.dto.SignupRequest;
 import com.example.party.user.type.Status;
@@ -40,7 +40,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class User extends BaseEntity implements UserDetails {
+public class User extends TimeStamped implements UserDetails {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -68,16 +68,16 @@ public class User extends BaseEntity implements UserDetails {
 	@OneToOne(optional = false)
 	@JoinColumn(name = "profile_id", unique = true, referencedColumnName = "id")
 	private Profile profile;
-	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "user")
 	private List<Application> applies;
 	@OneToMany(mappedBy = "user")
-	private List<com.example.party.partypost.entity.PartyPost> partyPosts;
+	private List<PartyPost> partyPosts;
 	@ManyToMany
 	@JoinTable(name = "likes",
 		joinColumns = @JoinColumn(name = "user_id"),
 		inverseJoinColumns = @JoinColumn(name = "post_id")
 	)
-	private Set<com.example.party.partypost.entity.PartyPost> likePartyPosts;
+	private Set<PartyPost> likePartyPosts;
 
 	@OneToMany(mappedBy = "reporter")
 	private List<UserReport> userReports = new ArrayList<>();
@@ -149,12 +149,9 @@ public class User extends BaseEntity implements UserDetails {
 		return false;
 	}
 
-	public void updataProfile(ProfileRequest profileRequest) {
-		this.nickname = profileRequest.getNickName();
+	public void updateProfile(ProfileRequest profileRequest) {
+		this.nickname = profileRequest.getNickname();
 		this.phoneNum = profileRequest.getPhoneNum();
-		//프로필 수정을 user 에서 처리
-		this.profile.updateProfile(profileRequest.getProFileUrl(), profileRequest.getComment());
-
 	}
 
 	public void increaseParticipationCnt() {

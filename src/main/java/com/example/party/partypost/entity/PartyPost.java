@@ -1,7 +1,6 @@
 package com.example.party.partypost.entity;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -19,7 +18,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.example.party.application.entity.Application;
-import com.example.party.global.BaseEntity;
+import com.example.party.category.entity.Category;
+import com.example.party.global.common.TimeStamped;
 import com.example.party.partypost.dto.PartyPostRequest;
 import com.example.party.partypost.dto.UpdatePartyPostRequest;
 import com.example.party.partypost.type.Status;
@@ -32,8 +32,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "party_post")
-@Entity(name = "partPost")
-public class PartyPost extends BaseEntity {
+@Entity(name = "partyPost")
+public class PartyPost extends TimeStamped {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,7 +46,7 @@ public class PartyPost extends BaseEntity {
 	@Column(name = "view_cnt", nullable = false)
 	private int viewCnt;
 	@Column(name = "max_member", nullable = false)
-	private byte maxMember; // MYSQL DB 상에
+	private byte maxMember;
 	@Column(name = "eub_myeon_dong", nullable = false)
 	private String eubMyeonDong;
 	@Column(name = "address", nullable = false)
@@ -55,6 +55,8 @@ public class PartyPost extends BaseEntity {
 	private String detailAddress;
 	@Column(name = "is_active", nullable = false)
 	private boolean active;
+	@Column(name ="accepted_cnt", nullable=false)
+	private byte acceptedMember;
 
 	// enum
 	@Enumerated(EnumType.STRING)
@@ -71,12 +73,16 @@ public class PartyPost extends BaseEntity {
 	private User user;
 	@OneToMany(mappedBy = "partyPost")
 	private List<Application> applications;
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "category_id")
+	private Category category;
 
 	//생성자
-	public PartyPost(User user, PartyPostRequest request, LocalDateTime partyDate) {
+	public PartyPost(User user, PartyPostRequest request, LocalDateTime partyDate, Category category) {
 		this.user = user;
 		this.title = request.getTitle();
 		this.content = request.getContent();
+		this.category = category;
 		this.status = Status.FINDING;
 		this.maxMember = request.getMaxMember();
 		this.eubMyeonDong = request.getEubMyeonDong();
@@ -84,7 +90,6 @@ public class PartyPost extends BaseEntity {
 		this.detailAddress = request.getDetailAddress();
 		this.partyDate = partyDate;
 		this.closeDate = partyDate.minusMinutes(15);
-		this.createdAt = LocalDateTime.now();
 		this.applications = Collections.emptyList();
 		this.active = true;
 	}
@@ -146,6 +151,13 @@ public class PartyPost extends BaseEntity {
 		this.id = id;
 	}
 
+	public void increaseAcceptedCnt() {
+		byte curMember = (byte)(this.acceptedMember + 1);
+		if (curMember == this.maxMember) {
+			this.status = Status.FOUND;
+		}
+	}
+
 	// (applications 의 인원+1)과 maxMember 가 일치하는 경우, status 를 FOUND 로 변경
 	private void checkMemberIsFull() {
 		int acceptedMembers = this.applications.size();
@@ -153,7 +165,6 @@ public class PartyPost extends BaseEntity {
 			this.status = Status.FOUND;
 		}
 	}
-
 }
 // TODO: API 1차 작업완료 후
 // 차단한 유저의 게시물 블라인드 처리 방식 생각
