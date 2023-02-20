@@ -2,8 +2,6 @@ package com.example.party.application.service;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.EntityManager;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,11 +20,12 @@ import com.example.party.application.type.ApplicationStatus;
 import com.example.party.global.dto.ListResponseDto;
 import com.example.party.global.dto.ResponseDto;
 import com.example.party.global.exception.ForbiddenException;
+import com.example.party.partypost.entity.Party;
 import com.example.party.partypost.entity.PartyPost;
 import com.example.party.partypost.exception.PartyPostNotFoundException;
 import com.example.party.partypost.repository.PartyPostRepository;
+import com.example.party.partypost.repository.PartyRepository;
 import com.example.party.user.entity.User;
-import com.example.party.user.exception.UserNotFoundException;
 import com.example.party.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -39,6 +38,7 @@ public class ApplicationService implements IApplicationService {
 	private final ApplicationRepository applicationRepository;
 	private final PartyPostRepository partyPostRepository;
 	private final UserRepository userRepository;
+	private final PartyRepository partyRepository;
 
 	//모집 참가 신청
 	@Override
@@ -109,6 +109,15 @@ public class ApplicationService implements IApplicationService {
 		validateApplication(application);
 		application.accept();
 
+		//Accept 된 유저만 넘어감
+		Party party = partyRepository.findById(application.getPartyPost().getId())
+			.orElseThrow(() -> new IllegalArgumentException(""));
+		int maxMember = party.getPartyPost().getMaxMember();
+		if (maxMember <= party.getUsers().size()) {
+			throw new IllegalArgumentException("파티가 꽉찼습니다");
+		}
+		party.addUsers(user);
+		partyRepository.save(party);
 		return ResponseDto.ok("참가 신청 수락 완료");
 	}
 

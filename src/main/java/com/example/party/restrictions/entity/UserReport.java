@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Entity
-public class Report {
+public class UserReport {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,7 +38,7 @@ public class Report {
 	@Column(nullable = false)
 	private String reportUserEmail;
 
-	public Report(User reporter, ReportUserRequest request, User user) {
+	public UserReport(User reporter, ReportUserRequest request, User user) {
 		this.userId = reporter.getId();
 		this.reportUserId = user.getId();
 		this.reportUserEmail = user.getEmail();

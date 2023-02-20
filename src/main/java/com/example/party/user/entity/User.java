@@ -26,9 +26,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.example.party.application.entity.Application;
 import com.example.party.global.BaseEntity;
-import com.example.party.partypost.entity.PartyPost;
 import com.example.party.restrictions.entity.Block;
-import com.example.party.restrictions.entity.Report;
+import com.example.party.restrictions.entity.UserReport;
 import com.example.party.user.dto.ProfileRequest;
 import com.example.party.user.dto.SignupRequest;
 import com.example.party.user.type.Status;
@@ -72,16 +71,16 @@ public class User extends BaseEntity implements UserDetails {
 	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
 	private List<Application> applies;
 	@OneToMany(mappedBy = "user")
-	private List<PartyPost> partyPosts;
+	private List<com.example.party.partypost.entity.PartyPost> partyPosts;
 	@ManyToMany
 	@JoinTable(name = "likes",
 		joinColumns = @JoinColumn(name = "user_id"),
 		inverseJoinColumns = @JoinColumn(name = "post_id")
 	)
-	private Set<PartyPost> likePartyPosts;
+	private Set<com.example.party.partypost.entity.PartyPost> likePartyPosts;
 
 	@OneToMany(mappedBy = "reporter")
-	private List<Report> reports = new ArrayList<>();
+	private List<UserReport> userReports = new ArrayList<>();
 
 	@OneToMany(mappedBy = "blocker")
 	private List<Block> blocks = new ArrayList<>();
@@ -183,15 +182,15 @@ public class User extends BaseEntity implements UserDetails {
 		return blocks;
 	}
 
-	public void addReports(Report report) {
-		this.reports.add(report);
+	public void addReports(UserReport userReport) {
+		this.userReports.add(userReport);
 	}
 
-	public void removeBlocks(Report report) {
-		this.reports.remove(report);
+	public void removeBlocks(UserReport userReport) {
+		this.userReports.remove(userReport);
 	}
 
-	public List<Report> getReports() {
-		return reports;
+	public List<UserReport> getUserReports() {
+		return userReports;
 	}
 }

@@ -22,11 +22,13 @@ import com.example.party.partypost.dto.PartyPostListResponse;
 import com.example.party.partypost.dto.PartyPostRequest;
 import com.example.party.partypost.dto.PartyPostResponse;
 import com.example.party.partypost.dto.UpdatePartyPostRequest;
+import com.example.party.partypost.entity.Party;
 import com.example.party.partypost.entity.PartyPost;
 import com.example.party.partypost.exception.IsNotWritterException;
 import com.example.party.partypost.exception.PartyPostNotDeletableException;
 import com.example.party.partypost.exception.PartyPostNotFoundException;
 import com.example.party.partypost.repository.PartyPostRepository;
+import com.example.party.partypost.repository.PartyRepository;
 import com.example.party.restrictions.entity.Block;
 import com.example.party.user.entity.User;
 import com.example.party.user.repository.UserRepository;
@@ -44,6 +46,7 @@ public class PartyPostService implements IPartyPostService {
 	private final PartyPostRepository partyPostRepository;
 	private final UserRepository userRepository;
 	private final ApplicationRepository applicationRepository;
+	private final PartyRepository partyRepository;
 
 	//모집글 작성
 	@Override
@@ -58,6 +61,11 @@ public class PartyPostService implements IPartyPostService {
 
 		//2. repository 에 저장
 		partyPostRepository.save(partyPost);
+
+		//Party 객체 생성
+		Party party = new Party(partyPost);
+		party.addUsers(user);
+		partyRepository.save(party);
 
 		//3. partyPostResponse 생성
 		PartyPostResponse partyPostResponse = new PartyPostResponse(partyPost);

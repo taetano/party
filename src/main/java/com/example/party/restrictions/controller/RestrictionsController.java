@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.party.global.dto.ListResponseDto;
 import com.example.party.global.dto.ResponseDto;
-import com.example.party.restrictions.dto.ReportNoShowRequest;
 import com.example.party.restrictions.dto.ReportPostRequest;
 import com.example.party.restrictions.dto.ReportUserRequest;
 import com.example.party.restrictions.service.RestrictionsService;
@@ -62,9 +61,9 @@ public class RestrictionsController {
 	}
 
 	//노쇼 신고
-	@PostMapping("/report/noShow")
-	public ResponseEntity<ResponseDto> noShowReport(@RequestBody ReportNoShowRequest request,
+	@PostMapping("/noShow/{userId}")
+	public ResponseEntity<ResponseDto> noShowReport(@PathVariable Long userId,
 		@AuthenticationPrincipal User user) {
-		return ResponseEntity.ok(restrictionsService.reportNoShow(user, request));
+		return ResponseEntity.ok(restrictionsService.reportNoShow(user, userId));
 	}
 }

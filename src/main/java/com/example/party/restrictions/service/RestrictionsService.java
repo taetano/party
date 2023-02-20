@@ -2,6 +2,8 @@ package com.example.party.restrictions.service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -9,16 +11,20 @@ import com.example.party.global.dto.DataResponseDto;
 import com.example.party.global.dto.ListResponseDto;
 import com.example.party.global.dto.ResponseDto;
 import com.example.party.global.exception.BedRequestException;
+import com.example.party.partypost.entity.PartyPost;
+import com.example.party.partypost.repository.PartyPostRepository;
 import com.example.party.restrictions.dto.BlockResponse;
-import com.example.party.restrictions.dto.ReportNoShowRequest;
 import com.example.party.restrictions.dto.ReportPostRequest;
+import com.example.party.restrictions.dto.ReportPostResponse;
 import com.example.party.restrictions.dto.ReportResponse;
 import com.example.party.restrictions.dto.ReportUserRequest;
 import com.example.party.restrictions.entity.Block;
-import com.example.party.restrictions.entity.Report;
+import com.example.party.restrictions.entity.PostReport;
+import com.example.party.restrictions.entity.UserReport;
 import com.example.party.restrictions.exception.CheckedBlocksException;
 import com.example.party.restrictions.repository.BlockRepository;
-import com.example.party.restrictions.repository.ReportRepository;
+import com.example.party.restrictions.repository.ReportPostRepository;
+import com.example.party.restrictions.repository.ReportUserRepository;
 import com.example.party.user.entity.User;
 import com.example.party.user.exception.UserNotFoundException;
 import com.example.party.user.repository.UserRepository;
@@ -33,7 +39,9 @@ public class RestrictionsService {
 
 	private final UserRepository userRepository;
 	private final BlockRepository blockRepository;
-	private final ReportRepository reportRepository;
+	private final ReportUserRepository reportUserRepository;
+	private final ReportPostRepository reportPostRepository;
+	private final PartyPostRepository partyPostRepository;
 
 	//차단등록
 	public DataResponseDto<BlockResponse> blockUser(Long userId, User user) {
@@ -71,38 +79,51 @@ public class RestrictionsService {
 	}
 
 	//차단목록 조회
-	public ListResponseDto<?> blocks(User user) {
+	public ListResponseDto<BlockResponse> blocks(User user) {
 		List<Block> blocks = user.getBlocks();
 		if (blocks.isEmpty()) {
 			throw new CheckedBlocksException();
 		}
-		return ListResponseDto.ok("조회 성공", blocks);
+		List<BlockResponse> collect = blocks.stream().map(BlockResponse::new).collect(Collectors.toList());
+
+		return ListResponseDto.ok("조회 성공", collect);
 	}
 
 	//유저 신고
-	public DataResponseDto reportUsers(User userDetails, ReportUserRequest request) {
+	public DataResponseDto<ReportResponse> reportUsers(User userDetails, ReportUserRequest request) {
 		User user = findByUser(request.getUserId());
-		List<Report> reports = userDetails.getReports();
-		if (!reports.isEmpty()) {
-			for (Report reportUser : reports) {
-				if (Objects.equals(reportUser.getReportUserId(), user.getId())) {
+		List<UserReport> userReports = userDetails.getUserReports();
+		if (!userReports.isEmpty()) {
+			for (UserReport userReportUser : userReports) {
+				if (Objects.equals(userReportUser.getReportUserId(), user.getId())) {
 					throw new BedRequestException("이미 신고한 유저입니다");
 				}
 			}
 		}
-		Report reportUser = new Report(userDetails, request, user);
-		reportRepository.save(reportUser);
-		userDetails.addReports(reportUser);
-		return DataResponseDto.ok("신고 완료", new ReportResponse(reportUser));
+		UserReport userReportUser = new UserReport(userDetails, request, user);
+		reportUserRepository.save(userReportUser);
+		userDetails.addReports(userReportUser);
+		return DataResponseDto.ok("신고 완료", new ReportResponse(userReportUser));
 	}
 
 	//게시글 신고
-	public ResponseDto reportPosts(User user, ReportPostRequest request) {
-		return ResponseDto.ok("");
+	public DataResponseDto<ReportPostResponse> reportPosts(User user, ReportPostRequest request) {
+		PartyPost post = partyPostRepository.findById(request.getPostId())
+			.orElseThrow(() -> new IllegalArgumentException(""));
+		Optional<PostReport> checkPostReport = reportPostRepository.findByUserIdAndReportPostId(user.getId(),
+			post.getId());
+		if (checkPostReport.isPresent()) {
+			throw new BedRequestException("이미 신고한 게시글입니다");
+		}
+		PostReport postReport = new PostReport(user.getId(), request, post);
+		reportPostRepository.save(postReport);
+		return DataResponseDto.ok("", new ReportPostResponse(postReport));
 	}
 
 	//노쇼 신고
-	public ResponseDto reportNoShow(User user, ReportNoShowRequest request) {
+	public ResponseDto reportNoShow(User userDetails, Long noShowUserId) {
+		User user = findByUser(noShowUserId);
+
 		return ResponseDto.ok("");
 	}
 
@@ -111,9 +132,4 @@ public class RestrictionsService {
 		return userRepository.findById(userId)
 			.orElseThrow(UserNotFoundException::new);
 	}
-
-	// private Report findByReport(Long userId) {
-	// 	return reportRepository.findById(userId)
-	// 		.orElseThrow(UserNotFoundException::new);
-	// }
 }
