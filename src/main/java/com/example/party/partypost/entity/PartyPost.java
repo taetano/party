@@ -40,40 +40,43 @@ public class PartyPost extends TimeStamped {
 	@Column(name = "id")
 	private Long id;
 	@Column(name = "title", nullable = false, length = 50)
-	private String title;
+	private String title; // 제목
 	@Column(name = "content", nullable = false, columnDefinition = "TEXT")
-	private String content;
+	private String content; // 내용
 	@Column(name = "view_cnt", nullable = false)
-	private int viewCnt;
+	private int viewCnt; //조회수
 	@Column(name = "max_member", nullable = false)
-	private byte maxMember;
+	private byte maxMember; //총인원 (파티장 포함 인원)
 	@Column(name = "address", nullable = false)
-	private String address;
+	private String address; // 주소 (ex. 서울 마포구 연남동)
 	@Column(name = "detail_address", nullable = false)
-	private String detailAddress;
+	private String detailAddress; // 동이하 상세주소 (ex. 567-34)
+	@Column(name ="partyPlace", nullable = false)
+	private String partyPlace; // 모임장소 (ex.파델라)
+
 	@Column(name = "is_active", nullable = false)
-	private boolean active;
+	private boolean active; // 삭제 여부 (false = 삭제)
 	@Column(name ="accepted_cnt", nullable=false)
-	private byte acceptedMember;
+	private byte acceptedMember; //수락된 인원(ACCEPT 시 올라감. 파티장 미포함)
 
 	// enum
 	@Enumerated(EnumType.STRING)
 	@Column(name = "status", nullable = false, columnDefinition = "ENUM('FINDING', 'FOUND', 'NO_SHOW_REPORTING', 'END')")
-	private Status status;
+	private Status status; // 모집상태 FINDING 모집중 / FOUND 모집완료 / NO_SHOW_REPORTING 노쇼신고가능 / END 모임종료 ( 상세설명은 type.Status 에서 확인가능)
 	@Column(name = "close_date", nullable = false)
-	private LocalDateTime closeDate;
+	private LocalDateTime closeDate; //마감시간 (partyDate 에서 15분전)
 	@Column(name = "party_date", nullable = false)
-	private LocalDateTime partyDate;
+	private LocalDateTime partyDate; //모임시간
 
 	// 연관관계
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "user_id")
-	private User user;
+	private User user; //작성자
 	@OneToMany(mappedBy = "partyPost")
-	private List<Application> applications;
+	private List<Application> applications; //이 모집글에 작성된 참가신청
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "category_id")
-	private Category category;
+	private Category category; //카테고리
 
 	//생성자
 	public PartyPost(User user, PartyPostRequest request, LocalDateTime partyDate, Category category) {
@@ -83,8 +86,9 @@ public class PartyPost extends TimeStamped {
 		this.category = category;
 		this.status = Status.FINDING;
 		this.maxMember = request.getMaxMember();
-		this.address = request.getAddress();
-		this.detailAddress = request.getDetailAddress();
+		this.address = extractAddress(request.getPartyAddress());
+		this.detailAddress = extractDetailAddress(request.getPartyAddress());
+		this.partyPlace = request.getPartyPlace();
 		this.partyDate = partyDate;
 		this.closeDate = partyDate.minusMinutes(15);
 		this.applications = Collections.emptyList();
@@ -99,7 +103,7 @@ public class PartyPost extends TimeStamped {
 		this.detailAddress = request.getDetailAddress();
 	}
 
-	// 메소드
+	// public 메소드
 	// 조회수 증가
 	public void increaseViewCnt(User user) {
 		if (!this.user.equals(user)) {
@@ -153,13 +157,27 @@ public class PartyPost extends TimeStamped {
 			this.status = Status.FOUND;
 		}
 	}
-
+	//private 메소드
 	// (applications 의 인원+1)과 maxMember 가 일치하는 경우, status 를 FOUND 로 변경
 	private void checkMemberIsFull() {
 		int acceptedMembers = this.applications.size();
 		if (this.maxMember == acceptedMembers + 1) {
 			this.status = Status.FOUND;
 		}
+	}
+
+	//request 에서 받아온 주소에서 address(~동 까지) 추출
+	private String extractAddress(String partyAddress){
+		int index = partyAddress.indexOf("동 ");
+
+		return partyAddress.substring(0, index +1);
+	}
+
+	//request 에서 받아온 주소에서 detailAddress(상세주소) 추출
+	private String extractDetailAddress(String partyAddress){
+		int index = partyAddress.indexOf("동 ");
+
+		return partyAddress.substring(index+2,partyAddress.length());
 	}
 }
 // TODO: API 1차 작업완료 후
