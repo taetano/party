@@ -25,7 +25,6 @@ public class PartyPostResponse {
 	private final LocalDateTime partyDate;
 	private final LocalDateTime closeDate;
 	private final String day;
-	private final String eubMyeonDong;
 	private final String address;
 	private final String detailAddress;
 	private final int viewCnt;
@@ -45,7 +44,6 @@ public class PartyPostResponse {
 		this.partyDate = partyPost.getPartyDate();
 		this.closeDate = partyPost.getCloseDate();
 		this.day = partyDate.getDayOfWeek().getDisplayName(TextStyle.NARROW, Locale.KOREAN);
-		this.eubMyeonDong = partyPost.getEubMyeonDong();
 		this.address = partyPost.getAddress();
 		this.detailAddress = partyPost.getDetailAddress();
 		this.createdAt = partyPost.getCreatedAt();

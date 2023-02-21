@@ -2,12 +2,12 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Login Page</title>
+    <title>Let's PARTY|Login</title>
     <style>
         body {
             margin: 0;
             padding: 0;
-            background-color: #F7B718;
+            background-color: #FFFFFF;
         }
 
         .container {
@@ -25,12 +25,14 @@
 
         .logo {
             margin: 0;
+            margin-bottom: 20px;
             color: #FFFFFF;
+            opacity:0.75; /* 75% 불투명도 */
             font-size: 3rem;
             font-weight: bold;
             text-align: center;
             padding: 2rem 0;
-            background-color: #000000;
+            background-color: #F7B718;
             border-top-left-radius: 10px;
             border-top-right-radius: 10px;
         }
@@ -49,13 +51,14 @@
         }
 
         input[type=submit] {
-            background-color: #000000;
+            background-color: #F7B718;
             color: #FFFFFF;
             border: none;
             border-radius: 20px;
-            padding: 1rem 2rem;
+            padding: 1rem 3rem;
             margin: 1rem 0;
-            font-size: 1.2rem;
+            font-size: 1.4rem;
+            font-weight: bolder;
             cursor: pointer;
         }
 
@@ -66,17 +69,20 @@
 </head>
 <body>
 <div class="container">
-    <h1 class="logo">지 금 놀 자</h1>
+    <h1 class="logo">Let's PARTY</h1>
     <form>
-        <label for="username">Username</label>
-        <input type="text" id="username" name="username" placeholder="Enter your username">
+        <span style = " font-size:1.5em;">
+        <label for="email">Email</label>
+        <input type="text" id="email" name="email" placeholder="예) lets@party.com">
 
         <label for="password">Password</label>
-        <input type="password" id="password" name="password" placeholder="Enter your password">
+        <input type="password" id="password" name="password" placeholder="영문, 숫자, 특수문자 조합 8-60자">
 
-        <input type="submit" value="Login">
+        <input type="submit" value="로그인">
+        </span>
     </form>
-    <p><a href="#">Forgot password?</a></p>
+    <p><a href="#">이메일/비밀번호 찾기</a></p>
+    <p><a href="#">회원가입</a></p>
 </div>
 </body>
 </html>

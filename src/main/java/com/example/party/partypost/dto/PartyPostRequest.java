@@ -18,7 +18,6 @@ public class PartyPostRequest {
 	private Long categoryId;
 	private byte maxMember;
 	private String partyDate;
-	private String eubMyeonDong;
 	private String address;
 	private String detailAddress;
 }
