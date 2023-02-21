@@ -110,7 +110,7 @@ public class PartyPostController {
 	//카테고리명 별로 모집글 조회
 	@GetMapping("/categories/{categoryId}")
 	public ResponseEntity<DataApiResponse<PartyPostListResponse>> searchPartyPostByCategory(
-		@PathVariable Long categoryId, @RequestParam int page) {
+		@PathVariable Long categoryId, @RequestParam(name = "page", defaultValue = "1") int page) {
 		return ResponseEntity.ok(partyPostService.searchPartyPostByCategory(categoryId, page));
 	}
 

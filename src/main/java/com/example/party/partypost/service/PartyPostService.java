@@ -118,7 +118,7 @@ public class PartyPostService implements IPartyPostService {
 		return DataApiResponse.ok("모집글 검색 완료", partyPostListResponses);
 	}
 
-	//카테고리명 별로 모집글 조회
+	//카테고리 별 모집글 조회
 	@Override
 	public DataApiResponse<PartyPostListResponse> searchPartyPostByCategory(Long categoryId, int page) {
 		Pageable pageable = PageRequest.of(page - 1, 6);
@@ -135,7 +135,7 @@ public class PartyPostService implements IPartyPostService {
 		List<PartyPostListResponse> partyPostListResponses = partyPostList.stream()
 			.map(PartyPostListResponse::new).collect(Collectors.toList());
 
-		return DataApiResponse.ok("모집글 검색 완료", partyPostListResponses);
+		return DataApiResponse.ok("카테고리별 모집글 조회 완료", partyPostListResponses);
 	}
 
 	//핫한 모집글 조회 (조회수)
