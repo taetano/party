@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <title>내가 신청한 모집글</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            /*background-color: #F7B718;*/
+        }
+
+        .mypage-top {
+            width: 100%;
+            width: 940px;
+            align-items: center;
+            text-align: center;
+            border: 4px solid #F7B718;
+
+            margin: 10px 20px 10px 20px;
+            border-radius: 15px;
+        }
+
+        .mypage-title {
+            width: 100%;
+            width: 940px;
+            align-items: center;
+            text-align: center;
+            border: 4px solid #F7B718;
+
+            margin: 10px 20px 10px 20px;
+            border-radius: 15px;
+        }
+
+        .mypageMain {
+            align-content: center;
+            display: flex;
+            width: 100%;
+        }
+
+        .mypageLeftMenu {
+            float: left;
+            margin: 10px 20px 10px 20px;
+            display: flex;
+            flex-direction: column;
+            width: 200px;
+            height: 500px;
+            background-color: #FFFFFF;
+            padding: 0px;
+            box-sizing: border-box;
+            border: 4px solid #F7B718;
+
+            border-radius: 15px;
+        }
+
+        .mypageLeftMenu button {
+            margin: 8px 5px 8px 5px;
+            padding-left: 15px;
+            height: 80px;
+            font-size: 20px;
+            text-align: left;
+            border: #FFFFFF;
+            background-color: #FFFFFF;
+        }
+
+        .mypageLeftMenu button:hover {
+            color: #F7B718;
+            font-weight: bold;
+        }
+
+        .mypageEdit {
+            float: left;
+            margin: 10px 20px 10px 20px;
+            width: 700px;
+            height: 700px;
+            border: 4px solid #F7B718;
+            border-radius: 15px;
+        }
+
+        .mypartypost {
+            margin: 10px 10px 10px 10px;
+            text-align: left;
+            height: 25px;
+            border: 1px solid black;
+            border-radius: 10px;
+
+        }
+
+        .mypartypost:hover {
+            background: #F7B718;
+        }
+
+    </style>
+</head>
+<body>
+
+
+<div class="mypagewrap">
+    <header>
+        <h1 class="mypage-top" onclick="window.location.href= 'login.html'">파티메이트</h1>
+        <div class="mypage-title">
+            <h1>내가 신청한 모집글</h1>
+        </div>
+    </header>
+
+    <div class="mypageMain">
+
+        <data class="mypageLeftMenu">
+            <button class="mydata" onclick="window.location.href= 'mypage_profile.html'">내 정보</button>
+            <button class="mydata" onclick="window.location.href= 'login.html'">1:1 채팅</button>
+            <button class="mydata" onclick="window.location.href= 'mypage_partypost_created.html'">내 모집글 목록</button>
+            <button class="mydata" onclick="window.location.href= 'mypage_partypost_apply.html'">신청 모집글 목록</button>
+            <button class="mydata" onclick="window.location.href= 'mypage_partypost_likes.html'">좋아한 모집글</button>
+            <button class="mydata" onclick="window.location.href= 'mypage_blocks.html'">차단 유저관리</button>
+        </data>
+
+        <div class="mypageEdit">
+            <div class="mypartypost-list">
+                <div id="mypartypost1" class="mypartypost">
+                    글 제목 : 글 제목1 / 마감일자 : 마감일자 / 위치 : 위치
+                    <button>좋아요 취소</button>
+                </div>
+                <div id="mypartypost2" class="mypartypost">
+                    글 제목 : 글 제목2 / 마감일자 : 마감일자 / 위치 : 위치
+                    <button>좋아요 취소</button>
+                </div>
+                <div id="mypartypost4" class="mypartypost">
+                    글 제목 : 글 제목3 / 마감일자 : 마감일자 / 위치 : 위치
+                    <button>좋아요 취소</button>
+                </div>
+                <div id="mypartypost3" class="mypartypost">
+                    글 제목 : 글 제목4 / 마감일자 : 마감일자 / 위치 : 위치
+                    <button>좋아요 취소</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
