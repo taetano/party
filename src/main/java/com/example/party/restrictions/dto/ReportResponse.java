@@ -12,7 +12,7 @@ public class ReportResponse {
 	private final String details;
 
 	public ReportResponse(UserReport userReport) {
-		this.userEmail = userReport.getReportUserEmail();
+		this.userEmail = userReport.getReported().getEmail();
 		this.reason = userReport.getReason();
 		this.details = userReport.getDetails();
 	}

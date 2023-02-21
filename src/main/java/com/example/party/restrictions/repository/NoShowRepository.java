@@ -4,5 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.party.restrictions.entity.NoShow;
 
-public interface noShowRepository extends JpaRepository<NoShow, Long> {
+public interface NoShowRepository extends JpaRepository<NoShow, Long> {
+	Boolean existsReporterIdAndPostIdAndReportedId(Long userId, Long postId, Long reportedId);
 }

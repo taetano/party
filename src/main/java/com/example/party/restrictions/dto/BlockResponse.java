@@ -9,6 +9,6 @@ public class BlockResponse {
 	private final String userEmail;
 
 	public BlockResponse(Block block) {
-		this.userEmail = block.getBlockedEmail();
+		this.userEmail = block.getBlocked().getEmail();
 	}
 }

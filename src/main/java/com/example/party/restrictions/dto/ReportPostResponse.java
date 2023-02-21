@@ -12,7 +12,7 @@ public class ReportPostResponse {
 	private final String details;
 
 	public ReportPostResponse(PostReport postReport) {
-		this.postTitle = postReport.getReportPostTitle();
+		this.postTitle = postReport.getReportPost().getTitle();
 		this.response = postReport.getReason();
 		this.details = postReport.getDetails();
 	}

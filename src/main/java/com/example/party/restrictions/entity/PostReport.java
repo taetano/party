@@ -32,20 +32,13 @@ public class PostReport {
 	private String details;
 	@ManyToOne
 	private User user;
-	@Column(nullable = false)
-	private Long userId;
 	@ManyToOne
 	private PartyPost reportPost;
-	@Column(nullable = false)
-	private Long reportPostId;
-	@Column(nullable = false)
-	private String reportPostTitle;
 
-	public PostReport(Long userId, ReportPostRequest request, PartyPost post) {
-		this.userId = userId;
+	public PostReport(User user, ReportPostRequest request, PartyPost post) {
+		this.user = user;
 		this.reason = request.getResponse().getReason();
 		this.details = request.getDetails();
-		this.reportPostId = post.getId();
-		this.reportPostTitle = post.getTitle();
+		this.reportPost = post;
 	}
 }

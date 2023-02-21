@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.party.global.common.ApiResponse;
@@ -41,10 +42,11 @@ public class RestrictionsController {
 		return ResponseEntity.ok(restrictionsService.unBlockUser(userId, user));
 	}
 
-	//차단리스트 조회
+	//차단목록 조회
 	@GetMapping("/block")
-	public ResponseEntity<DataApiResponse<BlockResponse>> getBLockedUsers(@AuthenticationPrincipal User user) {
-		return ResponseEntity.ok(restrictionsService.blocks(user));
+	public ResponseEntity<DataApiResponse<BlockResponse>> getBLockedUsers(@RequestParam int page,
+		@AuthenticationPrincipal User user) {
+		return ResponseEntity.ok(restrictionsService.blocks(page - 1, user));
 	}
 
 	//유저 신고
