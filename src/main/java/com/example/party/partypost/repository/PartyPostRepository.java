@@ -42,7 +42,7 @@ public interface PartyPostRepository extends JpaRepository<PartyPost, Long> {
 	List<PartyPost> findByTitleContainingOrAddressContaining(String title, String address, Pageable pageable);
 
 	//조회수가 많은 모집글 리스트 조회
-	List<PartyPost> findFirst20ByOrderByViewCntDesc();
+	List<PartyPost> findFirst3ByOrderByViewCntDesc();
 
 	//categoryId 로 모집글 리스트 조회
 	List<PartyPost> findByCategoryId(Long categoryId, Pageable pageable);

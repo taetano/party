@@ -141,9 +141,9 @@ public class PartyPostService implements IPartyPostService {
 	//핫한 모집글 조회 (조회수)
 	@Override
 	public DataApiResponse<PartyPostListResponse> findHotPartyPost() {
-		Pageable pageable = PageRequest.of(0, 6, Sort.by("view_cnt"));
+		Pageable pageable = PageRequest.of(0, 3, Sort.by("view_cnt"));
 
-		List<PartyPost> partyPostList = partyPostRepository.findFirst20ByOrderByViewCntDesc();
+		List<PartyPost> partyPostList = partyPostRepository.findFirst3ByOrderByViewCntDesc();
 
 		List<PartyPostListResponse> partyPostListResponses = partyPostList.stream()
 			.map(PartyPostListResponse::new).collect(Collectors.toList());
@@ -154,13 +154,13 @@ public class PartyPostService implements IPartyPostService {
 	//내주변 모집글 조회
 	@Override
 	public DataApiResponse<PartyPostListResponse> findNearPartyPost(String string) {
-		Pageable pageable = PageRequest.of(0, 6); //페이지 갯수 지정
+		Pageable pageable = PageRequest.of(0, 3); //페이지 갯수 지정
 
 		String[] list = string.split(" ");
-		String searchEubMyeonDong = list[2];
+		String searchAddress = list[2];
 
 		//1.검색 문자에 맞는 리스트 조회
-		List<PartyPost> partyPostList = partyPostRepository.findByAddressContaining(searchEubMyeonDong);
+		List<PartyPost> partyPostList = partyPostRepository.findByAddressContaining(searchAddress);
 
 		List<PartyPostListResponse> partyPostListResponses = partyPostList.stream()
 			.map(PartyPostListResponse::new).collect(Collectors.toList());

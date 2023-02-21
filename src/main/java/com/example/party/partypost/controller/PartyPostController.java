@@ -114,10 +114,10 @@ public class PartyPostController {
 		return ResponseEntity.ok(partyPostService.searchPartyPostByCategory(categoryId, page));
 	}
 
-	//유저의 읍면동을 검색해서 가까운 모집글 검색
-	@GetMapping("/near/{Address}")
+	//가까운 모집글 조회
+	@GetMapping("/near")
 	public DataApiResponse<PartyPostListResponse> findNearPartyPost(
-		@PathVariable(name = "Address") String Address) {
+		@RequestBody String Address) {
 		return partyPostService.findNearPartyPost(Address);
 	}
 }
