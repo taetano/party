@@ -13,9 +13,11 @@ public class PartyPostListResponse {
 
 	//postId
 	private final Long postId;
-	//title
+	//모집글의 제목
 	private final String title;
-	//status
+	//파티장 닉네임
+	private final String partyOwner;
+	//모집글의 상태
 	private final Status status;
 	//현재 인원
 	private final byte acceptedMember;
@@ -35,6 +37,7 @@ public class PartyPostListResponse {
 	public PartyPostListResponse(PartyPost partyPost) {
 		this.postId = partyPost.getId();
 		this.title = partyPost.getTitle();
+		this.partyOwner = partyPost.getUser().getNickname();
 		this.status = partyPost.getStatus();
 		this.acceptedMember = partyPost.getAcceptedMember();
 		this.maxMember = partyPost.getMaxMember();

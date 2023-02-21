@@ -80,7 +80,7 @@ public class PartyPostService implements IPartyPostService {
 		List<PartyPostListResponse> pageResponse = partyPostRepository.findAllByActiveIsTrue(pageable).stream().map(
 			PartyPostListResponse::new).collect(Collectors.toList());
 		// 3.ListResponseDto 생성 후 리턴
-		return DataApiResponse.ok("모집글 조회 완료", pageResponse);
+		return DataApiResponse.ok("모집글 전체 조회 완료", pageResponse);
 	}
 
 	//모집글 상세 조회(개별 상세조회)
