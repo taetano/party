@@ -58,7 +58,7 @@ public class User extends TimeStamped implements UserDetails {
 	@Column(name = "role", nullable = false, length = 12)
 	private UserRole role;
 	@Enumerated(EnumType.STRING)
-	@Column(name = "status", nullable = false, columnDefinition = "ENUM('ACTIVE', 'SUSPENDED')")
+	@Column(name = "status", nullable = false, columnDefinition = "ENUM('ACTIVE', 'SUSPENDED', 'DORMANT')")
 	private Status status;
 
 	// 연관관계

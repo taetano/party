@@ -5,7 +5,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -22,10 +21,9 @@ import com.example.party.global.common.ApiResponse;
 import com.example.party.global.common.DataApiResponse;
 import com.example.party.global.common.ItemApiResponse;
 import com.example.party.partypost.dto.MyPartyPostListResponse;
-import com.example.party.partypost.dto.PartyPostListResponse;
 import com.example.party.partypost.dto.PartyPostRequest;
 import com.example.party.partypost.dto.PartyPostResponse;
-import com.example.party.partypost.dto.SearchPartyPostListResponse;
+import com.example.party.partypost.dto.PartyPostListResponse;
 import com.example.party.partypost.dto.UpdatePartyPostRequest;
 import com.example.party.partypost.entity.PartyPost;
 import com.example.party.partypost.exception.IsNotWritterException;
@@ -79,10 +77,10 @@ public class PartyPostService implements IPartyPostService {
 		// 1.모집글 전체 불러오기 (페이지 추가)
 		Pageable pageable = PageRequest.of(page, 6, Sort.by("createdAt").descending());
 		//2. Page<partyPost> 를 Page<PartyPostListResponse> 로 변경
-		Page<PartyPostListResponse> pageResponse = partyPostRepository.findAllByActiveIsTrue(pageable).map(
-			PartyPostListResponse::new);
+		List<PartyPostListResponse> pageResponse = partyPostRepository.findAllByActiveIsTrue(pageable).stream().map(
+			PartyPostListResponse::new).collect(Collectors.toList());
 		// 3.ListResponseDto 생성 후 리턴
-		return DataApiResponse.ok("모집글 조회 완료", pageResponse.getContent());
+		return DataApiResponse.ok("모집글 조회 완료", pageResponse);
 	}
 
 	//모집글 상세 조회(개별 상세조회)
@@ -106,15 +104,16 @@ public class PartyPostService implements IPartyPostService {
 	//문자 검색으로 제목,지역명으로 모집글 조회
 	@Override
 	@Transactional
-	public DataApiResponse<SearchPartyPostListResponse> searchPartyPost(String searchText, int page) {
+	public DataApiResponse<PartyPostListResponse> searchPartyPost(String searchText, int page) {
 		Pageable pageable = PageRequest.of(page - 1, 6);
 
 		//1.검색 문자에 맞는 리스트 조회
-		List<PartyPost> partyPostList = partyPostRepository.findByTitleContainingOrAddressContaining(searchText, searchText,
+		List<PartyPost> partyPostList = partyPostRepository.findByTitleContainingOrAddressContaining(searchText,
+			searchText,
 			pageable);
 
-		List<SearchPartyPostListResponse> partyPostListResponses = partyPostList.stream()
-			.map(SearchPartyPostListResponse::new).collect(Collectors.toList());
+		List<PartyPostListResponse> partyPostListResponses = partyPostList.stream()
+			.map(PartyPostListResponse::new).collect(Collectors.toList());
 
 		return DataApiResponse.ok("모집글 검색 완료", partyPostListResponses);
 	}
@@ -141,20 +140,20 @@ public class PartyPostService implements IPartyPostService {
 
 	//핫한 모집글 조회 (조회수)
 	@Override
-	public DataApiResponse<SearchPartyPostListResponse> findHotPartyPost() {
+	public DataApiResponse<PartyPostListResponse> findHotPartyPost() {
 		Pageable pageable = PageRequest.of(0, 6, Sort.by("view_cnt"));
 
 		List<PartyPost> partyPostList = partyPostRepository.findFirst20ByOrderByViewCntDesc();
 
-		List<SearchPartyPostListResponse> partyPostListResponses = partyPostList.stream()
-			.map(SearchPartyPostListResponse::new).collect(Collectors.toList());
+		List<PartyPostListResponse> partyPostListResponses = partyPostList.stream()
+			.map(PartyPostListResponse::new).collect(Collectors.toList());
 
 		return DataApiResponse.ok("핫한 모집글 조회 완료", partyPostListResponses);
 	}
 
 	//내주변 모집글 조회
 	@Override
-	public DataApiResponse<SearchPartyPostListResponse> findNearPartyPost(String string) {
+	public DataApiResponse<PartyPostListResponse> findNearPartyPost(String string) {
 		Pageable pageable = PageRequest.of(0, 6); //페이지 갯수 지정
 
 		String[] list = string.split(" ");
@@ -163,8 +162,8 @@ public class PartyPostService implements IPartyPostService {
 		//1.검색 문자에 맞는 리스트 조회
 		List<PartyPost> partyPostList = partyPostRepository.findByAddressContaining(searchEubMyeonDong);
 
-		List<SearchPartyPostListResponse> partyPostListResponses = partyPostList.stream()
-			.map(SearchPartyPostListResponse::new).collect(Collectors.toList());
+		List<PartyPostListResponse> partyPostListResponses = partyPostList.stream()
+			.map(PartyPostListResponse::new).collect(Collectors.toList());
 
 		return DataApiResponse.ok("주변 모집글 조회 완료", partyPostListResponses);
 	}

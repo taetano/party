@@ -15,7 +15,7 @@ import com.example.party.partypost.entity.PartyPost;
 public interface PartyPostRepository extends JpaRepository<PartyPost, Long> {
 
 	//모집글 전체 조회
-	Page<PartyPost> findAllByActiveIsTrue(Pageable pageable);
+	List<PartyPost> findAllByActiveIsTrue(Pageable pageable);
 
 	// postId 로 특정 모집글 가져오기
 	Optional<PartyPost> findById(Long postId);

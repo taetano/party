@@ -6,10 +6,9 @@ import com.example.party.global.common.ApiResponse;
 import com.example.party.global.common.DataApiResponse;
 import com.example.party.global.common.ItemApiResponse;
 import com.example.party.partypost.dto.MyPartyPostListResponse;
-import com.example.party.partypost.dto.PartyPostListResponse;
 import com.example.party.partypost.dto.PartyPostRequest;
 import com.example.party.partypost.dto.PartyPostResponse;
-import com.example.party.partypost.dto.SearchPartyPostListResponse;
+import com.example.party.partypost.dto.PartyPostListResponse;
 import com.example.party.partypost.dto.UpdatePartyPostRequest;
 import com.example.party.user.entity.User;
 
@@ -42,13 +41,13 @@ public interface IPartyPostService {
 	ItemApiResponse<PartyPostResponse> getPartyPost(Long postId, User user);
 
 	// 검색단어로 모집글 리스트 조회
-	DataApiResponse<SearchPartyPostListResponse> searchPartyPost(String searchText, int page);
+	DataApiResponse<PartyPostListResponse> searchPartyPost(String searchText, int page);
 
-	DataApiResponse<SearchPartyPostListResponse> findHotPartyPost();
+	DataApiResponse<PartyPostListResponse> findHotPartyPost();
 
 	//카테고리명 별로 모집글 조회
 	DataApiResponse<PartyPostListResponse> searchPartyPostByCategory(Long categoryId, int page);
 
 	// 주소로 가까운 모집글 조회
-	DataApiResponse<SearchPartyPostListResponse> findNearPartyPost(String address);
+	DataApiResponse<PartyPostListResponse> findNearPartyPost(String address);
 }
