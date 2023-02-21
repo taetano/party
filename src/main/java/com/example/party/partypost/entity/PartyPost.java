@@ -96,11 +96,12 @@ public class PartyPost extends TimeStamped {
 	}
 
 	//제목, 상세내용, 카테고리, 주소만 변경 가능 /현재 모임시작시간 & 모임마감시간 & 모집인원 변경 불가능
-	public void update(UpdatePartyPostRequest request) {
+	public void update(UpdatePartyPostRequest request, Category category) {
 		this.title = request.getTitle();
 		this.content = request.getContent();
-		this.address = request.getAddress();
-		this.detailAddress = request.getDetailAddress();
+		this.category = category;
+		this.address = extractAddress(request.getPartyAddress());
+		this.detailAddress = extractDetailAddress(request.getPartyAddress());
 	}
 
 	// public 메소드

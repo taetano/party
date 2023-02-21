@@ -35,7 +35,7 @@ public class PartyPostController {
 
 	//모집글 작성
 	@PostMapping("")
-	public ResponseEntity<ItemApiResponse<PartyPostResponse>> createPartyPost(
+	public ResponseEntity<ApiResponse> createPartyPost(
 		@RequestBody PartyPostRequest request, @AuthenticationPrincipal User user) {
 		System.out.println(request.getCategoryId());
 		return ResponseEntity.ok(partyPostService.createPartyPost(user, request));
@@ -43,7 +43,7 @@ public class PartyPostController {
 
 	//모집글 수정
 	@PatchMapping("/{party-postId}")
-	public ResponseEntity<ItemApiResponse<PartyPostResponse>> updatePartyPost(
+	public ResponseEntity<ApiResponse> updatePartyPost(
 		@PathVariable(name = "party-postId") Long partyPostId, @RequestBody UpdatePartyPostRequest request,
 		@AuthenticationPrincipal User user) {
 		return ResponseEntity.ok(partyPostService.updatePartyPost(partyPostId, request, user));
@@ -94,10 +94,10 @@ public class PartyPostController {
 		return ResponseEntity.ok(partyPostService.deletePartyPost(partyPostId, user));
 	}
 
-	// 모집글 검색
-	@GetMapping("/search/{postsearchText}")
+	// 모집글 검색 (지역명 & 제목)
+	@GetMapping("/search")
 	public DataApiResponse<SearchPartyPostListResponse> searchPartyPost(
-		@PathVariable(name = "postsearchText") String SearchText,
+		@RequestParam(name = "searchText") String SearchText,
 		@RequestParam(name = "page", defaultValue = "1") int page) {
 		return partyPostService.searchPartyPost(SearchText, page);
 	}
