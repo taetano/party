@@ -116,9 +116,9 @@ public class PartyPostController {
 	}
 
 	//유저의 읍면동을 검색해서 가까운 모집글 검색
-	@GetMapping("/near/{EubMyeonDong}")
+	@GetMapping("/near/{Address}")
 	public DataApiResponse<SearchPartyPostListResponse> findNearPartyPost(
-		@PathVariable(name = "EubMyeonDong") String eubMyeonDong) {
-		return partyPostService.findNearPartyPost(eubMyeonDong);
+		@PathVariable(name = "Address") String Address) {
+		return partyPostService.findNearPartyPost(Address);
 	}
 }

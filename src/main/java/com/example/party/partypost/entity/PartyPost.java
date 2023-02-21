@@ -47,8 +47,6 @@ public class PartyPost extends TimeStamped {
 	private int viewCnt;
 	@Column(name = "max_member", nullable = false)
 	private byte maxMember;
-	@Column(name = "eub_myeon_dong", nullable = false)
-	private String eubMyeonDong;
 	@Column(name = "address", nullable = false)
 	private String address;
 	@Column(name = "detail_address", nullable = false)
@@ -85,7 +83,6 @@ public class PartyPost extends TimeStamped {
 		this.category = category;
 		this.status = Status.FINDING;
 		this.maxMember = request.getMaxMember();
-		this.eubMyeonDong = request.getEubMyeonDong();
 		this.address = request.getAddress();
 		this.detailAddress = request.getDetailAddress();
 		this.partyDate = partyDate;
@@ -98,7 +95,6 @@ public class PartyPost extends TimeStamped {
 	public void update(UpdatePartyPostRequest request) {
 		this.title = request.getTitle();
 		this.content = request.getContent();
-		this.eubMyeonDong = request.getEubMyeonDong();
 		this.address = request.getAddress();
 		this.detailAddress = request.getDetailAddress();
 	}

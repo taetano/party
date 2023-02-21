@@ -24,7 +24,6 @@ public class SearchPartyPostListResponse {
 	//closeDate(모집마감시간)
 	private final LocalDateTime closeDate;
 	//eubMyeonDong 읍면동
-	private String eubMyeonDong;
 
 	public SearchPartyPostListResponse(PartyPost partyPost) {
 		this.postId = partyPost.getId();
@@ -33,6 +32,5 @@ public class SearchPartyPostListResponse {
 		this.maxMember = partyPost.getMaxMember();
 		this.partyDate = partyPost.getPartyDate();
 		this.closeDate = partyPost.getCloseDate();
-		this.eubMyeonDong = partyPost.getEubMyeonDong();
 	}
 }

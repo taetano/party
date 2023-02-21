@@ -1,7 +1,5 @@
 package com.example.party.partypost.dto;
 
-import com.example.party.category.entity.Category;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,7 +16,6 @@ public class PartyPostRequest {
 	private Long categoryId;
 	private byte maxMember;
 	private String partyDate;
-	private String eubMyeonDong;
 	private String address;
 	private String detailAddress;
 }
