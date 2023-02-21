@@ -77,7 +77,7 @@ public class PartyPostService implements IPartyPostService {
 	@Transactional
 	public DataApiResponse<PartyPostListResponse> findPartyList(int page) {
 		// 1.모집글 전체 불러오기 (페이지 추가)
-		Pageable pageable = PageRequest.of(page, 10, Sort.by("createdAt").descending());
+		Pageable pageable = PageRequest.of(page, 6, Sort.by("createdAt").descending());
 		//2. Page<partyPost> 를 Page<PartyPostListResponse> 로 변경
 		Page<PartyPostListResponse> pageResponse = partyPostRepository.findAllByActiveIsTrue(pageable).map(
 			PartyPostListResponse::new);
@@ -107,7 +107,7 @@ public class PartyPostService implements IPartyPostService {
 	@Override
 	@Transactional
 	public DataApiResponse<SearchPartyPostListResponse> searchPartyPost(String searchText, int page) {
-		Pageable pageable = PageRequest.of(page - 1, 20);
+		Pageable pageable = PageRequest.of(page - 1, 6);
 
 		//1.검색 문자에 맞는 리스트 조회
 		List<PartyPost> partyPostList = partyPostRepository.findByTitleContainingOrAddressContaining(searchText, searchText,
@@ -122,7 +122,7 @@ public class PartyPostService implements IPartyPostService {
 	//카테고리명 별로 모집글 조회
 	@Override
 	public DataApiResponse<PartyPostListResponse> searchPartyPostByCategory(Long categoryId, int page) {
-		Pageable pageable = PageRequest.of(page - 1, 20);
+		Pageable pageable = PageRequest.of(page - 1, 6);
 
 		Category category = categoryRepository.findById(categoryId).orElseThrow(
 			CategoryNotFoundException::new
@@ -142,13 +142,9 @@ public class PartyPostService implements IPartyPostService {
 	//핫한 모집글 조회 (조회수)
 	@Override
 	public DataApiResponse<SearchPartyPostListResponse> findHotPartyPost() {
-		Pageable pageable = PageRequest.of(0, 20, Sort.by("view_cnt"));
+		Pageable pageable = PageRequest.of(0, 6, Sort.by("view_cnt"));
 
 		List<PartyPost> partyPostList = partyPostRepository.findFirst20ByOrderByViewCntDesc();
-
-		//1.검색 문자에 맞는 리스트 조회
-		// List<PartyPost> partyPostList = partyPostRepository.findByTitleContainingOrAddressContaining(string, string,
-		// 	pageable);
 
 		List<SearchPartyPostListResponse> partyPostListResponses = partyPostList.stream()
 			.map(SearchPartyPostListResponse::new).collect(Collectors.toList());
@@ -159,7 +155,7 @@ public class PartyPostService implements IPartyPostService {
 	//내주변 모집글 조회
 	@Override
 	public DataApiResponse<SearchPartyPostListResponse> findNearPartyPost(String string) {
-		Pageable pageable = PageRequest.of(0, 20); //페이지 갯수 지정
+		Pageable pageable = PageRequest.of(0, 6); //페이지 갯수 지정
 
 		String[] list = string.split(" ");
 		String searchEubMyeonDong = list[2];
@@ -218,7 +214,7 @@ public class PartyPostService implements IPartyPostService {
 	//내가 작성한 모집글 조회 ( 내가 파티장인 경우만 )
 	@Override
 	public DataApiResponse<MyPartyPostListResponse> findMyCreatedPartyList(User user, int page) {
-		Pageable pageable = PageRequest.of(page - 1, 5, Sort.by(Sort.Direction.DESC, "modifiedAt"));
+		Pageable pageable = PageRequest.of(page - 1, 6, Sort.by(Sort.Direction.DESC, "modifiedAt"));
 
 		//1. user가 작성한 partyPost의 리스트
 		List<PartyPost> myPartyPostList = partyPostRepository.findByUserId(user.getId(), pageable);
@@ -235,7 +231,7 @@ public class PartyPostService implements IPartyPostService {
 	//내가 신청한 모집글 조회 ( 내가 파티원인 경우만/ 파티장인 경우 제외 )
 	@Override
 	public DataApiResponse<MyPartyPostListResponse> findMyJoinedPartyList(User user, int page) {
-		Pageable pageable = PageRequest.of(page - 1, 5, Sort.by(Sort.Direction.DESC, "modifiedAt"));
+		Pageable pageable = PageRequest.of(page - 1, 6, Sort.by(Sort.Direction.DESC, "modifiedAt"));
 
 		//1. user가 신청한 application의 리스트
 		List<Application> myApplicationList = applicationRepository.findByUserId(user.getId(), pageable);
