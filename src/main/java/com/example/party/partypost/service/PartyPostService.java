@@ -158,11 +158,14 @@ public class PartyPostService implements IPartyPostService {
 	}
 
 	@Override
-	public DataApiResponse<SearchPartyPostListResponse> findNearPartyPost(String eubMyeonDong) {
+	public DataApiResponse<SearchPartyPostListResponse> findNearPartyPost(String string) {
 		Pageable pageable = PageRequest.of(0, 20); //페이지 갯수 지정
 
+		String[] list = string.split(" ");
+		String searchEubMyeonDong = list[2];
+
 		//1.검색 문자에 맞는 리스트 조회
-		List<PartyPost> partyPostList = partyPostRepository.findByEubMyeonDongContaining(eubMyeonDong);
+		List<PartyPost> partyPostList = partyPostRepository.findByAddressContaining(searchEubMyeonDong);
 
 		List<SearchPartyPostListResponse> partyPostListResponses = partyPostList.stream()
 			.map(SearchPartyPostListResponse::new).collect(Collectors.toList());
