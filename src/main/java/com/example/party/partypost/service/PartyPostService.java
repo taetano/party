@@ -21,9 +21,9 @@ import com.example.party.global.common.ApiResponse;
 import com.example.party.global.common.DataApiResponse;
 import com.example.party.global.common.ItemApiResponse;
 import com.example.party.partypost.dto.MyPartyPostListResponse;
+import com.example.party.partypost.dto.PartyPostListResponse;
 import com.example.party.partypost.dto.PartyPostRequest;
 import com.example.party.partypost.dto.PartyPostResponse;
-import com.example.party.partypost.dto.PartyPostListResponse;
 import com.example.party.partypost.dto.UpdatePartyPostRequest;
 import com.example.party.partypost.entity.PartyPost;
 import com.example.party.partypost.exception.IsNotWritterException;
@@ -143,7 +143,7 @@ public class PartyPostService implements IPartyPostService {
 	public DataApiResponse<PartyPostListResponse> findHotPartyPost() {
 		Pageable pageable = PageRequest.of(0, 3, Sort.by("view_cnt"));
 
-		List<PartyPost> partyPostList = partyPostRepository.findFirst3ByOrderByViewCntDesc();
+		List<PartyPost> partyPostList = partyPostRepository.findFirst3ByOrderByViewCntDesc(pageable);
 
 		List<PartyPostListResponse> partyPostListResponses = partyPostList.stream()
 			.map(PartyPostListResponse::new).collect(Collectors.toList());
@@ -160,7 +160,7 @@ public class PartyPostService implements IPartyPostService {
 		String searchAddress = list[2];
 
 		//1.검색 문자에 맞는 리스트 조회
-		List<PartyPost> partyPostList = partyPostRepository.findByAddressContaining(searchAddress);
+		List<PartyPost> partyPostList = partyPostRepository.findByAddressContaining(searchAddress, pageable);
 
 		List<PartyPostListResponse> partyPostListResponses = partyPostList.stream()
 			.map(PartyPostListResponse::new).collect(Collectors.toList());
