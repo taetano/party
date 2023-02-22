@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -42,11 +41,11 @@ public interface PartyPostRepository extends JpaRepository<PartyPost, Long> {
 	List<PartyPost> findByTitleContainingOrAddressContaining(String title, String address, Pageable pageable);
 
 	//조회수가 많은 모집글 리스트 조회
-	List<PartyPost> findFirst3ByOrderByViewCntDesc();
+	List<PartyPost> findFirst3ByOrderByViewCntDesc(Pageable pageable);
 
 	//categoryId 로 모집글 리스트 조회
 	List<PartyPost> findByCategoryId(Long categoryId, Pageable pageable);
 
 	// 읍면동으로 모집글 리스트 조회
-	List<PartyPost> findByAddressContaining(String place);
+	List<PartyPost> findByAddressContaining(String place, Pageable pageable);
 }
