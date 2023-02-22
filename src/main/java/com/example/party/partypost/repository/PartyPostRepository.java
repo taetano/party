@@ -17,7 +17,7 @@ public interface PartyPostRepository extends JpaRepository<PartyPost, Long> {
 	List<PartyPost> findAllByActiveIsTrue(Pageable pageable);
 
 	// postId 로 특정 모집글 가져오기
-	Optional<PartyPost> findById(Long postId);
+	Optional<PartyPost> findByIdAndActiveIsTrue(Long postId);
 
 	//내가 작성한 모집글 리스트 조회
 	List<PartyPost> findByUserId(Long userId, Pageable pageable);

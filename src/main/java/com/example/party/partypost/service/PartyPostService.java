@@ -88,7 +88,7 @@ public class PartyPostService implements IPartyPostService {
 	@Transactional
 	public ItemApiResponse<PartyPostResponse> getPartyPost(Long partyPostId, User user) {
 		//1. partyPostId의 partyPost 를 가져오기
-		PartyPost partyPost = partyPostRepository.findById(partyPostId)
+		PartyPost partyPost = partyPostRepository.findByIdAndActiveIsTrue(partyPostId)
 			.orElseThrow(PartyPostNotFoundException::new);
 
 		//2. 조회자!=작성자 인경우 조회한 partyPost 의 조회수 올려주기
