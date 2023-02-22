@@ -139,6 +139,7 @@ public class RestrictionsService {
 			party.getPartyPost().getId(), user.getId())) {
 			throw new BadRequestException("이미 신고한 유저입니다");
 		}
+
 		NoShow noShow = new NoShow(userDetails, party.getPartyPost(), user);
 		noShow.PlusNoShowReportCnt();
 		noShowRepository.save(noShow);
