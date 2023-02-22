@@ -145,7 +145,7 @@ public class PartyPostService implements IPartyPostService {
 	//핫한 모집글 조회 (조회수)
 	@Override
 	public DataApiResponse<PartyPostListResponse> findHotPartyPost() {
-		Pageable pageable = PageRequest.of(0, 3, Sort.by("view_cnt"));
+		Pageable pageable = PageRequest.of(0, 3, Sort.by("ViewCnt"));
 
 		List<PartyPost> partyPostList = partyPostRepository.findFirst3ByOrderByViewCntDesc(pageable);
 
