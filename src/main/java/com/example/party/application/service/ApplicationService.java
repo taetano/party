@@ -21,9 +21,11 @@ import com.example.party.application.type.ApplicationStatus;
 import com.example.party.global.common.ApiResponse;
 import com.example.party.global.common.DataApiResponse;
 import com.example.party.global.exception.ForbiddenException;
+import com.example.party.partypost.entity.Party;
 import com.example.party.partypost.entity.PartyPost;
 import com.example.party.partypost.exception.PartyPostNotFoundException;
 import com.example.party.partypost.repository.PartyPostRepository;
+import com.example.party.partypost.repository.PartyRepository;
 import com.example.party.user.entity.User;
 import com.example.party.user.repository.UserRepository;
 

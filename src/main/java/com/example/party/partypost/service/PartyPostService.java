@@ -31,7 +31,6 @@ import com.example.party.partypost.exception.IsNotWritterException;
 import com.example.party.partypost.exception.PartyPostNotDeletableException;
 import com.example.party.partypost.exception.PartyPostNotFoundException;
 import com.example.party.partypost.repository.PartyPostRepository;
-import com.example.party.restrictions.repository.BlockRepository;
 import com.example.party.user.entity.User;
 import com.example.party.user.repository.UserRepository;
 

@@ -72,9 +72,8 @@ public class PartyPostController {
 	//모집글전체조회
 	@GetMapping()
 	public ResponseEntity<DataApiResponse<PartyPostListResponse>> findPartyList(
-		@RequestParam int page, @AuthenticationPrincipal User user
-	) {
-		return ResponseEntity.ok(partyPostService.findPartyList(page - 1, user));
+		@RequestParam int page) {
+		return ResponseEntity.ok(partyPostService.findPartyList(page - 1));
 	}
 
 	//모집글 상세 조회(개별 상세조회)
