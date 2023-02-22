@@ -46,6 +46,5 @@ public class Blocks {
 	public void removeBlocks(User blocked) {
 		blocked.removeRelation(this);
 	}
-
 }
 
