@@ -104,16 +104,46 @@
     </style>
 </head>
 <body>
-<div class="wrapper">
-    <h1>게시글 제목</h1>
-    <div class="meta">
-        <span class="category">카테고리</span>
-        <span class="author">작성자</span>
-        <span class="date">작성일자</span>
+<div class="mypage">
+    <div class="mypage-title">
+        <h1>마이페이지</h1>
     </div>
-    <div class="content">
-        <p>게시글 내용</p>
+    <div class="mypage-menu">
+        <ul>
+            <li><a href="#">내 정보</a></li>
+            <li><a href="#">나의 글 목록</a></li>
+        </ul>
+    </div>
+
+    <div class="mypage-profile">
+        <div class="profile-image">
+            <img src="내 이미지 경로" alt="프로필 이미지">
+        </div>
+        <div class="profile-info">
+            <div class="nickname">
+                <h2>내 닉네임</h2>
+            </div>
+            <div class="status-message">
+                <p>상태 메세지</p>
+            </div>
+            <div class="contact-info">
+                <p><strong>이메일:</strong> 이메일 주소</p>
+                <p><strong>전화번호:</strong> 전화번호
+                    <button>수정</button>
+                </p>
+            </div>
+            <div class="password-change">
+                <form>
+                    <label for="new-password">새 비밀번호:</label>
+                    <input type="password" id="new-password" name="new-password"><br>
+                    <label for="confirm-password">새 비밀번호 확인:</label>
+                    <input type="password" id="confirm-password" name="confirm-password"><br>
+                    <input type="submit" value="변경">
+                </form>
+            </div>
+        </div>
     </div>
 </div>
+
 </body>
 </html>
