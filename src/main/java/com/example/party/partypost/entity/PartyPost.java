@@ -135,7 +135,6 @@ public class PartyPost extends TimeStamped {
 	// 들어온 참가신청을 applications 에 추가
 	public void addApplication(Application application) {
 		this.applications.add(application);
-		checkMemberIsFull();
 	}
 
 	// 이미 참가신청한 유저인지 확인
@@ -154,18 +153,12 @@ public class PartyPost extends TimeStamped {
 
 	public void increaseAcceptedCnt() {
 		byte curMember = (byte)(this.acceptedMember + 1);
-		if (curMember == this.maxMember) {
+		if (curMember+1 == this.maxMember) {
 			this.status = Status.FOUND;
 		}
+		this.acceptedMember = curMember;
 	}
 	//private 메소드
-	// (applications 의 인원+1)과 maxMember 가 일치하는 경우, status 를 FOUND 로 변경
-	private void checkMemberIsFull() {
-		int acceptedMembers = this.applications.size();
-		if (this.maxMember == acceptedMembers + 1) {
-			this.status = Status.FOUND;
-		}
-	}
 
 	//request 에서 받아온 주소에서 address(~동 까지) 추출
 	private String extractAddress(String partyAddress){

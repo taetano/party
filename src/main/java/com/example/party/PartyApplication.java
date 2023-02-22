@@ -21,6 +21,7 @@ public class PartyApplication {
 	@Bean
 	public CommandLineRunner dummyData(CategoryRepository categoryRepository) {
 		return (args -> {
+			// 카테고리 더미데이터 추가
 			CategoryRequest categoryRequest1 = new CategoryRequest("음식");
 			CategoryRequest categoryRequest2 = new CategoryRequest("공부");
 			CategoryRequest categoryRequest3 = new CategoryRequest("게임");
