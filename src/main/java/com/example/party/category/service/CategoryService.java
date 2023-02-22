@@ -14,7 +14,6 @@ import com.example.party.category.exception.DuplicateNameNotAllowException;
 import com.example.party.category.repository.CategoryRepository;
 import com.example.party.global.common.ApiResponse;
 import com.example.party.global.common.DataApiResponse;
-import com.example.party.global.common.ItemApiResponse;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,13 +23,13 @@ import lombok.extern.slf4j.Slf4j;
 @Transactional
 @RequiredArgsConstructor
 
-public class CategoryService implements ICategoryService{
+public class CategoryService implements ICategoryService {
 
 	private final CategoryRepository categoryRepository;
 
 	//카테고리 생성
 	@Override
-	public ItemApiResponse<CategoryResponse> createCategory(CategoryRequest request) {
+	public ApiResponse createCategory(CategoryRequest request) {
 		Category category = new Category(request);
 
 		if (categoryRepository.existsCategoryByName(category.getName())) {
@@ -38,8 +37,7 @@ public class CategoryService implements ICategoryService{
 		}
 
 		categoryRepository.save(category);
-		CategoryResponse categoryResponse = new CategoryResponse(category);
-		return new ItemApiResponse<>(201, "카테고리 생성 완료", categoryResponse);
+		return ApiResponse.create("카테고리 생성 완료");
 	}
 
 	//카테고리 전체 조회
@@ -47,15 +45,15 @@ public class CategoryService implements ICategoryService{
 	public DataApiResponse<CategoryResponse> getCategory() {
 		List<Category> categoryList = categoryRepository.findAll();
 		List<CategoryResponse> allCategoryList = categoryList.stream().map(
-			category -> new CategoryResponse(category)).collect(Collectors.toList());
+			CategoryResponse::new).collect(Collectors.toList());
 		return DataApiResponse.ok("카테고리 조회 완료", allCategoryList);
 	}
 
 	//카테고리 수정
 	@Override
-	public ItemApiResponse<CategoryResponse> updateCategory(Long categoryId, CategoryRequest request) {
+	public ApiResponse updateCategory(Long categoryId, CategoryRequest request) {
 		Category category = categoryRepository.findById(categoryId).orElseThrow(
-			() -> new CategoryNotFoundException()
+			CategoryNotFoundException::new
 		);
 
 		if (categoryRepository.existsCategoryByName(request.getName())) {
@@ -64,15 +62,14 @@ public class CategoryService implements ICategoryService{
 
 		category.update(request);
 
-		CategoryResponse categoryResponse = new CategoryResponse(category);
-		return ItemApiResponse.ok("카테고리 수정 완료", categoryResponse);
+		return ApiResponse.ok("카테고리 수정 완료");
 	}
 
 	//카테고리 삭제
 	@Override
 	public ApiResponse deleteCategory(Long categoryId) {
 		Category category = categoryRepository.findById(categoryId).orElseThrow(
-			() -> new CategoryNotFoundException()
+			CategoryNotFoundException::new
 		);
 		category.deleteCategory();
 		return ApiResponse.ok("카테고리 삭제 완료");

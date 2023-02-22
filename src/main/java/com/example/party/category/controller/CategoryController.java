@@ -15,8 +15,6 @@ import com.example.party.category.dto.CategoryResponse;
 import com.example.party.category.service.CategoryService;
 import com.example.party.global.common.ApiResponse;
 import com.example.party.global.common.DataApiResponse;
-import com.example.party.global.common.ItemApiResponse;
-import com.example.party.partypost.service.PartyPostService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -26,11 +24,10 @@ import lombok.RequiredArgsConstructor;
 public class CategoryController {
 
 	private final CategoryService categoryService;
-	private final PartyPostService partyPostService;
 
 	//카테고리 작성
 	@PostMapping("")
-	public ResponseEntity<ItemApiResponse<CategoryResponse>> createCategory(
+	public ResponseEntity<ApiResponse> createCategory(
 		@RequestBody CategoryRequest request) {
 		return ResponseEntity.ok(categoryService.createCategory(request));
 	}
@@ -43,7 +40,7 @@ public class CategoryController {
 
 	//카테고리 수정
 	@PatchMapping("/{categoryId}")
-	public ResponseEntity<ItemApiResponse<CategoryResponse>> updateCategory(
+	public ResponseEntity<ApiResponse> updateCategory(
 		@PathVariable(name = "categoryId") Long categoryId, @RequestBody CategoryRequest request) {
 		return ResponseEntity.ok(categoryService.updateCategory(categoryId, request));
 	}
