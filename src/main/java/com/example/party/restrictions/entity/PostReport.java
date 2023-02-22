@@ -29,7 +29,7 @@ public class PostReport {
 	@Column(nullable = false)
 	private ReportReason reason;
 	@Column(nullable = false)
-	private String details;
+	private String detailReason;
 	@ManyToOne
 	private User user;
 	@ManyToOne
@@ -37,8 +37,8 @@ public class PostReport {
 
 	public PostReport(User user, ReportPostRequest request, PartyPost post) {
 		this.user = user;
-		this.reason = request.getResponse().getReason();
-		this.details = request.getDetails();
+		this.reason = request.getReason();
+		this.detailReason = request.getDetailReason();
 		this.reportPost = post;
 	}
 }

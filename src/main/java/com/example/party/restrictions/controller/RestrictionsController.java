@@ -51,14 +51,14 @@ public class RestrictionsController {
 
 	//유저 신고
 	@PostMapping("/report/users")
-	public ResponseEntity<ApiResponse> usersReport(@RequestBody ReportUserRequest request,
+	public ResponseEntity<ApiResponse> reportUsers(@RequestBody ReportUserRequest request,
 		@AuthenticationPrincipal User user) {
 		return ResponseEntity.ok(restrictionsService.reportUsers(user, request));
 	}
 
-	//게시글 신고
+	//모집글 신고
 	@PostMapping("/report/party-posts")
-	public ResponseEntity<ApiResponse> postsReport(@RequestBody ReportPostRequest request,
+	public ResponseEntity<ApiResponse> reportPosts(@RequestBody ReportPostRequest request,
 		@AuthenticationPrincipal User user) {
 		return ResponseEntity.ok(restrictionsService.reportPosts(user, request));
 	}

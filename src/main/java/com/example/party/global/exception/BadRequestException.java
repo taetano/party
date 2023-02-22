@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 
 public class BadRequestException extends BaseException {
 
-	public BadRequestException(String msg) {
-		super(HttpStatus.BAD_REQUEST, msg);
+	public BadRequestException(String customMsg) {
+		super(HttpStatus.BAD_REQUEST, customMsg);
 	}
 }
