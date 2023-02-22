@@ -51,23 +51,23 @@ public class PartyPostController {
 	//내가 작성한 모집글 리스트 조회
 	@GetMapping("/mylist")
 	public ResponseEntity<DataApiResponse<MyPartyPostListResponse>> findMyCreatedPartyList(
-		@AuthenticationPrincipal User user, @RequestParam int page) {
+		@AuthenticationPrincipal User user, @RequestParam(name = "page", defaultValue = "1") int page) {
 		return ResponseEntity.ok(partyPostService.findMyCreatedPartyList(user, page));
 	}
 
 	//내가 신청한 모집글 리스트 조회
 	@GetMapping("/my-join-list")
 	public ResponseEntity<DataApiResponse<MyPartyPostListResponse>> findMyJoinedPartyList(
-		@AuthenticationPrincipal User user, @RequestParam int page) {
+		@AuthenticationPrincipal User user, @RequestParam(name = "page", defaultValue = "1") int page) {
 		return ResponseEntity.ok(partyPostService.findMyJoinedPartyList(user, page));
 	}
 
 	//모집게시물 좋아요 (*좋아요 취소도 포함되는 기능임)
 	@PostMapping("/{party-postId}/likes")
-	public ItemApiResponse<String> toggleLikePartyPost(@PathVariable(name = "party-postId") Long partyPostId,
+	public ResponseEntity<ApiResponse> toggleLikePartyPost(@PathVariable(name = "party-postId") Long partyPostId,
 		@AuthenticationPrincipal User user) {
 		//좋아요 기능
-		return partyPostService.toggleLikePartyPost(partyPostId, user);
+		return ResponseEntity.ok(partyPostService.toggleLikePartyPost(partyPostId, user));
 	}
 
 	//모집글전체조회

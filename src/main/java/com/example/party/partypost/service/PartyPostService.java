@@ -246,19 +246,18 @@ public class PartyPostService implements IPartyPostService {
 	}
 
 	//모집게시물 좋아요 (*좋아요 취소도 포함되는 기능임)
-	public ItemApiResponse<String> toggleLikePartyPost(Long partyPostId, User user) {
+	public ApiResponse toggleLikePartyPost(Long partyPostId, User user) {
 		//모집글 찾기
 		PartyPost partyPost = partyPostRepository.findById(partyPostId).orElseThrow(
-			() -> new PartyPostNotFoundException()
+			PartyPostNotFoundException::new
 		);
-		String partyPostTitle = partyPost.getTitle(); //모집글 제목 입력
 		User userT = userRepository.save(user);
 		//좋아요 확인
 		if (!(userT.getLikePartyPosts().add(partyPost))) {
 			userT.getLikePartyPosts().remove(partyPost);
-			return new ItemApiResponse(200, "모집글 좋아요 취소 완료", partyPostTitle);
+			return ApiResponse.ok("모집글 좋아요 취소 완료");
 		} else {
-			return new ItemApiResponse(200, "모집글 좋아요 완료", partyPostTitle);
+			return ApiResponse.ok("모집글 좋아요 완료");
 		}
 	}
 
