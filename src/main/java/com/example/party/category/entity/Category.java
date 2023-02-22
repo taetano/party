@@ -11,7 +11,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.example.party.category.dto.CategoryRequest;
-import com.example.party.user.exception.global.common.TimeStamped;
+import com.example.party.global.common.TimeStamped;
 import com.example.party.partypost.entity.PartyPost;
 
 import lombok.AccessLevel;

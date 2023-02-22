@@ -2,7 +2,7 @@ package com.example.party.category.exception;
 
 import org.springframework.http.HttpStatus;
 
-import com.example.party.user.exception.global.exception.BaseException;
+import com.example.party.global.exception.BaseException;
 
 public class DuplicateNameNotAllowException extends BaseException {
 

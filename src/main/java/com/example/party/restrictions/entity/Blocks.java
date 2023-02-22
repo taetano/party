@@ -21,11 +21,6 @@ public class Blocks {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	// @Column(nullable = false)
-	// private Long blockerId;
-	// @Column(nullable = false)
-	// private Long blockedId;
-
 	@ManyToOne
 	@JoinColumn(name = "blocker_id", nullable = false)
 	private User blocker;
@@ -36,15 +31,6 @@ public class Blocks {
 	public Blocks(User blocker, User blocked) {
 		this.blocker = blocker;
 		this.blocked = blocked;
-	}
-
-	public void addBlocks(User blocker) {
-		// 양방향 연관 user block이랑 연결
-		blocker.addRelation(this);
-	}
-
-	public void removeBlocks(User blocker) {
-		blocker.removeRelation(this);
 	}
 }
 

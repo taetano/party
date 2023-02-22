@@ -1,4 +1,4 @@
-package com.example.party.user.exception.global.common;
+package com.example.party.global.common;
 
 import java.util.List;
 

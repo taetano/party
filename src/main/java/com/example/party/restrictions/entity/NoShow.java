@@ -40,6 +40,6 @@ public class NoShow {
 	}
 
 	public void PlusNoShowReportCnt() {
-		this.noShowReportCnt++;
+		this.noShowReportCnt+=1;
 	}
 }

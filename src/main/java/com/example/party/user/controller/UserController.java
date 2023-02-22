@@ -1,5 +1,7 @@
 package com.example.party.user.controller;
 
+import static com.example.party.global.util.JwtProvider.*;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -14,9 +16,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
-import com.example.party.user.exception.global.common.ApiResponse;
+import com.example.party.global.common.ApiResponse;
 import com.example.party.user.dto.LoginRequest;
 import com.example.party.user.dto.ProfileRequest;
 import com.example.party.user.dto.SignupRequest;
@@ -32,6 +36,7 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
 
 	private final UserService userService;
+
 
 	//회원가입
 	@PostMapping("/signup")
@@ -52,7 +57,7 @@ public class UserController {
 	//로그아웃
 	@PostMapping("/signout")
 	public ResponseEntity<ApiResponse> signOut(@AuthenticationPrincipal User userDetails,
-		HttpServletResponse response) {
+											   HttpServletResponse response) {
 		Cookie cookie = new Cookie("rfToken", null);
 		cookie.setMaxAge(0);
 		response.setHeader(AUTHORIZATION_HEADER, "");
@@ -64,23 +69,25 @@ public class UserController {
 	//회원탈퇴
 	@PostMapping("/withdraw")
 	public ResponseEntity<ApiResponse> withdraw(@RequestBody WithdrawRequest withdrawRequest,
-		@AuthenticationPrincipal User userDetails) {
+												@AuthenticationPrincipal User userDetails) {
 		return ResponseEntity.ok(userService.withdraw(userDetails, withdrawRequest));
 	}
 
 	//프로필 정보 수정
 	@PatchMapping("/profile")
 	public ResponseEntity<ApiResponse> updateProfile(
-		@Validated @RequestBody ProfileRequest profileRequest,
-		@AuthenticationPrincipal User user) {
+			@Validated @RequestBody ProfileRequest profileRequest,
+			@AuthenticationPrincipal User user) {
 		return ResponseEntity.ok(userService.updateProfile(profileRequest, user));
 	}
+
 	//내 프로필 조회
 	@GetMapping("/profile")
 	public ResponseEntity<ApiResponse> getMyProfile(@AuthenticationPrincipal
-	User user) {
+													User user) {
 		return ResponseEntity.ok(userService.getMyProfile(user));
 	}
+
 	//상대 유저 프로필 조회
 	@GetMapping("/profile/{userId}")
 	public ResponseEntity<ApiResponse> getOtherProfile(@PathVariable Long userId) {

@@ -18,9 +18,9 @@ import com.example.party.partypost.dto.PartyPostRequest;
 import com.example.party.partypost.dto.PartyPostResponse;
 import com.example.party.partypost.dto.UpdatePartyPostRequest;
 import com.example.party.partypost.service.PartyPostService;
-import com.example.party.user.exception.global.common.ApiResponse;
-import com.example.party.user.exception.global.common.DataApiResponse;
-import com.example.party.user.exception.global.common.ItemApiResponse;
+import com.example.party.global.common.ApiResponse;
+import com.example.party.global.common.DataApiResponse;
+import com.example.party.global.common.ItemApiResponse;
 import com.example.party.user.entity.User;
 
 import lombok.RequiredArgsConstructor;

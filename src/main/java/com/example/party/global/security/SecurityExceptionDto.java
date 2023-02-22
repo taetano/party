@@ -1,4 +1,4 @@
-package com.example.party.user.exception.global.security;
+package com.example.party.global.security;
 
 import lombok.Getter;
 

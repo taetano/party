@@ -1,8 +1,8 @@
 package com.example.party.application.service;
 
 import com.example.party.application.dto.ApplicationResponse;
-import com.example.party.user.exception.global.common.ApiResponse;
-import com.example.party.user.exception.global.common.DataApiResponse;
+import com.example.party.global.common.ApiResponse;
+import com.example.party.global.common.DataApiResponse;
 import com.example.party.user.entity.User;
 
 public interface IApplicationService {

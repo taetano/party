@@ -14,7 +14,7 @@ import com.example.party.user.repository.UserRepository;
 import com.example.party.user.service.UserService;
 
 @ExtendWith(MockitoExtension.class)
-class UserControllerTest {
+class UsersControllerTest {
 
 	@Mock
 	private UserRepository userRepository;

@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.party.application.dto.ApplicationResponse;
 import com.example.party.application.service.ApplicationService;
-import com.example.party.user.exception.global.common.ApiResponse;
-import com.example.party.user.exception.global.common.DataApiResponse;
+import com.example.party.global.common.ApiResponse;
+import com.example.party.global.common.DataApiResponse;
 import com.example.party.user.entity.User;
 
 import lombok.RequiredArgsConstructor;

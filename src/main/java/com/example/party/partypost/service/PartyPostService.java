@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.example.party.partypost.entity.Parties;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -21,14 +22,13 @@ import com.example.party.partypost.exception.IsNotWritterException;
 import com.example.party.partypost.exception.PartyPostNotDeletableException;
 import com.example.party.partypost.exception.PartyPostNotFoundException;
 import com.example.party.category.repository.CategoryRepository;
-import com.example.party.user.exception.global.common.ApiResponse;
-import com.example.party.user.exception.global.common.DataApiResponse;
-import com.example.party.user.exception.global.common.ItemApiResponse;
+import com.example.party.global.common.ApiResponse;
+import com.example.party.global.common.DataApiResponse;
+import com.example.party.global.common.ItemApiResponse;
 import com.example.party.partypost.dto.MyPartyPostListResponse;
 import com.example.party.partypost.dto.PartyPostRequest;
 import com.example.party.partypost.dto.PartyPostResponse;
 import com.example.party.partypost.dto.UpdatePartyPostRequest;
-import com.example.party.partypost.entity.Partys;
 import com.example.party.partypost.entity.PartyPost;
 import com.example.party.partypost.repository.PartyPostRepository;
 import com.example.party.user.entity.User;
@@ -51,7 +51,6 @@ public class PartyPostService implements IPartyPostService {
 	//모집글 작성
 	@Override
 	public ApiResponse createPartyPost(User user, PartyPostRequest request) { // 인자 달라질 수 있습니다
-
 		//예시: "2023-02-16 12:00"
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 		LocalDateTime partyDate = LocalDateTime.parse(request.getPartyDate(), formatter);
@@ -66,8 +65,8 @@ public class PartyPostService implements IPartyPostService {
 		//3. PartyPost 객체 생성
 		PartyPost partyPost = new PartyPost(user, request, partyDate, category);
 		//Party 객체 생성
-		Partys partys = new Partys(partyPost);
-		partys.addUsers(user);
+		Parties parties = new Parties(partyPost);
+		parties.addUsers(user);
 		//4. repository 에 저장
 		partyPostRepository.save(partyPost);
 		//5. return

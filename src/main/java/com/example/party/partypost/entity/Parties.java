@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity(name = "party")
-public class Partys {
+public class Parties {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,9 +29,10 @@ public class Partys {
 	@OneToMany
 	private List<User> users;
 
-	public Partys(PartyPost partyPost) {
+	public Parties(PartyPost partyPost) {
 		this.users = new ArrayList<>();
 		this.partyPost = partyPost;
+		
 	}
 
 	public List<User> getUsers() {

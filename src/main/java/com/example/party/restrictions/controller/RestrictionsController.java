@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.party.user.exception.global.common.ApiResponse;
-import com.example.party.user.exception.global.common.DataApiResponse;
+import com.example.party.global.common.ApiResponse;
+import com.example.party.global.common.DataApiResponse;
 import com.example.party.restrictions.dto.BlockResponse;
 import com.example.party.restrictions.dto.ReportPostRequest;
 import com.example.party.restrictions.dto.ReportUserRequest;
