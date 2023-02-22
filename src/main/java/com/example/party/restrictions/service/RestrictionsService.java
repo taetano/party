@@ -104,7 +104,7 @@ public class RestrictionsService {
 	}
 
 	//유저 신고
-	public ItemApiResponse<ReportUserResponse> reportUsers(User user, ReportUserRequest request) {
+	public ApiResponse reportUsers(User user, ReportUserRequest request) {
 		//신고할 유저
 		User reportUser = findByUser(request.getUserId());
 		if (reportUserRepository.existsByReporterIdAndReportedId(user.getId(), reportUser.getId())) {
@@ -112,21 +112,21 @@ public class RestrictionsService {
 		}
 		UserReport userReports = new UserReport(user, reportUser, request);
 		reportUserRepository.save(userReports);
-		return ItemApiResponse.ok("신고 완료", new ReportUserResponse(userReports));
+		return ApiResponse.ok("유저 신고 완료");
 	}
 
 	//모집글 신고
-	public ItemApiResponse<ReportPostResponse> reportPosts(User user, ReportPostRequest request) {
+	public ApiResponse reportPosts(User user, ReportPostRequest request) {
 		PartyPost post = partyPostRepository.findById(request.getPostId())
 			.orElseThrow(() -> new PartyPostNotFoundException());
 		Optional<PostReport> checkPostReport = reportPostRepository
 			.findByUserIdAndReportPostId(user.getId(), post.getId());
 		if (checkPostReport.isPresent()) {
-			throw new BadRequestException("이미 신고한 게시글입니다");
+			throw new BadRequestException("이미 신고한 모집글입니다");
 		}
 		PostReport postReports = new PostReport(user, request, post);
 		reportPostRepository.save(postReports);
-		return ItemApiResponse.ok("게시글 신고 완료", new ReportPostResponse(postReports));
+		return ApiResponse.ok("모집글 신고 완료");
 	}
 
 	//노쇼 신고
