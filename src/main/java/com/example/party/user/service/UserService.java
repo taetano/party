@@ -5,6 +5,7 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.example.party.global.common.ApiResponse;
@@ -30,6 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
+@Transactional
 @AllArgsConstructor
 public class UserService implements IUserService {
 
@@ -88,9 +90,12 @@ public class UserService implements IUserService {
 	//회원탈퇴
 	@Override
 	public ApiResponse withdraw(User userDetails, WithdrawRequest withdrawRequest) {
-		User user = findByUser(userDetails.getEmail());
+		User user = userRepository.findById(userDetails.getId()).orElseThrow(
+			UserNotFoundException::new
+		);
 		confirmPassword(withdrawRequest.getPassword(), user.getPassword());
 		user.DormantState();
+		System.out.println(user.getStatus());
 		return ApiResponse.ok("회원탈퇴 완료");
 	}
 
