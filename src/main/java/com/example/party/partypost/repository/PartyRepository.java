@@ -4,8 +4,8 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.example.party.partypost.entity.Party;
+import com.example.party.partypost.entity.Partys;
 
-public interface PartyRepository extends JpaRepository<Party, Long> {
-	Optional<Party> findByPartyPostId(Long partyPostId);
+public interface PartyRepository extends JpaRepository<Partys, Long> {
+	Optional<Partys> findByPartyPostId(Long partyPostId);
 }

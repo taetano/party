@@ -9,11 +9,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.example.party.global.common.ApiResponse;
-import com.example.party.global.common.DataApiResponse;
-import com.example.party.global.common.ItemApiResponse;
-import com.example.party.global.exception.BadRequestException;
-import com.example.party.partypost.entity.Party;
+import com.example.party.user.exception.global.common.ApiResponse;
+import com.example.party.user.exception.global.common.DataApiResponse;
+import com.example.party.user.exception.global.common.ItemApiResponse;
+import com.example.party.user.exception.global.exception.BadRequestException;
+import com.example.party.partypost.entity.Partys;
 import com.example.party.partypost.entity.PartyPost;
 import com.example.party.partypost.exception.PartyPostNotFoundException;
 import com.example.party.partypost.repository.PartyPostRepository;
@@ -21,8 +21,6 @@ import com.example.party.partypost.repository.PartyRepository;
 import com.example.party.partypost.type.Status;
 import com.example.party.restrictions.dto.BlockResponse;
 import com.example.party.restrictions.dto.ReportPostRequest;
-import com.example.party.restrictions.dto.ReportPostResponse;
-import com.example.party.restrictions.dto.ReportUserResponse;
 import com.example.party.restrictions.dto.ReportUserRequest;
 import com.example.party.restrictions.entity.Blocks;
 import com.example.party.restrictions.entity.NoShow;
@@ -125,23 +123,23 @@ public class RestrictionsService {
 		//신고할 유저
 		User user = findByUser(noShowUserId);
 		//로그인한 유저의 파티객체
-		Party party = partyRepository.findById(userDetails.getId())
+		Partys partys = partyRepository.findById(userDetails.getId())
 			.orElseThrow(UserNotFoundException::new);
-		if (!party.getPartyPost().getStatus().equals(Status.NO_SHOW_REPORTING)) {
+		if (!partys.getPartyPost().getStatus().equals(Status.NO_SHOW_REPORTING)) {
 			throw new BadRequestException("노쇼 신고 기간이 만료되었습니다");
 		}
-		List<User> users = party.getUsers();
+		List<User> users = partys.getUsers();
 		for (User userIf : users) {
 			if (!userIf.equals(user)) {
 				throw new BadRequestException("파티 구성원이 아닙니다");
 			}
 		}
 		if (noShowRepository.existsByReporterIdAndPostIdAndReportedId(userDetails.getId(),
-			party.getPartyPost().getId(), user.getId())) {
+			partys.getPartyPost().getId(), user.getId())) {
 			throw new BadRequestException("이미 신고한 유저입니다");
 		}
 
-		NoShow noShow = new NoShow(userDetails, party.getPartyPost(), user);
+		NoShow noShow = new NoShow(userDetails, partys.getPartyPost(), user);
 		noShow.PlusNoShowReportCnt();
 		noShowRepository.save(noShow);
 		return ApiResponse.ok("노쇼 신고 완료");
@@ -149,9 +147,9 @@ public class RestrictionsService {
 
 	//status.END 상태 파티글에 대한 노쇼 신고 처리
 	public ApiResponse checkingNoShow(PartyPost post) {
-		Party endParty = partyRepository.findByPartyPostId(post.getId())
+		Partys endPartys = partyRepository.findByPartyPostId(post.getId())
 			.orElseThrow(IllegalArgumentException::new);
-		List<User> users = endParty.getUsers();
+		List<User> users = endPartys.getUsers();
 		List<NoShow> noShowList = noShowRepository.findAllByPostId(post.getId());
 		for (NoShow noShowIf : noShowList) {
 			if (noShowIf.getNoShowReportCnt() >= Math.round(users.size() / 2)) {

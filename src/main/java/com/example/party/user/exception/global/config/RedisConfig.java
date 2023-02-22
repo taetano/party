@@ -1,4 +1,4 @@
-package com.example.party.global.config;
+package com.example.party.user.exception.global.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

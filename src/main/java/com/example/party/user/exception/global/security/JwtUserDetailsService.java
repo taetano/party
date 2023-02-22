@@ -1,4 +1,4 @@
-package com.example.party.global.security;
+package com.example.party.user.exception.global.security;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;

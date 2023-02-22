@@ -1,4 +1,4 @@
-package com.example.party.global.exception;
+package com.example.party.user.exception.global.exception;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.example.party.global.common.ErrorResponse;
+import com.example.party.user.exception.global.common.ErrorResponse;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {

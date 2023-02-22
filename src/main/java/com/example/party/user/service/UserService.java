@@ -7,10 +7,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.example.party.global.common.ApiResponse;
-import com.example.party.global.common.ItemApiResponse;
-import com.example.party.global.exception.LoginException;
-import com.example.party.global.util.JwtProvider;
+import com.example.party.user.exception.global.common.ApiResponse;
+import com.example.party.user.exception.global.common.ItemApiResponse;
+import com.example.party.user.exception.global.exception.LoginException;
+import com.example.party.user.exception.global.util.JwtProvider;
 import com.example.party.user.dto.LoginRequest;
 import com.example.party.user.dto.MyProfileResponse;
 import com.example.party.user.dto.OtherProfileResponse;

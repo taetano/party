@@ -18,10 +18,10 @@ import com.example.party.application.exception.ApplicationNotFoundException;
 import com.example.party.application.exception.ApplicationNotGeneraleException;
 import com.example.party.application.repository.ApplicationRepository;
 import com.example.party.application.type.ApplicationStatus;
-import com.example.party.global.common.ApiResponse;
-import com.example.party.global.common.DataApiResponse;
-import com.example.party.global.exception.ForbiddenException;
-import com.example.party.partypost.entity.Party;
+import com.example.party.user.exception.global.common.ApiResponse;
+import com.example.party.user.exception.global.common.DataApiResponse;
+import com.example.party.user.exception.global.exception.ForbiddenException;
+import com.example.party.partypost.entity.Partys;
 import com.example.party.partypost.entity.PartyPost;
 import com.example.party.partypost.exception.PartyPostNotFoundException;
 import com.example.party.partypost.repository.PartyPostRepository;
@@ -114,10 +114,10 @@ public class ApplicationService implements IApplicationService {
 		application.accept();
 
 		//Accept 된 유저만 넘어감
-		Party party = partyRepository.findById(application.getPartyPost().getId())
+		Partys partys = partyRepository.findById(application.getPartyPost().getId())
 			.orElseThrow(PartyPostNotFoundException::new);
-		party.addUsers(user);
-		partyRepository.save(party);
+		partys.addUsers(user);
+		partyRepository.save(partys);
 
 		return ApiResponse.ok("참가 신청 수락 완료");
 	}

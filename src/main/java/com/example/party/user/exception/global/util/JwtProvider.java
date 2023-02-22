@@ -1,4 +1,4 @@
-package com.example.party.global.util;
+package com.example.party.user.exception.global.util;
 
 import java.security.Key;
 import java.util.Date;

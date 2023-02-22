@@ -1,6 +1,6 @@
 package com.example.party.user.service;
 
-import com.example.party.global.common.ApiResponse;
+import com.example.party.user.exception.global.common.ApiResponse;
 import com.example.party.user.dto.LoginRequest;
 import com.example.party.user.dto.ProfileRequest;
 import com.example.party.user.dto.SignupRequest;

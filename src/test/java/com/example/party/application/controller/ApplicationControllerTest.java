@@ -23,8 +23,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import com.example.party.application.service.ApplicationService;
-import com.example.party.global.common.ApiResponse;
-import com.example.party.global.common.DataApiResponse;
+import com.example.party.user.exception.global.common.ApiResponse;
+import com.example.party.user.exception.global.common.DataApiResponse;
 import com.example.party.user.entity.User;
 
 @WebMvcTest(

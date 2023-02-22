@@ -12,8 +12,8 @@ import com.example.party.category.entity.Category;
 import com.example.party.category.exception.CategoryNotFoundException;
 import com.example.party.category.exception.DuplicateNameNotAllowException;
 import com.example.party.category.repository.CategoryRepository;
-import com.example.party.global.common.ApiResponse;
-import com.example.party.global.common.DataApiResponse;
+import com.example.party.user.exception.global.common.ApiResponse;
+import com.example.party.user.exception.global.common.DataApiResponse;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

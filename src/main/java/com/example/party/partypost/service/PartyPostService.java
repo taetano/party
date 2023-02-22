@@ -16,20 +16,20 @@ import com.example.party.application.repository.ApplicationRepository;
 import com.example.party.category.entity.Category;
 import com.example.party.category.exception.CategoryNotActiveException;
 import com.example.party.category.exception.CategoryNotFoundException;
-import com.example.party.category.repository.CategoryRepository;
-import com.example.party.global.common.ApiResponse;
-import com.example.party.global.common.DataApiResponse;
-import com.example.party.global.common.ItemApiResponse;
-import com.example.party.partypost.dto.MyPartyPostListResponse;
 import com.example.party.partypost.dto.PartyPostListResponse;
-import com.example.party.partypost.dto.PartyPostRequest;
-import com.example.party.partypost.dto.PartyPostResponse;
-import com.example.party.partypost.dto.UpdatePartyPostRequest;
-import com.example.party.partypost.entity.Party;
-import com.example.party.partypost.entity.PartyPost;
 import com.example.party.partypost.exception.IsNotWritterException;
 import com.example.party.partypost.exception.PartyPostNotDeletableException;
 import com.example.party.partypost.exception.PartyPostNotFoundException;
+import com.example.party.category.repository.CategoryRepository;
+import com.example.party.user.exception.global.common.ApiResponse;
+import com.example.party.user.exception.global.common.DataApiResponse;
+import com.example.party.user.exception.global.common.ItemApiResponse;
+import com.example.party.partypost.dto.MyPartyPostListResponse;
+import com.example.party.partypost.dto.PartyPostRequest;
+import com.example.party.partypost.dto.PartyPostResponse;
+import com.example.party.partypost.dto.UpdatePartyPostRequest;
+import com.example.party.partypost.entity.Partys;
+import com.example.party.partypost.entity.PartyPost;
 import com.example.party.partypost.repository.PartyPostRepository;
 import com.example.party.user.entity.User;
 import com.example.party.user.repository.UserRepository;
@@ -66,8 +66,8 @@ public class PartyPostService implements IPartyPostService {
 		//3. PartyPost 객체 생성
 		PartyPost partyPost = new PartyPost(user, request, partyDate, category);
 		//Party 객체 생성
-		Party party = new Party(partyPost);
-		party.addUsers(user);
+		Partys partys = new Partys(partyPost);
+		partys.addUsers(user);
 		//4. repository 에 저장
 		partyPostRepository.save(partyPost);
 		//5. return

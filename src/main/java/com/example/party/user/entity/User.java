@@ -25,7 +25,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.example.party.application.entity.Application;
-import com.example.party.global.common.TimeStamped;
+import com.example.party.user.exception.global.common.TimeStamped;
 import com.example.party.partypost.entity.PartyPost;
 import com.example.party.restrictions.entity.Blocks;
 import com.example.party.restrictions.entity.UserReport;

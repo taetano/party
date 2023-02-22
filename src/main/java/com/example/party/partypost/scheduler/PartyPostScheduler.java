@@ -35,6 +35,9 @@ public class PartyPostScheduler {
 	@Scheduled(cron = "0 * * * * ?") // (테스트용)1분 간격으로 실행 // 배포시 매시 정각 마다로 변경 필요
 	private void changeStatusNoShowToEnd() {
 		partyPostRepository.changeStatusNoShowToEnd(LocalDateTime.now().minusHours(1));
+
 	}
+
+
 
 }
