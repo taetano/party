@@ -37,6 +37,7 @@ public class ApplicationService implements IApplicationService {
 	private final ApplicationRepository applicationRepository;
 	private final PartyPostRepository partyPostRepository;
 	private final UserRepository userRepository;
+	private final PartyRepository partyRepository;
 
 	//모집글에 참가 신청
 	@Override
@@ -64,6 +65,7 @@ public class ApplicationService implements IApplicationService {
 		return ApiResponse.ok("참가 신청 완료");
 
 	}
+
 	//참가신청 취소
 	@Override
 	public ApiResponse cancelApplication(Long applicationId, User user) {
@@ -76,6 +78,7 @@ public class ApplicationService implements IApplicationService {
 
 		return ApiResponse.ok("참가 신청 취소 완료");
 	}
+
 	//모집글의 참가신청 목록 조회(파티장만 조회가능)
 	@Transactional(readOnly = true)
 	@Override
@@ -95,6 +98,7 @@ public class ApplicationService implements IApplicationService {
 
 		return DataApiResponse.ok("참가신청자 목록 조회 완료", ret.getContent());
 	}
+
 	//(파티장) 참가신청 수락
 	@Override
 	public ApiResponse acceptApplication(Long applicationId, User user) {
@@ -107,9 +111,15 @@ public class ApplicationService implements IApplicationService {
 		validateApplication(application);
 		application.accept();
 
+		//Accept 된 유저만 넘어감
+		Party party = partyRepository.findById(application.getPartyPost().getId())
+			.orElseThrow(PartyPostNotFoundException::new);
+		party.addUsers(user);
+		partyRepository.save(party);
 
 		return ApiResponse.ok("참가 신청 수락 완료");
 	}
+
 	//(파티장) 참가신청 거부
 	@Override
 	public ApiResponse rejectApplication(Long applicationId, User user) {
@@ -124,6 +134,7 @@ public class ApplicationService implements IApplicationService {
 
 		return ApiResponse.ok("참가 신청 거부 완료");
 	}
+
 	//단일 참가신청 객체 불러오기
 	@Transactional(readOnly = true)
 	public Application getApplication(Long applicationId) {
@@ -152,6 +163,7 @@ public class ApplicationService implements IApplicationService {
 			throw new ApplicationNotGeneraleException("이미 신청한 모집글입니다");
 		}
 	}
+
 	//참가신청이 PENDING(대기중) 상태인지 확인
 	private static void validateApplication(Application application) {
 		if (application.getStatus() != ApplicationStatus.PENDING) {

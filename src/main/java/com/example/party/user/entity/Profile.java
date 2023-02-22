@@ -31,16 +31,20 @@ public class Profile {
 		this.id = id;
 	}
 
-	public Profile(String img, String comment, int noShowCnt, int participationCnt) {
+	public Profile(String img, String comment, int participationCnt) {
 		this.img = img;
 		this.comment = comment;
-		this.noShowCnt = noShowCnt;
+		this.noShowCnt = 0;
 		this.participationCnt = participationCnt;
 	}
 
 	public void updateProfile(String img, String comment) {
 		this.img = img;
 		this.comment = comment;
+	}
+
+	public void plusNoShowCnt() {
+		this.noShowCnt += 1;
 	}
 
 	public void increaseParticipationCnt() {

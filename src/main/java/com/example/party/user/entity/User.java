@@ -1,10 +1,12 @@
 package com.example.party.user.entity;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -25,6 +27,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.example.party.application.entity.Application;
 import com.example.party.global.common.TimeStamped;
 import com.example.party.partypost.entity.PartyPost;
+import com.example.party.restrictions.entity.Blocks;
+import com.example.party.restrictions.entity.UserReport;
 import com.example.party.user.dto.ProfileRequest;
 import com.example.party.user.dto.SignupRequest;
 import com.example.party.user.type.Status;
@@ -74,8 +78,13 @@ public class User extends TimeStamped implements UserDetails {
 		joinColumns = @JoinColumn(name = "user_id"),
 		inverseJoinColumns = @JoinColumn(name = "post_id")
 	)
-
 	private Set<PartyPost> likePartyPosts;
+
+	@OneToMany(mappedBy = "reporter")
+	private List<UserReport> userReports;
+
+	@OneToMany(mappedBy = "blocker", cascade = CascadeType.ALL, orphanRemoval = true)
+	private final List<Blocks> blockedList = new ArrayList<>();
 
 	public String getProfileImg() {
 		return this.profile.getImg();
@@ -157,5 +166,18 @@ public class User extends TimeStamped implements UserDetails {
 	//작성한 참가신청 목록 추가
 	public void addApplication(Application application) {
 		this.applies.add(application);
+	}
+
+	public List<Blocks> getBlockedList() {
+		return blockedList;
+	}
+
+	//유저를 알려줌
+	public void addRelation(Blocks blocks) {
+		this.blockedList.add(blocks);
+	}
+
+	public void removeRelation(Blocks blocked) {
+		this.blockedList.remove(blocked);
 	}
 }

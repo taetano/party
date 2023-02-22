@@ -8,6 +8,7 @@ import com.example.party.user.entity.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 	Optional<User> findByEmail(String email);
+
 	Boolean existsUserByEmail(String email); //* 요거로 바꾸는게 어떨까요?
 
 	Boolean existsUserByNickname(String nickname);

@@ -1,7 +1,5 @@
 package com.example.party.user.service;
 
-import java.util.Optional;
-
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.HttpStatus;
@@ -44,19 +42,13 @@ public class UserService implements IUserService {
 	//회원가입
 	@Override
 	public ApiResponse signUp(SignupRequest signupRequest) {
-		if (userRepository.existsUserByNickname(signupRequest.getNickname())) {
-			throw new ExistNicknameException();
-		} // nickname 중복검사 추가
-
-		Optional<User> users = userRepository.findByEmail(signupRequest.getEmail());
-		if (users.isPresent()) {
+		if (userRepository.existsUserByEmail(signupRequest.getEmail())) {
 			throw new EmailOverlapException();
 		}
-		// 위 로직을 아래처럼 바꾸는게 어떨까요 위의 경우 Optional 로 받기 때문에 DB를 전체 다 훑지만,
-		// exists 함수의 경우 하나라도 있으면 검색을 멈춰서 더 효율적일 것 같습니다!
-		// if(userRepository.existsUserByEmail(signupRequest.getEmail())){
-		// 	throw new EmailOverlapException();
-		// }]
+
+		if (userRepository.existsUserByNickname(signupRequest.getNickname())) {
+			throw new ExistNicknameException();
+		}
 
 		String password = passwordEncoder.encode(signupRequest.getPassword());
 		Profile profile = new Profile();
@@ -122,7 +114,7 @@ public class UserService implements IUserService {
 	//상대방 프로필 조회
 	public ApiResponse getOtherProfile(Long id) {
 		User user = userRepository.findById(id)
-			.orElseThrow(() -> new UserNotFoundException()); //user 정보 조회
+			.orElseThrow(UserNotFoundException::new); //user 정보 조회
 		OtherProfileResponse otherProfileResponse = new OtherProfileResponse(user); // profile 내용 입력
 		return ItemApiResponse.ok("타 프로필 조회", otherProfileResponse); //결과값 반환
 	}
@@ -131,7 +123,7 @@ public class UserService implements IUserService {
 	//repository 에서 user 찾기
 	private User findByUser(String email) {
 		return userRepository.findByEmail(email)
-			.orElseThrow(LoginException::new);
+			.orElseThrow(UserNotFoundException::new);
 	}
 
 	//비밀번호 확인
