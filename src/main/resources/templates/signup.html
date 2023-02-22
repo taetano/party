@@ -3,6 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <title>Let's PARTY|Signup</title>
+
+    <script>
+        const form = document.querySelector('form');
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const formData = new FormData(form);
+            const response = await fetch('/api/signup', {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (response.ok) {
+                alert('회원가입이 완료되었습니다!');
+                location.href = '/login.html'; // 로그인 페이지로 이동
+            } else {
+                alert('회원가입에 실패했습니다. 다시 시도해주세요.');
+            }
+        });
+    </script>
+
     <style>
         body {
             margin: 0;
@@ -109,7 +130,8 @@
             <input type="text" id="nickname" name="nickname" placeholder="닉네임을 입력해주세요.">
 
             <label for="phone">전화번호:</label>
-            <input type="tel" id="phone" name="phone" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}" placeholder="예) 010-0000-0000">
+            <input type="tel" id="phone" name="phone" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}"
+                   placeholder="예) 010-0000-0000">
 
             <input type="submit" value="가입하기">
         </span>
@@ -119,7 +141,7 @@
 </div>
 <footer>
     <div class="bottomlogo">
-        <a href="http://localhost:63342/party/party.main/dist/index.html?_ijt=gpruglcfdtoseprjup3v4tavc9&_ij_reload=RELOAD_ON_SAVE">Let's PARTY</a>
+        <a href='index.html'>Let's PARTY</a>
     </div>
 </footer>
 </body>
