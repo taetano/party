@@ -10,7 +10,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.example.party.global.common.ApiResponse;
 import com.example.party.user.dto.LoginRequest;
@@ -35,6 +35,22 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
 
 	private final UserService userService;
+
+	//로그인페이지 연결
+	@GetMapping("/loginPage")
+	public ModelAndView loginPage() {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("login"); // signup.html 파일 이름
+		return modelAndView;
+	}
+
+	//로그인시 index page 로 이동
+	@GetMapping("/indexPage")
+	public ModelAndView indexPage() {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("index"); // signup.html 파일 이름
+		return modelAndView;
+	}
 
 	//회원가입
 	@PostMapping("/signup")
@@ -78,12 +94,14 @@ public class UserController {
 		@AuthenticationPrincipal User user) {
 		return ResponseEntity.ok(userService.updateProfile(profileRequest, user));
 	}
+
 	//내 프로필 조회
 	@GetMapping("/profile")
 	public ResponseEntity<ApiResponse> getMyProfile(@AuthenticationPrincipal
 	User user) {
 		return ResponseEntity.ok(userService.getMyProfile(user));
 	}
+
 	//상대 유저 프로필 조회
 	@GetMapping("/profile/{userId}")
 	public ResponseEntity<ApiResponse> getOtherProfile(@PathVariable Long userId) {
