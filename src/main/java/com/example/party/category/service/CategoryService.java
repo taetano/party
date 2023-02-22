@@ -45,7 +45,7 @@ public class CategoryService implements ICategoryService{
 	//카테고리 전체 조회
 	@Override
 	public DataApiResponse<CategoryResponse> getCategory() {
-		List<Category> categoryList = categoryRepository.findAll();
+		List<Category> categoryList = categoryRepository.findAllByActiveIsTrue();
 		List<CategoryResponse> allCategoryList = categoryList.stream().map(
 			category -> new CategoryResponse(category)).collect(Collectors.toList());
 		return DataApiResponse.ok("카테고리 조회 완료", allCategoryList);
