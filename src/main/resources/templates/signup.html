@@ -4,24 +4,47 @@
     <meta charset="UTF-8">
     <title>Let's PARTY|Signup</title>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>
-        const form = document.querySelector('form');
-        form.addEventListener('submit', async (event) => {
-            event.preventDefault();
+        $(() => {
+            //해당 버튼쪽에서 클릭행위를 했을때 signup기능을 시작
+            $("#signbtn").on("click", (ev) => signup(ev))
+        })
 
-            const formData = new FormData(form);
-            const response = await fetch('/api/signup', {
-                method: 'POST',
-                body: formData,
-            });
+        function signup(ev) {
+            // 회원가입 양식 데이터 가져오기
+            var formData = {
+                email: $("#email").val(),
+                password: $("#password").val(),
+                nickname: $("#nickname").val(),
+                phoneNum: $("#phone").val()
+            };
+            ev.preventDefault()
+            // Ajax 요청 보내기
+            $.ajax({
+                type: "POST",
+                contentType: "application/json",
+                url: "/api/users/signup",
+                data: JSON.stringify(formData),
+                success: function (response, status, xhr) {
+                    if (status === 'success') {
+                        alert('회원가입 완료')
+                        let host = window.location.host;
+                        let url = host + '/api/users/loginPage'; //이동하려는 페이지 주소
+                        document.cookie =
+                            'Authorization' + '=' + xhr.getResponseHeader('Authorization') + ';path=/';
+                        window.location.href = 'http://' + url;
+                    } else {
+                        alert('회원가입 실패')
+                    }
+                }
+            }).done((json) => {
+                console.log("singup_done");
+            }).fail(() => {
+                console.log("singup_fail");
+            })
+        }
 
-            if (response.ok) {
-                alert('회원가입이 완료되었습니다!');
-                location.href = '/login.html'; // 로그인 페이지로 이동
-            } else {
-                alert('회원가입에 실패했습니다. 다시 시도해주세요.');
-            }
-        });
     </script>
 
     <style>
@@ -133,7 +156,7 @@
             <input type="tel" id="phone" name="phone" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}"
                    placeholder="예) 010-0000-0000">
 
-            <input type="submit" value="가입하기">
+            <input type="submit" value="가입하기" id="signbtn">
         </span>
     </form>
     <p><a href="#">이미 가입한 계정이 있으신가요?</a></p>
