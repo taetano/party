@@ -16,10 +16,9 @@ import com.example.party.global.common.ApiResponse;
 import com.example.party.global.common.DataApiResponse;
 import com.example.party.global.common.ItemApiResponse;
 import com.example.party.partypost.dto.MyPartyPostListResponse;
-import com.example.party.partypost.dto.PartyPostListResponse;
 import com.example.party.partypost.dto.PartyPostRequest;
 import com.example.party.partypost.dto.PartyPostResponse;
-import com.example.party.partypost.dto.SearchPartyPostListResponse;
+import com.example.party.partypost.dto.PartyPostListResponse;
 import com.example.party.partypost.dto.UpdatePartyPostRequest;
 import com.example.party.partypost.service.PartyPostService;
 import com.example.party.user.entity.User;
@@ -35,7 +34,7 @@ public class PartyPostController {
 
 	//모집글 작성
 	@PostMapping("")
-	public ResponseEntity<ItemApiResponse<PartyPostResponse>> createPartyPost(
+	public ResponseEntity<ApiResponse> createPartyPost(
 		@RequestBody PartyPostRequest request, @AuthenticationPrincipal User user) {
 		System.out.println(request.getCategoryId());
 		return ResponseEntity.ok(partyPostService.createPartyPost(user, request));
@@ -43,7 +42,7 @@ public class PartyPostController {
 
 	//모집글 수정
 	@PatchMapping("/{party-postId}")
-	public ResponseEntity<ItemApiResponse<PartyPostResponse>> updatePartyPost(
+	public ResponseEntity<ApiResponse> updatePartyPost(
 		@PathVariable(name = "party-postId") Long partyPostId, @RequestBody UpdatePartyPostRequest request,
 		@AuthenticationPrincipal User user) {
 		return ResponseEntity.ok(partyPostService.updatePartyPost(partyPostId, request, user));
@@ -52,23 +51,23 @@ public class PartyPostController {
 	//내가 작성한 모집글 리스트 조회
 	@GetMapping("/mylist")
 	public ResponseEntity<DataApiResponse<MyPartyPostListResponse>> findMyCreatedPartyList(
-		@AuthenticationPrincipal User user, @RequestParam int page) {
+		@AuthenticationPrincipal User user, @RequestParam(name = "page", defaultValue = "1") int page) {
 		return ResponseEntity.ok(partyPostService.findMyCreatedPartyList(user, page));
 	}
 
 	//내가 신청한 모집글 리스트 조회
 	@GetMapping("/my-join-list")
 	public ResponseEntity<DataApiResponse<MyPartyPostListResponse>> findMyJoinedPartyList(
-		@AuthenticationPrincipal User user, @RequestParam int page) {
+		@AuthenticationPrincipal User user, @RequestParam(name = "page", defaultValue = "1") int page) {
 		return ResponseEntity.ok(partyPostService.findMyJoinedPartyList(user, page));
 	}
 
 	//모집게시물 좋아요 (*좋아요 취소도 포함되는 기능임)
 	@PostMapping("/{party-postId}/likes")
-	public ItemApiResponse<String> toggleLikePartyPost(@PathVariable(name = "party-postId") Long partyPostId,
+	public ResponseEntity<ApiResponse> toggleLikePartyPost(@PathVariable(name = "party-postId") Long partyPostId,
 		@AuthenticationPrincipal User user) {
 		//좋아요 기능
-		return partyPostService.toggleLikePartyPost(partyPostId, user);
+		return ResponseEntity.ok(partyPostService.toggleLikePartyPost(partyPostId, user));
 	}
 
 	//모집글전체조회
@@ -94,31 +93,31 @@ public class PartyPostController {
 		return ResponseEntity.ok(partyPostService.deletePartyPost(partyPostId, user));
 	}
 
-	// 모집글 검색
-	@GetMapping("/search/{postsearchText}")
-	public DataApiResponse<SearchPartyPostListResponse> searchPartyPost(
-		@PathVariable(name = "postsearchText") String SearchText,
+	// 모집글 검색 (지역명 & 제목)
+	@GetMapping("/search")
+	public DataApiResponse<PartyPostListResponse> searchPartyPost(
+		@RequestParam(name = "searchText") String SearchText,
 		@RequestParam(name = "page", defaultValue = "1") int page) {
 		return partyPostService.searchPartyPost(SearchText, page);
 	}
 
 	//조회수 많은 핫한 모집글 조회
 	@GetMapping("/hot")
-	public DataApiResponse<SearchPartyPostListResponse> findHotPartyPost() {
+	public DataApiResponse<PartyPostListResponse> findHotPartyPost() {
 		return partyPostService.findHotPartyPost();
 	}
 
 	//카테고리명 별로 모집글 조회
 	@GetMapping("/categories/{categoryId}")
 	public ResponseEntity<DataApiResponse<PartyPostListResponse>> searchPartyPostByCategory(
-		@PathVariable Long categoryId, @RequestParam int page) {
+		@PathVariable Long categoryId, @RequestParam(name = "page", defaultValue = "1") int page) {
 		return ResponseEntity.ok(partyPostService.searchPartyPostByCategory(categoryId, page));
 	}
 
-	//유저의 읍면동을 검색해서 가까운 모집글 검색
-	@GetMapping("/near/{Address}")
-	public DataApiResponse<SearchPartyPostListResponse> findNearPartyPost(
-		@PathVariable(name = "Address") String Address) {
+	//가까운 모집글 조회
+	@GetMapping("/near")
+	public DataApiResponse<PartyPostListResponse> findNearPartyPost(
+		@RequestBody String Address) {
 		return partyPostService.findNearPartyPost(Address);
 	}
 }

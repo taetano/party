@@ -67,7 +67,7 @@ public class UserController {
 	}
 
 	//회원탈퇴
-	@DeleteMapping("/withdraw")
+	@PostMapping("/withdraw")
 	public ResponseEntity<ApiResponse> withdraw(@RequestBody WithdrawRequest withdrawRequest,
 		@AuthenticationPrincipal User userDetails) {
 		ApiResponse apiResponse = userService.withdraw(userDetails, withdrawRequest);
@@ -82,13 +82,13 @@ public class UserController {
 		@AuthenticationPrincipal User user) {
 		return ResponseEntity.ok(userService.updateProfile(profileRequest, user));
 	}
-
+	//내 프로필 조회
 	@GetMapping("/profile")
 	public ResponseEntity<ApiResponse> getMyProfile(@AuthenticationPrincipal
 	User user) {
 		return ResponseEntity.ok(userService.getMyProfile(user));
 	}
-
+	//상대 유저 프로필 조회
 	@GetMapping("/profile/{userId}")
 	public ResponseEntity<ApiResponse> getOtherProfile(@PathVariable Long userId) {
 		return ResponseEntity.ok(userService.getOtherProfile(userId));

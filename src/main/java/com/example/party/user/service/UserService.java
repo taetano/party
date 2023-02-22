@@ -90,7 +90,7 @@ public class UserService implements IUserService {
 	public ApiResponse signOut(User user) {
 		// 이후 security 에 url 보안 설정 필요합니다.
 		redisTemplate.opsForValue().getOperations().delete(RT_TOKEN + user.getId());
-		return ApiResponse.ok("회원 탈퇴 완료");
+		return ApiResponse.ok("로그아웃 완료");
 	}
 
 	//회원탈퇴
@@ -110,8 +110,7 @@ public class UserService implements IUserService {
 		user.updateProfile(profileRequest); //user 정보 수정
 		profileRepository.save(profile);
 		userRepository.save(user); //변경한 user 저장
-		MyProfileResponse myProfileResponse = new MyProfileResponse(user); // profile 내용 입력
-		return ItemApiResponse.ok("프로필 정보 수정 완료", myProfileResponse); //결과값 반환
+		return ApiResponse.ok("프로필 정보 수정 완료"); //결과값 반환
 	}
 
 	//내 프로필 조회
