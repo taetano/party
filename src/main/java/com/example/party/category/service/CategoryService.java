@@ -24,13 +24,13 @@ import lombok.extern.slf4j.Slf4j;
 @Transactional
 @RequiredArgsConstructor
 
-public class CategoryService implements ICategoryService{
+public class CategoryService implements ICategoryService {
 
 	private final CategoryRepository categoryRepository;
 
 	//카테고리 생성
 	@Override
-	public ItemApiResponse<CategoryResponse> createCategory(CategoryRequest request) {
+	public ApiResponse createCategory(CategoryRequest request) {
 		Category category = new Category(request);
 
 		if (categoryRepository.existsCategoryByName(category.getName())) {
@@ -38,8 +38,7 @@ public class CategoryService implements ICategoryService{
 		}
 
 		categoryRepository.save(category);
-		CategoryResponse categoryResponse = new CategoryResponse(category);
-		return new ItemApiResponse<>(201, "카테고리 생성 완료", categoryResponse);
+		return ApiResponse.create("카테고리 생성 완료");
 	}
 
 	//카테고리 전체 조회
