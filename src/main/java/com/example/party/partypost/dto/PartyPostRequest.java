@@ -1,7 +1,5 @@
 package com.example.party.partypost.dto;
 
-import com.example.party.category.entity.Category;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

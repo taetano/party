@@ -7,7 +7,6 @@ import java.util.Locale;
 import java.util.stream.Collectors;
 
 import com.example.party.application.dto.ApplicationResponse;
-import com.example.party.category.entity.Category;
 import com.example.party.partypost.entity.PartyPost;
 import com.example.party.partypost.type.Status;
 
