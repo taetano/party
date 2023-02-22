@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.party.global.common.ApiResponse;
@@ -28,6 +27,7 @@ import com.example.party.restrictions.entity.Blocks;
 import com.example.party.restrictions.entity.NoShow;
 import com.example.party.restrictions.entity.PostReport;
 import com.example.party.restrictions.entity.UserReport;
+import com.example.party.restrictions.exception.CheckedBlocksException;
 import com.example.party.restrictions.repository.BlockRepository;
 import com.example.party.restrictions.repository.NoShowRepository;
 import com.example.party.restrictions.repository.ReportPostRepository;
@@ -55,22 +55,15 @@ public class RestrictionsService {
 	//차단등록
 	public ItemApiResponse<BlockResponse> blockUser(Long userId, User user) {
 		User blocked = findByUser(userId);
-		List<Blocks> blocker = blockRepository.findAllByBlockerId(user.getId());
-		// User 와 Blocks 를 연관관계 했고 서로 알게끔 설정했는데 User user.getBLockedList() 하면 정보를 못가져옴 왜 ?
-		// List<Blocks> blockedList = blocker.get(0).getBlocker().getBlockedList();
-		for (Blocks blockIf : blocker) {
-			if (Objects.equals(blockIf.getBlocked().getId(), (blocked.getId()))) {
-				throw new IllegalArgumentException("이미 신고한 유저입니다");
+		List<Blocks> blocks = blockRepository.findAllByBlockerId(user.getId());
+		if (blocks.size() > 0) {
+			for (Blocks blockIf : blocks) {
+				if (Objects.equals(blockIf.getBlocked().getId(), (blocked.getId()))) {
+					throw new CheckedBlocksException("이미 신고한 유저입니다");
+				}
 			}
 		}
-		// List<Blocks> blocks = blockRepository.findAllByBlockerId(user.getId());
-		// for (Blocks block : blocks) {
-		// 	if (Objects.equals(block.getBlockedId(), blocked.getId())) {
-		// 		throw new IllegalArgumentException("이미 신고한 유저입니다");
-		// 	}
-		// }
 		Blocks block = new Blocks(user, blocked);
-		block.addBlocks(blocked);
 		blockRepository.save(block);
 		return ItemApiResponse.ok("차단등록 완료", new BlockResponse(block));
 	}
@@ -78,28 +71,23 @@ public class RestrictionsService {
 	//차단해제
 	public ApiResponse unBlockUser(Long userId, User user) {
 		User blocked = findByUser(userId);
-		for (Blocks blockIf : user.getBlockedList()) {
-			if (Objects.equals(blockIf.getBlocked().getId(), (blocked.getId()))) {
-				throw new IllegalArgumentException("이미 신고한 유저입니다");
+		List<Blocks> blocks = blockRepository.findAllByBlockerId(user.getId());
+		if (!blocks.isEmpty()) {
+			for (Blocks block : blocks) {
+				if (Objects.equals(block.getBlocked().getId(), (blocked.getId()))) {
+					blockRepository.delete(block);
+					return ApiResponse.ok("차단해제 완료");
+				}
 			}
+		} else {
+			throw new BadRequestException("차단한 유저가 아닙니다");
 		}
-		// List<Blocks> blocks = blockRepository.findAllByBlockerId(user.getId());
-		// for (Blocks block : blocks) {
-		// 	if (!Objects.equals(block.getBlockedId(), blocked.getId())) {
-		// 		throw new IllegalArgumentException("신고 목록에 유저가 없습니다");
-		// 	}
-		// 	blockRepository.delete(block);
-		// }
-		Blocks blocker = blockRepository.findByBlockerId(user.getId())
-			.orElseThrow(UserNotFoundException::new);
-		blocker.removeBlocks(blocked);
-		blockRepository.delete(blocker);
 		return ApiResponse.ok("차단해제 완료");
 	}
 
 	//차단목록 조회
 	public DataApiResponse<BlockResponse> getBlockedList(int page, User user) {
-		Pageable pageable = PageRequest.of(page, 10, Sort.by("createdAt").descending());
+		Pageable pageable = PageRequest.of(page, 10);
 		List<Blocks> blocks = blockRepository.findAllByBlockerId(user.getId(), pageable);
 		List<BlockResponse> blockResponse = blocks.stream().map(BlockResponse::new).collect(Collectors.toList());
 		return DataApiResponse.ok("조회 성공", blockResponse);

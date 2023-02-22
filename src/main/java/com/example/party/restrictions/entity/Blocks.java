@@ -38,13 +38,13 @@ public class Blocks {
 		this.blocked = blocked;
 	}
 
-	public void addBlocks(User blocked) {
+	public void addBlocks(User blocker) {
 		// 양방향 연관 user block이랑 연결
-		blocked.addRelation(this);
+		blocker.addRelation(this);
 	}
 
-	public void removeBlocks(User blocked) {
-		blocked.removeRelation(this);
+	public void removeBlocks(User blocker) {
+		blocker.removeRelation(this);
 	}
 }
 

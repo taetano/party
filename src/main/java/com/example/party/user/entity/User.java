@@ -84,7 +84,7 @@ public class User extends TimeStamped implements UserDetails {
 	private List<UserReport> userReports;
 
 	@OneToMany(mappedBy = "blocker", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Blocks> blockedList = new ArrayList<>();
+	private final List<Blocks> blockedList = new ArrayList<>();
 
 	public String getProfileImg() {
 		return this.profile.getImg();
@@ -173,12 +173,11 @@ public class User extends TimeStamped implements UserDetails {
 	}
 
 	//유저를 알려줌
-	public void addRelation(Blocks blocked) {
-		this.blockedList.add(blocked);
+	public void addRelation(Blocks blocks) {
+		this.blockedList.add(blocks);
 	}
 
 	public void removeRelation(Blocks blocked) {
 		this.blockedList.remove(blocked);
 	}
-
 }
