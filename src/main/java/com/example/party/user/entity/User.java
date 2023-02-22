@@ -1,5 +1,6 @@
 package com.example.party.user.entity;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -83,7 +84,7 @@ public class User extends TimeStamped implements UserDetails {
 	private List<UserReport> userReports;
 
 	@OneToMany(mappedBy = "blocker", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<Blocks> blockedList;
+	private List<Blocks> blockedList = new ArrayList<>();
 
 	public String getProfileImg() {
 		return this.profile.getImg();

@@ -29,24 +29,24 @@ public class RestrictionsController {
 	private final RestrictionsService restrictionsService;
 
 	//차단등록
-	@PostMapping("/block/{userId}")
+	@PostMapping("/blocks/{userId}")
 	public ResponseEntity<ApiResponse> blockUser(@PathVariable Long userId,
 		@AuthenticationPrincipal User user) {
 		return ResponseEntity.ok(restrictionsService.blockUser(userId, user));
 	}
 
 	//차단해제
-	@DeleteMapping("/block/{userId}")
+	@DeleteMapping("/blocks/{userId}")
 	public ResponseEntity<ApiResponse> unBlockUser(@PathVariable Long userId,
 		@AuthenticationPrincipal User user) {
 		return ResponseEntity.ok(restrictionsService.unBlockUser(userId, user));
 	}
 
 	//차단목록 조회
-	@GetMapping("/block")
-	public ResponseEntity<DataApiResponse<BlockResponse>> getBLockedUsers(@RequestParam int page,
+	@GetMapping("/blocks")
+	public ResponseEntity<DataApiResponse<BlockResponse>> getBLockedList(@RequestParam int page,
 		@AuthenticationPrincipal User user) {
-		return ResponseEntity.ok(restrictionsService.blocks(page - 1, user));
+		return ResponseEntity.ok(restrictionsService.getBlockedList(page - 1, user));
 	}
 
 	//유저 신고

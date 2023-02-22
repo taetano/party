@@ -56,7 +56,10 @@ public class RestrictionsService {
 	//차단등록
 	public ItemApiResponse<BlockResponse> blockUser(Long userId, User user) {
 		User blocked = findByUser(userId);
-		for (Blocks blockIf : user.getBlockedList()) {
+		List<Blocks> blocker = blockRepository.findAllByBlockerId(user.getId());
+		// User 와 Blocks 를 연관관계 했고 서로 알게끔 설정했는데 User user.getBLockedList() 하면 정보를 못가져옴 왜 ?
+		// List<Blocks> blockedList = blocker.get(0).getBlocker().getBlockedList();
+		for (Blocks blockIf : blocker) {
 			if (Objects.equals(blockIf.getBlocked().getId(), (blocked.getId()))) {
 				throw new IllegalArgumentException("이미 신고한 유저입니다");
 			}
@@ -96,7 +99,7 @@ public class RestrictionsService {
 	}
 
 	//차단목록 조회
-	public DataApiResponse<BlockResponse> blocks(int page, User user) {
+	public DataApiResponse<BlockResponse> getBlockedList(int page, User user) {
 		Pageable pageable = PageRequest.of(page, 10, Sort.by("createdAt").descending());
 		List<Blocks> blocks = blockRepository.findAllByBlockerId(user.getId(), pageable);
 		List<BlockResponse> blockResponse = blocks.stream().map(BlockResponse::new).collect(Collectors.toList());
