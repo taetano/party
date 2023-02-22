@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -23,12 +24,14 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.example.party.application.entity.Application;
+import com.example.party.chat.entity.MsgRoom;
 import com.example.party.global.common.TimeStamped;
 import com.example.party.partypost.entity.PartyPost;
 import com.example.party.user.dto.ProfileRequest;
 import com.example.party.user.dto.SignupRequest;
 import com.example.party.user.type.Status;
 import com.example.party.user.type.UserRole;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -62,13 +65,20 @@ public class User extends TimeStamped implements UserDetails {
 	private Status status;
 
 	// 연관관계
-	@OneToOne(optional = false)
+	@OneToOne(optional = false, cascade = CascadeType.ALL)
 	@JoinColumn(name = "profile_id", unique = true, referencedColumnName = "id")
 	private Profile profile;
+	@JsonIgnore
 	@OneToMany(mappedBy = "user")
 	private List<Application> applies;
+
+	@JsonIgnore
 	@OneToMany(mappedBy = "user")
 	private List<PartyPost> partyPosts;
+
+	@JsonIgnore
+	@OneToMany(mappedBy = "user")
+	private List<MsgRoom> msgRooms;
 	@ManyToMany
 	@JoinTable(name = "likes",
 		joinColumns = @JoinColumn(name = "user_id"),

@@ -149,9 +149,10 @@ public class PartyPost extends TimeStamped {
 
 	public void increaseAcceptedCnt() {
 		byte curMember = (byte)(this.acceptedMember + 1);
-		if (curMember == this.maxMember) {
+		if ((curMember + 1) == this.maxMember) {
 			this.status = Status.FOUND;
 		}
+		this.acceptedMember = curMember;
 	}
 
 	// (applications 의 인원+1)과 maxMember 가 일치하는 경우, status 를 FOUND 로 변경

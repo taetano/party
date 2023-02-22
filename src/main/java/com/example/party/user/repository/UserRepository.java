@@ -11,4 +11,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	Boolean existsUserByEmail(String email); //* 요거로 바꾸는게 어떨까요?
 
 	Boolean existsUserByNickname(String nickname);
+
+	Optional<User> findByNickname(String yourName);
 }
