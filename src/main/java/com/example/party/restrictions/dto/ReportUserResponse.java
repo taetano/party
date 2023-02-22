@@ -6,14 +6,14 @@ import com.example.party.restrictions.type.ReportReason;
 import lombok.Getter;
 
 @Getter
-public class ReportResponse {
+public class ReportUserResponse {
 	private final String userEmail;
 	private final ReportReason reason;
-	private final String details;
+	private final String detailReason;
 
-	public ReportResponse(UserReport userReport) {
+	public ReportUserResponse(UserReport userReport) {
 		this.userEmail = userReport.getReported().getEmail();
 		this.reason = userReport.getReason();
-		this.details = userReport.getDetails();
+		this.detailReason = userReport.getDetailReason();
 	}
 }

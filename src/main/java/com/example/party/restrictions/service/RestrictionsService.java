@@ -16,13 +16,14 @@ import com.example.party.global.common.ItemApiResponse;
 import com.example.party.global.exception.BadRequestException;
 import com.example.party.partypost.entity.Party;
 import com.example.party.partypost.entity.PartyPost;
+import com.example.party.partypost.exception.PartyPostNotFoundException;
 import com.example.party.partypost.repository.PartyPostRepository;
 import com.example.party.partypost.repository.PartyRepository;
 import com.example.party.partypost.type.Status;
 import com.example.party.restrictions.dto.BlockResponse;
 import com.example.party.restrictions.dto.ReportPostRequest;
 import com.example.party.restrictions.dto.ReportPostResponse;
-import com.example.party.restrictions.dto.ReportResponse;
+import com.example.party.restrictions.dto.ReportUserResponse;
 import com.example.party.restrictions.dto.ReportUserRequest;
 import com.example.party.restrictions.entity.Blocks;
 import com.example.party.restrictions.entity.NoShow;
@@ -103,7 +104,7 @@ public class RestrictionsService {
 	}
 
 	//유저 신고
-	public ItemApiResponse<ReportResponse> reportUsers(User user, ReportUserRequest request) {
+	public ItemApiResponse<ReportUserResponse> reportUsers(User user, ReportUserRequest request) {
 		//신고할 유저
 		User reportUser = findByUser(request.getUserId());
 		if (reportUserRepository.existsByReporterIdAndReportedId(user.getId(), reportUser.getId())) {
@@ -111,21 +112,21 @@ public class RestrictionsService {
 		}
 		UserReport userReports = new UserReport(user, reportUser, request);
 		reportUserRepository.save(userReports);
-		return ItemApiResponse.ok("신고 완료", new ReportResponse(userReports));
+		return ItemApiResponse.ok("신고 완료", new ReportUserResponse(userReports));
 	}
 
-	//게시글 신고
+	//모집글 신고
 	public ItemApiResponse<ReportPostResponse> reportPosts(User user, ReportPostRequest request) {
 		PartyPost post = partyPostRepository.findById(request.getPostId())
-			.orElseThrow(() -> new IllegalArgumentException("없는 파티 모집글 입니다"));
+			.orElseThrow(() -> new PartyPostNotFoundException());
 		Optional<PostReport> checkPostReport = reportPostRepository
 			.findByUserIdAndReportPostId(user.getId(), post.getId());
 		if (checkPostReport.isPresent()) {
 			throw new BadRequestException("이미 신고한 게시글입니다");
 		}
-		PostReport postReport = new PostReport(user, request, post);
-		reportPostRepository.save(postReport);
-		return ItemApiResponse.ok("게시글 신고 완료", new ReportPostResponse(postReport));
+		PostReport postReports = new PostReport(user, request, post);
+		reportPostRepository.save(postReports);
+		return ItemApiResponse.ok("게시글 신고 완료", new ReportPostResponse(postReports));
 	}
 
 	//노쇼 신고

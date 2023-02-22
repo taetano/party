@@ -56,9 +56,9 @@ public class RestrictionsController {
 		return ResponseEntity.ok(restrictionsService.reportUsers(user, request));
 	}
 
-	//게시글 신고
+	//모집글 신고
 	@PostMapping("/report/party-posts")
-	public ResponseEntity<ApiResponse> postsReport(@RequestBody ReportPostRequest request,
+	public ResponseEntity<ApiResponse> reportPosts(@RequestBody ReportPostRequest request,
 		@AuthenticationPrincipal User user) {
 		return ResponseEntity.ok(restrictionsService.reportPosts(user, request));
 	}

@@ -31,7 +31,7 @@ public class UserReport {
 	private ReportReason reason;
 
 	@Column(nullable = false)
-	private String details;
+	private String detailReason;
 
 	@ManyToOne
 	@JoinColumn(nullable = false)
@@ -44,6 +44,6 @@ public class UserReport {
 		this.reporter = reporter;
 		this.reported = reported;
 		this.reason = request.getReason();
-		this.details = request.getDetails();
+		this.detailReason = request.getDetailReason();
 	}
 }

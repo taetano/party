@@ -9,11 +9,11 @@ import lombok.Getter;
 public class ReportPostResponse {
 	private final String postTitle;
 	private final ReportReason response;
-	private final String details;
+	private final String detailReason;
 
 	public ReportPostResponse(PostReport postReport) {
 		this.postTitle = postReport.getReportPost().getTitle();
 		this.response = postReport.getReason();
-		this.details = postReport.getDetails();
+		this.detailReason = postReport.getDetailReason();
 	}
 }
