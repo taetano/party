@@ -18,6 +18,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.example.party.application.entity.Application;
+import com.example.party.application.type.ApplicationStatus;
 import com.example.party.category.entity.Category;
 import com.example.party.global.common.TimeStamped;
 import com.example.party.partypost.dto.PartyPostRequest;
@@ -51,12 +52,12 @@ public class PartyPost extends TimeStamped {
 	private String address; // 주소 (ex. 서울 마포구 연남동)
 	@Column(name = "detail_address", nullable = false)
 	private String detailAddress; // 동이하 상세주소 (ex. 567-34)
-	@Column(name ="partyPlace", nullable = false)
+	@Column(name = "partyPlace", nullable = false)
 	private String partyPlace; // 모임장소 (ex.파델라)
 
 	@Column(name = "is_active", nullable = false)
 	private boolean active; // 삭제 여부 (false = 삭제)
-	@Column(name ="accepted_cnt", nullable=false)
+	@Column(name = "accepted_cnt", nullable = false)
 	private byte acceptedMember; //수락된 인원(ACCEPT 시 올라감. 파티장 미포함)
 
 	// enum
@@ -135,7 +136,6 @@ public class PartyPost extends TimeStamped {
 	// 들어온 참가신청을 applications 에 추가
 	public void addApplication(Application application) {
 		this.applications.add(application);
-		checkMemberIsFull();
 	}
 
 	// 이미 참가신청한 유저인지 확인
@@ -154,31 +154,34 @@ public class PartyPost extends TimeStamped {
 
 	public void increaseAcceptedCnt() {
 		byte curMember = (byte)(this.acceptedMember + 1);
-		if (curMember == this.maxMember) {
+		if (curMember + 1 == this.maxMember) {
 			this.status = Status.FOUND;
+			isFullParty();
 		}
+		this.acceptedMember = curMember;
 	}
 	//private 메소드
-	// (applications 의 인원+1)과 maxMember 가 일치하는 경우, status 를 FOUND 로 변경
-	private void checkMemberIsFull() {
-		int acceptedMembers = this.applications.size();
-		if (this.maxMember == acceptedMembers + 1) {
-			this.status = Status.FOUND;
-		}
-	}
 
 	//request 에서 받아온 주소에서 address(~동 까지) 추출
-	private String extractAddress(String partyAddress){
+	private String extractAddress(String partyAddress) {
 		int index = partyAddress.indexOf("동 ");
 
-		return partyAddress.substring(0, index +1);
+		return partyAddress.substring(0, index + 1);
 	}
 
 	//request 에서 받아온 주소에서 detailAddress(상세주소) 추출
-	private String extractDetailAddress(String partyAddress){
+	private String extractDetailAddress(String partyAddress) {
 		int index = partyAddress.indexOf("동 ");
 
-		return partyAddress.substring(index+2,partyAddress.length());
+		return partyAddress.substring(index + 2, partyAddress.length());
+	}
+
+	//모집글이 FOUND가 된 경우 아직 PENDING 상태인 모집글을 모두 REJECT로 전환
+	private void isFullParty() {
+		this.applications.stream()
+			.filter(application -> application.getStatus().equals(ApplicationStatus.PENDING))
+			.forEach(
+				Application::reject);
 	}
 }
 // TODO: API 1차 작업완료 후

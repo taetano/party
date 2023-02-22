@@ -25,6 +25,7 @@ import com.example.party.partypost.dto.PartyPostListResponse;
 import com.example.party.partypost.dto.PartyPostRequest;
 import com.example.party.partypost.dto.PartyPostResponse;
 import com.example.party.partypost.dto.UpdatePartyPostRequest;
+import com.example.party.partypost.entity.Party;
 import com.example.party.partypost.entity.PartyPost;
 import com.example.party.partypost.exception.IsNotWritterException;
 import com.example.party.partypost.exception.PartyPostNotDeletableException;
@@ -64,6 +65,9 @@ public class PartyPostService implements IPartyPostService {
 		}
 		//3. PartyPost 객체 생성
 		PartyPost partyPost = new PartyPost(user, request, partyDate, category);
+		//Party 객체 생성
+		Party party = new Party(partyPost);
+		party.addUsers(user);
 		//4. repository 에 저장
 		partyPostRepository.save(partyPost);
 		//5. return
@@ -88,7 +92,7 @@ public class PartyPostService implements IPartyPostService {
 	@Transactional
 	public ItemApiResponse<PartyPostResponse> getPartyPost(Long partyPostId, User user) {
 		//1. partyPostId의 partyPost 를 가져오기
-		PartyPost partyPost = partyPostRepository.findById(partyPostId)
+		PartyPost partyPost = partyPostRepository.findByIdAndActiveIsTrue(partyPostId)
 			.orElseThrow(PartyPostNotFoundException::new);
 
 		//2. 조회자!=작성자 인경우 조회한 partyPost 의 조회수 올려주기

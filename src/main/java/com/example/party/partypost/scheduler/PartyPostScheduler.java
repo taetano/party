@@ -21,23 +21,20 @@ public class PartyPostScheduler {
 
 	// FOUND -> NO_SHOW_REPORTING (모임시작시간이 되면 변경)
 	@Scheduled(cron = "0 * * * * ?") //(테스트용)1분 간격으로 실행 // 배포시 매시 정각마다로 변경 필요
-	private void changeStatusFoundToNoShow(){
+	private void changeStatusFoundToNoShow() {
 		partyPostRepository.changeStatusFoundToNoShow();
 	}
 
 	// FINDING -> END (모집마감시간이 됐는데도 아직 FINDING 상태일 때)
 	@Scheduled(cron = "0 * * * * ?") //(테스트용)1분 간격으로 실행 // 배포시 매시 45분 마다로 변경 필요
-	private void changeStatusFindingToEnd(){
+	private void changeStatusFindingToEnd() {
 		partyPostRepository.changeStatusFindingToEnd();
 	}
 
-
-
 	// NO_SHOW_REPORTING -> END (모임시간 후 1시간 지나면 변경)
 	@Scheduled(cron = "0 * * * * ?") // (테스트용)1분 간격으로 실행 // 배포시 매시 정각 마다로 변경 필요
-	private void changeStatusNoShowToEnd(){
+	private void changeStatusNoShowToEnd() {
 		partyPostRepository.changeStatusNoShowToEnd(LocalDateTime.now().minusHours(1));
 	}
-
 
 }

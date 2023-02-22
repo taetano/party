@@ -17,7 +17,7 @@ public class PartyApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(PartyApplication.class, args);
 	}
-	//카테고리 더미데이터 넣기
+
 	@Bean
 	public CommandLineRunner dummyData(CategoryRepository categoryRepository) {
 		return (args -> {
@@ -38,4 +38,5 @@ public class PartyApplication {
 
 		});
 	}
+
 }

@@ -10,7 +10,7 @@ import com.example.party.category.entity.Category;
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
 	//카테고리 조회
-	List<Category> findAll();
+	List<Category> findAllByActiveIsTrue();
 
 	Optional<Category> findById(Long Id);
 

@@ -36,7 +36,6 @@ public class PartyPostController {
 	@PostMapping("")
 	public ResponseEntity<ApiResponse> createPartyPost(
 		@RequestBody PartyPostRequest request, @AuthenticationPrincipal User user) {
-		System.out.println(request.getCategoryId());
 		return ResponseEntity.ok(partyPostService.createPartyPost(user, request));
 	}
 
@@ -73,8 +72,7 @@ public class PartyPostController {
 	//모집글전체조회
 	@GetMapping()
 	public ResponseEntity<DataApiResponse<PartyPostListResponse>> findPartyList(
-		@RequestParam int page
-	) {
+		@RequestParam int page) {
 		return ResponseEntity.ok(partyPostService.findPartyList(page - 1));
 	}
 
