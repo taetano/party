@@ -51,7 +51,7 @@ public class RestrictionsController {
 
 	//유저 신고
 	@PostMapping("/report/users")
-	public ResponseEntity<ApiResponse> usersReport(@RequestBody ReportUserRequest request,
+	public ResponseEntity<ApiResponse> reportUsers(@RequestBody ReportUserRequest request,
 		@AuthenticationPrincipal User user) {
 		return ResponseEntity.ok(restrictionsService.reportUsers(user, request));
 	}

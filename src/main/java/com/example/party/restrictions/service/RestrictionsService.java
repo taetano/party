@@ -103,15 +103,15 @@ public class RestrictionsService {
 	}
 
 	//유저 신고
-	public ItemApiResponse<ReportResponse> reportUsers(User userDetails, ReportUserRequest request) {
+	public ItemApiResponse<ReportResponse> reportUsers(User user, ReportUserRequest request) {
 		//신고할 유저
-		User reported = findByUser(request.getUserId());
-		if (reportUserRepository.existsByReporterIdAndReportedId(userDetails.getId(), reported.getId())) {
+		User reportUser = findByUser(request.getUserId());
+		if (reportUserRepository.existsByReporterIdAndReportedId(user.getId(), reportUser.getId())) {
 			throw new BadRequestException("이미 신고한 유저입니다");
 		}
-		UserReport userReportUser = new UserReport(userDetails, reported, request);
-		reportUserRepository.save(userReportUser);
-		return ItemApiResponse.ok("신고 완료", new ReportResponse(userReportUser));
+		UserReport userReports = new UserReport(user, reportUser, request);
+		reportUserRepository.save(userReports);
+		return ItemApiResponse.ok("신고 완료", new ReportResponse(userReports));
 	}
 
 	//게시글 신고

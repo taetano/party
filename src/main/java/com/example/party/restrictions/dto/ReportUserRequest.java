@@ -8,5 +8,5 @@ import lombok.Getter;
 public class ReportUserRequest {
 	private Long userId;
 	private ReportReason reason;
-	private String details;
+	private String detailReason;
 }
