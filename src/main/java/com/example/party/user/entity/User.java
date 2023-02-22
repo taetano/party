@@ -1,11 +1,11 @@
 package com.example.party.user.entity;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -26,7 +26,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.example.party.application.entity.Application;
 import com.example.party.global.common.TimeStamped;
 import com.example.party.partypost.entity.PartyPost;
-import com.example.party.restrictions.entity.Block;
+import com.example.party.restrictions.entity.Blocks;
 import com.example.party.restrictions.entity.UserReport;
 import com.example.party.user.dto.ProfileRequest;
 import com.example.party.user.dto.SignupRequest;
@@ -61,7 +61,7 @@ public class User extends TimeStamped implements UserDetails {
 	@Column(name = "role", nullable = false, length = 12)
 	private UserRole role;
 	@Enumerated(EnumType.STRING)
-	@Column(name = "status", nullable = false, columnDefinition = "ENUM('ACTIVE', 'SUSPENDED')")
+	@Column(name = "status", nullable = false, columnDefinition = "ENUM('ACTIVE', 'SUSPENDED', 'DORMANT')")
 	private Status status;
 
 	// 연관관계
@@ -80,10 +80,10 @@ public class User extends TimeStamped implements UserDetails {
 	private Set<PartyPost> likePartyPosts;
 
 	@OneToMany(mappedBy = "reporter")
-	private List<UserReport> userReports = new ArrayList<>();
+	private List<UserReport> userReports;
 
-	@OneToMany(mappedBy = "blocker")
-	private List<Block> blocks = new ArrayList<>();
+	@OneToMany(mappedBy = "blocker", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Blocks> blockedList;
 
 	public String getProfileImg() {
 		return this.profile.getImg();
@@ -167,27 +167,17 @@ public class User extends TimeStamped implements UserDetails {
 		this.applies.add(application);
 	}
 
-	public void addBlocks(Block block) {
-		this.blocks.add(block);
+	public List<Blocks> getBlockedList() {
+		return blockedList;
 	}
 
-	public void removeBlocks(Block block) {
-		this.blocks.remove(block);
+	//유저를 알려줌
+	public void addRelation(Blocks blocked) {
+		this.blockedList.add(blocked);
 	}
 
-	public List<Block> getBlocks() {
-		return blocks;
+	public void removeRelation(Blocks blocked) {
+		this.blockedList.remove(blocked);
 	}
 
-	public void addReports(UserReport userReport) {
-		this.userReports.add(userReport);
-	}
-
-	public void removeBlocks(UserReport userReport) {
-		this.userReports.remove(userReport);
-	}
-
-	public List<UserReport> getUserReports() {
-		return userReports;
-	}
 }

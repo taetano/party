@@ -25,6 +25,7 @@ import com.example.party.global.common.TimeStamped;
 import com.example.party.partypost.dto.PartyPostRequest;
 import com.example.party.partypost.dto.UpdatePartyPostRequest;
 import com.example.party.partypost.type.Status;
+import com.example.party.restrictions.entity.PostReport;
 import com.example.party.user.entity.User;
 
 import lombok.AccessLevel;
@@ -80,6 +81,8 @@ public class PartyPost extends TimeStamped {
 	private Category category;
 	@OneToOne(cascade = CascadeType.PERSIST)
 	private Party party;
+	@OneToMany(mappedBy = "reportPost")
+	private List<PostReport> postReports;
 
 	//생성자
 	public PartyPost(User user, PartyPostRequest request, LocalDateTime partyDate, Category category) {

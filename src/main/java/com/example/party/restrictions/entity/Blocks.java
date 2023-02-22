@@ -15,27 +15,37 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Entity
-public class Block {
+public class Blocks {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	// @Column(nullable = false)
+	// private Long blockerId;
+	// @Column(nullable = false)
+	// private Long blockedId;
+
 	@ManyToOne
 	@JoinColumn(name = "blocker_id", nullable = false)
 	private User blocker;
-
 	@ManyToOne
 	@JoinColumn(name = "blocked_id", nullable = false)
 	private User blocked;
 
-	public Block(User blocker, User blocked) {
+	public Blocks(User blocker, User blocked) {
 		this.blocker = blocker;
 		this.blocked = blocked;
 	}
 
-	public User getBlocked() {
-		return blocked;
+	public void addBlocks(User blocked) {
+		// 양방향 연관 user block이랑 연결
+		blocked.addRelation(this);
 	}
+
+	public void removeBlocks(User blocked) {
+		blocked.removeRelation(this);
+	}
+
 }
 

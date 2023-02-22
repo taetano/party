@@ -111,7 +111,7 @@ public class ApplicationService implements IApplicationService {
 		application.accept();
 
 		//Accept 된 유저만 넘어감
-		Party party = partyRepository.findById(application.getId())
+		Party party = partyRepository.findById(application.getPartyPost().getId())
 			.orElseThrow(PartyPostNotFoundException::new);
 		party.addUsers(user);
 		partyRepository.save(party);

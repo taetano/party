@@ -1,6 +1,7 @@
 package com.example.party.restrictions.service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -23,7 +24,7 @@ import com.example.party.restrictions.dto.ReportPostRequest;
 import com.example.party.restrictions.dto.ReportPostResponse;
 import com.example.party.restrictions.dto.ReportResponse;
 import com.example.party.restrictions.dto.ReportUserRequest;
-import com.example.party.restrictions.entity.Block;
+import com.example.party.restrictions.entity.Blocks;
 import com.example.party.restrictions.entity.NoShow;
 import com.example.party.restrictions.entity.PostReport;
 import com.example.party.restrictions.entity.UserReport;
@@ -54,10 +55,19 @@ public class RestrictionsService {
 	//차단등록
 	public ItemApiResponse<BlockResponse> blockUser(Long userId, User user) {
 		User blocked = findByUser(userId);
-		if (blockRepository.existsBlockerAndBlocked(user, blocked)) {
-			throw new BadRequestException("이미 신고한 유저입니다");
+		for (Blocks blockIf : user.getBlockedList()) {
+			if (Objects.equals(blockIf.getBlocked().getId(), (blocked.getId()))) {
+				throw new IllegalArgumentException("이미 신고한 유저입니다");
+			}
 		}
-		Block block = new Block(user, blocked);
+		// List<Blocks> blocks = blockRepository.findAllByBlockerId(user.getId());
+		// for (Blocks block : blocks) {
+		// 	if (Objects.equals(block.getBlockedId(), blocked.getId())) {
+		// 		throw new IllegalArgumentException("이미 신고한 유저입니다");
+		// 	}
+		// }
+		Blocks block = new Blocks(user, blocked);
+		block.addBlocks(blocked);
 		blockRepository.save(block);
 		return ItemApiResponse.ok("차단등록 완료", new BlockResponse(block));
 	}
@@ -65,16 +75,29 @@ public class RestrictionsService {
 	//차단해제
 	public ApiResponse unBlockUser(Long userId, User user) {
 		User blocked = findByUser(userId);
-		Block block = blockRepository.findByBlockerAndBlocked(user, blocked)
-			.orElseThrow(() -> new BadRequestException("차단 목록에 없는 유저입니다"));
-		blockRepository.delete(block);
+		for (Blocks blockIf : user.getBlockedList()) {
+			if (Objects.equals(blockIf.getBlocked().getId(), (blocked.getId()))) {
+				throw new IllegalArgumentException("이미 신고한 유저입니다");
+			}
+		}
+		// List<Blocks> blocks = blockRepository.findAllByBlockerId(user.getId());
+		// for (Blocks block : blocks) {
+		// 	if (!Objects.equals(block.getBlockedId(), blocked.getId())) {
+		// 		throw new IllegalArgumentException("신고 목록에 유저가 없습니다");
+		// 	}
+		// 	blockRepository.delete(block);
+		// }
+		Blocks blocker = blockRepository.findByBlockerId(user.getId())
+			.orElseThrow(UserNotFoundException::new);
+		blocker.removeBlocks(blocked);
+		blockRepository.delete(blocker);
 		return ApiResponse.ok("차단해제 완료");
 	}
 
 	//차단목록 조회
 	public DataApiResponse<BlockResponse> blocks(int page, User user) {
 		Pageable pageable = PageRequest.of(page, 10, Sort.by("createdAt").descending());
-		List<Block> blocks = blockRepository.findByBlocker(user, pageable);
+		List<Blocks> blocks = blockRepository.findAllByBlockerId(user.getId(), pageable);
 		List<BlockResponse> blockResponse = blocks.stream().map(BlockResponse::new).collect(Collectors.toList());
 		return DataApiResponse.ok("조회 성공", blockResponse);
 	}
@@ -83,7 +106,7 @@ public class RestrictionsService {
 	public ItemApiResponse<ReportResponse> reportUsers(User userDetails, ReportUserRequest request) {
 		//신고할 유저
 		User reported = findByUser(request.getUserId());
-		if (reportUserRepository.existsReporterAndReported(userDetails, reported)) {
+		if (reportUserRepository.existsByReporterIdAndReportedId(userDetails.getId(), reported.getId())) {
 			throw new BadRequestException("이미 신고한 유저입니다");
 		}
 		UserReport userReportUser = new UserReport(userDetails, reported, request);
@@ -94,7 +117,7 @@ public class RestrictionsService {
 	//게시글 신고
 	public ItemApiResponse<ReportPostResponse> reportPosts(User user, ReportPostRequest request) {
 		PartyPost post = partyPostRepository.findById(request.getPostId())
-			.orElseThrow(() -> new IllegalArgumentException(""));
+			.orElseThrow(() -> new IllegalArgumentException("없는 파티 모집글 입니다"));
 		Optional<PostReport> checkPostReport = reportPostRepository
 			.findByUserIdAndReportPostId(user.getId(), post.getId());
 		if (checkPostReport.isPresent()) {
@@ -121,7 +144,7 @@ public class RestrictionsService {
 				throw new BadRequestException("파티 구성원이 아닙니다");
 			}
 		}
-		if (noShowRepository.existsReporterIdAndPostIdAndReportedId(userDetails.getId(),
+		if (noShowRepository.existsByReporterIdAndPostIdAndReportedId(userDetails.getId(),
 			party.getPartyPost().getId(), user.getId())) {
 			throw new BadRequestException("이미 신고한 유저입니다");
 		}
@@ -131,9 +154,24 @@ public class RestrictionsService {
 		return ApiResponse.ok("노쇼 신고 완료");
 	}
 
+	//status.END 상태 파티글에 대한 노쇼 신고 처리
+	public ApiResponse checkingNoShow(PartyPost post) {
+		Party endParty = partyRepository.findByPartyPostId(post.getId())
+			.orElseThrow(IllegalArgumentException::new);
+		List<User> users = endParty.getUsers();
+		List<NoShow> noShowList = noShowRepository.findAllByPostId(post.getId());
+		for (NoShow noShowIf : noShowList) {
+			if (noShowIf.getNoShowReportCnt() >= Math.round(users.size() / 2)) {
+				noShowIf.getReported().getProfile().plusNoShowCnt();
+			}
+		}
+		return ApiResponse.ok("노쇼 처리 완료");
+	}
+
 	//private
 	private User findByUser(Long userId) {
 		return userRepository.findById(userId)
 			.orElseThrow(UserNotFoundException::new);
 	}
 }
+

@@ -33,7 +33,8 @@ import com.example.party.partypost.exception.IsNotWritterException;
 import com.example.party.partypost.exception.PartyPostNotDeletableException;
 import com.example.party.partypost.exception.PartyPostNotFoundException;
 import com.example.party.partypost.repository.PartyPostRepository;
-import com.example.party.restrictions.entity.Block;
+import com.example.party.restrictions.entity.Blocks;
+import com.example.party.restrictions.repository.BlockRepository;
 import com.example.party.user.entity.User;
 import com.example.party.user.repository.UserRepository;
 
@@ -45,6 +46,7 @@ import lombok.extern.slf4j.Slf4j;
 @Transactional
 @RequiredArgsConstructor
 public class PartyPostService implements IPartyPostService {
+	private final BlockRepository blockRepository;
 
 	private final PartyPostRepository partyPostRepository;
 	private final UserRepository userRepository;
@@ -83,14 +85,17 @@ public class PartyPostService implements IPartyPostService {
 	@Transactional
 	public DataApiResponse<PartyPostListResponse> findPartyList(int page, User user) {
 		// 로그인한 유저 블랙리스트
-		List<Block> blockList = user.getBlocks();
+		List<Blocks> blockList = user.getBlockedList();
+
+		// List<Blocks> blocks = blockRepository.findAllByBlockerId(user.getId());
+
 		// 1.모집글 전체 불러오기 (페이지 추가)
 		Pageable pageable = PageRequest.of(page, 10, Sort.by("createdAt").descending());
 		//2. Page<partyPost> 를 Page<PartyPostListResponse> 로 변경
 		Page<PartyPost> postPage = partyPostRepository.findAllByActiveIsTrue(pageable);
 		// postPage filter 적용
 		List<PartyPostListResponse> filteredPosts = postPage.stream()
-			.filter(post -> !blockList.contains(post.getUser().getEmail()))
+			.filter(post -> !blockList.contains(post.getUser()))
 			.map(PartyPostListResponse::new)
 			.collect(Collectors.toList());
 		// 3.ListResponseDto 생성 후 리턴
@@ -136,9 +141,8 @@ public class PartyPostService implements IPartyPostService {
 	public DataApiResponse<PartyPostListResponse> searchPartyPostByCategory(Long categoryId, int page) {
 		Pageable pageable = PageRequest.of(page - 1, 20);
 
-		Category category = categoryRepository.findById(categoryId).orElseThrow(
-			() -> new CategoryNotFoundException()
-		);
+		Category category = categoryRepository.findById(categoryId)
+			.orElseThrow(CategoryNotFoundException::new);
 
 		if (!category.isActive()) {
 			throw new CategoryNotActiveException();

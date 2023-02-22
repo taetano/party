@@ -1,14 +1,14 @@
 package com.example.party.restrictions.dto;
 
-import com.example.party.restrictions.entity.Block;
+import com.example.party.restrictions.entity.Blocks;
 
 import lombok.Getter;
 
 @Getter
 public class BlockResponse {
-	private final String userEmail;
+	private final String blockEmail;
 
-	public BlockResponse(Block block) {
-		this.userEmail = block.getBlocked().getEmail();
+	public BlockResponse(Blocks blocks) {
+		this.blockEmail = blocks.getBlocked().getEmail();
 	}
 }
