@@ -36,17 +36,24 @@ public class UserController {
 
 	private final UserService userService;
 
-	//로그인페이지 연결
-	@GetMapping("/loginPage")
-	public ModelAndView loginPage() {
+	//회원가입페이지 호출
+	@RequestMapping("/signup")
+	public ModelAndView showSignUpPage() {
 		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("login"); // signup.html 파일 이름
+		modelAndView.setViewName("signup"); // signup.html 파일 이름
+		return modelAndView;
+	}
+	//로그인 페이지 호출
+	@RequestMapping("/loginPage")
+	public ModelAndView showLoginPage() {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("login"); // login.html 파일 이름
 		return modelAndView;
 	}
 
-	//로그인시 index page 로 이동
+	//index 페이지 호출
 	@GetMapping("/indexPage")
-	public ModelAndView indexPage() {
+	public ModelAndView showIndexPage() {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("index"); // signup.html 파일 이름
 		return modelAndView;
@@ -94,14 +101,12 @@ public class UserController {
 		@AuthenticationPrincipal User user) {
 		return ResponseEntity.ok(userService.updateProfile(profileRequest, user));
 	}
-
 	//내 프로필 조회
 	@GetMapping("/profile")
 	public ResponseEntity<ApiResponse> getMyProfile(@AuthenticationPrincipal
 	User user) {
 		return ResponseEntity.ok(userService.getMyProfile(user));
 	}
-
 	//상대 유저 프로필 조회
 	@GetMapping("/profile/{userId}")
 	public ResponseEntity<ApiResponse> getOtherProfile(@PathVariable Long userId) {

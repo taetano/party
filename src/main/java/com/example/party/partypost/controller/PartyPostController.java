@@ -16,9 +16,9 @@ import com.example.party.global.common.ApiResponse;
 import com.example.party.global.common.DataApiResponse;
 import com.example.party.global.common.ItemApiResponse;
 import com.example.party.partypost.dto.MyPartyPostListResponse;
+import com.example.party.partypost.dto.PartyPostListResponse;
 import com.example.party.partypost.dto.PartyPostRequest;
 import com.example.party.partypost.dto.PartyPostResponse;
-import com.example.party.partypost.dto.PartyPostListResponse;
 import com.example.party.partypost.dto.UpdatePartyPostRequest;
 import com.example.party.partypost.service.PartyPostService;
 import com.example.party.user.entity.User;
@@ -94,9 +94,9 @@ public class PartyPostController {
 	// 모집글 검색 (지역명 & 제목)
 	@GetMapping("/search")
 	public DataApiResponse<PartyPostListResponse> searchPartyPost(
-		@RequestParam(name = "searchText") String SearchText,
+		@RequestParam(name = "searchText") String searchText,
 		@RequestParam(name = "page", defaultValue = "1") int page) {
-		return partyPostService.searchPartyPost(SearchText, page);
+		return partyPostService.searchPartyPost(searchText, page);
 	}
 
 	//조회수 많은 핫한 모집글 조회
