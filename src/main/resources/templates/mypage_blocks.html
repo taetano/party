@@ -31,40 +31,19 @@
           rel="stylesheet"/>
     <!-- Core theme CSS (includes Bootstrap)-->
     <link href="../static/css/styles.css" rel="stylesheet"/>
-    <title>내가 신청한 모집글</title>
+    <title>차단유저관리</title>
     <style>
         body {
-            margin: 0;
-            padding: 0;
             /*background-color: #F7B718;*/
         }
 
-        .mypage-top {
-            width: 100%;
-            width: 940px;
+        .mypagewrap {
             align-items: center;
-            text-align: center;
-            border: 4px solid #F7B718;
-
-            margin: 10px 20px 10px 20px;
-            border-radius: 15px;
-        }
-
-        .mypage-title {
-            width: 100%;
-            width: 940px;
-            align-items: center;
-            text-align: center;
-            border: 4px solid #F7B718;
-
-            margin: 10px 20px 10px 20px;
-            border-radius: 15px;
+            align-content: center;
         }
 
         .mypageMain {
-            align-content: center;
             display: flex;
-            width: 100%;
         }
 
         .mypageLeftMenu {
@@ -101,33 +80,23 @@
             float: left;
             margin: 10px 20px 10px 20px;
             width: 700px;
+            height: 700px;
             border: 4px solid #F7B718;
             border-radius: 15px;
         }
 
-        .mypartypost {
-            margin: 20px 10px 10px 10px;
-            padding: 10px 10px 10px 10px;
-            padding-bottom: 10px;
-            text-align: center;
-            align-content: center;
-            height: 60px;
+        .blocks-user {
+            margin: 20px 20px 20px 20px;
+            text-align: left;
             border: 1px solid black;
-            border-radius: 10px;
+
         }
 
-
-        .mypartypost:hover {
-            background: #F7B718;
+        .blocks-user input {
+            padding-top: 0px;
+            height: 25px;
         }
 
-        .mypageEdit mypartypost button {
-            align-items: center;
-        }
-
-        .mypartypost button {
-            border-radius: 10px;
-        }
     </style>
 </head>
 <body>
@@ -162,10 +131,11 @@
     <div class="masthead-content">
         <div class="container px-5">
             <h1 class="masthead-heading mb-0">Let's PARTY!</h1>
-            <h2 class="masthead-subheading mb-0">마이이페이지 - 신청한 모집글</h2>
+            <h2 class="masthead-subheading mb-0">마이이페이지 - 차단 유저 관리</h2>
         </div>
     </div>
 </header>
+
 <div class="container">
 
     <div class="mypageMain">
@@ -180,22 +150,30 @@
         </data>
 
         <div class="mypageEdit">
-            <div class="mypartypost-list">
-                <div id="mypartypost1" class="mypartypost">
-                    글 제목 : 글 제목1 / 마감일자 : 마감일자 / 위치 : 위치 / 신청 상태 : 대기
-                    <button class="btn btn-dark rounded-pill">신청 취소</button>
+            <div class="blocks-list">
+                <div class="blocks-user">
+                    <img src="../static/css/image/person.png" width=40 height=40>
+                    유저이름 : 유저이름
+                    <input type="submit" id="blocks-remove1" class="btn btn-dark rounded-pill" value="차단 제거">
+
+                    <button class="btn btn-warning rounded-pill" onclick="window.location.href= 'login.html'">유저정보
+                    </button>
                 </div>
-                <div id="mypartypost2" class="mypartypost">
-                    글 제목 : 글 제목2 / 마감일자 : 마감일자 / 위치 : 위치 / 신청 상태 : 대기
-                    <button class="btn btn-dark rounded-pill">신청 취소</button>
+                <div class="blocks-user">
+                    <img src="../static/css/image/person.png" width=40 height=40>
+                    유저이름 : 유저이름
+                    <input type="submit" id="blocks-remove2" class="btn btn-dark rounded-pill" value="차단 제거">
+
+                    <button class="btn btn-warning rounded-pill" onclick="window.location.href= 'login.html'">유저정보
+                    </button>
                 </div>
-                <div id="mypartypost4" class="mypartypost">
-                    글 제목 : 글 제목3 / 마감일자 : 마감일자 / 위치 : 위치 / 신청 상태 : 대기
-                    <button class="btn btn-dark rounded-pill">신청 취소</button>
-                </div>
-                <div id="mypartypost3" class="mypartypost">
-                    글 제목 : 글 제목4 / 마감일자 : 마감일자 / 위치 : 위치 / 신청 상태 : 대기
-                    <button class="btn btn-dark rounded-pill">신청 취소</button>
+                <div class="blocks-user">
+                    <img src="../static/css/image/person.png" width=40 height=40>
+                    유저이름 : 유저이름
+                    <input type="submit" id="blocks-remove3" class="btn btn-dark rounded-pill" value="차단 제거">
+
+                    <button class="btn btn-warning rounded-pill" onclick="window.location.href= 'login.html'">유저정보
+                    </button>
                 </div>
             </div>
         </div>
