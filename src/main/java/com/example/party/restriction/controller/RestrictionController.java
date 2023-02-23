@@ -17,6 +17,7 @@ import com.example.party.global.common.DataApiResponse;
 import com.example.party.restriction.dto.BlockResponse;
 import com.example.party.restriction.dto.ReportPostRequest;
 import com.example.party.restriction.dto.ReportUserRequest;
+import com.example.party.restriction.dto.ReportUserResponse;
 import com.example.party.restriction.service.RestrictionService;
 import com.example.party.user.entity.User;
 
@@ -55,6 +56,12 @@ public class RestrictionController {
 	public ResponseEntity<ApiResponse> createReportUser(@RequestBody ReportUserRequest request,
 		@AuthenticationPrincipal User user) {
 		return ResponseEntity.ok(restrictionService.createReportUser(user, request));
+	}
+
+	//유저 신고 로그 조회
+	@GetMapping("/report/users")
+	public ResponseEntity<DataApiResponse<ReportUserResponse>> findReportUserList(@RequestParam int page) {
+		return ResponseEntity.ok(restrictionService.findReportUserList(page - 1));
 	}
 
 	//모집글 신고

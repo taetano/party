@@ -6,10 +6,13 @@ import java.util.stream.Collectors;
 
 import com.example.party.partypost.entity.Parties;
 import com.example.party.restriction.dto.NoShowRequest;
+
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.example.party.restriction.dto.ReportUserResponse;
 import com.example.party.user.entity.User;
 import com.example.party.global.common.ApiResponse;
 import com.example.party.global.common.DataApiResponse;
@@ -110,6 +113,14 @@ public class RestrictionService {
 		ReportUser reportUser = new ReportUser(user, reported, request);
 		reportUserRepository.save(reportUser);
 		return ApiResponse.ok("유저 신고 완료");
+	}
+
+	//유저 신고 로그 조회
+	public DataApiResponse<ReportUserResponse> findReportUserList(int page) {
+		Pageable pageable = PageRequest.of(page, 6, Sort.by("createdAt").descending());
+		List<ReportUserResponse> reportUserResponseList = reportUserRepository.findAllByOrderById(pageable).stream()
+			.map(ReportUserResponse::new).collect(Collectors.toList());
+		return DataApiResponse.ok("유저 신고 로그 조회 완료", reportUserResponseList);
 	}
 
 	//모집글 신고
