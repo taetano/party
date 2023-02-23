@@ -76,21 +76,6 @@ public class User extends TimeStamped implements UserDetails {
 	)
 	private Set<PartyPost> likePartyPosts;
 
-//	@OneToMany(mappedBy = "reporter")
-//	private List<NoShow> noShowReportPostUsers;
-//	@OneToMany(mappedBy = "reporter")
-//	private List<NoShow> noShowReportUsers;
-//	@OneToMany(mappedBy = "reporter")
-//	private List<ReportPost> reportPostUsers;
-//	@OneToMany(mappedBy = "reporter")
-//	private List<ReportUser> reportUsers;
-//	@OneToMany(mappedBy = "reported")
-//	private List<ReportUser> reportedUsers;
-//	@OneToMany(mappedBy = "blocker")
-//	private List<Blocks> blockerList;
-//	@OneToMany(mappedBy = "blocked")
-//	private List<Blocks> blockedList;
-
 	public String getProfileImg() {
 		return this.profiles.getImg();
 	}
