@@ -17,7 +17,7 @@ import com.example.party.global.common.DataApiResponse;
 import com.example.party.restriction.dto.BlockResponse;
 import com.example.party.restriction.dto.ReportPostRequest;
 import com.example.party.restriction.dto.ReportUserRequest;
-import com.example.party.restriction.service.RestrictionsService;
+import com.example.party.restriction.service.RestrictionService;
 import com.example.party.user.entity.User;
 
 import lombok.RequiredArgsConstructor;
@@ -25,49 +25,49 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/restrictions")
-public class RestrictionsController {
+public class RestrictionController {
 
-	private final RestrictionsService restrictionsService;
+	private final RestrictionService restrictionService;
 
 	//차단등록
 	@PostMapping("/blocks/{userId}")
 	public ResponseEntity<ApiResponse> blockUser(@PathVariable Long userId,
 		@AuthenticationPrincipal User user) {
-		return ResponseEntity.ok(restrictionsService.blockUser(user, userId));
+		return ResponseEntity.ok(restrictionService.blockUser(user, userId));
 	}
 
 	//차단해제
 	@DeleteMapping("/blocks/{userId}")
 	public ResponseEntity<ApiResponse> unBlockUser(@PathVariable Long userId,
 		@AuthenticationPrincipal User user) {
-		return ResponseEntity.ok(restrictionsService.unBlockUser(user, userId));
+		return ResponseEntity.ok(restrictionService.unBlockUser(user, userId));
 	}
 
 	//차단목록 조회
 	@GetMapping("/blocks")
 	public ResponseEntity<DataApiResponse<BlockResponse>> getBLockedList(@RequestParam int page,
 		@AuthenticationPrincipal User user) {
-		return ResponseEntity.ok(restrictionsService.getBlockedList(page - 1, user));
+		return ResponseEntity.ok(restrictionService.getBlockedList(page - 1, user));
 	}
 
 	//유저 신고
 	@PostMapping("/report/users")
 	public ResponseEntity<ApiResponse> createReportUser(@RequestBody ReportUserRequest request,
 		@AuthenticationPrincipal User user) {
-		return ResponseEntity.ok(restrictionsService.createReportUser(user, request));
+		return ResponseEntity.ok(restrictionService.createReportUser(user, request));
 	}
 
 	//모집글 신고
 	@PostMapping("/report/party-posts")
 	public ResponseEntity<ApiResponse> createReportPost(@RequestBody ReportPostRequest request,
 		@AuthenticationPrincipal User user) {
-		return ResponseEntity.ok(restrictionsService.createReportPost(user, request));
+		return ResponseEntity.ok(restrictionService.createReportPost(user, request));
 	}
 
 	//노쇼 신고
 	@PostMapping("/noShow")
 	public ResponseEntity<ApiResponse> noShowReport(@RequestBody NoShowRequest request,
 													@AuthenticationPrincipal User user) {
-		return ResponseEntity.ok(restrictionsService.reportNoShow(user, request));
+		return ResponseEntity.ok(restrictionService.reportNoShow(user, request));
 	}
 }

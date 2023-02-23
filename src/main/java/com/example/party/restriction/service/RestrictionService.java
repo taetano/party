@@ -43,7 +43,7 @@ import javax.transaction.Transactional;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class RestrictionsService {
+public class RestrictionService {
 
 	private final UserRepository userRepository;
 	private final PartyRepository partyRepository;
