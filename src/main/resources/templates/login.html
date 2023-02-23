@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Let's PARTY|Login</title>
@@ -27,7 +27,7 @@
             margin: 0;
             margin-bottom: 20px;
             color: #FFFFFF;
-            opacity:0.75; /* 75% 불투명도 */
+            opacity: 0.75; /* 75% 불투명도 */
             font-size: 3rem;
             font-weight: bold;
             text-align: center;
@@ -71,18 +71,77 @@
 <div class="container">
     <h1 class="logo">Let's PARTY</h1>
     <form>
-        <span style = " font-size:1.5em;">
+        <span style=" font-size:1.5em;">
         <label for="email">Email</label>
         <input type="text" id="email" name="email" placeholder="예) lets@parties.com">
 
         <label for="password">Password</label>
         <input type="password" id="password" name="password" placeholder="영문, 숫자, 특수문자 조합 8-60자">
 
-        <input type="submit" value="로그인">
+        <input type="submit" id="submit-btn" value="로그인">
         </span>
     </form>
     <p><a href="#">이메일/비밀번호 찾기</a></p>
     <p><a href="#">회원가입</a></p>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+    $(() => {
+        $("#submit-btn").on("click", (ev) => login(ev))
+    })
+
+
+    function login(ev) {
+
+        let email = $('#email').val();
+        let password = $('#password').val();
+
+        if (email === '') {
+            alert('이메일을 입력해주세요');
+            return;
+        } else if (password === '') {
+            alert('비밀번호를 입력해주세요');
+            return;
+        }
+        ev.preventDefault()
+        $.ajax({
+            type: "POST",
+            url: `/api/users/signin`,
+            contentType: "application/json",
+            data: JSON.stringify({email: email, password: password})
+            // success: function (response, status, xhr) {
+            //
+            //     if (status === 200) {
+            //         let host = window.location.host;
+            //         let url = host + '/api/users/indexPage';
+            //         document.cookie = 'Authorization' + '=' + xhr.getResponseHeader('Authorization') + ';path=/';
+            //         window.location.href = 'http://' + url;
+            //         console.log(document.cookie);
+            //         console.log(window.location.href)
+            //
+            //     } else {
+            //         alert('이메일 & 비밀번호를 확인해주세요. 계속 문제가 발생할경우 관리자에 문의해주세요.')
+            //
+            //     }
+            // }
+        }).done((json) => {
+            if (json.code === 200) {
+                console.log(json)
+                // 쿠키에 어찌 저장하는지, 또 어찌 꺼내쓰는지
+                // index 페이지로 이동.
+
+            } else {
+                console.log(json)
+            }
+
+
+        }).fail(() => {
+            console.log("실패시 호출")
+        })
+    }
+
+
+</script>
+
 </body>
 </html>

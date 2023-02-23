@@ -3,6 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <title>Let's PARTY|Signup</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+        $(() => {
+            //해당 버튼쪽에서 클릭행위를 했을때 signup기능을 시작
+            $("#signbtn").on("click", (ev) => signup(ev))
+        })
+
+        function signup(ev) {
+            // 회원가입 양식 데이터 가져오기
+            var formData = {
+                email: $("#email").val(),
+                password: $("#password").val(),
+                nickname: $("#nickname").val(),
+                phoneNum: $("#phone").val()
+            };
+            ev.preventDefault()
+            // Ajax 요청 보내기
+            $.ajax({
+                type: "POST",
+                contentType: "application/json",
+                url: "/api/users/signup",
+                data: JSON.stringify(formData),
+                success: function (response, status, xhr) {
+                    if (status === 'success') {
+                        alert('회원가입 완료')
+                        let host = window.location.host;
+                        let url = host + '/api/users/loginPage'; //이동하려는 페이지 주소
+                        document.cookie =
+                            'Authorization' + '=' + xhr.getResponseHeader('Authorization') + ';path=/';
+                        window.location.href = 'http://' + url;
+                    } else {
+                        alert('회원가입 실패')
+                    }
+                }
+            }).done((json) => {
+                console.log("singup_done");
+            }).fail(() => {
+                console.log("singup_fail");
+            })
+        }
+
+    </script>
+
     <style>
         body {
             margin: 0;
@@ -100,7 +144,7 @@
     <form action="submit_form.php" method="POST">
         <span style=" font-size:1.5em;">
             <label for="email">Email</label>
-            <input type="text" id="email" name="email" placeholder="예) lets@parties.com">
+            <input type="text" id="email" name="email" placeholder="예) lets@party.com">
 
             <label for="password">Password</label>
             <input type="password" id="password" name="password" placeholder="영문, 숫자, 특수문자 조합 8-60자">
@@ -109,9 +153,10 @@
             <input type="text" id="nickname" name="nickname" placeholder="닉네임을 입력해주세요.">
 
             <label for="phone">전화번호:</label>
-            <input type="tel" id="phone" name="phone" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}" placeholder="예) 010-0000-0000">
+            <input type="tel" id="phone" name="phone" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}"
+                   placeholder="예) 010-0000-0000">
 
-            <input type="submit" value="가입하기">
+            <input type="submit" value="가입하기" id="signbtn">
         </span>
     </form>
     <p><a href="#">이미 가입한 계정이 있으신가요?</a></p>
@@ -119,7 +164,7 @@
 </div>
 <footer>
     <div class="bottomlogo">
-        <a href="http://localhost:63342/parties/parties.main/dist/index.html?_ijt=gpruglcfdtoseprjup3v4tavc9&_ij_reload=RELOAD_ON_SAVE">Let's PARTY</a>
+        <a href='index.html'>Let's PARTY</a>
     </div>
 </footer>
 </body>
