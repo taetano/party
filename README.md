@@ -11,8 +11,8 @@
 [![My Skills](https://skillicons.dev/icons?i=mysql,redis)](https://skillicons.dev)
 - 프론트엔드  
 [![My Skills](https://skillicons.dev/icons?i=css,javascript)](https://skillicons.dev)
-- 협업 도구
-[![My Skills](https://skillicons.dev/icons?i=git,github,notion)](https://skillicons.dev)
+- 협업 도구  
+[![My Skills](https://skillicons.dev/icons?i=git,github)](https://skillicons.dev)
 
 
 - JDK 11
