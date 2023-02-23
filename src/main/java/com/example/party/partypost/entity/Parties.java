@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Entity(name = "party")
+@Entity
 public class Parties {
 
 	@Id
@@ -22,7 +22,9 @@ public class Parties {
 	@OneToOne
 	@JoinColumn(name = "partyPost_id")
 	private PartyPost partyPost;
-	@OneToMany
+
+	//브릿지 테이블
+	@OneToMany()
 	private List<User> users;
 
 	public Parties(PartyPost partyPost) {

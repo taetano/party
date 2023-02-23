@@ -5,19 +5,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
+import com.example.party.partypost.entity.Parties;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -76,6 +66,9 @@ public class User extends TimeStamped implements UserDetails {
 	)
 	private Set<PartyPost> likePartyPosts;
 
+//	@ManyToOne
+//	@JoinColumn(name = "partyUser_id")
+//	private Parties partyUser;
 //	@OneToMany(mappedBy = "reporter")
 //	private List<NoShow> noShowReportPostUsers;
 //	@OneToMany(mappedBy = "reporter")
@@ -171,5 +164,21 @@ public class User extends TimeStamped implements UserDetails {
 	//작성한 참가신청 목록 추가
 	public void addApplication(Application application) {
 		this.applies.add(application);
+	}
+
+
+	//오브잭트 클레스에서 제공하는
+	@Override
+	public int hashCode() {
+		return id.hashCode();
+	}
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		User user = (User) o;
+
+		return id.equals(user.id);
 	}
 }

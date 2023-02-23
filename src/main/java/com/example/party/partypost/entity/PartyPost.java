@@ -195,6 +195,11 @@ public class PartyPost extends TimeStamped {
 			.forEach(
 				Application::reject);
 	}
+
+	// Test 하기 위한 코드
+	public void changeStatusNoShow() {
+		this.status = Status.NO_SHOW_REPORTING;
+	}
 }
 // TODO: API 1차 작업완료 후
 // 차단한 유저의 게시물 블라인드 처리 방식 생각

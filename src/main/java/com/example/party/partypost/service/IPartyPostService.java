@@ -34,7 +34,7 @@ public interface IPartyPostService {
 
 	//모집글 전체 조회
 	@Transactional
-	DataApiResponse<PartyPostListResponse> findPartyList(int page);
+	DataApiResponse<PartyPostListResponse> findPartyList(User user, int page);
 
 	//모집글 상세 조회(개별 상세조회)
 	@Transactional

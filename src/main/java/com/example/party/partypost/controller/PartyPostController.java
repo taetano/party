@@ -69,11 +69,17 @@ public class PartyPostController {
         return ResponseEntity.ok(partyPostService.toggleLikePartyPost(partyPostId, user));
     }
 
+    //좋아요 게시물 목록 조회
+    @GetMapping("/likes")
+    public ResponseEntity<DataApiResponse<PartyPostListResponse>> getLikePartyPost(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(partyPostService.getLikePartyPost(user));
+    }
+
     //모집글전체조회
     @GetMapping()
     public ResponseEntity<DataApiResponse<PartyPostListResponse>> findPartyList(
-            @RequestParam int page) {
-        return ResponseEntity.ok(partyPostService.findPartyList(page - 1));
+            @RequestParam int page, @AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(partyPostService.findPartyList(user, page - 1));
     }
 
     //모집글 상세 조회(개별 상세조회)

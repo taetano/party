@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/restrictions")
+@RequestMapping("/api/restriction")
 public class RestrictionController {
 
 	private final RestrictionService restrictionService;

@@ -1,5 +1,6 @@
 package com.example.party.restriction.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -129,19 +130,20 @@ public class RestrictionService {
 
 	//노쇼 신고
 	public ApiResponse reportNoShow(User user, NoShowRequest request) {
+		int checkCnt = 0;
 		isMySelf(user, request.getUserId());
 		//신고할 유저
 		User reported = findByUser(request.getUserId());
-		//로그인한 유저의 파티객체
 		Parties parties = getParties(request.getPostId());
 		if (!parties.getPartyPost().getStatus().equals(Status.NO_SHOW_REPORTING)) {
 			throw new BadRequestException("노쇼 신고 기간이 만료되었습니다");
 		}
 		List<User> users = parties.getUsers();
-		for (User usersIf : users) {
-			if (!usersIf.equals(reported)) {
-				throw new BadRequestException("파티 구성원이 아닙니다");
-			}
+		if (!users.contains(reported)) {
+			throw new BadRequestException("참여한 파티원이 아닙니다");
+		}
+		if (!users.contains(user)) {
+			throw new BadRequestException("파티 구성원이 아닙니다");
 		}
 		if (noShowRepository.existsByReporterIdAndReportedIdAndPartyPostId(user.getId(), reported.getId(),
 				parties.getPartyPost().getId())) {
@@ -157,11 +159,12 @@ public class RestrictionService {
 	@Transactional
 	public void checkingNoShow(List<PartyPost> posts) {
 		for (PartyPost partyPost : posts ) {
-			//Processing 상태로 바꿔서 재검색이 되지 않게함
 			partyPost.ChangeStatusEnd();
-			Parties parties = getParties(partyPost.getId());
+
 			// 파티 유저 size 를 알기 위해
+			Parties parties = getParties(partyPost.getId());
 			List<User> users = parties.getUsers();
+
 			List<NoShow> noShowList = noShowRepository.findAllByPartyPostId(partyPost.getId());
 			for (NoShow noShowIf : noShowList) {
 				if (noShowIf.getNoShowReportCnt() >= Math.round(users.size()/2)) {
