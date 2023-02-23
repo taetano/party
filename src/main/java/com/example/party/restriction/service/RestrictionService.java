@@ -57,8 +57,7 @@ public class RestrictionService {
 	private final ReportPostRepository reportPostRepository;
 	private final PartyPostRepository partyPostRepository;
 
-	//차단등록
-	public ItemApiResponse<BlockResponse> blockUser(User user, Long userId) {
+	public ApiResponse blockUser(User user, Long userId) {
 		User blocked = findByUser(userId);
 		isMySelf(user, userId);
 		List<Blocks> blocks = getBlocks(user.getId());
@@ -71,7 +70,7 @@ public class RestrictionService {
 		}
 		Blocks block = new Blocks(user, blocked);
 		blockRepository.save(block);
-		return ItemApiResponse.ok("차단등록 완료", new BlockResponse(block));
+		return ApiResponse.ok("차단등록 완료");
 	}
 
 	//차단해제
