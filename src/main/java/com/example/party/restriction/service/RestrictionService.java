@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.example.party.restriction.dto.ReportPostResponse;
 import com.example.party.restriction.dto.ReportUserResponse;
 import com.example.party.user.entity.User;
 import com.example.party.global.common.ApiResponse;
@@ -119,7 +120,7 @@ public class RestrictionService {
 	public DataApiResponse<ReportUserResponse> findReportUserList(int page) {
 		Pageable pageable = PageRequest.of(page, 6, Sort.by("createdAt").descending());
 		List<ReportUserResponse> reportUserResponseList = reportUserRepository.findAllByOrderById(pageable).stream()
-			.map(ReportUserResponse::new).collect(Collectors.toList());
+			.map(reportUser -> new ReportUserResponse(reportUser)).collect(Collectors.toList());
 		return DataApiResponse.ok("유저 신고 로그 조회 완료", reportUserResponseList);
 	}
 
@@ -136,6 +137,14 @@ public class RestrictionService {
 		ReportPost reportsPost = new ReportPost(user, request, partyPost);
 		reportPostRepository.save(reportsPost);
 		return ApiResponse.ok("모집글 신고 완료");
+	}
+
+	//모집글 신고 로그 조회
+	public DataApiResponse<ReportPostResponse> findReportPostList(int page) {
+		Pageable pageable = PageRequest.of(page, 6, Sort.by("createdAt").descending());
+		List<ReportPostResponse> reportPostResponseList = reportPostRepository.findAllByOrderById(pageable).stream()
+			.map((ReportPost reportPost) -> new ReportPostResponse(reportPost)).collect(Collectors.toList());
+		return DataApiResponse.ok("유저 신고 로그 조회 완료", reportPostResponseList);
 	}
 
 	//노쇼 신고
