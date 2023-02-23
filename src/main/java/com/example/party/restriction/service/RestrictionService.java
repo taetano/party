@@ -184,7 +184,7 @@ public class RestrictionService {
 			List<NoShow> noShowList = noShowRepository.findAllByPartyPostId(partyPost.getId());
 			for (NoShow noShowIf : noShowList) {
 				if (noShowIf.getNoShowReportCnt() >= Math.round(users.size()/2)) {
-					noShowIf.getReported().getProfiles().plusNoShowCnt();
+					noShowIf.getReported().getProfile().plusNoShowCnt();
 				}
 			}
 		}
