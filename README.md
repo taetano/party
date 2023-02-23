@@ -6,11 +6,13 @@
 
 ## 1. 작업환경
 - 백엔드 환경  
-[![My Skills](https://skillicons.dev/icons?i=java,spring,idea,mysql,redis,html,css,javascript,git,github)](https://skillicons.dev)
+[![My Skills](https://skillicons.dev/icons?i=java,spring,mysql,redis)](https://skillicons.dev)
 - DB 환경  
-[![My Skills](https://skillicons.dev/icons?i=java,spring,idea,mysql,redis,html,css,javascript,git,github)](https://skillicons.dev)
+[![My Skills](https://skillicons.dev/icons?i=mysql,redis)](https://skillicons.dev)
 - 프론트엔드  
-[![My Skills](https://skillicons.dev/icons?i=html,css,javascript)](https://skillicons.dev)
+[![My Skills](https://skillicons.dev/icons?i=css,javascript)](https://skillicons.dev)
+- 협업 도구
+[![My Skills](https://skillicons.dev/icons?i=git,github,notion)](https://skillicons.dev)
 
 
 - JDK 11
