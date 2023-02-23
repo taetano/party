@@ -18,7 +18,7 @@
 - JDK 11
 - SpringBoot 2.7.8
 - 현재 로컬 MYSQL, REDIS 저장소를 사용해 개발중입니다. 
-- Spring Thymleaf 를 사용해 뷰 구현
+- Spring Thymleaf 를 사용해 뷰 구현 중
 - AWS EC2를 통해 배포 예정이며, 추후 GithubAction을 활용한 CI/CD 방식 도입 예정
 
 
