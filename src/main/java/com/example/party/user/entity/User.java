@@ -1,12 +1,10 @@
 package com.example.party.user.entity;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -27,8 +25,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.example.party.application.entity.Application;
 import com.example.party.global.common.TimeStamped;
 import com.example.party.partypost.entity.PartyPost;
-import com.example.party.restrictions.entity.Blocks;
-import com.example.party.restrictions.entity.UserReport;
 import com.example.party.user.dto.ProfileRequest;
 import com.example.party.user.dto.SignupRequest;
 import com.example.party.user.type.Status;
@@ -67,8 +63,8 @@ public class User extends TimeStamped implements UserDetails {
 
 	// 연관관계
 	@OneToOne(optional = false)
-	@JoinColumn(name = "profile_id", unique = true, referencedColumnName = "id")
-	private Profile profile;
+	@JoinColumn(name = "profiles_id", unique = true, referencedColumnName = "id")
+	private Profiles profiles;
 	@OneToMany(mappedBy = "user")
 	private List<Application> applies;
 	@OneToMany(mappedBy = "user")
@@ -80,36 +76,45 @@ public class User extends TimeStamped implements UserDetails {
 	)
 	private Set<PartyPost> likePartyPosts;
 
-	@OneToMany(mappedBy = "reporter")
-	private List<UserReport> userReports;
-
-	@OneToMany(mappedBy = "blocker", cascade = CascadeType.ALL, orphanRemoval = true)
-	private final List<Blocks> blockedList = new ArrayList<>();
+//	@OneToMany(mappedBy = "reporter")
+//	private List<NoShow> noShowReportPostUsers;
+//	@OneToMany(mappedBy = "reporter")
+//	private List<NoShow> noShowReportUsers;
+//	@OneToMany(mappedBy = "reporter")
+//	private List<ReportPost> reportPostUsers;
+//	@OneToMany(mappedBy = "reporter")
+//	private List<ReportUser> reportUsers;
+//	@OneToMany(mappedBy = "reported")
+//	private List<ReportUser> reportedUsers;
+//	@OneToMany(mappedBy = "blocker")
+//	private List<Blocks> blockerList;
+//	@OneToMany(mappedBy = "blocked")
+//	private List<Blocks> blockedList;
 
 	public String getProfileImg() {
-		return this.profile.getImg();
+		return this.profiles.getImg();
 	}
 
 	public String getComment() {
-		return this.profile.getComment();
+		return this.profiles.getComment();
 	}
 
 	public int getNoShowCnt() {
-		return this.profile.getNoShowCnt();
+		return this.profiles.getNoShowCnt();
 	}
 
 	public int getParticipationCnt() {
-		return this.profile.getParticipationCnt();
+		return this.profiles.getParticipationCnt();
 	}
 
-	public User(SignupRequest signupRequest, String password, Profile profile) {
+	public User(SignupRequest signupRequest, String password, Profiles profiles) {
 		this.email = signupRequest.getEmail();
 		this.password = password;
 		this.nickname = signupRequest.getNickname();
 		this.phoneNum = signupRequest.getPhoneNum();
 		this.role = UserRole.ROLE_USER;
 		this.status = Status.ACTIVE;
-		this.profile = profile;
+		this.profiles = profiles;
 	}
 
 	public void DormantState() {
@@ -156,7 +161,7 @@ public class User extends TimeStamped implements UserDetails {
 	}
 
 	public void increaseParticipationCnt() {
-		this.profile.increaseParticipationCnt();
+		this.profiles.increaseParticipationCnt();
 	}
 
 	public void setId(Long id) { // 테스트를 위한 추가
@@ -166,18 +171,5 @@ public class User extends TimeStamped implements UserDetails {
 	//작성한 참가신청 목록 추가
 	public void addApplication(Application application) {
 		this.applies.add(application);
-	}
-
-	public List<Blocks> getBlockedList() {
-		return blockedList;
-	}
-
-	//유저를 알려줌
-	public void addRelation(Blocks blocks) {
-		this.blockedList.add(blocks);
-	}
-
-	public void removeRelation(Blocks blocked) {
-		this.blockedList.remove(blocked);
 	}
 }

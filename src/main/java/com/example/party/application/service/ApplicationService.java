@@ -2,6 +2,7 @@ package com.example.party.application.service;
 
 import java.time.LocalDateTime;
 
+import com.example.party.partypost.entity.Parties;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +22,6 @@ import com.example.party.application.type.ApplicationStatus;
 import com.example.party.global.common.ApiResponse;
 import com.example.party.global.common.DataApiResponse;
 import com.example.party.global.exception.ForbiddenException;
-import com.example.party.partypost.entity.Party;
 import com.example.party.partypost.entity.PartyPost;
 import com.example.party.partypost.exception.PartyPostNotFoundException;
 import com.example.party.partypost.repository.PartyPostRepository;
@@ -114,10 +114,10 @@ public class ApplicationService implements IApplicationService {
 		application.accept();
 
 		//Accept 된 유저만 넘어감
-		Party party = partyRepository.findById(application.getPartyPost().getId())
+		Parties parties = partyRepository.findById(application.getPartyPost().getId())
 			.orElseThrow(PartyPostNotFoundException::new);
-		party.addUsers(user);
-		partyRepository.save(party);
+		parties.addUsers(user);
+		partyRepository.save(parties);
 
 		return ApiResponse.ok("참가 신청 수락 완료");
 	}

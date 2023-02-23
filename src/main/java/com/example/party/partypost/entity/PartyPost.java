@@ -20,10 +20,12 @@ import javax.persistence.Table;
 import com.example.party.application.entity.Application;
 import com.example.party.application.type.ApplicationStatus;
 import com.example.party.category.entity.Category;
-import com.example.party.global.common.TimeStamped;
 import com.example.party.partypost.dto.PartyPostRequest;
+import com.example.party.global.common.TimeStamped;
 import com.example.party.partypost.dto.UpdatePartyPostRequest;
 import com.example.party.partypost.type.Status;
+import com.example.party.restriction.entity.NoShow;
+import com.example.party.restriction.entity.ReportPost;
 import com.example.party.user.entity.User;
 
 import lombok.AccessLevel;
@@ -78,6 +80,11 @@ public class PartyPost extends TimeStamped {
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "category_id")
 	private Category category; //카테고리
+	@OneToMany(mappedBy = "reportPost")
+	private List<ReportPost> reportPosts;
+	@OneToMany(mappedBy = "partyPost")
+	private List<NoShow> noShowReportPosts;
+
 
 	//생성자
 	public PartyPost(User user, PartyPostRequest request, LocalDateTime partyDate, Category category) {
@@ -160,6 +167,11 @@ public class PartyPost extends TimeStamped {
 		}
 		this.acceptedMember = curMember;
 	}
+
+	public void ChangeStatusEnd() {
+		this.status = Status.END;
+	}
+
 	//private 메소드
 
 	//request 에서 받아온 주소에서 address(~동 까지) 추출
