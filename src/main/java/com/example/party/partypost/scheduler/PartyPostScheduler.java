@@ -2,6 +2,8 @@ package com.example.party.partypost.scheduler;
 
 import java.time.LocalDateTime;
 
+import com.example.party.partypost.repository.PartyRepository;
+import com.example.party.restriction.service.RestrictionService;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +16,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Transactional
 public class PartyPostScheduler {
+	private final RestrictionService restrictionService;
 	private final PartyPostRepository partyPostRepository;
+	private final PartyRepository partyRepository;
 	// @Scheduled(cron = "0 45 * * * ?")// 실제 업로드용(매 시 45분마다 실행)
 	// @Scheduled(cron = "0 0 * * * ?") // 실제 업로드용(매 시 정각마다 실행)
 	// @Scheduled(cron = "0 * * * * ?") // 매 1분 간격으로 실행(테스트용)
@@ -35,6 +39,6 @@ public class PartyPostScheduler {
 	@Scheduled(cron = "0 * * * * ?") // (테스트용)1분 간격으로 실행 // 배포시 매시 정각 마다로 변경 필요
 	private void changeStatusNoShowToEnd() {
 		partyPostRepository.changeStatusNoShowToEnd(LocalDateTime.now().minusHours(1));
+		restrictionService.checkingNoShow(partyPostRepository.statusEqualEnd());
 	}
-
 }
