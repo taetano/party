@@ -1,11 +1,9 @@
 package com.example.party.partypost.scheduler;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-import com.example.party.partypost.entity.PartyPost;
 import com.example.party.partypost.repository.PartyRepository;
-import com.example.party.restrictions.service.RestrictionsService;
+import com.example.party.restriction.service.RestrictionsService;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

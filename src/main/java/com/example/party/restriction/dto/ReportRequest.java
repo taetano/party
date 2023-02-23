@@ -1,4 +1,4 @@
-package com.example.party.restrictions.dto;
+package com.example.party.restriction.dto;
 
 import lombok.Getter;
 

@@ -1,6 +1,6 @@
-package com.example.party.restrictions.dto;
+package com.example.party.restriction.dto;
 
-import com.example.party.restrictions.type.ReportReason;
+import com.example.party.restriction.type.ReportReason;
 
 import lombok.Getter;
 

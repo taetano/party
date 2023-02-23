@@ -1,4 +1,4 @@
-package com.example.party.restrictions.type;
+package com.example.party.restriction.type;
 
 public enum ReportReason {
 	SPAM,

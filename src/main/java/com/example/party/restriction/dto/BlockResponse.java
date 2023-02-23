@@ -1,6 +1,6 @@
-package com.example.party.restrictions.dto;
+package com.example.party.restriction.dto;
 
-import com.example.party.restrictions.entity.Blocks;
+import com.example.party.restriction.entity.Blocks;
 
 import lombok.Getter;
 

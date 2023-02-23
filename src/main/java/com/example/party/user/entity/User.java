@@ -25,8 +25,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.example.party.application.entity.Application;
 import com.example.party.global.common.TimeStamped;
 import com.example.party.partypost.entity.PartyPost;
-import com.example.party.restrictions.entity.Blocks;
-import com.example.party.restrictions.entity.UserReport;
 import com.example.party.user.dto.ProfileRequest;
 import com.example.party.user.dto.SignupRequest;
 import com.example.party.user.type.Status;
@@ -78,11 +76,20 @@ public class User extends TimeStamped implements UserDetails {
 	)
 	private Set<PartyPost> likePartyPosts;
 
-	@OneToMany(mappedBy = "reporter")
-	private List<UserReport> userReports;
-
-	@OneToMany(mappedBy = "blocker")
-	private List<Blocks> blockedList;
+//	@OneToMany(mappedBy = "reporter")
+//	private List<NoShow> noShowReportPostUsers;
+//	@OneToMany(mappedBy = "reporter")
+//	private List<NoShow> noShowReportUsers;
+//	@OneToMany(mappedBy = "reporter")
+//	private List<ReportPost> reportPostUsers;
+//	@OneToMany(mappedBy = "reporter")
+//	private List<ReportUser> reportUsers;
+//	@OneToMany(mappedBy = "reported")
+//	private List<ReportUser> reportedUsers;
+//	@OneToMany(mappedBy = "blocker")
+//	private List<Blocks> blockerList;
+//	@OneToMany(mappedBy = "blocked")
+//	private List<Blocks> blockedList;
 
 	public String getProfileImg() {
 		return this.profiles.getImg();

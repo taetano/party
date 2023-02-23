@@ -15,7 +15,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.example.party.application.entity.Application;
@@ -25,6 +24,8 @@ import com.example.party.partypost.dto.PartyPostRequest;
 import com.example.party.global.common.TimeStamped;
 import com.example.party.partypost.dto.UpdatePartyPostRequest;
 import com.example.party.partypost.type.Status;
+import com.example.party.restriction.entity.NoShow;
+import com.example.party.restriction.entity.ReportPost;
 import com.example.party.user.entity.User;
 
 import lombok.AccessLevel;
@@ -79,8 +80,11 @@ public class PartyPost extends TimeStamped {
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "category_id")
 	private Category category; //카테고리
-	@OneToOne(mappedBy = "partyPost")
-	private Parties parties;
+	@OneToMany(mappedBy = "reportPost")
+	private List<ReportPost> reportPosts;
+	@OneToMany(mappedBy = "partyPost")
+	private List<NoShow> noShowReportPosts;
+
 
 	//생성자
 	public PartyPost(User user, PartyPostRequest request, LocalDateTime partyDate, Category category) {

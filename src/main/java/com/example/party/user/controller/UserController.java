@@ -56,21 +56,20 @@ public class UserController {
 
 	//로그아웃
 	@PostMapping("/signout")
-	public ResponseEntity<ApiResponse> signOut(@AuthenticationPrincipal User userDetails,
+	public ResponseEntity<ApiResponse> signOut(@AuthenticationPrincipal User user,
 											   HttpServletResponse response) {
 		Cookie cookie = new Cookie("rfToken", null);
 		cookie.setMaxAge(0);
 		response.setHeader(AUTHORIZATION_HEADER, "");
 		response.addCookie(cookie);
-		System.out.println(userDetails);
-		return ResponseEntity.ok(userService.signOut(userDetails));
+		return ResponseEntity.ok(userService.signOut(user));
 	}
 
 	//회원탈퇴
 	@PostMapping("/withdraw")
 	public ResponseEntity<ApiResponse> withdraw(@RequestBody WithdrawRequest withdrawRequest,
-												@AuthenticationPrincipal User userDetails) {
-		return ResponseEntity.ok(userService.withdraw(userDetails, withdrawRequest));
+												@AuthenticationPrincipal User user) {
+		return ResponseEntity.ok(userService.withdraw(user, withdrawRequest));
 	}
 
 	//프로필 정보 수정

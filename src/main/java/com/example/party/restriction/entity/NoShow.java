@@ -1,10 +1,6 @@
-package com.example.party.restrictions.entity;
+package com.example.party.restriction.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 import com.example.party.partypost.entity.PartyPost;
 import com.example.party.user.entity.User;
@@ -19,19 +15,24 @@ public class NoShow {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private Long id;
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "reporter_id")
 	private User reporter;
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "reported_id")
 	private User reported;
-	@ManyToOne
-	private PartyPost post;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "partyPost_id")
+	private PartyPost partyPost;
+	@Column(name = "no_show_cnt")
 	private int noShowReportCnt;
 
-	public NoShow(User reporter, PartyPost post, User reported) {
+	public NoShow(User reporter, User reported, PartyPost partyPost) {
 		this.reporter = reporter;
 		this.reported = reported;
-		this.post = post;
+		this.partyPost = partyPost;
 		this.noShowReportCnt = 0;
 	}
 

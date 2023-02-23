@@ -87,10 +87,10 @@ public class UserService implements IUserService {
 
 	//회원탈퇴
 	@Override
-	public ApiResponse withdraw(User userDetails, WithdrawRequest withdrawRequest) {
-		User user = findByUser(userDetails.getEmail());
-		confirmPassword(withdrawRequest.getPassword(), user.getPassword());
-		user.DormantState();
+	public ApiResponse withdraw(User user, WithdrawRequest withdrawRequest) {
+		User userIf = findByUser(user.getEmail());
+		confirmPassword(withdrawRequest.getPassword(), userIf.getPassword());
+		userIf.DormantState();
 		return ApiResponse.ok("회원탈퇴 완료");
 	}
 
