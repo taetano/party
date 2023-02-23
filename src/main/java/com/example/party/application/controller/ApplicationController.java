@@ -22,33 +22,33 @@ import lombok.RequiredArgsConstructor;
 public class ApplicationController {
 
 	private final ApplicationService applicationService;
-
+	//모집글작성
 	@PostMapping("/join/{party-postId}")
 	public ResponseEntity<ApiResponse> createApplication(@PathVariable(name = "party-postId") Long partyPostId,
 		@AuthenticationPrincipal User user) {
 
 		return ResponseEntity.ok(applicationService.createApplication(partyPostId, user));
 	}
-
+	//모집참가취소
 	@PostMapping("/cancel/{applicationId}")
 	public ResponseEntity<ApiResponse> cancelApplication(@PathVariable Long applicationId,
 		@AuthenticationPrincipal User user) {
 		return ResponseEntity.ok(applicationService.cancelApplication(applicationId, user));
 	}
-
+	//해당 모집글의 참가신청 조회
 	@GetMapping("/{party-postId}")
 	public ResponseEntity<DataApiResponse<ApplicationResponse>> getApplications(
 		@PathVariable(name = "party-postId") Long partyPostId, @AuthenticationPrincipal User user) {
 		return ResponseEntity.ok(applicationService.getApplications(partyPostId, user));
 	}
-
+	//(파티장) 참가신청 수락
 	@PostMapping("/accept/{applicationId}")
 	public ResponseEntity<ApiResponse> acceptApplication(
 		@PathVariable Long applicationId,
 		@AuthenticationPrincipal User user) {
 		return ResponseEntity.ok(applicationService.acceptApplication(applicationId, user));
 	}
-
+	//(파티장) 참가신청 거부
 	@PostMapping("/reject/{applicationId}")
 	public ResponseEntity<ApiResponse> rejectApplication(@PathVariable Long applicationId,
 		@AuthenticationPrincipal User user) {

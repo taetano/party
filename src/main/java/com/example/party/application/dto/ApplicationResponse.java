@@ -9,13 +9,13 @@ import lombok.Getter;
 
 @Getter
 public class ApplicationResponse {
-	private final Long id;
-	private final String nickname;
-	private final String profileImg;
-	private final int noShowCnt;
-	private final LocalDateTime createdAt;
-	private final ApplicationStatus status;
-	private final boolean cancel;
+	private final Long id; // 신청자의 id값
+	private final String nickname; // 신청자의 닉네임
+	private final String profileImg; // 신청자의 프로필 이미지
+	private final int noShowCnt; // 신청자의 노쇼포인트 정보
+	private final LocalDateTime createdAt; // 작성된 시간
+	private final ApplicationStatus status; // 신청 상태 (PENDING / 	ACCEPT /REJECT )
+	private final boolean cancel; // 취소여부
 
 	public ApplicationResponse(Application application) {
 		this.id = application.getId();

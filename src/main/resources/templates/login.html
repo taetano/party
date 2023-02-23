@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Let's PARTY|Login</title>
@@ -27,7 +27,7 @@
             margin: 0;
             margin-bottom: 20px;
             color: #FFFFFF;
-            opacity:0.75; /* 75% 불투명도 */
+            opacity: 0.75; /* 75% 불투명도 */
             font-size: 3rem;
             font-weight: bold;
             text-align: center;
@@ -71,18 +71,67 @@
 <div class="container">
     <h1 class="logo">Let's PARTY</h1>
     <form>
-        <span style = " font-size:1.5em;">
+        <span style=" font-size:1.5em;">
         <label for="email">Email</label>
-        <input type="text" id="email" name="email" placeholder="예) lets@party.com">
+        <input type="text" id="email" name="email" placeholder="예) lets@parties.com">
 
         <label for="password">Password</label>
         <input type="password" id="password" name="password" placeholder="영문, 숫자, 특수문자 조합 8-60자">
 
-        <input type="submit" value="로그인">
+        <input type="submit" id="submit-btn" value="로그인">
         </span>
     </form>
     <p><a href="#">이메일/비밀번호 찾기</a></p>
     <p><a href="#">회원가입</a></p>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+    $(() => {
+        $("#submit-btn").on("click", (ev) => login(ev))
+    })
+
+
+    function login(ev) {
+
+        let email = $('#email').val();
+        let password = $('#password').val();
+
+        if (email === '') {
+            alert('이메일을 입력해주세요');
+            return;
+        } else if (password === '') {
+            alert('비밀번호를 입력해주세요');
+            return;
+        }
+        ev.preventDefault()
+        $.ajax({
+            type: "POST",
+            url: `/api/users/signin`,
+            contentType: "application/json",
+            data: JSON.stringify({email: email, password: password}),
+            success: function (response, status, xhr) {
+                console.log(response);
+                console.log(status);
+                console.log(xhr);
+                document.cookie = 'Authorization' + '=' + xhr.getResponseHeader('Authorization')
+
+                let host = window.location.host;
+                let url = host + '/page/indexPage';
+                window.location.href = 'http://' + url;
+
+                //포스트맨 참고
+                //pm.environment.set('token', pm.response.headers.get("Authorization")); (로그인)
+                //pm.environment.set('token', postman.getResponseHeader('Authorization')); (토큰을 사용해야할때)
+            }
+
+        }).fail((json) => {
+            console.log(json)
+            alert("로그인에 문제가 발생했습니다. 증상이 계속되는 경우 관리자에 문의주세요.")
+        })
+    }
+
+
+</script>
+
 </body>
 </html>

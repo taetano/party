@@ -1,10 +1,6 @@
 package com.example.party.user.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,6 +8,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Entity
+@Table(name = "Profiles")
 public class Profile {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,16 +28,20 @@ public class Profile {
 		this.id = id;
 	}
 
-	public Profile(String img, String comment, int noShowCnt, int participationCnt) {
+	public Profile(String img, String comment, int participationCnt) {
 		this.img = img;
 		this.comment = comment;
-		this.noShowCnt = noShowCnt;
+		this.noShowCnt = 0;
 		this.participationCnt = participationCnt;
 	}
 
 	public void updateProfile(String img, String comment) {
 		this.img = img;
 		this.comment = comment;
+	}
+
+	public void plusNoShowCnt() {
+		this.noShowCnt += 1;
 	}
 
 	public void increaseParticipationCnt() {

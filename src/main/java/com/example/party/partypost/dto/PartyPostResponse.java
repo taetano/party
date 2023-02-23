@@ -20,15 +20,16 @@ public class PartyPostResponse {
 	private final String content;
 	private final Long categoryId;
 	private final Status status;
+	private final byte acceptedMember;
 	private final byte maxMember;
 	private final LocalDateTime partyDate;
 	private final LocalDateTime closeDate;
 	private final String day;
 	private final String address;
 	private final String detailAddress;
+
+	private final String partyPlace;
 	private final int viewCnt;
-	private final LocalDateTime createdAt;
-	private final LocalDateTime modifiedAt;
 	private final List<ApplicationResponse> joinMember;
 
 	//생성자
@@ -38,6 +39,8 @@ public class PartyPostResponse {
 		this.content = partyPost.getContent();
 		this.categoryId = partyPost.getCategory().getId();
 		this.viewCnt = partyPost.getViewCnt();
+		this.partyPlace = partyPost.getPartyPlace();
+		this.acceptedMember = partyPost.getAcceptedMember();
 		this.status = partyPost.getStatus();
 		this.maxMember = partyPost.getMaxMember();
 		this.partyDate = partyPost.getPartyDate();
@@ -45,8 +48,6 @@ public class PartyPostResponse {
 		this.day = partyDate.getDayOfWeek().getDisplayName(TextStyle.NARROW, Locale.KOREAN);
 		this.address = partyPost.getAddress();
 		this.detailAddress = partyPost.getDetailAddress();
-		this.createdAt = partyPost.getCreatedAt();
-		this.modifiedAt = partyPost.getModifiedAt();
 		this.joinMember = partyPost.getApplications().stream().map(
 			ApplicationResponse::new).collect(Collectors.toList());
 	}

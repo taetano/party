@@ -2,6 +2,7 @@ package com.example.party.application.service;
 
 import java.time.LocalDateTime;
 
+import com.example.party.partypost.entity.Parties;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +25,7 @@ import com.example.party.global.exception.ForbiddenException;
 import com.example.party.partypost.entity.PartyPost;
 import com.example.party.partypost.exception.PartyPostNotFoundException;
 import com.example.party.partypost.repository.PartyPostRepository;
+import com.example.party.partypost.repository.PartyRepository;
 import com.example.party.user.entity.User;
 import com.example.party.user.repository.UserRepository;
 
@@ -37,8 +39,9 @@ public class ApplicationService implements IApplicationService {
 	private final ApplicationRepository applicationRepository;
 	private final PartyPostRepository partyPostRepository;
 	private final UserRepository userRepository;
+	private final PartyRepository partyRepository;
 
-	//모집 참가 신청
+	//모집글에 참가 신청
 	@Override
 	public ApiResponse createApplication(Long partyPostId, User user) {
 		//0. 받아온 user 를 영속성 컨텍스트에 저장
@@ -65,6 +68,7 @@ public class ApplicationService implements IApplicationService {
 
 	}
 
+	//참가신청 취소
 	@Override
 	public ApiResponse cancelApplication(Long applicationId, User user) {
 		Application application = getApplication(applicationId);
@@ -77,6 +81,7 @@ public class ApplicationService implements IApplicationService {
 		return ApiResponse.ok("참가 신청 취소 완료");
 	}
 
+	//모집글의 참가신청 목록 조회(파티장만 조회가능)
 	@Transactional(readOnly = true)
 	@Override
 	public DataApiResponse<ApplicationResponse> getApplications(Long partPostId, User user) {
@@ -96,6 +101,7 @@ public class ApplicationService implements IApplicationService {
 		return DataApiResponse.ok("참가신청자 목록 조회 완료", ret.getContent());
 	}
 
+	//(파티장) 참가신청 수락
 	@Override
 	public ApiResponse acceptApplication(Long applicationId, User user) {
 		Application application = getApplication(applicationId);
@@ -107,9 +113,16 @@ public class ApplicationService implements IApplicationService {
 		validateApplication(application);
 		application.accept();
 
+		//Accept 된 유저만 넘어감
+		Parties parties = partyRepository.findById(application.getPartyPost().getId())
+			.orElseThrow(PartyPostNotFoundException::new);
+		parties.addUsers(user);
+		partyRepository.save(parties);
+
 		return ApiResponse.ok("참가 신청 수락 완료");
 	}
 
+	//(파티장) 참가신청 거부
 	@Override
 	public ApiResponse rejectApplication(Long applicationId, User user) {
 		Application application = getApplication(applicationId);
@@ -124,6 +137,7 @@ public class ApplicationService implements IApplicationService {
 		return ApiResponse.ok("참가 신청 거부 완료");
 	}
 
+	//단일 참가신청 객체 불러오기
 	@Transactional(readOnly = true)
 	public Application getApplication(Long applicationId) {
 		return applicationRepository.findById(applicationId)
@@ -152,6 +166,7 @@ public class ApplicationService implements IApplicationService {
 		}
 	}
 
+	//참가신청이 PENDING(대기중) 상태인지 확인
 	private static void validateApplication(Application application) {
 		if (application.getStatus() != ApplicationStatus.PENDING) {
 			throw new ApplicationNotAvailableException();

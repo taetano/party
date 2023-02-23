@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title>Let's PARTY</title>
+    <style>
+        input[type="text"] {
+            text-align: center;
+            width: 100%;
+            padding: 1rem 2rem;
+            margin: 1rem 0;
+            box-sizing: border-box;
+            border: none;
+            border-radius: 20px;
+            background-color: #EEEEEE;
+            color: #33312E;
+            font-size: 1.2rem;
+            outline: none;
+        }
+    </style>
+    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico"/>
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900"
+          rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i"
+          rel="stylesheet"/>
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="../static/css/styles.css" rel="stylesheet"/>
+
+    <title>내 정보</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            /*background-color: #F7B718;*/
+        }
+
+
+        .pageEdit {
+            text-align: center;
+        }
+
+        .mypage-profiles img {
+            float: left;
+            border: 4px solid #F7B718;
+            margin: 10px 20px 10px 20px;
+            border-radius: 100%;
+        }
+
+        .status-message {
+            padding: 10px 10px 10px 10px;
+            width: 400px;
+            height: 200px;
+            margin-left: 140px;
+            overflow: hidden; /* 내용이 넘칠 때 숨김 */
+            border: 2px solid #000000;
+            border-radius: 15px;
+        }
+
+        .profiles-info {
+            height: 100px;
+            margin: 20px 0px 0px 0px;
+        }
+
+        .pageEdit {
+            float: left;
+            margin: 10px 20px 10px 250px;
+            width: 700px;
+            padding-bottom: 10px;
+            border: 4px solid #F7B718;
+            border-radius: 15px;
+            align-items: center;
+        }
+
+        .otherpartypost {
+            border: 4px solid #33312E;
+            border-radius: 15px;
+            margin: 5px 5px 5px 5px;
+            padding: 10px 10px 10px 10px;
+            height: 50px;
+            background: #F7B718;
+
+        }
+
+        .partypost {
+            border: 4px solid #33312E;
+            border-radius: 15px;
+            margin: 5px 5px 5px 5px;
+            padding: 10px 10px 10px 10px;
+
+        }
+
+        .pageEdit input {
+            float: right;
+            margin: 10px 10px 10px 10px;
+        }
+
+
+    </style>
+</head>
+<body>
+<!-- Navigation-->
+<nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
+    <div class="container px-5 py-3">
+        <a class="navbar-brand" href="#page-top">Let's PARTY</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
+                aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span
+                class="navbar-toggler-icon"></span></button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="#!">|&emsp;음식</a></li>
+                <li class="nav-item"><a class="nav-link" href="#!">|&emsp;게임</a></li>
+                <li class="nav-item"><a class="nav-link" href="#!">|&emsp;공부</a></li>
+                <li class="nav-item"><a class="nav-link" href="#!">|&emsp;문화생활&emsp;|</a></li>
+            </ul>
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link"
+                                        href="http://localhost:63342/parties/parties.main/templates/signup.html?_ijt=2n2aoejdga53njq9ev9rpqql1&_ij_reload=RELOAD_ON_SAVE">회원가입</a>
+                </li>
+                <li class="nav-item"><a class="nav-link"
+                                        href="http://localhost:63342/parties/parties.main/templates/login.html?_ijt=2n2aoejdga53njq9ev9rpqql1&_ij_reload=RELOAD_ON_SAVE">로그인</a>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="#!">마이페이지</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- Header-->
+<header class="masthead text-center text-white">
+    <div class="masthead-content">
+        <div class="container px-5">
+            <h1 class="masthead-heading mb-0">Let's PARTY!</h1>
+            <h2 class="masthead-subheading mb-0">상대 정보페이지</h2>
+        </div>
+    </div>
+</header>
+<div class="container">
+    <div class="pageEdit">
+        <div id="nickname" class="nickname">
+            <h2>상대 닉네임</h2>
+        </div>
+        <img src="../static/css/image/person.png" width=150 height=110>
+        <div id="status-message" class="status-message"><h5>상태 메세지</h5>
+            <br> 나는 오늘도 배고프다 몹시 배고프다 소고기가 먹고싶다, 업진살...
+        </div>
+
+        <div class="profiles-info">
+        </div>
+
+        <div class="otherpartypost-list">
+            <div class="otherpartypost">
+                <strong> 상대방 모집글</strong>
+            </div>
+
+            <div id="partypost1" class="partypost">
+                <strong> 글 제목 : 글 제목1 / 마감일자 : 마감일자 / 위치 : 위치 / 모집 상태 : 모집중</strong>
+                <button class="btn btn-warning rounded-pill" onclick="window.location.href= 'login.html'">유저정보
+                </button>
+            </div>
+            <div id="partypost2" class="partypost">
+                <strong>글 제목 : 글 제목2 / 마감일자 : 마감일자 / 위치 : 위치 / 모집 상태 : 모집중</strong>
+                <button class="btn btn-warning rounded-pill" onclick="window.location.href= 'login.html'">유저정보
+                </button>
+            </div>
+            <div id="partypost3" class="partypost">
+                <strong>글 제목 : 글 제목3 / 마감일자 : 마감일자 / 위치 : 위치 / 모집 상태 : 모집중</strong>
+                <button class="btn btn-warning rounded-pill" onclick="window.location.href= 'login.html'">유저정보
+                </button>
+            </div>
+            <div id="partypost4" class="partypost">
+                <strong>글 제목 : 글 제목4 / 마감일자 : 마감일자 / 위치 : 위치 / 모집 상태 : 모집중</strong>
+                <button class="btn btn-warning rounded-pill" onclick="window.location.href= 'login.html'">유저정보
+                </button>
+            </div>
+
+        </div>
+        <div class="partypost-list">
+            <div class="otherpartypost">
+                <strong> 신청한 모집글</strong>
+            </div>
+
+            <div id="partypost6" class="partypost">
+                <strong> 글 제목 : 글 제목1 / 마감일자 : 마감일자 / 위치 : 위치 / 모집 상태 : 모집중</strong>
+                <button class="btn btn-warning rounded-pill" onclick="window.location.href= 'login.html'">유저정보
+                </button>
+            </div>
+            <div id="partypost7" class="partypost">
+                <strong>글 제목 : 글 제목2 / 마감일자 : 마감일자 / 위치 : 위치 / 모집 상태 : 모집중</strong>
+                <button class="btn btn-warning rounded-pill" onclick="window.location.href= 'login.html'">유저정보
+                </button>
+            </div>
+        </div>
+
+        <div class="noshowpartypost-list">
+            <div class="otherpartypost">
+                <strong> 노쇼한 모집글</strong>
+            </div>
+
+            <div id="partypost8" class="partypost">
+                <strong> 글 제목 : 글 제목1 / 마감일자 : 마감일자 / 위치 : 위치 / 모집 상태 : 모집중</strong>
+                <button class="btn btn-warning rounded-pill" onclick="window.location.href= 'login.html'">유저정보
+                </button>
+            </div>
+            <div id="partypost5" class="partypost">
+                <strong>글 제목 : 글 제목2 / 마감일자 : 마감일자 / 위치 : 위치 / 모집 상태 : 모집중</strong>
+                <button class="btn btn-warning rounded-pill" onclick="window.location.href= 'login.html'">유저정보
+                </button>
+            </div>
+        </div>
+        <input type="submit" class="btn btn-danger rounded-pill" value="해당유저 신고">
+
+        <input type="submit" class="btn btn-primary rounded-pill" value="해당유저 차단">
+    </div>
+</div>
+</body>
+</html>

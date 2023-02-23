@@ -31,7 +31,6 @@ import com.example.party.user.dto.ProfileRequest;
 import com.example.party.user.dto.SignupRequest;
 import com.example.party.user.type.Status;
 import com.example.party.user.type.UserRole;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -61,18 +60,15 @@ public class User extends TimeStamped implements UserDetails {
 	@Column(name = "role", nullable = false, length = 12)
 	private UserRole role;
 	@Enumerated(EnumType.STRING)
-	@Column(name = "status", nullable = false, columnDefinition = "ENUM('ACTIVE', 'SUSPENDED')")
+	@Column(name = "status", nullable = false, columnDefinition = "ENUM('ACTIVE', 'SUSPENDED', 'DORMANT')")
 	private Status status;
 
 	// 연관관계
 	@OneToOne(optional = false, cascade = CascadeType.ALL)
 	@JoinColumn(name = "profile_id", unique = true, referencedColumnName = "id")
 	private Profile profile;
-	@JsonIgnore
 	@OneToMany(mappedBy = "user")
 	private List<Application> applies;
-
-	@JsonIgnore
 	@OneToMany(mappedBy = "user")
 	private List<PartyPost> partyPosts;
 	@OneToMany(mappedBy = "user")

@@ -10,7 +10,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,9 +38,7 @@ public class UserController {
 	//회원가입
 	@PostMapping("/signup")
 	public ResponseEntity<ApiResponse> signup(@RequestBody @Valid SignupRequest signupRequest) {
-		ApiResponse apiResponse = userService.signUp(signupRequest);
-		HttpHeaders headers = new HttpHeaders();
-		return ResponseEntity.ok().headers(headers).body(apiResponse);
+		return ResponseEntity.ok(userService.signUp(signupRequest));
 	}
 
 	//로그인
@@ -56,23 +53,20 @@ public class UserController {
 
 	//로그아웃
 	@PostMapping("/signout")
-	public ResponseEntity<ApiResponse> signOut(@AuthenticationPrincipal User userDetails,
+	public ResponseEntity<ApiResponse> signOut(@AuthenticationPrincipal User user,
 		HttpServletResponse response) {
 		Cookie cookie = new Cookie("rfToken", null);
 		cookie.setMaxAge(0);
 		response.setHeader(AUTHORIZATION_HEADER, "");
 		response.addCookie(cookie);
-		System.out.println(userDetails);
-		return ResponseEntity.ok(userService.signOut(userDetails));
+		return ResponseEntity.ok(userService.signOut(user));
 	}
 
 	//회원탈퇴
-	@DeleteMapping("/withdraw")
+	@PostMapping("/withdraw")
 	public ResponseEntity<ApiResponse> withdraw(@RequestBody WithdrawRequest withdrawRequest,
-		@AuthenticationPrincipal User userDetails) {
-		ApiResponse apiResponse = userService.withdraw(userDetails, withdrawRequest);
-		HttpHeaders headers = new HttpHeaders();
-		return ResponseEntity.ok().headers(headers).body(apiResponse);
+		@AuthenticationPrincipal User user) {
+		return ResponseEntity.ok(userService.withdraw(user, withdrawRequest));
 	}
 
 	//프로필 정보 수정
@@ -83,12 +77,14 @@ public class UserController {
 		return ResponseEntity.ok(userService.updateProfile(profileRequest, user));
 	}
 
+	//내 프로필 조회
 	@GetMapping("/profile")
 	public ResponseEntity<ApiResponse> getMyProfile(@AuthenticationPrincipal
 	User user) {
 		return ResponseEntity.ok(userService.getMyProfile(user));
 	}
 
+	//상대 유저 프로필 조회
 	@GetMapping("/profile/{userId}")
 	public ResponseEntity<ApiResponse> getOtherProfile(@PathVariable Long userId) {
 		return ResponseEntity.ok(userService.getOtherProfile(userId));
