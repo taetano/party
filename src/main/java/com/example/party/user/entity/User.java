@@ -24,7 +24,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.example.party.application.entity.Application;
-import com.example.party.chat.entity.MsgRoom;
+import com.example.party.chat.entity.EnrolledChatRoom;
 import com.example.party.global.common.TimeStamped;
 import com.example.party.partypost.entity.PartyPost;
 import com.example.party.user.dto.ProfileRequest;
@@ -75,16 +75,13 @@ public class User extends TimeStamped implements UserDetails {
 	@JsonIgnore
 	@OneToMany(mappedBy = "user")
 	private List<PartyPost> partyPosts;
-
-	@JsonIgnore
 	@OneToMany(mappedBy = "user")
-	private List<MsgRoom> msgRooms;
+	private List<EnrolledChatRoom> enrolledChatRoom;
 	@ManyToMany
 	@JoinTable(name = "likes",
 		joinColumns = @JoinColumn(name = "user_id"),
 		inverseJoinColumns = @JoinColumn(name = "post_id")
 	)
-
 	private Set<PartyPost> likePartyPosts;
 
 	public String getProfileImg() {

@@ -13,16 +13,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.example.party.chat.dto.CreateRoomRequest;
-import com.example.party.chat.dto.MsgRoomResponse;
-import com.example.party.chat.service.MsgService;
+import com.example.party.chat.dto.ChatRoomResponse;
+import com.example.party.chat.service.ChatRoomService;
 import com.example.party.user.entity.User;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Controller
-public class MsgRoomController {
-	private final MsgService msgService;
+public class ChatRoomContoller {
+	private final ChatRoomService chatRoomService;
 
 	@GetMapping("/chatting")
 	public String chatting(Model model, @AuthenticationPrincipal User user) {
@@ -30,17 +30,17 @@ public class MsgRoomController {
 		return "chat";
 	}
 
-	@PostMapping("/rooms")
+	@PostMapping("/api/rooms")
 	@ResponseBody
 	@ResponseStatus(HttpStatus.CREATED)
 	public void createRoom(@RequestBody CreateRoomRequest request, @AuthenticationPrincipal User user) {
-		msgService.createRoom(request, user);
+		chatRoomService.createRoom(request, user);
 	}
 
-	@GetMapping("/rooms")
+	@GetMapping("/api/rooms")
 	@ResponseBody
-	public List<MsgRoomResponse> getAllRooms(@AuthenticationPrincipal User user) { // 유저 정보
-		return msgService.findAllByUserId(user);
+	public List<ChatRoomResponse> getChatRoom(@AuthenticationPrincipal User user) { // 유저 정보
+		return chatRoomService.findAllChatRoomByUser(user);
 	}
 }
 

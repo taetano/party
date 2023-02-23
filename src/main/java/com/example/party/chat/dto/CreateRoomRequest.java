@@ -1,10 +1,10 @@
 package com.example.party.chat.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
+@AllArgsConstructor
 public class CreateRoomRequest {
-	private String otherUserName;
+	private String nickName;
 }

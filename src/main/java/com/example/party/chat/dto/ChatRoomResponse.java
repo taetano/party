@@ -3,11 +3,11 @@ package com.example.party.chat.dto;
 import lombok.Getter;
 
 @Getter
-public class MsgRoomResponse {
+public class ChatRoomResponse {
 	private final String roomName;
 	private final Long roomId;
 
-	public MsgRoomResponse(String roomName, Long roomId) {
+	public ChatRoomResponse(String roomName, Long roomId) {
 		this.roomName = roomName;
 		this.roomId = roomId;
 	}

@@ -11,24 +11,15 @@ public class Message {
 	}
 
 	private final MessageType messageType;
-	private String msg;
+	private final String text;
 	private final String roomId;
 	private final String writer;
 
-	public Message(String msg, String messageType, String roomId, String writer) {
-		this.msg = msg;
+	public Message(String text, String messageType, String roomId, String writer) {
+		this.text = text;
 		this.messageType = MessageType.SEND.name().equals(messageType) ? MessageType.SEND : MessageType.OUT;
 		this.roomId = roomId;
 		this.writer = writer;
-	}
-
-	public Message outFromChatRoom(String nickname) {
-		this.msg = String.format("%s님이 대화방에서 나가셨습니다.", nickname);
-		return this;
-	}
-
-	public String getRoomId() {
-		return this.roomId;
 	}
 
 }

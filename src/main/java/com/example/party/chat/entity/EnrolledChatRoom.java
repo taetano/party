@@ -1,6 +1,5 @@
 package com.example.party.chat.entity;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,26 +16,21 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class MsgRoom {
+public class EnrolledChatRoom {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "name", nullable = false)
-	private String roomName;
-
-	@ManyToOne // cascade = CascadeType.PERSIST
+	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private User user;
 
 	@ManyToOne
-	@JoinColumn(name = "other_id")
-	private User other;
+	@JoinColumn(name = "chat_room_id")
+	private ChatRoom chatRoom;
 
-	public MsgRoom(String roomName, User user, User other) {
-		this.roomName = roomName;
+	public EnrolledChatRoom(User user, ChatRoom chatRoom) {
 		this.user = user;
-		this.other = other;
+		this.chatRoom = chatRoom;
 	}
-
 }

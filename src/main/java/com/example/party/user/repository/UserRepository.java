@@ -1,5 +1,6 @@
 package com.example.party.user.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,5 +13,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 	Boolean existsUserByNickname(String nickname);
 
-	Optional<User> findByNickname(String yourName);
+	List<User> findAllByNicknameIn(List<String> nicknames);
 }
