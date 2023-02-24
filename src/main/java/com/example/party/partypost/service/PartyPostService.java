@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 import com.example.party.global.exception.NotFoundException;
 import com.example.party.partypost.entity.Parties;
 import com.example.party.restriction.entity.Blocks;
-import com.example.party.restriction.repository.BlockRepository;
+import com.example.party.restriction.repository.BlocksRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -51,7 +51,7 @@ public class PartyPostService implements IPartyPostService {
     private final UserRepository userRepository;
     private final ApplicationRepository applicationRepository;
     private final CategoryRepository categoryRepository;
-    private final BlockRepository blockRepository;
+    private final BlocksRepository blocksRepository;
 
     //모집글 작성
     @Override
@@ -82,15 +82,15 @@ public class PartyPostService implements IPartyPostService {
     @Override
     @Transactional
     public DataApiResponse<PartyPostListResponse> findPartyList(User user, int page) {
-        List<Blocks> blockedList = blockRepository.findAllByBlockerId(user.getId());
+        List<Blocks> blockedList = blocksRepository.findAllByBlockerId(user.getId());
         // 1.모집글 전체 불러오기 (페이지 추가)
         Pageable pageable = PageRequest.of(page, 6, Sort.by("createdAt").descending());
         //2. Page<partyPost> 를 Page<PartyPostListResponse> 로 변경
         List<PartyPost> pageResponse = partyPostRepository.findAllByActiveIsTrue(pageable);
         //blockedList 를 체크해서 걸러줌. 걸러진 페이지에 대한 처리는 아직 없음
-        List<PartyPostListResponse> returnByPartyPost = filteringPosts(blockedList, pageResponse).stream()
+        List<PartyPostListResponse> filteredPosts = filteringPosts(blockedList, pageResponse).stream()
                 .map(PartyPostListResponse::new).collect(Collectors.toList());
-        return DataApiResponse.ok("모집글 전체 조회 완료", returnByPartyPost);
+        return DataApiResponse.ok("모집글 전체 조회 완료", filteredPosts);
     }
 
     //모집글 상세 조회(개별 상세조회)
@@ -114,24 +114,26 @@ public class PartyPostService implements IPartyPostService {
     //문자 검색으로 제목,지역명으로 모집글 조회
     @Override
     @Transactional
-    public DataApiResponse<PartyPostListResponse> searchPartyPost(String searchText, int page) {
+    public DataApiResponse<PartyPostListResponse> searchPartyPost(User user, String searchText, int page) {
         Pageable pageable = PageRequest.of(page - 1, 6);
+        List<Blocks> blockedList = blocksRepository.findAllByBlockerId(user.getId());
 
         //1.검색 문자에 맞는 리스트 조회
         List<PartyPost> partyPostList = partyPostRepository.findByTitleContainingOrAddressContaining(searchText,
                 searchText,
                 pageable);
-
-        List<PartyPostListResponse> partyPostListResponses = partyPostList.stream()
+        
+        List<PartyPostListResponse> filteredPosts = filteringPosts(blockedList, partyPostList).stream()
                 .map(PartyPostListResponse::new).collect(Collectors.toList());
 
-        return DataApiResponse.ok("모집글 검색 완료", partyPostListResponses);
+        return DataApiResponse.ok("모집글 검색 완료", filteredPosts);
     }
 
     //카테고리 별 모집글 조회
     @Override
-    public DataApiResponse<PartyPostListResponse> searchPartyPostByCategory(Long categoryId, int page) {
+    public DataApiResponse<PartyPostListResponse> searchPartyPostByCategory(User user, Long categoryId, int page) {
         Pageable pageable = PageRequest.of(page - 1, 6);
+        List<Blocks> blockedList = blocksRepository.findAllByBlockerId(user.getId());
 
         Category category = categoryRepository.findById(categoryId).orElseThrow(
                 CategoryNotFoundException::new
@@ -142,29 +144,32 @@ public class PartyPostService implements IPartyPostService {
         }
 
         List<PartyPost> partyPostList = partyPostRepository.findByCategoryId(categoryId, pageable);
-        List<PartyPostListResponse> partyPostListResponses = partyPostList.stream()
+
+        List<PartyPostListResponse> filteredPosts = filteringPosts(blockedList, partyPostList).stream()
                 .map(PartyPostListResponse::new).collect(Collectors.toList());
 
-        return DataApiResponse.ok("카테고리별 모집글 조회 완료", partyPostListResponses);
+        return DataApiResponse.ok("카테고리별 모집글 조회 완료", filteredPosts);
     }
 
     //핫한 모집글 조회 (조회수)
     @Override
-    public DataApiResponse<PartyPostListResponse> findHotPartyPost() {
+    public DataApiResponse<PartyPostListResponse> findHotPartyPost(User user) {
         Pageable pageable = PageRequest.of(0, 3, Sort.by("ViewCnt"));
+        List<Blocks> blockedList = blocksRepository.findAllByBlockerId(user.getId());
 
         List<PartyPost> partyPostList = partyPostRepository.findFirst3ByOrderByViewCntDesc(pageable);
 
-        List<PartyPostListResponse> partyPostListResponses = partyPostList.stream()
+        List<PartyPostListResponse> filteredPosts = filteringPosts(blockedList, partyPostList).stream()
                 .map(PartyPostListResponse::new).collect(Collectors.toList());
 
-        return DataApiResponse.ok("핫한 모집글 조회 완료", partyPostListResponses);
+        return DataApiResponse.ok("핫한 모집글 조회 완료", filteredPosts);
     }
 
     //내주변 모집글 조회
     @Override
-    public DataApiResponse<PartyPostListResponse> findNearPartyPost(String string) {
+    public DataApiResponse<PartyPostListResponse> findNearPartyPost(User user, String string) {
         Pageable pageable = PageRequest.of(0, 3); //페이지 갯수 지정
+        List<Blocks> blockedList = blocksRepository.findAllByBlockerId(user.getId());
 
         String[] list = string.split(" ");
         String searchAddress = list[2];
@@ -172,10 +177,10 @@ public class PartyPostService implements IPartyPostService {
         //1.검색 문자에 맞는 리스트 조회
         List<PartyPost> partyPostList = partyPostRepository.findByAddressContaining(searchAddress, pageable);
 
-        List<PartyPostListResponse> partyPostListResponses = partyPostList.stream()
+        List<PartyPostListResponse> filteredPosts = filteringPosts(blockedList, partyPostList).stream()
                 .map(PartyPostListResponse::new).collect(Collectors.toList());
 
-        return DataApiResponse.ok("주변 모집글 조회 완료", partyPostListResponses);
+        return DataApiResponse.ok("주변 모집글 조회 완료", filteredPosts);
     }
 
     //모집글 수정

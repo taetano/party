@@ -16,13 +16,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.example.party.global.common.ApiResponse;
 import com.example.party.user.dto.LoginRequest;
-import com.example.party.user.dto.ProfileRequest;
+import com.example.party.user.dto.ProfilesRequest;
 import com.example.party.user.dto.SignupRequest;
 import com.example.party.user.dto.WithdrawRequest;
 import com.example.party.user.entity.User;
@@ -99,9 +98,9 @@ public class UserController {
     //프로필 정보 수정
     @PatchMapping("/profile")
     public ResponseEntity<ApiResponse> updateProfile(
-            @Validated @RequestBody ProfileRequest profileRequest,
+            @Validated @RequestBody ProfilesRequest profilesRequest,
             @AuthenticationPrincipal User user) {
-        return ResponseEntity.ok(userService.updateProfile(profileRequest, user));
+        return ResponseEntity.ok(userService.updateProfile(profilesRequest, user));
     }
 
     //내 프로필 조회

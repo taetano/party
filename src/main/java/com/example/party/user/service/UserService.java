@@ -16,14 +16,14 @@ import com.example.party.global.util.JwtProvider;
 import com.example.party.user.dto.LoginRequest;
 import com.example.party.user.dto.MyProfileResponse;
 import com.example.party.user.dto.OtherProfileResponse;
-import com.example.party.user.dto.ProfileRequest;
+import com.example.party.user.dto.ProfilesRequest;
 import com.example.party.user.dto.SignupRequest;
 import com.example.party.user.dto.WithdrawRequest;
 import com.example.party.user.entity.User;
 import com.example.party.user.exception.EmailOverlapException;
 import com.example.party.user.exception.ExistNicknameException;
 import com.example.party.user.exception.UserNotFoundException;
-import com.example.party.user.repository.ProfileRepository;
+import com.example.party.user.repository.ProfilesRepository;
 import com.example.party.user.repository.UserRepository;
 
 import lombok.AllArgsConstructor;
@@ -37,7 +37,7 @@ public class UserService implements IUserService {
 
     private static final String RT_TOKEN = "rTKey";
     private final UserRepository userRepository;
-    private final ProfileRepository profileRepository;
+    private final ProfilesRepository profilesRepository;
     private final PasswordEncoder passwordEncoder;
     private final RedisTemplate<String, String> redisTemplate;
 
@@ -54,7 +54,7 @@ public class UserService implements IUserService {
 
         String password = passwordEncoder.encode(signupRequest.getPassword());
         Profiles profiles = new Profiles();
-        profileRepository.save(profiles);
+        profilesRepository.save(profiles);
         User user = new User(signupRequest, password, profiles);
         userRepository.save(user);
         return ApiResponse.create("회원가입 완료");
@@ -98,11 +98,11 @@ public class UserService implements IUserService {
 
     //프로필 수정
     @Override
-    public ApiResponse updateProfile(ProfileRequest profileRequest, User user) {
+    public ApiResponse updateProfile(ProfilesRequest profilesRequest, User user) {
         Profiles profiles = user.getProfiles();
-        profiles.updateProfile(profileRequest.getProfileImg(), profileRequest.getComment());
-        user.updateProfile(profileRequest); //user 정보 수정
-        profileRepository.save(profiles);
+        profiles.updateProfile(profilesRequest.getProfileImg(), profilesRequest.getComment());
+        user.updateProfile(profilesRequest); //user 정보 수정
+        profilesRepository.save(profiles);
         userRepository.save(user); //변경한 user 저장
         return ApiResponse.ok("프로필 정보 수정 완료"); //결과값 반환
     }

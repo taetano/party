@@ -1,6 +1,5 @@
 package com.example.party.restriction.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -29,7 +28,7 @@ import com.example.party.restriction.entity.NoShow;
 import com.example.party.restriction.entity.ReportPost;
 import com.example.party.restriction.entity.ReportUser;
 import com.example.party.global.exception.NotFoundException;
-import com.example.party.restriction.repository.BlockRepository;
+import com.example.party.restriction.repository.BlocksRepository;
 import com.example.party.restriction.repository.NoShowRepository;
 import com.example.party.restriction.repository.ReportPostRepository;
 import com.example.party.restriction.repository.ReportUserRepository;
@@ -48,7 +47,7 @@ public class RestrictionService {
 
 	private final UserRepository userRepository;
 	private final PartyRepository partyRepository;
-	private final BlockRepository blockRepository;
+	private final BlocksRepository blocksRepository;
 	private final NoShowRepository noShowRepository;
 	private final ReportUserRepository reportUserRepository;
 	private final ReportPostRepository reportPostRepository;
@@ -67,7 +66,7 @@ public class RestrictionService {
 			}
 		}
 		Blocks block = new Blocks(user, blocked);
-		blockRepository.save(block);
+		blocksRepository.save(block);
 		return ItemApiResponse.ok("차단등록 완료", new BlockResponse(block));
 	}
 
@@ -79,7 +78,7 @@ public class RestrictionService {
 		if (!blocks.isEmpty()) {
 			for (Blocks block : blocks) {
 				if (Objects.equals(block.getBlocked().getId(), (blocked.getId()))) {
-					blockRepository.delete(block);
+					blocksRepository.delete(block);
 					return ApiResponse.ok("차단해제 완료");
 				}
 			}
@@ -92,7 +91,7 @@ public class RestrictionService {
 	//차단목록 조회
 	public DataApiResponse<BlockResponse> getBlockedList(int page, User user) {
 		Pageable pageable = PageRequest.of(page, 10);
-		List<Blocks> blocks = blockRepository.findAllByBlockerId(user.getId(), pageable);
+		List<Blocks> blocks = blocksRepository.findAllByBlockerId(user.getId(), pageable);
 		if (blocks.size() == 0) {
 			throw new BadRequestException("차단한 유저가 없습니다");
 		}
@@ -187,7 +186,7 @@ public class RestrictionService {
 	}
 
 	private List<Blocks> getBlocks(Long userId) {
-		return blockRepository.findAllByBlockerId(userId);
+		return blocksRepository.findAllByBlockerId(userId);
 	}
 
 	private Parties getParties(Long postId) {

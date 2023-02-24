@@ -9,7 +9,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.example.party.global.util.JwtProvider;
-import com.example.party.user.repository.ProfileRepository;
+import com.example.party.user.repository.ProfilesRepository;
 import com.example.party.user.repository.UserRepository;
 import com.example.party.user.service.UserService;
 
@@ -19,7 +19,7 @@ class UsersControllerTest {
 	@Mock
 	private UserRepository userRepository;
 	@Mock
-	private ProfileRepository profileRepository;
+	private ProfilesRepository profilesRepository;
 	@InjectMocks
 	private UserService userService;
 

@@ -1,6 +1,5 @@
 package com.example.party;
 
-import com.example.party.category.exception.CategoryNotFoundException;
 import com.example.party.partypost.dto.PartyPostRequest;
 import com.example.party.partypost.entity.Parties;
 import com.example.party.partypost.entity.PartyPost;
@@ -11,7 +10,7 @@ import com.example.party.restriction.repository.NoShowRepository;
 import com.example.party.user.dto.SignupRequest;
 import com.example.party.user.entity.Profiles;
 import com.example.party.user.entity.User;
-import com.example.party.user.repository.ProfileRepository;
+import com.example.party.user.repository.ProfilesRepository;
 import com.example.party.user.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -26,8 +25,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 
 @SpringBootApplication
 @EnableJpaAuditing
@@ -40,7 +37,7 @@ public class PartyApplication {
 	 @Bean
 	 public CommandLineRunner dummyData(
 			 CategoryRepository categoryRepository, UserRepository userRepository, PasswordEncoder passwordEncoder,
-			 ProfileRepository profileRepository, PartyPostRepository partyPostRepository, PartyRepository partyRepository,
+			 ProfilesRepository profilesRepository, PartyPostRepository partyPostRepository, PartyRepository partyRepository,
 			 NoShowRepository noShowRepository
 	 ) {
 	 	return (args -> {
@@ -82,12 +79,12 @@ public class PartyApplication {
 			Profiles profiles5 = new Profiles();
 			Profiles profiles6 = new Profiles();
 
-			profileRepository.save(profiles1);
-			profileRepository.save(profiles2);
-			profileRepository.save(profiles3);
-			profileRepository.save(profiles4);
-			profileRepository.save(profiles5);
-			profileRepository.save(profiles6);
+			profilesRepository.save(profiles1);
+			profilesRepository.save(profiles2);
+			profilesRepository.save(profiles3);
+			profilesRepository.save(profiles4);
+			profilesRepository.save(profiles5);
+			profilesRepository.save(profiles6);
 
 			User user1 = new User(signupRequest1, password, profiles1);
 			User user2 = new User(signupRequest2,password, profiles2);

@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.party.user.entity.Profiles;
 
-public interface ProfileRepository extends JpaRepository<Profiles, Long> {
+public interface ProfilesRepository extends JpaRepository<Profiles, Long> {
 	// boolean existsProfileBy(String profile); jpa 메소드명 작성 규칙에 대해 알아봐주세요.
 
 }
