@@ -16,8 +16,8 @@
     <script type="text/javascript"
             src="//dapi.kakao.com/v2/maps/sdk.js?appkey=c026441ee839df0644ae92edb8d7b55c&libraries=services"></script>
     <!--    스타일 시트 & css 불러오기-->
-    <script src="../static/js/postWriter.js"></script>
-    <link rel="stylesheet" href="../static/css/postWriterStyle.css">
+    <script src="../static/js/partypost-writer.js"></script>
+    <link rel="stylesheet" href="../static/css/partypost-writer.css">
     <link rel="stylesheet" href="../static/css/styles.css">
     <title>Let's PARTY|Partypost|Edit</title>
 </head>
@@ -299,7 +299,7 @@
     // json 만들어서 보내는 함수 만들기
     function sendPartyPost() {
 
-            let partyPostData = {
+        let partyPostData = {
             "title": $('#title').val(),
             "content": $('#content').val(),
             "categoryId": $('#category').val(),
@@ -321,10 +321,6 @@
         )
         console.log()
     }
-
-
-
-
 
 
 </script>
