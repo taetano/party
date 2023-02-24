@@ -34,20 +34,20 @@ public interface IPartyPostService {
 
 	//모집글 전체 조회
 	@Transactional
-	DataApiResponse<PartyPostListResponse> findPartyList(int page);
+	DataApiResponse<PartyPostListResponse> findPartyList(User user, int page);
 
 	//모집글 상세 조회(개별 상세조회)
 	@Transactional
 	ItemApiResponse<PartyPostResponse> getPartyPost(Long postId, User user);
 
 	// 검색단어로 모집글 리스트 조회
-	DataApiResponse<PartyPostListResponse> searchPartyPost(String searchText, int page);
+	DataApiResponse<PartyPostListResponse> searchPartyPost(User user, String searchText, int page);
 
-	DataApiResponse<PartyPostListResponse> findHotPartyPost();
+	DataApiResponse<PartyPostListResponse> findHotPartyPost(User user);
 
 	//카테고리명 별로 모집글 조회
-	DataApiResponse<PartyPostListResponse> searchPartyPostByCategory(Long categoryId, int page);
+	DataApiResponse<PartyPostListResponse> searchPartyPostByCategory(User user, Long categoryId, int page);
 
 	// 주소로 가까운 모집글 조회
-	DataApiResponse<PartyPostListResponse> findNearPartyPost(String address);
+	DataApiResponse<PartyPostListResponse> findNearPartyPost(User user, String address);
 }

@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "Profiles")
-public class Profile {
+public class Profiles {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -28,7 +28,7 @@ public class Profile {
 		this.id = id;
 	}
 
-	public Profile(String img, String comment, int participationCnt) {
+	public Profiles(String img, String comment, int participationCnt) {
 		this.img = img;
 		this.comment = comment;
 		this.noShowCnt = 0;

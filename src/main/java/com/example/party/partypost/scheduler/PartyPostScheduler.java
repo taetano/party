@@ -29,16 +29,16 @@ public class PartyPostScheduler {
 		partyPostRepository.changeStatusFoundToNoShow();
 	}
 
-	// FINDING -> END (모집마감시간이 됐는데도 아직 FINDING 상태일 때)
+	// FINDING -> PROCESSING (모집마감시간이 됐는데도 아직 FINDING 상태일 때)
 	@Scheduled(cron = "0 * * * * ?") //(테스트용)1분 간격으로 실행 // 배포시 매시 45분 마다로 변경 필요
-	private void changeStatusFindingToEnd() {
-		partyPostRepository.changeStatusFindingToEnd();
+	private void changeStatusFindingToProcessing() {
+		partyPostRepository.changeStatusFindingToProcessing();
 	}
 
-	// NO_SHOW_REPORTING -> END (모임시간 후 1시간 지나면 변경)
+	// NO_SHOW_REPORTING -> PROCESSING (모임시간 후 1시간 지나면 변경)
 	@Scheduled(cron = "0 * * * * ?") // (테스트용)1분 간격으로 실행 // 배포시 매시 정각 마다로 변경 필요
-	private void changeStatusNoShowToEnd() {
-		partyPostRepository.changeStatusNoShowToEnd(LocalDateTime.now().minusHours(1));
-		restrictionService.checkingNoShow(partyPostRepository.statusEqualEnd());
+	private void changeStatusNoShowToProcessing() {
+		partyPostRepository.changeStatusNoShowToProcessing(LocalDateTime.now().minusHours(1));
+		restrictionService.checkingNoShow(partyPostRepository.statusEqualProcessing());
 	}
 }

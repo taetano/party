@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.party.restriction.entity.Blocks;
 
-public interface BlockRepository extends JpaRepository<Blocks, Long> {
+public interface BlocksRepository extends JpaRepository<Blocks, Long> {
 
 	List<Blocks> findAllByBlockerId(Long blockerId);
 
