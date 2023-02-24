@@ -4,9 +4,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import com.example.party.partypost.entity.Parties;
+import com.example.party.partypost.entity.Party;
 import com.example.party.restriction.dto.*;
 
+import com.example.party.restriction.entity.Block;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -21,12 +22,11 @@ import com.example.party.partypost.exception.PartyPostNotFoundException;
 import com.example.party.partypost.repository.PartyPostRepository;
 import com.example.party.partypost.repository.PartyRepository;
 import com.example.party.partypost.type.Status;
-import com.example.party.restriction.entity.Blocks;
 import com.example.party.restriction.entity.NoShow;
 import com.example.party.restriction.entity.ReportPost;
 import com.example.party.restriction.entity.ReportUser;
 import com.example.party.global.exception.NotFoundException;
-import com.example.party.restriction.repository.BlocksRepository;
+import com.example.party.restriction.repository.BlockRepository;
 import com.example.party.restriction.repository.NoShowRepository;
 import com.example.party.restriction.repository.ReportPostRepository;
 import com.example.party.restriction.repository.ReportUserRepository;
@@ -45,7 +45,7 @@ public class RestrictionService {
 
     private final UserRepository userRepository;
     private final PartyRepository partyRepository;
-    private final BlocksRepository blocksRepository;
+    private final BlockRepository blockRepository;
     private final NoShowRepository noShowRepository;
     private final ReportUserRepository reportUserRepository;
     private final ReportPostRepository reportPostRepository;
@@ -54,16 +54,16 @@ public class RestrictionService {
     public ApiResponse blockUser(User user, Long userId) {
         User blocked = findByUser(userId);
         isMySelf(user, userId);
-        List<Blocks> blocks = getBlocks(user.getId());
+        List<Block> blocks = getBlocks(user.getId());
         if (blocks.size() > 0) {
-            for (Blocks blockIf : blocks) {
+            for (Block blockIf : blocks) {
                 if (Objects.equals(blockIf.getBlocked().getId(), (blocked.getId()))) {
                     throw new BadRequestException("이미 신고한 유저입니다");
                 }
             }
         }
-        Blocks block = new Blocks(user, blocked);
-        blocksRepository.save(block);
+        Block block = new Block(user, blocked);
+        blockRepository.save(block);
         return ApiResponse.ok("차단등록 완료");
     }
 
@@ -71,11 +71,11 @@ public class RestrictionService {
     public ApiResponse unBlockUser(User user, Long userId) {
         User blocked = findByUser(userId);
         isMySelf(user, userId);
-        List<Blocks> blocks = getBlocks(user.getId());
+        List<Block> blocks = getBlocks(user.getId());
         if (!blocks.isEmpty()) {
-            for (Blocks block : blocks) {
+            for (Block block : blocks) {
                 if (Objects.equals(block.getBlocked().getId(), (blocked.getId()))) {
-                    blocksRepository.delete(block);
+                    blockRepository.delete(block);
                     return ApiResponse.ok("차단해제 완료");
                 }
             }
@@ -88,7 +88,7 @@ public class RestrictionService {
     //차단목록 조회
     public DataApiResponse<BlockResponse> getBlockedList(int page, User user) {
         Pageable pageable = PageRequest.of(page, 10);
-        List<Blocks> blocks = blocksRepository.findAllByBlockerId(user.getId(), pageable);
+        List<Block> blocks = blockRepository.findAllByBlockerId(user.getId(), pageable);
         if (blocks.size() == 0) {
             throw new BadRequestException("차단한 유저가 없습니다");
         }
@@ -113,7 +113,7 @@ public class RestrictionService {
     public DataApiResponse<ReportUserResponse> findReportUserList(int page) {
         Pageable pageable = PageRequest.of(page, 6, Sort.by("createdAt").descending());
         List<ReportUserResponse> reportUserResponseList = reportUserRepository.findAllByOrderById(pageable).stream()
-                .map(reportUser -> new ReportUserResponse(reportUser)).collect(Collectors.toList());
+                .map(ReportUserResponse::new).collect(Collectors.toList());
         return DataApiResponse.ok("유저 신고 로그 조회 완료", reportUserResponseList);
     }
 
@@ -136,7 +136,7 @@ public class RestrictionService {
     public DataApiResponse<ReportPostResponse> findReportPostList(int page) {
         Pageable pageable = PageRequest.of(page, 6, Sort.by("createdAt").descending());
         List<ReportPostResponse> reportPostResponseList = reportPostRepository.findAllByOrderById(pageable).stream()
-                .map((ReportPost reportPost) -> new ReportPostResponse(reportPost)).collect(Collectors.toList());
+                .map(ReportPostResponse::new).collect(Collectors.toList());
         return DataApiResponse.ok("유저 신고 로그 조회 완료", reportPostResponseList);
     }
 
@@ -145,11 +145,11 @@ public class RestrictionService {
         isMySelf(user, request.getUserId());
         //신고할 유저
         User reported = findByUser(request.getUserId());
-        Parties parties = getParties(request.getPostId());
-        if (!parties.getPartyPost().getStatus().equals(Status.NO_SHOW_REPORTING)) {
+        Party party = getParties(request.getPostId());
+        if (!party.getPartyPost().getStatus().equals(Status.NO_SHOW_REPORTING)) {
             throw new BadRequestException("노쇼 신고 기간이 만료되었습니다");
         }
-        List<User> users = parties.getUsers();
+        List<User> users = party.getUsers();
         if (!users.contains(reported)) {
             throw new BadRequestException("참여한 파티원이 아닙니다");
         }
@@ -157,10 +157,10 @@ public class RestrictionService {
             throw new BadRequestException("파티 구성원이 아닙니다");
         }
         if (noShowRepository.existsByReporterIdAndReportedIdAndPartyPostId(user.getId(), reported.getId(),
-                parties.getPartyPost().getId())) {
+                party.getPartyPost().getId())) {
             throw new BadRequestException("이미 신고한 유저입니다");
         }
-        NoShow noShow = new NoShow(user, reported, parties.getPartyPost());
+        NoShow noShow = new NoShow(user, reported, party.getPartyPost());
         noShow.PlusNoShowReportCnt();
         noShowRepository.save(noShow);
         return ApiResponse.ok("노쇼 신고 완료");
@@ -173,8 +173,8 @@ public class RestrictionService {
             partyPost.ChangeStatusEnd();
 
             // 파티 유저 size 를 알기 위해
-            Parties parties = getParties(partyPost.getId());
-            List<User> users = parties.getUsers();
+            Party party = getParties(partyPost.getId());
+            List<User> users = party.getUsers();
 
             List<NoShow> noShowList = noShowRepository.findAllByPartyPostId(partyPost.getId());
             for (NoShow noShowIf : noShowList) {
@@ -197,11 +197,11 @@ public class RestrictionService {
             throw new BadRequestException("본인 아이디입니다");
     }
 
-    private List<Blocks> getBlocks(Long userId) {
-        return blocksRepository.findAllByBlockerId(userId);
+    private List<Block> getBlocks(Long userId) {
+        return blockRepository.findAllByBlockerId(userId);
     }
 
-    private Parties getParties(Long postId) {
+    private Party getParties(Long postId) {
         return partyRepository.findByPartyPostId(postId)
                 .orElseThrow(NotFoundException::new);
     }

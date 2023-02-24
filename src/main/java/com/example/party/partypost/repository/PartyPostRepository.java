@@ -13,8 +13,6 @@ import com.example.party.partypost.entity.PartyPost;
 
 public interface PartyPostRepository extends JpaRepository<PartyPost, Long> {
 
-	//
-
 	//모집글 전체 조회
 	List<PartyPost> findAllByActiveIsTrue(Pageable pageable);
 

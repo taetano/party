@@ -5,17 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.example.party.application.entity.Application;
 import com.example.party.application.type.ApplicationStatus;
@@ -84,7 +74,8 @@ public class PartyPost extends TimeStamped {
 	private List<ReportPost> reportPosts;
 	@OneToMany(mappedBy = "partyPost")
 	private List<NoShow> noShowReportPosts;
-
+	@OneToOne(fetch =  FetchType.LAZY, mappedBy = "partyPost", cascade = CascadeType.ALL)
+	private Party party;
 
 	//생성자
 	public PartyPost(User user, PartyPostRequest request, LocalDateTime partyDate, Category category) {
@@ -101,6 +92,20 @@ public class PartyPost extends TimeStamped {
 		this.closeDate = partyDate.minusMinutes(15);
 		this.applications = Collections.emptyList();
 		this.active = true;
+		this.party = new Party(this);
+	}
+
+	//test용
+	public void changeParty(Party party) {
+		this.party = party;
+	}
+
+	public void addUser(User user) {
+		this.party.autoAddUser(user);
+	}
+
+	public List<User> getPartyUsers() {
+		return this.party.getUsers();
 	}
 
 	//제목, 상세내용, 카테고리, 주소만 변경 가능 /현재 모임시작시간 & 모임마감시간 & 모집인원 변경 불가능

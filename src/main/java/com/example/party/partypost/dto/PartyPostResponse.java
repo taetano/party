@@ -16,6 +16,8 @@ import lombok.Getter;
 public class PartyPostResponse {
 
 	private final Long id;
+
+	private final String nickname;
 	private final String title;
 	private final String content;
 	private final Long categoryId;
@@ -35,6 +37,7 @@ public class PartyPostResponse {
 	//생성자
 	public PartyPostResponse(PartyPost partyPost) {
 		this.id = partyPost.getId();
+		this.nickname = partyPost.getUser().getNickname();
 		this.title = partyPost.getTitle();
 		this.content = partyPost.getContent();
 		this.categoryId = partyPost.getCategory().getId();
