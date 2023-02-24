@@ -1,26 +1,20 @@
-/*!
-    * Start Bootstrap - SB Admin v7.0.5 (https://startbootstrap.com/template/sb-admin)
-    * Copyright 2013-2022 Start Bootstrap
-    * Licensed under MIT (https://github.com/StartBootstrap/startbootstrap-sb-admin/blob/master/LICENSE)
-    */
-    // 
-// Scripts
-// 
-
-window.addEventListener('DOMContentLoaded', event => {
-
-    // Toggle the side navigation
-    const sidebarToggle = document.body.querySelector('#sidebarToggle');
-    if (sidebarToggle) {
-        // Uncomment Below to persist sidebar toggle between refreshes
-        // if (localStorage.getItem('sb|sidebar-toggle') === 'true') {
-        //     document.body.classList.toggle('sb-sidenav-toggled');
-        // }
-        sidebarToggle.addEventListener('click', event => {
-            event.preventDefault();
-            document.body.classList.toggle('sb-sidenav-toggled');
-            localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('sb-sidenav-toggled'));
-        });
+function getToken() {
+    let cName = 'Authorization' + '=';
+    let cookieData = document.cookie;
+    let cookie = cookieData.indexOf('Authorization');
+    let auth = '';
+    if (cookie !== -1) {
+        cookie += cName.length;
+        let end = cookieData.indexOf(';', cookie);
+        if (end === -1) end = cookieData.length;
+        auth = cookieData.substring(cookie, end);
     }
 
-});
+    // kakao 로그인 사용한 경우 Bearer 추가
+    if (auth.indexOf('Bearer') === -1 && auth !== '') {
+        auth = 'Bearer ' + auth;
+    }
+
+    return auth;
+}
+
