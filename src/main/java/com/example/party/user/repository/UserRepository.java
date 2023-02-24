@@ -1,5 +1,6 @@
 package com.example.party.user.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,4 +13,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	Boolean existsUserByEmail(String email);
 
 	Boolean existsUserByNickname(String nickname);
+
+	List<User> findAllByNicknameIn(List<String> nicknames);
 }

@@ -30,12 +30,12 @@
                     if (status === 'success') {
                         alert('회원가입 완료')
                         let host = window.location.host;
-                        let url = host + '/api/users/loginPage'; //이동하려는 페이지 주소
+                        let url = host + '/page/loginPage'; //이동하려는 페이지 주소
                         document.cookie =
                             'Authorization' + '=' + xhr.getResponseHeader('Authorization') + ';path=/';
                         window.location.href = 'http://' + url;
                     } else {
-                        alert('회원가입 실패')
+                        alert(response.json.msg)
                     }
                 }
             }).done((json) => {

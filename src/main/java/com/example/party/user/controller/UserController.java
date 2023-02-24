@@ -6,6 +6,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import com.example.party.user.dto.ProfilesRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.example.party.global.common.ApiResponse;
 import com.example.party.user.dto.LoginRequest;
@@ -35,31 +35,6 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
 
     private final UserService userService;
-
-
-    //회원가입페이지 호출
-    @RequestMapping("/signup")
-    public ModelAndView showSignUpPage() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("signup"); // signup.html 파일 이름
-        return modelAndView;
-    }
-
-    //로그인 페이지 호출
-    @RequestMapping("/loginPage")
-    public ModelAndView showLoginPage() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("login"); // login.html 파일 이름
-        return modelAndView;
-    }
-
-    //index 페이지 호출
-    @GetMapping("/indexPage")
-    public ModelAndView showIndexPage() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("index"); // signup.html 파일 이름
-        return modelAndView;
-    }
 
     //회원가입
     @PostMapping("/signup")

@@ -16,7 +16,9 @@ import com.example.party.global.common.ApiResponse;
 import com.example.party.global.common.DataApiResponse;
 import com.example.party.restriction.dto.BlockResponse;
 import com.example.party.restriction.dto.ReportPostRequest;
+import com.example.party.restriction.dto.ReportPostResponse;
 import com.example.party.restriction.dto.ReportUserRequest;
+import com.example.party.restriction.dto.ReportUserResponse;
 import com.example.party.restriction.service.RestrictionService;
 import com.example.party.user.entity.User;
 
@@ -57,11 +59,23 @@ public class RestrictionController {
 		return ResponseEntity.ok(restrictionService.createReportUser(user, request));
 	}
 
+	//유저 신고 로그 조회
+	@GetMapping("/report/users")
+	public ResponseEntity<DataApiResponse<ReportUserResponse>> findReportUserList(@RequestParam int page) {
+		return ResponseEntity.ok(restrictionService.findReportUserList(page - 1));
+	}
+
 	//모집글 신고
 	@PostMapping("/report/party-posts")
 	public ResponseEntity<ApiResponse> createReportPost(@RequestBody ReportPostRequest request,
 		@AuthenticationPrincipal User user) {
 		return ResponseEntity.ok(restrictionService.createReportPost(user, request));
+	}
+
+	//모집글 신고 로그 조회
+	@GetMapping("/report/party-posts")
+	public ResponseEntity<DataApiResponse<ReportPostResponse>> findReportPostList(@RequestParam int page) {
+		return ResponseEntity.ok(restrictionService.findReportPostList(page - 1));
 	}
 
 	//노쇼 신고

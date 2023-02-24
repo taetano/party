@@ -2,6 +2,7 @@ package com.example.party.restriction.entity;
 
 import javax.persistence.*;
 
+import com.example.party.global.common.TimeStamped;
 import com.example.party.restriction.dto.ReportUserRequest;
 import com.example.party.restriction.type.ReportReason;
 import com.example.party.user.entity.User;
@@ -12,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Entity
-public class ReportUser {
+public class ReportUser extends TimeStamped {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
