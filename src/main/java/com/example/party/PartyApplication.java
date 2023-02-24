@@ -1,7 +1,7 @@
 package com.example.party;
 
 import com.example.party.partypost.dto.PartyPostRequest;
-import com.example.party.partypost.entity.Parties;
+import com.example.party.partypost.entity.Party;
 import com.example.party.partypost.entity.PartyPost;
 import com.example.party.partypost.repository.PartyPostRepository;
 import com.example.party.partypost.repository.PartyRepository;
@@ -78,7 +78,7 @@ public class PartyApplication {
             Profile profile4 = new Profile();
             Profile profile5 = new Profile();
             Profile profile6 = new Profile();
-//
+
 //            profilesRepository.save(profile1);
 //            profilesRepository.save(profile2);
 //            profilesRepository.save(profile3);
@@ -104,7 +104,7 @@ public class PartyApplication {
                     .categoryId((long) 3).maxMember((byte) 5).partyDate("2023-02-23 15:40").partyAddress("onLine")
                     .partyPlace("onLine").build();
             PartyPostRequest partyPostRequest2 = PartyPostRequest.builder().title("맛있는 녀석들").content("햄최 3개 이상")
-                    .categoryId((long) 1).maxMember((byte) 4).partyDate("2023-02-23 15:40").partyAddress("전국")
+                    .categoryId((long) 1).maxMember((byte) 4).partyDate("2023-02-25 15:40").partyAddress("전국")
                     .partyPlace("맛집").build();
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -113,21 +113,22 @@ public class PartyApplication {
             PartyPost partyPost1 = new PartyPost(user1, partyPostRequest1, partyDate, category3);
             PartyPost partyPost2 = new PartyPost(user6, partyPostRequest2, partyDate, category1);
 
-            partyPost1.changeStatusNoShow();
+            //노쇼 신고시
+//          partyPost1.changeStatusNoShow();
 //			partyPost2.changeStatusNoShow();
+
+            Party party = new Party(partyPost1);
+            //ACCEPT User 라는 가정
+//            party.addUser(user1);
+            party.addUser(user2);
+            party.addUser(user3);
+            party.addUser(user4);
+            party.addUser(user5);
+
+            partyPost1.changeParty(party);
 
             partyPostRepository.save(partyPost1);
             partyPostRepository.save(partyPost2);
-
-            Parties parties = new Parties(partyPost1);
-            //ACCEPT User
-            parties.addUsers(user1);
-            parties.addUsers(user2);
-            parties.addUsers(user3);
-            parties.addUsers(user4);
-            parties.addUsers(user5);
-
-            partyRepository.save(parties);
 
             NoShow noShow1 = new NoShow(user1, user2, partyPost1);
             NoShow noShow2 = new NoShow(user3, user2, partyPost1);

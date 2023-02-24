@@ -53,7 +53,7 @@ public class User extends TimeStamped implements UserDetails {
 
     // 연관관계
     @OneToOne(optional = false, cascade = CascadeType.ALL)
-    @JoinColumn(name = "profiles_id", unique = true, referencedColumnName = "id")
+    @JoinColumn(name = "profile_id", unique = true, referencedColumnName = "id")
     private Profile profile;
     @OneToMany(mappedBy = "user")
     private List<Application> applies;

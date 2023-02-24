@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Entity
-@Table(name = "Profiles")
-public class Profiles {
+@Table(name = "Profile")
+public class Profile {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
@@ -28,7 +28,7 @@ public class Profiles {
 		this.id = id;
 	}
 
-	public Profiles(String img, String comment, int participationCnt) {
+	public Profile(String img, String comment, int participationCnt) {
 		this.img = img;
 		this.comment = comment;
 		this.noShowCnt = 0;

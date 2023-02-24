@@ -2,7 +2,7 @@ package com.example.party.application.service;
 
 import java.time.LocalDateTime;
 
-import com.example.party.partypost.entity.Parties;
+import com.example.party.partypost.entity.Party;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -114,10 +114,10 @@ public class ApplicationService implements IApplicationService {
 		application.accept();
 
 		//Accept 된 유저만 넘어감
-		Parties parties = partyRepository.findById(application.getPartyPost().getId())
+		Party party = partyRepository.findByPartyPostId(application.getPartyPost().getId())
 			.orElseThrow(PartyPostNotFoundException::new);
-		parties.addUsers(application.getUser());
-		partyRepository.save(parties);
+		party.autoAddUser(application.getUser());
+		partyRepository.save(party);
 
 		return ApiResponse.ok("참가 신청 수락 완료");
 	}

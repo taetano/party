@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @Entity
-public class Blocks extends TimeStamped {
+public class Block extends TimeStamped {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +24,7 @@ public class Blocks extends TimeStamped {
 	@JoinColumn(name = "blocked_id", nullable = false)
 	private User blocked;
 
-	public Blocks(User blocker, User blocked) {
+	public Block(User blocker, User blocked) {
 		this.blocker = blocker;
 		this.blocked = blocked;
 	}

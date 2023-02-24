@@ -1,5 +1,7 @@
 package com.example.party.user.service;
 
+import com.example.party.user.entity.Profile;
+import org.springframework.cglib.core.Block;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.HttpStatus;
@@ -8,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.example.party.user.entity.Profiles;
 import com.example.party.global.common.ApiResponse;
 import com.example.party.global.common.ItemApiResponse;
 import com.example.party.global.exception.LoginException;
@@ -53,9 +54,9 @@ public class UserService implements IUserService {
         }
 
         String password = passwordEncoder.encode(signupRequest.getPassword());
-        Profiles profiles = new Profiles();
-        profilesRepository.save(profiles);
-        User user = new User(signupRequest, password, profiles);
+        Profile profile = new Profile();
+        profilesRepository.save(profile);
+        User user = new User(signupRequest, password, profile);
         userRepository.save(user);
         return ApiResponse.create("회원가입 완료");
     }
@@ -99,10 +100,10 @@ public class UserService implements IUserService {
     //프로필 수정
     @Override
     public ApiResponse updateProfile(ProfilesRequest profilesRequest, User user) {
-        Profiles profiles = user.getProfiles();
-        profiles.updateProfile(profilesRequest.getProfileImg(), profilesRequest.getComment());
+        Profile profile = user.getProfile();
+        profile.updateProfile(profilesRequest.getProfileImg(), profilesRequest.getComment());
         user.updateProfile(profilesRequest); //user 정보 수정
-        profilesRepository.save(profiles);
+        profilesRepository.save(profile);
         userRepository.save(user); //변경한 user 저장
         return ApiResponse.ok("프로필 정보 수정 완료"); //결과값 반환
     }
