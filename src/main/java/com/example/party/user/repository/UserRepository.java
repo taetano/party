@@ -3,11 +3,9 @@ package com.example.party.user.repository;
 import java.util.List;
 import java.util.Optional;
 
-import com.example.party.partypost.entity.PartyPost;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.party.user.entity.User;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -19,7 +17,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 	List<User> findAllByNicknameIn(List<String> nicknames);
 
-	@Modifying
 	@Query(value = "SELECT u FROM User u WHERE u.status = 'SUSPENDED'")
 	List<User> statusEqualSuspended();
+
+	@Query(value = "SELECT p FROM Profile p WHERE p.noShowCnt >= 1 ")
+	List<User> findAllByNoShowList();
+
 }

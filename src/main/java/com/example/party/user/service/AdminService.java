@@ -55,11 +55,17 @@ public class AdminService {
         return DataApiResponse.ok("유저 신고 로그 조회 완료", reportPostResponseList);
     }
 
+    //노쇼 로그 조회
+    public DataApiResponse<?> findNoShowList(User user) {
+        checkAdmin(user);
+//        Pageable pageable = PageRequest.of(page, 10);
+        List<User> users = userRepository.findAllByNoShowList();
+        return DataApiResponse.ok("", users );
+    }
+
     //모집글 삭제
     public ItemApiResponse<AdminResponse> deletePost(User user, Long partyPostId) {
-        if (!user.getRole().equals(UserRole.ROLE_ADMIN)) {
-            throw new IllegalArgumentException("권한 없음");
-        }
+        checkAdmin(user);
 
         PartyPost partyPost = partyPostRepository.findById(partyPostId)
                 .orElseThrow(NotFoundException::new);
