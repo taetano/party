@@ -30,6 +30,12 @@ public class AdminController {
         return ResponseEntity.ok(adminService.findReportPostList(page - 1));
     }
 
+    //노쇼 로그 조회
+    @GetMapping("/report/noShow")
+    public ResponseEntity<DataApiResponse<?>> findNoShowList(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(adminService.findNoShowList(user));
+    }
+
     //모집글 삭제
     @DeleteMapping("/party-posts/{partyPostId}/reportPost/{reportPostId}")
     public ResponseEntity<ItemApiResponse<AdminResponse>> deletePost(@AuthenticationPrincipal User user, @PathVariable Long partyPostId) {
