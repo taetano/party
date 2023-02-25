@@ -23,6 +23,7 @@ public class Profile {
 
 	@Column(name = "participation_cnt", nullable = false)
 	private int participationCnt;
+	private int adminReportCnt;
 
 	public void setId(Long id) {
 		this.id = id;
@@ -33,6 +34,7 @@ public class Profile {
 		this.comment = comment;
 		this.noShowCnt = 0;
 		this.participationCnt = participationCnt;
+		this.adminReportCnt = 0;
 	}
 
 	public void updateProfile(String img, String comment) {
@@ -40,6 +42,7 @@ public class Profile {
 		this.comment = comment;
 	}
 
+	public void plusAdminReportCnt() { this.adminReportCnt += 1; }
 	public void plusNoShowCnt() {
 		this.noShowCnt += 1;
 	}

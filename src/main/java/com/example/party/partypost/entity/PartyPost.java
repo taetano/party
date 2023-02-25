@@ -70,7 +70,7 @@ public class PartyPost extends TimeStamped {
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "category_id")
 	private Category category; //카테고리
-	@OneToMany(mappedBy = "reportPost")
+	@OneToMany(mappedBy = "partyPost")
 	private List<ReportPost> reportPosts;
 	@OneToMany(mappedBy = "partyPost")
 	private List<NoShow> noShowReportPosts;

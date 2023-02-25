@@ -15,8 +15,8 @@ public class ReportPostResponse {
 
 	public ReportPostResponse(ReportPost reportPost) {
 		this.id = reportPost.getId();
-		this.reportedPostId = reportPost.getReportPost().getId();
-		this.postTitle = reportPost.getReportPost().getTitle();
+		this.reportedPostId = reportPost.getPartyPost().getId();
+		this.postTitle = reportPost.getPartyPost().getTitle();
 		this.response = reportPost.getReason();
 		this.detailReason = reportPost.getDetailReason();
 	}
