@@ -31,10 +31,9 @@ public class AdminController {
     }
 
     //모집글 삭제
-    @DeleteMapping("/party-post/{partyPostId}/reportPost/{reportPostId}")
-    public ResponseEntity<ItemApiResponse<AdminResponse>> deletePost(@AuthenticationPrincipal User user,
-                                                                     @PathVariable Long partyPostId, @PathVariable Long reportPostId) {
-        return ResponseEntity.ok(adminService.deletePost(user, partyPostId, reportPostId));
+    @DeleteMapping("/party-posts/{partyPostId}/reportPost/{reportPostId}")
+    public ResponseEntity<ItemApiResponse<AdminResponse>> deletePost(@AuthenticationPrincipal User user, @PathVariable Long partyPostId) {
+        return ResponseEntity.ok(adminService.deletePost(user, partyPostId));
     }
 
     //블랙리스트 등록

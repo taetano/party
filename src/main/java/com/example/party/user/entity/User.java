@@ -94,10 +94,10 @@ public class User extends TimeStamped implements UserDetails {
         this.profile = profile;
     }
 
+    public void changeAdmin() { this.role = UserRole.ROLE_ADMIN; }
     public void DormantState() {
         this.status = Status.DORMANT;
     }
-
     public void setSuspended() { this.status = Status.SUSPENDED; }
     public void setActive() { this.status = Status.ACTIVE; }
 

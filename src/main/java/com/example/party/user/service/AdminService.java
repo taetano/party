@@ -25,6 +25,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -55,29 +56,17 @@ public class AdminService {
     }
 
     //모집글 삭제
-    public ItemApiResponse<AdminResponse> deletePost(User user, Long partyPostId, Long reportPostId) {
+    public ItemApiResponse<AdminResponse> deletePost(User user, Long partyPostId) {
         if (!user.getRole().equals(UserRole.ROLE_ADMIN)) {
             throw new IllegalArgumentException("권한 없음");
         }
-        //글 작성자가 삭제했을 가능성
-        ReportPost reportPostIf = reportPostRepository.findById(reportPostId)
-                .orElseThrow(NotFoundException::new);
+
         PartyPost partyPost = partyPostRepository.findById(partyPostId)
-                .orElseThrow(IllegalArgumentException::new);
-
-        List<ReportPost> reportPosts = partyPost.getReportPosts();
-        for (ReportPost reportPost : reportPosts) {
-            if (!reportPost.equals(reportPostIf)) {
-                throw new IllegalArgumentException("신고 내용이 아닙니다 ");
-            }
-        }
-
-        /*                   >>>>> 이게 가능하다면 <<<<<
-         Boolean 값을 추가해서 admin 이 조회해보고 사유가 타당하면 t, 아니면 f
-         신고한 내용을 확인하고 처리하는걸로 기획단계에 얘기가 나왔던걸로 기억함
-        */
-//        Boolean adminIndex = false;
-//        if (adminIndex) {
+                .orElseThrow(NotFoundException::new);
+        List<ReportPost> reportPosts = reportPostRepository.findAllByPartyPostId(partyPost.getId());
+        //나중에 다시 정해야함 기준이 없어서 일단 랜덤 사용
+        Random random = new Random();
+        ReportPost reportPost = reportPosts.get(random.nextInt(reportPosts.size()));
 
         User createPostUser = partyPost.getUser();
         createPostUser.getProfile().plusAdminReportCnt();
@@ -85,13 +74,12 @@ public class AdminService {
             createPostUser.setSuspended();
             partyPostRepository.delete(partyPost);
             return ItemApiResponse.ok("삭제 및 블랙리스트 처리 완료",
-                    new AdminResponse(createPostUser, partyPost, reportPostIf, accountMsg));
+                    new AdminResponse(createPostUser, partyPost, reportPost, accountMsg));
         }
-//        } else {
-//            return ItemApiResponse.ok("보류 처리 완료", reportPostIf);
-//        }
+
+        reportPostRepository.deleteAll(reportPosts);
         partyPostRepository.delete(partyPost);
-        return ItemApiResponse.ok("게시글 삭제 완료", new AdminResponse(partyPost, reportPostIf, postMsg));
+        return ItemApiResponse.ok("게시글 삭제 완료", new AdminResponse(partyPost, reportPost, postMsg));
     }
 
     //회원 블랙리스트 등록

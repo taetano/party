@@ -109,14 +109,6 @@ public class RestrictionService {
         return ApiResponse.ok("유저 신고 완료");
     }
 
-    //유저 신고 로그 조회
-    public DataApiResponse<ReportUserResponse> findReportUserList(int page) {
-        Pageable pageable = PageRequest.of(page, 6, Sort.by("createdAt").descending());
-        List<ReportUserResponse> reportUserResponseList = reportUserRepository.findAllByOrderById(pageable).stream()
-                .map(ReportUserResponse::new).collect(Collectors.toList());
-        return DataApiResponse.ok("유저 신고 로그 조회 완료", reportUserResponseList);
-    }
-
     //모집글 신고
     public ApiResponse createReportPost(User user, ReportPostRequest request) {
         PartyPost partyPost = partyPostRepository.findByIdAndActiveIsTrue(request.getPostId())
@@ -124,20 +116,12 @@ public class RestrictionService {
         if (partyPost.getUser().equals(user)) {
             throw new BadRequestException("본인이 작성한 글입니다");
         }
-        if (reportPostRepository.existsByUserIdAndReportPostId(user.getId(), partyPost.getId())) {
+        if (reportPostRepository.existsByUserIdAndPartyPostId(user.getId(), partyPost.getId())) {
             throw new BadRequestException("이미 신고한 모집글입니다");
         }
         ReportPost reportsPost = new ReportPost(user, request, partyPost);
         reportPostRepository.save(reportsPost);
         return ApiResponse.ok("모집글 신고 완료");
-    }
-
-    //모집글 신고 로그 조회
-    public DataApiResponse<ReportPostResponse> findReportPostList(int page) {
-        Pageable pageable = PageRequest.of(page, 6, Sort.by("createdAt").descending());
-        List<ReportPostResponse> reportPostResponseList = reportPostRepository.findAllByOrderById(pageable).stream()
-                .map(ReportPostResponse::new).collect(Collectors.toList());
-        return DataApiResponse.ok("유저 신고 로그 조회 완료", reportPostResponseList);
     }
 
     //노쇼 신고
