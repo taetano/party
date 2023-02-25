@@ -56,13 +56,13 @@
 <input type="text" id="place-address" name="place-address" readonly required>
 <br>
 <label for="category">카테고리</label>
-<select id="category" name="category">
+<select id="category" name="category" required>
     <option value="">--선택--</option>
 </select>
 <br>
 
 <label for="max-member">모임 인원(파티장 포함 입니다)</label>
-<select id="max-member" name="category">
+<select id="max-member" name="category" required>
     <option value="">--선택--</option>
     <option value="3">3</option>
     <option value="4">4</option>
@@ -71,20 +71,20 @@
 <br>
 
 <label for="date">날짜</label>
-<input type="date" id="date" name="date" min="" max="">
+<input type="date" id="date" name="date" min="" max="" required>
 <br>
 
 <label for="time">시간</label>
-<input type="text" id="time" name="time">
+<input type="text" id="time" name="time" required>
 
 <br>
 
 <label for="content">내용</label>
-<textarea id="content" name="content" rows="10" cols="50"></textarea>
+<textarea id="content" name="content" rows="10" cols="50" required></textarea>
 <br>
 
 <button type="button" onclick="cancel()">취소</button>
-<button onclick="sendPartyPost()">등록</button>
+<button type="submit" onclick="sendPartyPost()">등록</button>
 
 <script>
     <!--    카카오 지도 관련 스크립트 -->
@@ -107,7 +107,6 @@
     var infowindow = new kakao.maps.InfoWindow({zIndex: 1});
 
     // 키워드로 장소를 검색합니다
-    searchPlaces();
 
     // 키워드 검색을 요청하는 함수입니다
     function searchPlaces() {

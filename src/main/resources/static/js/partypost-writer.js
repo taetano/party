@@ -76,10 +76,26 @@ function sendPartyPost() {
                 console.log("갔어요")
                 console.log(json)
                 alert(json.msg)
+
+                let host = window.location.host;
+                let url = host + '/page/indexPage';
+                window.location.href = 'http://' + url;
+
+
             },
-            error(error, status, request) {
+            error(error, response) {
                 console.log("안갔어요")
-                console.error(error)
+                console.log(response)
+                console.log(error)
+                if (response.msg === undefined) {
+                    alert("값을 모두 입력해주세요")
+
+                } else if (response.msg !== null) {
+                    alert(response.msg)
+                } else {
+                    alert("문제가 발생했습니다. 관리자에게 문의해주세요.")
+                }
+
             }
         })
 }
@@ -92,19 +108,23 @@ function get_category() {
         headers: {
             "Authorization": getCookieValue('Authorization')
         },
-        error(error) {
+        error(error, response) {
+            alert(response.msg)
             console.error(error);
+            console.error(response);
         },
         success: function (response) {
             console.log(response.data)
-            let rows = response['data']
-            for (let i = 0; i < rows.length; i++) {
-                console.log(response)
-                console.log(rows)
-                let category_name = rows[i]['name']
-                let category_temp = `<option value= ${i}> ${category_name} </option>`
+            if (response.code === 200) {
+                let rows = response['data']
+                for (let i = 0; i < rows.length; i++) {
+                    console.log(response)
+                    console.log(rows)
+                    let category_name = rows[i]['name']
+                    let category_temp = `<option value= ${i + 1}> ${category_name} </option>`
 
-                $('#category').append(category_temp)
+                    $('#category').append(category_temp)
+                }
             }
         }
 
