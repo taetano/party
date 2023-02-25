@@ -29,13 +29,13 @@ public class ReportPost extends TimeStamped {
 	@JoinColumn(name = "user_id")
 	private User user;
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "reportPost_id")
-	private PartyPost reportPost;
+	@JoinColumn(name = "partyPost_id")
+	private PartyPost partyPost;
 
-	public ReportPost(User user, ReportPostRequest request, PartyPost reportPost) {
+	public ReportPost(User user, ReportPostRequest request, PartyPost partyPost) {
 		this.user = user;
 		this.reason = request.getReason();
 		this.detailReason = request.getDetailReason();
-		this.reportPost = reportPost;
+		this.partyPost = partyPost;
 	}
 }
