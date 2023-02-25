@@ -16,9 +16,9 @@
     <script type="text/javascript"
             src="//dapi.kakao.com/v2/maps/sdk.js?appkey=c026441ee839df0644ae92edb8d7b55c&libraries=services"></script>
     <!--    스타일 시트 & css 불러오기-->
-    <script src="../static/js/partypost-writer.js"></script>
-    <link rel="stylesheet" href="../static/css/partypost-writer.css">
-    <link rel="stylesheet" href="../static/css/styles.css">
+    <script type="text/javascript" th:src="@{/js/partypost-writer.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/partypost-writer.css}">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
     <title>모집글 작성 페이지</title>
 </head>
 <body>
@@ -58,19 +58,15 @@
 <label for="category">카테고리</label>
 <select id="category" name="category">
     <option value="">--선택--</option>
-    <option value="food">식당</option>
-    <option value="travel">카페</option>
-    <option value="lifestyle">공부</option>
-    <option value="entertainment">공연&문화생활</option>
 </select>
 <br>
 
 <label for="max-member">모임 인원(파티장 포함 입니다)</label>
 <select id="max-member" name="category">
     <option value="">--선택--</option>
-    <option value="three-members">3</option>
-    <option value="four-members">4</option>
-    <option value="five-members">5</option>
+    <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
 </select>
 <br>
 
@@ -315,33 +311,6 @@
         while (el.hasChildNodes()) {
             el.removeChild(el.lastChild);
         }
-    }
-
-
-    // json 만들어서 보내는 함수 만들기
-    function sendPartyPost() {
-
-        let partyPostData = {
-            "title": $('#title').val(),
-            "content": $('#content').val(),
-            "categoryId": $('#category').val(),
-            "maxMember": $('#max-member').val(),
-            "partyDate": $('#date').val() + ' ' + $('#time').val(),
-            "partyAddress": $('#place-address').val(),
-            "partyPlace": $('#place-name').val()
-        }
-        console.log()
-        $.ajax(
-            {
-                type: "POST",
-                url: `/api/parties-posts`,
-                contentType: "application/json",
-                data: JSON.stringify({
-                    partyPostData
-                })
-            }
-        )
-        console.log()
     }
 
 

@@ -1,4 +1,21 @@
+//쿠키값 가져오는 함수(cookieName 자리에 Authorization사용)
+function getCookieValue(cookieName) {
+    var name = cookieName + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var cookieParts = decodedCookie.split(';');
+    for (var i = 0; i < cookieParts.length; i++) {
+        var cookiePart = cookieParts[i].trim();
+        if (cookiePart.indexOf(name) === 0) {
+            return cookiePart.substring(name.length, cookiePart.length);
+        }
+    }
+    return "";
+}
+
+//페이지 로딩될때 실행되는 함수입니다
 $(document).ready(function () {
+    get_category();
+
     // timepicker 옵션 설정
     $("#time").timepicker({
         timeFormat: 'HH:mm',
@@ -34,4 +51,62 @@ $(document).ready(function () {
 // 취소 버튼 클릭 시 이전 페이지로 이동
 function cancel() {
     window.history.back();
+}
+
+// json 만들어서 보내는 함수 만들기
+function sendPartyPost() {
+    $.ajax(
+        {
+            type: "POST",
+            url: `/api/party-posts`,
+            headers: {
+                "Authorization": getCookieValue('Authorization')
+            },
+            contentType: "application/json; charset=UTF-8",
+            data: JSON.stringify({
+                "title": $('#title').val(),
+                "content": $('#content').val(),
+                "categoryId": $('#category').val(),
+                "maxMember": $('#max-member').val(),
+                "partyDate": $('#date').val() + ' ' + $('#time').val(),
+                "partyAddress": $('#place-address').val(),
+                "partyPlace": $('#place-name').val()
+            }),
+            success: function (json) {
+                console.log("갔어요")
+                console.log(json)
+                alert(json.msg)
+            },
+            error(error, status, request) {
+                console.log("안갔어요")
+                console.error(error)
+            }
+        })
+}
+
+//카테고리 가져오기
+function get_category() {
+    $.ajax({
+        type: "GET",
+        url: `/api/categories`,
+        headers: {
+            "Authorization": getCookieValue('Authorization')
+        },
+        error(error) {
+            console.error(error);
+        },
+        success: function (response) {
+            console.log(response.data)
+            let rows = response['data']
+            for (let i = 0; i < rows.length; i++) {
+                console.log(response)
+                console.log(rows)
+                let category_name = rows[i]['name']
+                let category_temp = `<option value= ${i}> ${category_name} </option>`
+
+                $('#category').append(category_temp)
+            }
+        }
+
+    });
 }
