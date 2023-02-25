@@ -22,13 +22,13 @@ function getProfile() {
             console.log(response.data)
             if (response.code === 200) {
                 let comment = response['data']['comment'];
-                let nickname = response['data']['nickname'];
+                let nickname = response['data']['nickName'];
                 let email = response['data']['email'];
                 let participationCount = response['data']['participationCount'];
                 let phoneNum = response['data']['phoneNum'];
 
                 $('#nickname').append(nickname);
-                $('#status-message').append(comment);
+                $('#message').append(comment);
 
                 $('#email').append(email);
                 $('#phoneNum').append(phoneNum);
