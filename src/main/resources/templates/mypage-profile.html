@@ -6,57 +6,7 @@
     <meta name="description" content=""/>
     <meta name="author" content=""/>
     <title>Let's PARTY</title>
-    <script>
-        function getProfile() {
 
-        }
-
-        function updateProfile() {
-            //다른곳 코드를 이용해서 해봤는데 아직 테스트도 안해봄 추후에 테스트밑 수정 필요
-
-            let imageUrl = $('#image-input-text').val();
-            let nickname = $('#nickname-input-text').val();
-            let comment = $('#comment-input-text').val();
-            let newpassword = $('#new-password').val();
-            let confirmpassword = $('#confirm-password').val();
-            let nowpassword = $('#now-password').val();
-            //빈 입력값 확인, 수정비번-재확인비번 일치확인
-            if (nickname == '') {
-                alert('닉네임를 입력해주세요');
-                return;
-            } else if (nowpassword == '') {
-                alert('현재 비밀번호를 입력해주세요');
-                return;
-            } else if (newpassword == confirmpassword) {
-                alert('수정 비밀번호와 확인 비밀번호가 불일치합니다.');
-                return;
-            }
-            $.ajax({
-                type: "PATCH",
-                url: `/api/users/profile`,
-                contentType: "application/json",
-                data: JSON.stringify({
-                    imageUrl: imageUrl, nickname: nickname, comment: comment,
-                    newpassword: newpassword, confirmpassword: confirmpassword, nowpassword: nowpassword
-                }),
-                success: function (response, status, xhr) {
-                    if (response === 'success') {
-                        let host = window.location.host;
-                        let url = host + '/api/index';
-
-                        document.cookie =
-                            'Authorization' + '=' + xhr.getResponseHeader('Authorization') + ';path=/';
-                        window.location.href = 'http://' + url;
-                    } else {
-                        alert('프로필 수정 적용을 실패했습니다')
-                        window.location.reload();
-                    }
-                }
-            })
-        }
-
-
-    </script>
     <style>
         input[type="text"] {
             text-align: center;
@@ -71,20 +21,7 @@
             font-size: 1.2rem;
             outline: none;
         }
-    </style>
-    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico"/>
-    <!-- Font Awesome icons (free version)-->
-    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
-    <!-- Google fonts-->
-    <link href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900"
-          rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i"
-          rel="stylesheet"/>
-    <!-- Core theme CSS (includes Bootstrap)-->
-    <link href="../static/css/styles.css" rel="stylesheet"/>
 
-    <title>내 정보</title>
-    <style>
         body {
             margin: 0;
             padding: 0;
@@ -171,8 +108,31 @@
             margin: 20px 0px 10px 0px;
         }
 
+        .tg  {border-collapse:collapse;border-spacing:0;}
+        .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+            overflow:hidden;padding:10px 5px;word-break:normal;}
+        .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+            font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+        .tg .tg-8jbz{background-color:#f7b718;border-color:inherit;font-weight:bold;text-align:center;vertical-align:top}
+        .tg .tg-y698{background-color:#efefef;border-color:inherit;text-align:left;vertical-align:top}
+
 
     </style>
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900"
+          rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i"
+          rel="stylesheet"/>
+    <!--    jquery 라이브러리 로드 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- css & javascript 불러오기 -->
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <script type="text/javascript" th:src="@{/js/mypage-profile.js}"></script>
+    <script type="text/javascript" th:src="@{/js/scripts.js}"></script>
+
+    <title>내 정보</title>
 </head>
 <body>
 <!-- Navigation-->
@@ -210,74 +170,90 @@
         </div>
     </div>
 </header>
-<div class="container">
+<div class="mypageMain">
 
+    <data class="mypageLeftMenu">
+        <button class="mydata" onclick="window.location.href= 'mypage_profile.html'">내 정보</button>
+        <button class="mydata" onclick="window.location.href= 'login.html'">1:1 채팅</button>
+        <button class="mydata" onclick="window.location.href= 'mypage_partypost_created.html'">내 모집글 목록</button>
+        <button class="mydata" onclick="window.location.href= 'mypage_partypost_apply.html'">신청 모집글 목록</button>
+        <button class="mydata" onclick="window.location.href= 'mypage_partypost_likes.html'">좋아한 모집글</button>
+        <button class="mydata" onclick="window.location.href= 'mypage_blocks.html'">차단 유저관리</button>
+    </data>
 
-    <div class="mypageMain">
+    <div class="mypageEdit">
+        <div class="mypage-profile">
+            <div class="profile-image">
+                <!--                    <img src="../static/css/image/person.png" width=100 height=80>-->
 
-        <data class="mypageLeftMenu">
-            <button class="mydata" onclick="window.location.href= 'mypage_profile.html'">내 정보</button>
-            <button class="mydata" onclick="window.location.href= 'login.html'">1:1 채팅</button>
-            <button class="mydata" onclick="window.location.href= 'mypage_partypost_created.html'">내 모집글 목록</button>
-            <button class="mydata" onclick="window.location.href= 'mypage_partypost_apply.html'">신청 모집글 목록</button>
-            <button class="mydata" onclick="window.location.href= 'mypage_partypost_likes.html'">좋아한 모집글</button>
-            <button class="mydata" onclick="window.location.href= 'mypage_blocks.html'">차단 유저관리</button>
-        </data>
-
-        <div class="mypageEdit">
-            <div class="mypage-profile">
-                <div class="profile-image">
-                    <img src="../static/css/image/person.png" width=100 height=80>
                     <div id="nickname" class="nickname">
-                        <h2>내 닉네임</h2>
+                        <h2>  <!--       닉네임 들어갈 곳                 --></h2>
                     </div>
-                    <div id="status-message" class="status-message"> 상태 메세지</div>
-                </div>
 
-                <div class="profile-info">
-                    <div class="contact-info">
-                        <div id="email/phone/nickname-info" class="email-info">
-                            <strong>이메일:</strong> 이메일 주소 &nbsp;
-                            <strong>전화번호:</strong> 전화번호 &nbsp;
-                            <strong>닉네임:</strong> 닉네임
+                <div id="status-message" class="status-message">
+                    <!--                  상태메세지 들어갈 곳 -->
+                </div>
+            </div>
+
+            <div class="profile-info">
+                <div class="contact-info">
+                    <div id="my-profile-info" class="my-profile-info">
+                        <table class="tg">
+                            <thead>
+                            <tr>
+                                <th class="tg-8jbz">이메일</th>
+                                <th class="tg-y698" id="email"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td class="tg-8jbz">전화번호</td>
+                                <td class="tg-y698" id="phoneNum"></td>
+                            </tr>
+                            <tr>
+                                <td class="tg-8jbz">참여횟수</td>
+                                <td class="tg-y698"><div id="participationCount"></div> 회</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <br><br>
+                <div class="password-change">
+                    <form>
+                        <h5>- 수정내용 입력 -</h5>
+                        <div id="image-input">
+                            <label for="image-input-text">이미지url 수정입력:</label>
+                            <input type="text" id="image-input-text" name="input-text" class="input-text"><br>
                         </div>
-                    </div>
-                    <br><br>
-                    <div class="password-change">
-                        <form>
-                            <h5>- 수정내용 입력 -</h5>
-                            <div id="image-input">
-                                <label for="image-input-text">이미지url 수정입력:</label>
-                                <input type="text" id="image-input-text" name="input-text" class="input-text"><br>
-                            </div>
-                            <div class="nickname-input">
-                                <label for="nickname-input-text">닉네임 수정입력:</label>
-                                <input type="text" id="nickname-input-text" name="input-text" class="input-text"><br>
-                            </div>
-                            <div id="comment-input" class="comment-input">
-                                <label for="comment-input-text">상태 수정입력:</label>
-                                <input type="text" id="comment-input-text" name="input-text" class="input-text"><br>
-                            </div>
-                            <div id="new-password-input" class="new-password-input">
-                                <label for="new-password">새 비밀번호:</label>
-                                <input type="text" id="new-password" name="new-password">
-                            </div>
-                            <div id="image-confirm-password--input" class="confirm-password--input">
-                                <label for="confirm-password">새 비밀번호 확인:</label>
-                                <input type="text" id="confirm-password" name="confirm-password">
-                            </div>
-                            <br><br>
-                            <div id="now-password--input-input" class="now-password--input">
-                                <label for="now-password">현재 비밀번호 확인:</label>
-                                <input type="text" id="now-password" name="now-password">
-                                <input type="submit" class="btn btn-primary rounded-pill" value="수정 적용"><br>
-                            </div>
-                        </form>
-                    </div>
+                        <div class="nickname-input">
+                            <label for="nickname-input-text">닉네임 수정입력:</label>
+                            <input type="text" id="nickname-input-text" name="input-text" class="input-text"><br>
+                        </div>
+                        <div id="comment-input" class="comment-input">
+                            <label for="comment-input-text">상태 수정입력:</label>
+                            <input type="text" id="comment-input-text" name="input-text" class="input-text"><br>
+                        </div>
+                        <div id="new-password-input" class="new-password-input">
+                            <label for="new-password">새 비밀번호:</label>
+                            <input type="text" id="new-password" name="new-password">
+                        </div>
+                        <div id="image-confirm-password--input" class="confirm-password--input">
+                            <label for="confirm-password">새 비밀번호 확인:</label>
+                            <input type="text" id="confirm-password" name="confirm-password">
+                        </div>
+                        <br><br>
+                        <div id="now-password--input-input" class="now-password--input">
+                            <label for="now-password">현재 비밀번호 확인:</label>
+                            <input type="text" id="now-password" name="now-password">
+                            <input type="submit" class="btn btn-primary rounded-pill" value="수정 적용"><br>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
 </div>
 </body>

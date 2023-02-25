@@ -1,20 +1,13 @@
-function getToken() {
-    let cName = 'Authorization' + '=';
-    let cookieData = document.cookie;
-    let cookie = cookieData.indexOf('Authorization');
-    let auth = '';
-    if (cookie !== -1) {
-        cookie += cName.length;
-        let end = cookieData.indexOf(';', cookie);
-        if (end === -1) end = cookieData.length;
-        auth = cookieData.substring(cookie, end);
+//쿠키값 가져오는 함수(cookieName 자리에 Authorization사용)
+function getCookieValue(cookieName) {
+    var name = cookieName + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var cookieParts = decodedCookie.split(';');
+    for (var i = 0; i < cookieParts.length; i++) {
+        var cookiePart = cookieParts[i].trim();
+        if (cookiePart.indexOf(name) === 0) {
+            return cookiePart.substring(name.length, cookiePart.length);
+        }
     }
-
-    // kakao 로그인 사용한 경우 Bearer 추가
-    if (auth.indexOf('Bearer') === -1 && auth !== '') {
-        auth = 'Bearer ' + auth;
-    }
-
-    return auth;
+    return "";
 }
-
