@@ -21,6 +21,7 @@ public interface PartyPostRepository extends JpaRepository<PartyPost, Long> {
 
 	//내가 작성한 모집글 리스트 조회
 	List<PartyPost> findByUserId(Long userId, Pageable pageable);
+	List<PartyPost> findAllByUserId(Long userId);
 
 	@Modifying
 	@Query(value = "SELECT p FROM partyPost p WHERE p.status = 'PROCESSING'")

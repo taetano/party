@@ -98,6 +98,9 @@ public class User extends TimeStamped implements UserDetails {
         this.status = Status.DORMANT;
     }
 
+    public void setSuspended() { this.status = Status.SUSPENDED; }
+    public void setActive() { this.status = Status.ACTIVE; }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> authorities = new HashSet<>();
