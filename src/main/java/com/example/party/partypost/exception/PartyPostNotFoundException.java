@@ -6,9 +6,9 @@ import com.example.party.global.exception.BaseException;
 
 public class PartyPostNotFoundException extends BaseException {
 
-	private static final String msg = "존재하지 않는 모집글 입니다.";
+	public static final String MSG = "존재하지 않는 모집글 입니다.";
 
 	public PartyPostNotFoundException() {
-		super(HttpStatus.NOT_FOUND, msg);
+		super(HttpStatus.NOT_FOUND, MSG);
 	}
 }
