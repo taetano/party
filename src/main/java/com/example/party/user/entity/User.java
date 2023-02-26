@@ -84,14 +84,14 @@ public class User extends TimeStamped implements UserDetails {
         return this.profile.getParticipationCnt();
     }
 
-    public User(SignupRequest signupRequest, String password, Profile profile) {
+    public User(SignupRequest signupRequest, String password) {
         this.email = signupRequest.getEmail();
         this.password = password;
         this.nickname = signupRequest.getNickname();
         this.phoneNum = signupRequest.getPhoneNum();
         this.role = UserRole.ROLE_USER;
         this.status = Status.ACTIVE;
-        this.profile = profile;
+        this.profile = new Profile();
     }
 
     public void changeAdmin() { this.role = UserRole.ROLE_ADMIN; }
@@ -142,10 +142,6 @@ public class User extends TimeStamped implements UserDetails {
 
     public void increaseParticipationCnt() {
         this.profile.increaseParticipationCnt();
-    }
-
-    public void setId(Long id) { // 테스트를 위한 추가
-        this.id = id;
     }
 
     //작성한 참가신청 목록 추가
