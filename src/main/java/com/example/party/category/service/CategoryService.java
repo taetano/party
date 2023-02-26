@@ -52,9 +52,7 @@ public class CategoryService implements ICategoryService {
 	//카테고리 수정
 	@Override
 	public ApiResponse updateCategory(Long categoryId, CategoryRequest request) {
-		Category category = categoryRepository.findById(categoryId).orElseThrow(
-			CategoryNotFoundException::new
-		);
+		Category category = getCategory(categoryId);
 
 		if (categoryRepository.existsCategoryByName(request.getName())) {
 			throw new DuplicateNameNotAllowException();
@@ -68,10 +66,15 @@ public class CategoryService implements ICategoryService {
 	//카테고리 삭제
 	@Override
 	public ApiResponse deleteCategory(Long categoryId) {
-		Category category = categoryRepository.findById(categoryId).orElseThrow(
-			CategoryNotFoundException::new
-		);
+		Category category = getCategory(categoryId);
 		category.deleteCategory();
 		return ApiResponse.ok("카테고리 삭제 완료");
+	}
+
+	@Transactional(readOnly = true)
+	public Category getCategory(Long categoryId) {
+		return categoryRepository.findById(categoryId).orElseThrow(
+			CategoryNotFoundException::new
+		);
 	}
 }
