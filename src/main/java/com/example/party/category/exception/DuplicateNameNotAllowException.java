@@ -6,9 +6,9 @@ import com.example.party.global.exception.BaseException;
 
 public class DuplicateNameNotAllowException extends BaseException {
 
-	private static final String msg = "카테고리명은 중복이 불가합니다.";
+	public static final String MSG = "카테고리명은 중복이 불가합니다.";
 
 	public DuplicateNameNotAllowException() {
-			super(HttpStatus.BAD_REQUEST, msg);
+			super(HttpStatus.BAD_REQUEST, MSG);
 		}
 }
