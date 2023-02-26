@@ -54,9 +54,8 @@ public class UserService implements IUserService {
         }
 
         String password = passwordEncoder.encode(signupRequest.getPassword());
-        Profile profile = new Profile();
-        profilesRepository.save(profile);
-        User user = new User(signupRequest, password, profile);
+
+        User user = new User(signupRequest, password);
         userRepository.save(user);
         return ApiResponse.create("회원가입 완료");
     }
