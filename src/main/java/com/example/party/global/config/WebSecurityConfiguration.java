@@ -22,6 +22,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @EnableWebSecurity
 public class WebSecurityConfiguration {
+	public static final String[] URL_PERMIT_ALL = "/api/users/signup,/api/users/signin,/api/party-posts,/api/party-posts/{party-postId:[\\d+]}".split(",");
+	public static final String[] URL_ROLE_USER_ADMIN = "/api/restriction/**,/api/users/**,/api/party-posts/**,/api/rooms,chatting".split(",");
 	private final UserDetailsService userDetailsService;
 	private final RedisTemplate<String, String> redisTemplate;
 
@@ -65,7 +67,20 @@ public class WebSecurityConfiguration {
 
 		http
 			.authorizeHttpRequests(auth -> auth
-				.anyRequest().permitAll()
+				.antMatchers(URL_PERMIT_ALL)
+				.permitAll()
+				.antMatchers(URL_ROLE_USER_ADMIN)
+				.hasAnyRole("USER", "ADMIN")
+				.antMatchers("/api/categories/**")
+				.hasRole("ADMIN")
+				.antMatchers("/api/applications/**")
+				.hasRole("USER")
+				.anyRequest()
+				.permitAll()
+			)
+			.formLogin(login -> login
+				.loginPage("/page/loginPage")
+				.successForwardUrl("/page/indexPage")
 			);
 
 		return http.build();
