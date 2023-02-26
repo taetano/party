@@ -51,7 +51,7 @@ public class PartyPostService implements IPartyPostService {
     private final UserRepository userRepository;
     private final ApplicationRepository applicationRepository;
     private final CategoryRepository categoryRepository;
-    private final BlockRepository blockRepository;
+    private final PartyPostValidator partyPostValidator;
 
     //모집글 작성
     @Override
@@ -66,11 +66,7 @@ public class PartyPostService implements IPartyPostService {
         if (!category.isActive()) { throw new CategoryNotActiveException();}
 
         //3. PartyPost 객체 생성
-        PartyPost partyPost = new PartyPost(user, request, partyDate, category );
-
-        //Party 객체 생성
-        Party party = new Party(partyPost);
-        party.autoAddUser(user);
+        PartyPost partyPost = new PartyPost(user, request, partyDate, category);
 
         //4. repository 에 저장
         partyPostRepository.save(partyPost);
@@ -87,8 +83,7 @@ public class PartyPostService implements IPartyPostService {
         //2. Page<partyPost> 를 Page<PartyPostListResponse> 로 변경
         List<PartyPost> pageResponse = partyPostRepository.findAllByActiveIsTrue(pageable);
         //blockedList 를 체크해서 걸러줌. 걸러진 페이지에 대한 처리는 아직 없음
-        List<PartyPostListResponse> filteredPosts = filteringPosts(user, pageResponse).stream()
-                .map(PartyPostListResponse::new).collect(Collectors.toList());
+        List<PartyPostListResponse> filteredPosts = partyPostValidator.filteringPosts(user, pageResponse);
         return DataApiResponse.ok("모집글 전체 조회 완료", filteredPosts);
     }
 
@@ -121,8 +116,7 @@ public class PartyPostService implements IPartyPostService {
                 searchText,
                 pageable);
         
-        List<PartyPostListResponse> filteredPosts = filteringPosts(user, partyPostList).stream()
-                .map(PartyPostListResponse::new).collect(Collectors.toList());
+        List<PartyPostListResponse> filteredPosts = partyPostValidator.filteringPosts(user, partyPostList);
 
         return DataApiResponse.ok("모집글 검색 완료", filteredPosts);
     }
@@ -142,8 +136,7 @@ public class PartyPostService implements IPartyPostService {
 
         List<PartyPost> partyPostList = partyPostRepository.findByCategoryId(categoryId, pageable);
 
-        List<PartyPostListResponse> filteredPosts = filteringPosts(user, partyPostList).stream()
-                .map(PartyPostListResponse::new).collect(Collectors.toList());
+        List<PartyPostListResponse> filteredPosts = partyPostValidator.filteringPosts(user, partyPostList);
 
         return DataApiResponse.ok("카테고리별 모집글 조회 완료", filteredPosts);
     }
@@ -155,8 +148,7 @@ public class PartyPostService implements IPartyPostService {
 
         List<PartyPost> partyPostList = partyPostRepository.findFirst3ByOrderByViewCntDesc(pageable);
 
-        List<PartyPostListResponse> filteredPosts = filteringPosts(user, partyPostList).stream()
-                .map(PartyPostListResponse::new).collect(Collectors.toList());
+        List<PartyPostListResponse> filteredPosts = partyPostValidator.filteringPosts(user, partyPostList);
 
         return DataApiResponse.ok("핫한 모집글 조회 완료", filteredPosts);
     }
@@ -172,8 +164,7 @@ public class PartyPostService implements IPartyPostService {
         //1.검색 문자에 맞는 리스트 조회
         List<PartyPost> partyPostList = partyPostRepository.findByAddressContaining(searchAddress, pageable);
 
-        List<PartyPostListResponse> filteredPosts = filteringPosts(user, partyPostList).stream()
-                .map(PartyPostListResponse::new).collect(Collectors.toList());
+        List<PartyPostListResponse> filteredPosts = partyPostValidator.filteringPosts(user, partyPostList);
 
         return DataApiResponse.ok("주변 모집글 조회 완료", filteredPosts);
     }
@@ -213,7 +204,7 @@ public class PartyPostService implements IPartyPostService {
                 PartyPostNotFoundException::new
         );
         //2. 삭제 가능한지 확인 (작성자인지 / 모집마감전인지 / 참가신청한 모집자가 없는지)
-        canDeletePartyPost(user, partyPost);
+        partyPostValidator.canDeletePartyPost(user, partyPost);
 
         //3. 2가 통과한 경우 삭제 진행
         partyPost.deletePartyPost();
@@ -281,46 +272,6 @@ public class PartyPostService implements IPartyPostService {
         List<PartyPostListResponse> partyPost = userIf.getLikePartyPosts().stream()
                 .map(PartyPostListResponse::new).collect(Collectors.toList());
         return DataApiResponse.ok("좋아요 게시글 조회 완료", partyPost);
-    }
-
-    //private 메소드
-    //삭제가능여부 확인
-    private void canDeletePartyPost(User user, PartyPost partyPost) {
-        //1. 작성자인지 확인
-        if (!partyPost.isWrittenByMe(user.getId())) {
-            throw new PartyPostNotDeletableException("작성자만 모집글을 삭제할 수 있습니다");
-        }
-        //2. 모집글이 이미 삭제 상태인지 확인
-        if (!partyPost.isActive()) {
-            throw new PartyPostNotDeletableException("이미 삭제처리된 모집글입니다.");
-        }
-
-        //3. 모집마감전인지 확인
-        if (!partyPost.beforeCloseDate(LocalDateTime.now())) {
-            throw new PartyPostNotDeletableException("모집마감시간이 지나면 모집글을 삭제할 수 없습니다");
-        }
-        //3. 참가신청한 모집자가 없는지 확인
-        if (!partyPost.haveNoApplications()) {
-            throw new PartyPostNotDeletableException("참가신청자가 있는 경우 삭제할 수 없습니다");
-        }
-    }
-
-    //blockedList 검열
-    private List<PartyPost> filteringPosts(User user, List<PartyPost> partyPostList) {
-        List<Block> blockedList = blockRepository.findAllByBlockerId(user.getId());
-        List<PartyPost> returnPartyPost = new ArrayList<>();
-        if (blockedList.size() > 0) {
-            for (PartyPost post : partyPostList) {
-                for (Block block : blockedList) {
-                    if (!post.getUser().getId().equals(block.getBlocked().getId())) {
-                        returnPartyPost.add(post);
-                    }
-                }
-            }
-        } else {
-            return partyPostList;
-        }
-        return returnPartyPost;
     }
 
 }
