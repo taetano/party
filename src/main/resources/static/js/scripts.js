@@ -22,12 +22,44 @@ function logout() {
             "Authorization": getCookieValue('Authorization')
         },
         success: function () {
-            document.cookie = 'Authorization' + '=' + ""
             let host = window.location.host;
             let url = host + '/page/indexPage';
             window.location.href = 'http://' + url;
 
         }
     })
+
+}
+
+
+// 상단 카테고리 메뉴 불러오기
+function getCategories() {
+    $.ajax({
+        type: "GET",
+        url: `/api/categories`,
+        headers: {
+            "Authorization": getCookieValue('Authorization')
+        },
+        error(error, response) {
+            alert(response.msg)
+            console.error(error);
+            console.error(response);
+        },
+        success: function (response) {
+            console.log(response.data)
+            if (response.code === 200) {
+                let rows = response['data']
+                for (let i = 0; i < rows.length; i++) {
+                    let category_name = rows[i]['name']
+                    let category_id = rows[i]['id']
+                    let category_temp = `<li class="nav-item"><a class="nav-link" onclick=""><hidden>${category_id}</hidden> ${category_name} |</a></li>`
+
+                    $('#categories').append(category_temp)
+                }
+            }
+        }
+
+    });
+
 
 }
