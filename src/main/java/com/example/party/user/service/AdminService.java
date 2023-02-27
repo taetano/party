@@ -12,7 +12,7 @@ import com.example.party.restriction.dto.ReportUserResponse;
 import com.example.party.restriction.entity.ReportPost;
 import com.example.party.restriction.repository.ReportPostRepository;
 import com.example.party.restriction.repository.ReportUserRepository;
-import com.example.party.user.dto.AdminResponse;
+import com.example.party.user.dto.BlackListResponse;
 import com.example.party.user.entity.User;
 import com.example.party.user.exception.UserNotFoundException;
 import com.example.party.user.repository.UserRepository;
@@ -25,7 +25,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -58,38 +57,36 @@ public class AdminService {
     //노쇼 로그 조회
     public DataApiResponse<?> findNoShowList(User user) {
         checkAdmin(user);
-//        Pageable pageable = PageRequest.of(page, 10);
+//        Pageable 적용 방법 찾아야함
         List<User> users = userRepository.findAllByNoShowList();
-        return DataApiResponse.ok("", users );
+        return DataApiResponse.ok("노쇼 로그 조회 완료", users );
     }
 
     //모집글 삭제
-    public ItemApiResponse<AdminResponse> deletePost(User user, Long partyPostId) {
+    public ApiResponse deletePost(User user, Long partyPostId) {
         checkAdmin(user);
 
         PartyPost partyPost = partyPostRepository.findById(partyPostId)
                 .orElseThrow(NotFoundException::new);
         List<ReportPost> reportPosts = reportPostRepository.findAllByPartyPostId(partyPost.getId());
         //나중에 다시 정해야함 기준이 없어서 일단 랜덤 사용
-        Random random = new Random();
-        ReportPost reportPost = reportPosts.get(random.nextInt(reportPosts.size()));
 
         User createPostUser = partyPost.getUser();
         createPostUser.getProfile().plusAdminReportCnt();
         if (createPostUser.getProfile().getAdminReportCnt() >= 3) {
             createPostUser.setSuspended();
+            reportPostRepository.deleteAll(reportPosts);
             partyPostRepository.delete(partyPost);
-            return ItemApiResponse.ok("삭제 및 블랙리스트 처리 완료",
-                    new AdminResponse(createPostUser, partyPost, reportPost, accountMsg));
+            return ItemApiResponse.ok("삭제 및 블랙리스트 처리 완료");
         }
 
         reportPostRepository.deleteAll(reportPosts);
         partyPostRepository.delete(partyPost);
-        return ItemApiResponse.ok("게시글 삭제 완료", new AdminResponse(partyPost, reportPost, postMsg));
+        return ApiResponse.ok("게시글 삭제 완료");
     }
 
     //회원 블랙리스트 등록
-    public ItemApiResponse<AdminResponse> setSuspended(User user, Long userId) {
+    public ApiResponse setSuspended(User user, Long userId) {
         checkAdmin(user);
         isMySelf(user, userId);
         User blackuser = findByUser(userId);
@@ -101,7 +98,7 @@ public class AdminService {
         }
 
         userRepository.save(blackuser);
-        return ItemApiResponse.ok("블랙리스트 처리 완료", new AdminResponse(blackuser, accountMsg));
+        return ApiResponse.ok("블랙리스트 해제 완료");
     }
 
     //회원 블랙리스트 해제
@@ -115,20 +112,20 @@ public class AdminService {
     }
 
     //블랙리스트 조회
-    public DataApiResponse<AdminResponse> getBlackList(User user) {
+    public DataApiResponse<BlackListResponse> getBlackList(User user) {
         checkAdmin(user);
-        List<AdminResponse> blackList = userRepository.statusEqualSuspended().stream()
-                .map(b -> new AdminResponse(b,accountMsg)).collect(Collectors.toList());
+        List<BlackListResponse> blackList = userRepository.statusEqualSuspended().stream()
+                .map(b -> new BlackListResponse(b,accountMsg)).collect(Collectors.toList());
         return DataApiResponse.ok("블랙리스트 조회 완료", blackList);
     }
 
+    //private
     private void checkAdmin(User user) {
         if (!user.getRole().equals(UserRole.ROLE_ADMIN)) {
             throw new IllegalArgumentException("권한 없음");
         }
     }
 
-    //private
     private User findByUser(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
