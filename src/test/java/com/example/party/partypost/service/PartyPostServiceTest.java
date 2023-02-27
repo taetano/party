@@ -12,7 +12,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import org.assertj.core.api.AbstractThrowableAssert;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,6 +26,8 @@ import org.springframework.data.domain.Pageable;
 import com.example.party.application.entity.Application;
 import com.example.party.application.repository.ApplicationRepository;
 import com.example.party.category.entity.Category;
+import com.example.party.category.exception.CategoryNotActiveException;
+import com.example.party.category.exception.CategoryNotFoundException;
 import com.example.party.category.repository.CategoryRepository;
 import com.example.party.global.common.ApiResponse;
 import com.example.party.global.common.DataApiResponse;
@@ -34,6 +38,8 @@ import com.example.party.partypost.dto.PartyPostRequest;
 import com.example.party.partypost.dto.PartyPostResponse;
 import com.example.party.partypost.dto.UpdatePartyPostRequest;
 import com.example.party.partypost.entity.PartyPost;
+import com.example.party.partypost.exception.IsNotWritterException;
+import com.example.party.partypost.exception.PartyPostNotFoundException;
 import com.example.party.partypost.repository.PartyPostRepository;
 import com.example.party.restriction.repository.BlockRepository;
 import com.example.party.user.entity.User;
@@ -317,5 +323,163 @@ class PartyPostServiceTest {
 		assertThat(result.getCode()).isEqualTo(200);
 		assertThat(result.getMsg()).isEqualTo("좋아요 게시글 조회 완료");
 		assertThat(result.getData().size()).isEqualTo(1);
+	}
+
+	// throw Exception
+
+	@Nested
+	class Fail {
+		@Test
+		void createPartyPost_CategoryNotFoundException() {
+			//  given
+			Category category = mock(Category.class);
+			//  when
+			when(partyPostRequest.getPartyDate()).thenReturn("2023-02-16 12:00"); // 오류 뜰까?
+
+			var thrown = assertThatThrownBy(
+				() -> partyPostService.createPartyPost(user, partyPostRequest));
+			//  then
+			verify(categoryRepository).findById(anyLong());
+			thrown.isInstanceOf(CategoryNotFoundException.class)
+				.hasMessage(CategoryNotFoundException.MSG);
+		}
+
+		@Test
+		void createPartyPost_CategoryNotActiveException() {
+			//  given
+			Category category = mock(Category.class);
+			//  when
+			when(partyPostRequest.getPartyDate()).thenReturn("2023-02-16 12:00"); // 오류 뜰까?
+			when(partyPostRequest.getCategoryId()).thenReturn(999L);
+			when(categoryRepository.findById(anyLong())).thenReturn(Optional.of(category));
+			when(category.isActive()).thenReturn(false);
+
+			var thrown = assertThatThrownBy(
+				() -> partyPostService.createPartyPost(user, partyPostRequest));
+			//  then
+			verify(categoryRepository).findById(anyLong());
+			verify(category).isActive();
+			thrown.isInstanceOf(CategoryNotActiveException.class)
+				.hasMessage(CategoryNotActiveException.MSG);
+		}
+
+		@Test
+		void getPartyPost_PartyPostNotFoundException() {
+			//  given
+			//  when
+			var thrown = assertThatThrownBy(
+				() -> partyPostService.getPartyPost(partyPost.getId(), user));
+			//  then
+			verify(partyPostRepository).findByIdAndActiveIsTrue(anyLong());
+			thrown.isInstanceOf(PartyPostNotFoundException.class)
+				.hasMessage(PartyPostNotFoundException.MSG);
+		}
+
+		@Test
+		void searchPartyPostByCategory_CategoryNotFoundException() {
+			//  given
+
+			//  when
+
+			var thrown = assertThatThrownBy(
+				() -> partyPostService.searchPartyPostByCategory(user, category.getId(), 999));
+			//  then
+			verify(categoryRepository).findById(anyLong());
+			thrown.isInstanceOf(CategoryNotFoundException.class)
+				.hasMessage(CategoryNotFoundException.MSG);
+		}
+
+		@Test
+		void searchPartyPostByCategory_CategoryNotActiveException() {
+			//  given
+
+			//  when
+			when(categoryRepository.findById(anyLong())).thenReturn(Optional.of(category));
+
+			var thrown = assertThatThrownBy(
+				() -> partyPostService.searchPartyPostByCategory(user, category.getId(), 999));
+			//  then
+			verify(categoryRepository).findById(anyLong());
+			verify(category).isActive();
+			thrown.isInstanceOf(CategoryNotActiveException.class)
+				.hasMessage(CategoryNotActiveException.MSG);
+		}
+
+		@Test
+		void updatePartyPost_PartyPostNotFoundException() {
+			//  given
+
+			//  when
+
+			var thrown = assertThatThrownBy(
+				() -> partyPostService.updatePartyPost(partyPost.getId(), updatePartyPostRequest, user));
+			//  then
+			verify(partyPostRepository).findById(anyLong());
+			thrown.isInstanceOf(PartyPostNotFoundException.class)
+				.hasMessage(PartyPostNotFoundException.MSG);
+		}
+
+		@Test
+		void updatePartyPost_CategoryNotFoundException() {
+			//  given
+
+			//  when
+			when(partyPostRepository.findById(anyLong())).thenReturn(Optional.of(partyPost));
+
+			var thrown = assertThatThrownBy(
+				() -> partyPostService.updatePartyPost(partyPost.getId(), updatePartyPostRequest, user));
+			//  then
+			verify(partyPostRepository).findById(anyLong());
+			verify(categoryRepository).findById(anyLong());
+			thrown.isInstanceOf(CategoryNotFoundException.class)
+				.hasMessage(CategoryNotFoundException.MSG);
+		}
+
+		@Test
+		void updatePartyPost_IsNotWritterException() {
+			//  given
+
+			//  when
+			when(partyPostRepository.findById(anyLong())).thenReturn(Optional.of(partyPost));
+			when(categoryRepository.findById(anyLong())).thenReturn(Optional.of(category));
+
+			var thrown = assertThatThrownBy(
+				() -> partyPostService.updatePartyPost(partyPost.getId(), updatePartyPostRequest, user));
+			//  then
+			verify(partyPostRepository).findById(anyLong());
+			verify(categoryRepository).findById(anyLong());
+			verify(partyPost).isWrittenByMe(anyLong());
+			thrown.isInstanceOf(IsNotWritterException.class)
+				.hasMessage(IsNotWritterException.MSG);
+		}
+
+		@Test
+		void deletePartyPost() {
+			//  given
+
+			//  when
+
+			var thrown = assertThatThrownBy(
+				() -> partyPostService.deletePartyPost(partyPost.getId(), user));
+			//  then
+			verify(partyPostRepository).findById(anyLong());
+			thrown.isInstanceOf(PartyPostNotFoundException.class)
+				.hasMessage(PartyPostNotFoundException.MSG);
+		}
+
+		@Test
+		void toggleLikePartyPost_PartyPostNotFoundException() {
+			//  given
+			HashSet<PartyPost> set = new HashSet<>();
+			set.add(partyPost);
+			//  when
+
+			var thrown = assertThatThrownBy(
+				() -> partyPostService.toggleLikePartyPost(partyPost.getId(), user));
+			//  then
+			verify(partyPostRepository).findById(anyLong());
+			thrown.isInstanceOf(PartyPostNotFoundException.class)
+				.hasMessage(PartyPostNotFoundException.MSG);
+		}
 	}
 }
