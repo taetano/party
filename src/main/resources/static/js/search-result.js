@@ -1,7 +1,10 @@
-jQuery(document).ready(function () {
-    getHotPartyPost()
-    getNearPartyPost()
-})
+$(document).ready(function () {
+    //검색어 값으로 받음
+    let searchText = new URLSearchParams(window.location.search).get('searchText');
+    if (searchText) {
+        firstsearchPartyPost(searchText); //검색어가 들어왔을때 검색적용
+    }
+});
 
 // 토큰값 분리
 function getCookieValue(cookieName) {
@@ -17,31 +20,20 @@ function getCookieValue(cookieName) {
     return "";
 }
 
-// 검색할 문자를 가져와 , 주소 이동과함께 같이 보냄
-function handleSearchButtonClick() {
-    // input 요소에서 검색어를 가져옵니다.
-    const searchText = document.getElementById("search").value;
-    // 검색어를 인코딩합니다.
-    const encodedSearchText = encodeURIComponent(searchText);
-    // 검색 결과 페이지 URL을 생성합니다. ex)/search?searchText=검색어
-    const searchResultPageUrl = `/page/search?searchText=` + encodedSearchText;
-
-    // 검색 결과 페이지로 이동합니다.
-    window.location.href = searchResultPageUrl;
-}
-
-//조회수 높은 핫한글 모집글 조회
-function getHotPartyPost() {
-
-    $('#hotPartyposts').empty()
-
+//페이지 바로 로딩시 검색어가 들어왔을때
+function firstsearchPartyPost(inputVal) {
+    $('#searchPartyPostResult').empty()
     $.ajax({
-        url: "http://localhost:8080/api/party-posts/hot",
+        url: "http://localhost:8080/api/party-posts/search?",
         headers: {
             "Authorization": getCookieValue('Authorization')
         },
+        data: {
+            searchText: inputVal
+        },
         type: "GET",
         success: function (response) {
+            console.log(response);
             let responseData = response['data']
             for (let i = 0; i < responseData.length; i++) {
                 let obj = responseData[i];
@@ -80,25 +72,33 @@ function getHotPartyPost() {
             </div>
         </div>
           `
-                $('#hotPartyposts').append(tempHtml)
+
+                $('#searchPartyPostResult').append(tempHtml)
+
             }
         }
     });
 }
 
-//내 주소 기준으로 주면 모집글 조회
-function getNearPartyPost() {
-    $('#nearPartyposts').empty()
+//로딩 이후 따로 재검색시 이용
+function searchPartyPost() {
+    var inputVal = document.getElementById("search").value;
 
-    let Address = "서울시 마포구 연남동"; //임시로 주소 고정 입력
+    console.log("입력된 값은 " + inputVal + "입니다.");
+
+    $('#searchPartyPostResult').empty()
+
     $.ajax({
-        url: "http://localhost:8080/api/party-posts/near/" + Address,
+        url: "http://localhost:8080/api/party-posts/search?",
         headers: {
             "Authorization": getCookieValue('Authorization')
         },
+        data: {
+            searchText: inputVal
+        },
         type: "GET",
-        contentType: "application/json; charset=UTF-8",
         success: function (response) {
+            console.log(response);
             let responseData = response['data']
             for (let i = 0; i < responseData.length; i++) {
                 let obj = responseData[i];
@@ -137,8 +137,11 @@ function getNearPartyPost() {
             </div>
         </div>
           `
-                $('#nearPartyposts').append(tempHtml)
+
+                $('#searchPartyPostResult').append(tempHtml)
+
             }
         }
     });
 }
+

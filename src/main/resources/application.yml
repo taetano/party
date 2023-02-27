@@ -10,7 +10,7 @@ spring:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     show-sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
@@ -22,6 +22,15 @@ spring:
   thymeleaf:
     prefix: "classpath:/templates/"
     suffix: ".html"
+    cache: false
+
+  # 이하 devtools 옵션은 배포시 삭제 필요
+  devtools:
+    livereload:
+      enabled: true
+    remote:
+      restart:
+        enabled: true
 
 server:
   error:
