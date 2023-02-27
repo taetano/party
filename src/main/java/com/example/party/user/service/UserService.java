@@ -1,6 +1,7 @@
 package com.example.party.user.service;
 
 import com.example.party.user.entity.Profile;
+import com.example.party.user.type.Status;
 import org.springframework.cglib.core.Block;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -71,6 +72,9 @@ public class UserService implements IUserService {
             redisTemplate.delete(RT_TOKEN + user.getId());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "중복 로그인");
         }
+        if (user.getStatus().equals(Status.DORMANT)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "탈퇴한 사용자 입니다");
+        }
 
         String generateToken = JwtProvider.accessToken(user.getEmail(), user.getId());
         String refreshToken = JwtProvider.refreshToken(user.getEmail(), user.getId());
@@ -93,6 +97,7 @@ public class UserService implements IUserService {
         User userIf = findByUser(user.getEmail());
         confirmPassword(withdrawRequest.getPassword(), userIf.getPassword());
         userIf.DormantState();
+        redisTemplate.opsForValue().getOperations().delete(RT_TOKEN + user.getId());
         return ApiResponse.ok("회원탈퇴 완료");
     }
 
