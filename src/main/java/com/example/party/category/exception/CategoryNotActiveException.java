@@ -6,10 +6,10 @@ import com.example.party.global.exception.BaseException;
 
 public class CategoryNotActiveException extends BaseException {
 
-	private static final String msg = "비활성화된 카테고리입니다.";
+	public static final String MSG = "비활성화된 카테고리입니다.";
 
 	public CategoryNotActiveException() {
-			super(HttpStatus.BAD_REQUEST, msg);
+			super(HttpStatus.BAD_REQUEST, MSG);
 	}
 
 }

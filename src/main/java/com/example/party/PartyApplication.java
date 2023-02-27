@@ -1,38 +1,18 @@
 package com.example.party;
 
-import com.example.party.category.dto.CategoryRequest;
-import com.example.party.category.entity.Category;
-import com.example.party.category.repository.CategoryRepository;
-import com.example.party.partypost.dto.PartyPostRequest;
-import com.example.party.partypost.entity.Party;
-import com.example.party.partypost.entity.PartyPost;
-import com.example.party.partypost.repository.PartyPostRepository;
-import com.example.party.partypost.repository.PartyRepository;
-import com.example.party.restriction.entity.NoShow;
-import com.example.party.restriction.repository.NoShowRepository;
-import com.example.party.user.dto.SignupRequest;
-import com.example.party.user.entity.User;
-import com.example.party.user.repository.ProfilesRepository;
-import com.example.party.user.repository.UserRepository;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @SpringBootApplication
 @EnableScheduling
 @EnableJpaAuditing
 public class PartyApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(PartyApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(PartyApplication.class, args);
+    }
 
 //	 @Bean
 //	 public CommandLineRunner dummyData(
