@@ -42,6 +42,9 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
 
+    //spring devtools
+    compileOnly "org.springframework.boot:spring-boot-devtools"
+
     // Redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 }

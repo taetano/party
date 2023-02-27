@@ -29,8 +29,13 @@
           rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i"
           rel="stylesheet"/>
-    <!-- Core theme CSS (includes Bootstrap)-->
-    <link href="../static/css/styles.css" rel="stylesheet"/>
+
+    <!--    jquery 라이브러리 로드 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- css & javascript 불러오기 -->
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <script type="text/javascript" th:src="@{/js/mypage-partypost-apply.js}"></script>
+    <script type="text/javascript" th:src="@{/js/scripts.js}"></script>
     <title>내가 신청한 모집글</title>
     <style>
         body {
@@ -133,20 +138,15 @@
                 aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span
                 class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link" href="#!">|&emsp;음식</a></li>
-                <li class="nav-item"><a class="nav-link" href="#!">|&emsp;게임</a></li>
-                <li class="nav-item"><a class="nav-link" href="#!">|&emsp;공부</a></li>
-                <li class="nav-item"><a class="nav-link" href="#!">|&emsp;문화생활&emsp;|</a></li>
+            <ul class="navbar-nav ms-auto" id="categories">
+                |
+                <!-- 불러온 카테고리 들어갈 곳 -->
+
             </ul>
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item"><a class="nav-link"
-                                        href="http://localhost:63342/party/party.main/templates/signup.html?_ijt=2n2aoejdga53njq9ev9rpqql1&_ij_reload=RELOAD_ON_SAVE">회원가입</a>
+                                        onclick="logout()">로그아웃</a>
                 </li>
-                <li class="nav-item"><a class="nav-link"
-                                        href="http://localhost:63342/party/party.main/templates/login.html?_ijt=2n2aoejdga53njq9ev9rpqql1&_ij_reload=RELOAD_ON_SAVE">로그인</a>
-                </li>
-                <li class="nav-item"><a class="nav-link" href="#!">마이페이지</a></li>
             </ul>
         </div>
     </div>
@@ -165,7 +165,7 @@
     <div class="mypageMain">
 
         <data class="mypageLeftMenu">
-            <button class="mydata" onclick="window.location.href= 'mypage_profile.html'">내 정보</button>
+            <button class="mydata" onclick="window.location.href=''">내 정보</button>
             <button class="mydata" onclick="window.location.href= 'login.html'">1:1 채팅</button>
             <button class="mydata" onclick="window.location.href= 'mypage_partypost_created.html'">내 모집글 목록</button>
             <button class="mydata" onclick="window.location.href= 'mypage_partypost_apply.html'">신청 모집글 목록</button>
@@ -174,31 +174,9 @@
         </data>
 
         <div class="mypageEdit">
-            <div class="mypartypost-list">
-                <div id="mypartypost1" class="mypartypost">
-                    글 제목 : 글 제목1 / 마감일자 : 마감일자 / 위치 : 위치 / 신청 상태 : 대기
-                    <button class="btn btn-warning rounded-pill" onclick="window.location.href= 'login.html'">글이동
-                    </button>
-                    <button class="btn btn-dark rounded-pill">신청취소</button>
-                </div>
-                <div id="mypartypost2" class="mypartypost">
-                    글 제목 : 글 제목2 / 마감일자 : 마감일자 / 위치 : 위치 / 신청 상태 : 대기
-                    <button class="btn btn-warning rounded-pill" onclick="window.location.href= 'login.html'">글이동
-                    </button>
-                    <button class="btn btn-dark rounded-pill">신청취소</button>
-                </div>
-                <div id="mypartypost4" class="mypartypost">
-                    글 제목 : 글 제목3 / 마감일자 : 마감일자 / 위치 : 위치 / 신청 상태 : 대기
-                    <button class="btn btn-warning rounded-pill" onclick="window.location.href= 'login.html'">글이동
-                    </button>
-                    <button class="btn btn-dark rounded-pill">신청취소</button>
-                </div>
-                <div id="mypartypost3" class="mypartypost">
-                    글 제목 : 글 제목4 / 마감일자 : 마감일자 / 위치 : 위치 / 신청 상태 : 대기
-                    <button class="btn btn-warning rounded-pill" onclick="window.location.href= 'login.html'">글이동
-                    </button>
-                    <button class="btn btn-dark rounded-pill">신청취소</button>
-                </div>
+            <div class="mypartypost-apply-list" id="mypartypost-apply-list">
+                <!--             모집글 목록 나오는 곳 -->
+
             </div>
         </div>
     </div>

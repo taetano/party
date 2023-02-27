@@ -11,3 +11,23 @@ function getCookieValue(cookieName) {
     }
     return "";
 }
+
+// 로그아웃 메소드
+function logout() {
+    $.ajax({
+        type: "POST",
+        url: `/api/users/signout`,
+        contentType: "application/json",
+        headers: {
+            "Authorization": getCookieValue('Authorization')
+        },
+        success: function () {
+            document.cookie = 'Authorization' + '=' + ""
+            let host = window.location.host;
+            let url = host + '/page/indexPage';
+            window.location.href = 'http://' + url;
+
+        }
+    })
+
+}
