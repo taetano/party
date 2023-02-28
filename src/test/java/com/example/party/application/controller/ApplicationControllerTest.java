@@ -1,77 +1,90 @@
 package com.example.party.application.controller;
 
+import static java.lang.String.*;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Collections;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
-import org.springframework.security.access.SecurityConfig;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import com.example.party.TestHelper;
 import com.example.party.application.service.ApplicationService;
 import com.example.party.global.common.ApiResponse;
 import com.example.party.global.common.DataApiResponse;
 import com.example.party.user.entity.User;
 
-@WebMvcTest(
-	controllers = ApplicationController.class,
-	excludeFilters = {
-		@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class)
-	},
-	excludeAutoConfiguration = SecurityAutoConfiguration.class
-
-)
+@ActiveProfiles("test")
+@ExtendWith(MockitoExtension.class)
+@AutoConfigureMockMvc(addFilters = false)
+@WebMvcTest(controllers = ApplicationController.class)
 class ApplicationControllerTest {
-
 	@MockBean
 	private ApplicationService applicationService;
 	@Autowired
 	private MockMvc mockMvc;
 
-	private static String URI_PREFIX;
-	private static String APPLICATION_ID;
+	@LocalServerPort
+	private String port;
 
-	@BeforeAll()
-	public static void setUp() {
-		URI_PREFIX = "/api/applications";
-		APPLICATION_ID = "/775";
+	private URI uri(String path) throws URISyntaxException {
+		return new URI(format("http://localhost:%s/api/applications%s", port, path));
 	}
 
 	@Nested
 	@DisplayName("성공 테스트 입니다.")
 	class Success {
-		private String getUrlTemplate(String mid) {
-			return URI_PREFIX + mid + APPLICATION_ID;
+		@BeforeEach
+		public void init() {
+			TestHelper.withoutSecurity();
+		}
+
+		@Test
+		void createApplication() throws Exception {
+			//  given
+
+			//  when
+			when(applicationService.createApplication(anyLong(), any(User.class)))
+				.thenReturn(ApiResponse.ok("참가 신청 완료"));
+
+			mockMvc.perform(post(uri("/join/123")))
+				.andDo(print())
+				.andExpect(status().isOk());
+			//  then
+			verify(applicationService).createApplication(anyLong(), any(User.class));
 		}
 
 		@DisplayName("나의 모임 참가 신청 취소하기")
 		@Test
 		void cancelApplication() throws Exception {
 			//  given
-			given(applicationService.cancelApplication(anyLong(), any(User.class)))
-				.willReturn(ApiResponse.ok("테스트 성공"));
+
 			//  when
-			ResultActions actions = mockMvc.perform(post(getUrlTemplate("/cancel/"))
-				.contentType(MediaType.APPLICATION_JSON));
+			when(applicationService.cancelApplication(anyLong(), any(User.class)))
+				.thenReturn(ApiResponse.ok("참가 신청 취소 완료"));
 
-			//  then
-			actions.andDo(print())
+			mockMvc.perform(post(uri("/cancel/999")))
+				.andDo(print())
 				.andExpect(status().isOk());
-
+			//  then
 			verify(applicationService).cancelApplication(anyLong(), any(User.class));
 		}
 
@@ -79,18 +92,14 @@ class ApplicationControllerTest {
 		@Test
 		void getApplications() throws Exception {
 			//  given
-			// 	List<ApplicationResponse> applications = List.of(new ApplicationResponse(data1), new ApplicationResponse(data2));
-			given(applicationService.getApplications(anyLong(), any(User.class)))
-				.willReturn(DataApiResponse.ok("테스트 성공", Collections.emptyList()));
 
 			//  when
-			ResultActions actions = mockMvc.perform(get(getUrlTemplate(""))
-				.contentType(MediaType.APPLICATION_JSON));
-
-			//  then
-			actions.andDo(print())
+			mockMvc.perform(get("/api/applications/775"))
 				.andExpect(status().isOk());
 
+			when(applicationService.getApplications(anyLong(), any(User.class)))
+				.thenReturn(DataApiResponse.ok("참가신청자 목록 조회 완료", Collections.emptyList()));
+			//  then
 			verify(applicationService).getApplications(anyLong(), any(User.class));
 		}
 
@@ -102,7 +111,7 @@ class ApplicationControllerTest {
 				.willReturn(ApiResponse.ok("테스트 성공"));
 
 			//  when
-			ResultActions actions = mockMvc.perform(post(getUrlTemplate("/accept"))
+			ResultActions actions = mockMvc.perform(post(uri("/accept/999"))
 				.contentType(MediaType.APPLICATION_JSON));
 
 			//  then
@@ -120,7 +129,7 @@ class ApplicationControllerTest {
 				.willReturn(ApiResponse.ok("테스트 성공"));
 
 			//  when
-			ResultActions actions = mockMvc.perform(post(getUrlTemplate("/reject"))
+			ResultActions actions = mockMvc.perform(post(uri("/reject/999"))
 				.contentType(MediaType.APPLICATION_JSON));
 
 			//  then
@@ -134,47 +143,59 @@ class ApplicationControllerTest {
 	@Nested
 	class Fail {
 		@Test
-		void cancelApplication_strangePatValue() throws Exception {
+		void createApplication_strangePathValue() throws Exception {
 			//  given
+
 			//  when
-			ResultActions actions = mockMvc.perform(post(URI_PREFIX + "/cancel" + "/null")
+			ResultActions actions = mockMvc.perform(post(uri("/join"))
 				.contentType(MediaType.APPLICATION_JSON));
 			//  then
 			actions.andDo(print())
-				.andExpect(status().isBadRequest());
+				.andExpect(status().is4xxClientError());
 		}
 
 		@Test
-		void getApplications_strangePatValue() throws Exception {
+		void cancelApplication_strangePathValue() throws Exception {
 			//  given
 			//  when
-			ResultActions actions = mockMvc.perform(get(URI_PREFIX + "/null")
+			ResultActions actions = mockMvc.perform(post(uri("/cancel"))
 				.contentType(MediaType.APPLICATION_JSON));
 			//  then
 			actions.andDo(print())
-				.andExpect(status().isBadRequest());
+				.andExpect(status().is4xxClientError());
 		}
 
 		@Test
-		void acceptApplication_strangePatValue() throws Exception {
+		void getApplications_strangePathValue() throws Exception {
 			//  given
 			//  when
-			ResultActions actions = mockMvc.perform(post(URI_PREFIX + "/accept" + "/null")
+			ResultActions actions = mockMvc.perform(get(uri(""))
 				.contentType(MediaType.APPLICATION_JSON));
 			//  then
 			actions.andDo(print())
-				.andExpect(status().isBadRequest());
+				.andExpect(status().is4xxClientError());
 		}
 
 		@Test
-		void rejectApplication_strangePatValue() throws Exception {
+		void acceptApplication_strangePathValue() throws Exception {
 			//  given
 			//  when
-			ResultActions actions = mockMvc.perform(post(URI_PREFIX + "/accept" + "/null")
+			ResultActions actions = mockMvc.perform(post(uri("/accept"))
 				.contentType(MediaType.APPLICATION_JSON));
 			//  then
 			actions.andDo(print())
-				.andExpect(status().isBadRequest());
+				.andExpect(status().is4xxClientError());
+		}
+
+		@Test
+		void rejectApplication_strangePathValue() throws Exception {
+			//  given
+			//  when
+			ResultActions actions = mockMvc.perform(post(uri("/accept"))
+				.contentType(MediaType.APPLICATION_JSON));
+			//  then
+			actions.andDo(print())
+				.andExpect(status().is4xxClientError());
 		}
 	}
 }
