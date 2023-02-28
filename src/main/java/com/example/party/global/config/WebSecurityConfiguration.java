@@ -75,6 +75,8 @@ public class WebSecurityConfiguration {
 				.hasRole("ADMIN")
 				.antMatchers("/api/applications/**")
 				.hasRole("USER")
+				.antMatchers("/api/admin/**")
+				.hasRole("ADMIN")
 				.anyRequest()
 				.permitAll()
 			)

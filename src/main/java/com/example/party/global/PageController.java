@@ -30,7 +30,6 @@ public class PageController {
 	@GetMapping("/indexPage")
 	public ModelAndView showIndexPage() {
 		return new ModelAndView("index"); // signup.html 파일 이름
-
 	}
 
 	//채팅 페이지 호출
@@ -51,7 +50,6 @@ public class PageController {
 	@GetMapping("/myPage/partypost/apply")
 	public ModelAndView showMyPagePartyPostApply() {
 		return new ModelAndView("mypage-partypost-apply"); //view할 html의 파일이름 넣어주세요
-
 	}
 
 	//마이페이지-partypost-created 호출
@@ -72,7 +70,6 @@ public class PageController {
 	@GetMapping("/myPage/profile")
 	public ModelAndView showMyPageProfile() {
 		return new ModelAndView("mypage-profile"); //view할 html의 파일이름 넣어주세요
-
 	}
 
 	//others-profile 호출
@@ -109,6 +106,12 @@ public class PageController {
 		return new ModelAndView("search-result"); //view할 html의 파일이름 넣어주세요
 
 	}
-	/// 혹시 없는 경우 이 밑에 추가해주세요 . 어드민은 추후 추가 예정 ///
 
+	/// 혹시 없는 경우 이 밑에 추가해주세요 . 어드민은 추후 추가 예정 ///
+	//admin partypostlisk호출
+	@GetMapping("/AdminPartyPostList")
+	public ModelAndView showAdminPartyPostList() {
+		return new ModelAndView("admin-partypost-list"); //view할 html의 파일이름 넣어주세요
+
+	}
 }
