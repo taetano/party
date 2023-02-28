@@ -22,7 +22,8 @@ function getCookieValue(cookieName) {
 
 //페이지 바로 로딩시 검색어가 들어왔을때
 function firstsearchPartyPost(inputVal) {
-    $('#searchPartyPostResult').empty()
+    $('#searchPartyPostResult').empty();
+    $("#search").val(inputVal);
     $.ajax({
         url: "http://localhost:8080/api/party-posts/search?",
         headers: {
@@ -37,7 +38,7 @@ function firstsearchPartyPost(inputVal) {
             let responseData = response['data']
             for (let i = 0; i < responseData.length; i++) {
                 let obj = responseData[i];
-                let postId = obj['postId']
+                let postId = obj['id']
                 let title = obj['title']
                 let partyOwner = obj['partyOwner']
                 let status = obj['status']
@@ -81,7 +82,7 @@ function firstsearchPartyPost(inputVal) {
 }
 
 //로딩 이후 따로 재검색시 이용
-function searchPartyPost() {
+function searchPartyPost(page) {
     var inputVal = document.getElementById("search").value;
 
     console.log("입력된 값은 " + inputVal + "입니다.");
@@ -89,12 +90,13 @@ function searchPartyPost() {
     $('#searchPartyPostResult').empty()
 
     $.ajax({
-        url: "http://localhost:8080/api/party-posts/search?",
+        url: "http://localhost:8080/api/party-posts/search",
         headers: {
             "Authorization": getCookieValue('Authorization')
         },
         data: {
-            searchText: inputVal
+            searchText: inputVal,
+            page: page
         },
         type: "GET",
         success: function (response) {
@@ -102,7 +104,7 @@ function searchPartyPost() {
             let responseData = response['data']
             for (let i = 0; i < responseData.length; i++) {
                 let obj = responseData[i];
-                let postId = obj['postId']
+                let postId = obj['id']
                 let title = obj['title']
                 let partyOwner = obj['partyOwner']
                 let status = obj['status']

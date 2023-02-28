@@ -20,6 +20,19 @@
             font-size: 1.2rem;
             outline: none;
         }
+
+        .wrap_4 ul {
+            text-align: center;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex; /* 리스트 아이템들을 가로로 나열하기 위해 flexbox 레이아웃을 사용합니다. */
+        }
+
+        .wrap_4 li {
+            margin-right: 10px; /* 리스트 아이템들 간의 간격을 조정합니다. */
+            display: inline-block; /* 리스트 아이템들을 가로로 나열합니다. */
+        }
     </style>
     <link rel="icon" type="image/x-icon" href="../assets/favicon.ico"/>
     <!-- Font Awesome icons (free version)-->
@@ -71,7 +84,7 @@
                         </span>
             </form>
             <a class="btn btn-primary btn-xl rounded-pill mt-5" id="searchPartyPost"
-               onclick="searchPartyPost()">검색하기</a>
+               onclick="searchPartyPost(1)">검색하기</a>
         </div>
     </div>
     <div class="bg-circle-1 bg-circle"></div>
@@ -110,6 +123,23 @@
         <!--        </div>-->
     </div>
 </section>
+
+<div class="wrap_4" style="position: relative; margin-bottom: 100px">
+    <nav aria-label="Page navigation example">
+        <ul>
+            <li><a href="#" onclick="searchPartyPost(1)">1</a></li>
+            <li><a href="#" onclick="searchPartyPost(2)">2</a></li>
+            <li><a href="#" onclick="searchPartyPost(3)">3</a></li>
+            <li><a href="#" onclick="searchPartyPost(4)">4</a></li>
+            <li><a href="#" onclick="searchPartyPost(5)">5</a></li>
+            <li><a href="#" onclick="searchPartyPost(6)">6</a></li>
+            <li><a href="#" onclick="searchPartyPost(7)">7</a></li>
+            <li><a href="#" onclick="searchPartyPost(8)">8</a></li>
+            <li><a href="#" onclick="searchPartyPost(9)">9</a></li>
+            <li><a href="#" onclick="searchPartyPost(10)">10</a></li>
+        </ul>
+    </nav>
+</div>
 <!-- Footer-->
 <footer class="py-3 bg-black">
     <div class="container px-5"><p class="m-0 text-center text-white small">Copyright &copy; Your Website 2023</p></div>

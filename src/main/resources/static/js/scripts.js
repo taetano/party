@@ -25,7 +25,6 @@ function logout() {
             let host = window.location.host;
             let url = host + '/page/indexPage';
             window.location.href = 'http://' + url;
-
         }
     })
 
@@ -58,8 +57,5 @@ function getCategories() {
                 }
             }
         }
-
     });
-
-
 }

@@ -45,7 +45,7 @@ function getHotPartyPost() {
             let responseData = response['data']
             for (let i = 0; i < responseData.length; i++) {
                 let obj = responseData[i];
-                let postId = obj['postId']
+                let postId = obj['id']
                 let title = obj['title']
                 let partyOwner = obj['partyOwner']
                 let status = obj['status']
@@ -56,7 +56,7 @@ function getHotPartyPost() {
                 let partyAddress = obj['partyAddress']
                 let partyPlace = obj['partyPlace']
                 let tempHtml = `
-        <div class="col-lg-4 my-5">
+        <div class="col-lg-4 my-5" >
             <div class="card h-100 shadow border-0">
                 <div class="card-body p-4">
                     <div class="badge bg-primary bg-gradient rounded-pill mb-2">모집상태 :${status}</div>
@@ -102,7 +102,7 @@ function getNearPartyPost() {
             let responseData = response['data']
             for (let i = 0; i < responseData.length; i++) {
                 let obj = responseData[i];
-                let postId = obj['postId']
+                let postId = obj['id']
                 let title = obj['title']
                 let partyOwner = obj['partyOwner']
                 let status = obj['status']
