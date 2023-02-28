@@ -54,7 +54,7 @@ function get_profile() {
                     <!-- 상태메세지 들어갈 곳 -->
                     <span id="profile-comment">상태메세지: ${comment}</span>
                     
-<!--                    //소개글이 없을 때-->
+<!--                    //소개글이 없을git p 때-->
 <!--                    if (comment == null) {-->
 <!--                        comment = "소개글이 없습니다"-->
 <!--                    }-->
