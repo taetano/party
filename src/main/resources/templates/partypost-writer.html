@@ -16,7 +16,7 @@
     <script type="text/javascript"
             src="//dapi.kakao.com/v2/maps/sdk.js?appkey=c026441ee839df0644ae92edb8d7b55c&libraries=services"></script>
     <!--    스타일 시트 & css 불러오기-->
-    <script type="text/javascript" th:src="@{/js/partypost-writer.js}"></script>
+    <script type="text/javascript" th:src="@{/js/partypost-edit.js}"></script>
     <link rel="stylesheet" th:href="@{/css/partypost-writer.css}">
     <link rel="stylesheet" th:href="@{/css/styles.css}">
     <title>모집글 작성 페이지</title>
@@ -61,30 +61,12 @@
 </select>
 <br>
 
-<label for="max-member">모임 인원(파티장 포함 입니다)</label>
-<select id="max-member" name="category" required>
-    <option value="">--선택--</option>
-    <option value="3">3</option>
-    <option value="4">4</option>
-    <option value="5">5</option>
-</select>
-<br>
-
-<label for="date">날짜</label>
-<input type="date" id="date" name="date" min="" max="" required>
-<br>
-
-<label for="time">시간</label>
-<input type="text" id="time" name="time" required>
-
-<br>
-
 <label for="content">내용</label>
 <textarea id="content" name="content" rows="10" cols="50" required></textarea>
 <br>
 
 <button type="button" onclick="cancel()">취소</button>
-<button type="submit" onclick="sendPartyPost()">등록</button>
+<button type="submit" onclick="submitUpdatePartyPost(postId)">수정</button>
 
 <script>
     <!--    카카오 지도 관련 스크립트 -->

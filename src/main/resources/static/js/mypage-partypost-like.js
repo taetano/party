@@ -1,11 +1,11 @@
 $(document).ready(function () {
     getCategories();
     $('#mypartypost-like-list').empty();
-    getPartyPostCreated();
+    getPartyPostLike();
 });
 
 // 좋아요한 모집글 불러오기
-function getPartyPostCreated() {
+function getPartyPostLike() {
     $.ajax({
         type: "GET",
         url: `/api/party-posts/likes`,

@@ -1,7 +1,7 @@
 //페이지 시작 시 호출 함수
 jQuery(document).ready(function () {
-    let partypostId=new URLSearchParams(window.location.search).get('partypostId');
-    if(partypostId) {
+    let partypostId = new URLSearchParams(window.location.search).get('partypostId');
+    if (partypostId) {
         go_to_partypost(partypostId);
     }
 });
@@ -30,7 +30,7 @@ function get_partypost(postId) {
 
     $.ajax({
         type: "GET",
-        url:'/api/party-posts/' + postId,
+        url: '/api/party-posts/' + postId,
         headers: {
             "Authorization": getCookieValue('Authorization')
         },
@@ -42,7 +42,7 @@ function get_partypost(postId) {
             let content = responseData['content']
             let categoryId = responseData['categoryId']
             let status = responseData['status']
-            let acceptedMember = responseData['acceptedMember']+1
+            let acceptedMember = responseData['acceptedMember'] + 1
             let maxMember = responseData['maxMember']
             let partyDate = responseData['partyDate']
             let closeDate = responseData['closeDate']
@@ -102,7 +102,7 @@ function get_partypost(postId) {
                                     </section>
                                 </article>
                                 <a class="btn-long btn-primary btn-xl-long rounded-pill" href="#!">신청 (1:1 채팅)</a>
-                                <a class="btn-long btn-primary btn-xl-long rounded-pill" href="#!">수정하기</a>
+                                <a class="btn-long btn-primary btn-xl-long rounded-pill" onclick="clickUpdate(${postId})">수정하기</a>
                             </div>
                         </div>
                     </div>
@@ -132,4 +132,13 @@ function get_partypost(postId) {
             }
         }
     });
+}
+
+//수정페이지로 옮겨가기
+function clickUpdate(postId) {
+    //postId값을 주소에 넣는다
+    const updatePartypostUrl = `/page/partypost/edit?postId=` + postId;
+    //수정페이지로 이동
+    window.location.href = updatePartypostUrl;
+
 }
