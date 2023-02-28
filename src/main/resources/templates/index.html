@@ -26,6 +26,7 @@
     <link rel="icon" type="image/x-icon" th:href="@{/assets/favicon.ico}">
     <link rel="stylesheet" th:href="@{/css/styles.css}">
     <script src="../js/index.js"></script>
+    <script src="../js/scripts.js"></script>
 
 </head>
 <body id="page-top">
@@ -37,20 +38,20 @@
                 aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span
                 class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link" href="#!">|&emsp;음식</a></li>
-                <li class="nav-item"><a class="nav-link" href="#!">|&emsp;게임</a></li>
-                <li class="nav-item"><a class="nav-link" href="#!">|&emsp;스터디</a></li>
-                <li class="nav-item"><a class="nav-link" href="#!">|&emsp;문화생활&emsp;|</a></li>
+            <ul class="navbar-nav ms-auto" id="categories">
+                <!-- 불러온 카테고리 들어갈 곳 -->
             </ul>
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link"
-                                        href="/page/signup">회원가입</a>
+                <li id="signupBtn" class="nav-item"><a class="nav-link"
+                                                       href="/page/signup">회원가입</a>
                 </li>
-                <li class="nav-item"><a class="nav-link"
-                                        href="/page/loginPage">로그인</a>
+                <li id="loginBtn" class="nav-item"><a class="nav-link"
+                                                      href="/page/loginPage">로그인</a>
                 </li>
-                <li class="nav-item"><a class="nav-link" href="/page/myPage/profile">마이페이지</a></li>
+                <li id="logoutBtn" class="nav-item"><a class="nav-link"
+                                                       onclick="logout()">로그아웃</a>
+                <li id="mypageBtn" class="nav-item"><a class="nav-link" href="/page/myPage/profile">마이페이지</a>
+                </li>
             </ul>
         </div>
     </div>
