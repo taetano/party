@@ -41,7 +41,7 @@ function firstsearchPartyPost(inputVal) {
                 let title = obj['title']
                 let partyOwner = obj['partyOwner']
                 let status = obj['status']
-                let acceptedMember = obj['acceptedMember']
+                let acceptedMember = obj['acceptedMember'] +1
                 let maxMember = obj['maxMember']
                 let partyDate = new Date(obj['partyDate'])
                 let closeDate = new Date(obj['closeDate'])
@@ -106,7 +106,7 @@ function searchPartyPost() {
                 let title = obj['title']
                 let partyOwner = obj['partyOwner']
                 let status = obj['status']
-                let acceptedMember = obj['acceptedMember']
+                let acceptedMember = obj['acceptedMember'] +1
                 let maxMember = obj['maxMember']
                 let partyDate = new Date(obj['partyDate'])
                 let closeDate = new Date(obj['closeDate'])

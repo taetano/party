@@ -78,7 +78,7 @@ function get_profile() {
 }
 
 //프로필 유저 정보 수정하기
-function update_profile() {
+function edit_profile() {
     $('#editProfile').empty()
 
     $.ajax({
