@@ -19,6 +19,8 @@
 
     <!-- JQuery 사용 설정 -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="/js/mypage-profile.js"></script>
+    <script src="/js/scripts.js"></script>
 
 </head>
 
@@ -32,11 +34,10 @@
                 class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <!-- 카테고리 -->
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link" href="#!">|&emsp;음식</a></li>
-                <li class="nav-item"><a class="nav-link" href="#!">|&emsp;게임</a></li>
-                <li class="nav-item"><a class="nav-link" href="#!">|&emsp;공부</a></li>
-                <li class="nav-item"><a class="nav-link" href="#!">|&emsp;문화생활&emsp;|</a></li>
+            <ul class="navbar-nav ms-auto" id="categories">
+                |
+                <!-- 불러온 카테고리 들어갈 곳 -->
+
             </ul>
             <!-- 상단바 회원 관련 바로가기 -->
             <ul class="navbar-nav ms-auto">
@@ -46,7 +47,7 @@
                 <li class="nav-item"><a class="nav-link"
                                         href="http://localhost:63342/party/party.main/templates/login.html?_ijt=2n2aoejdga53njq9ev9rpqql1&_ij_reload=RELOAD_ON_SAVE">로그인</a>
                 </li>
-                <li class="nav-item"><a class="nav-link" href="#!">마이페이지</a></li>
+                <li class="nav-item"><a class="nav-link" href="/page/indexPage">마이페이지</a></li>
             </ul>
         </div>
     </div>
@@ -64,12 +65,12 @@
 <div class="mypageMain">
     <!-- 사이드바 -->
     <data class="mypageLeftMenu">
-        <button class="mydata" onclick="window.location.href= 'mypage_profile.html'">내 정보</button>
-        <button class="mydata" onclick="window.location.href= 'login.html'">1:1 채팅</button>
-        <button class="mydata" onclick="window.location.href= 'mypage_partypost_created.html'">내 모집글 목록</button>
-        <button class="mydata" onclick="window.location.href= 'mypage_partypost_apply.html'">신청 모집글 목록</button>
-        <button class="mydata" onclick="window.location.href= 'mypage_partypost_likes.html'">좋아한 모집글</button>
-        <button class="mydata" onclick="window.location.href= 'mypage_blocks.html'">차단 유저관리</button>
+        <a class="nav-link" href="/page/myPage/profile">내 정보</a>
+        <a class="nav-link" href="/page/chatPage">1:1 채팅</a>
+        <a class="nav-link" href="/page/myPage/partypost/created">내 모집글 목록</a>
+        <a class="nav-link" href="/page/myPage/partypost/apply">신청 모집글 목록</a>
+        <a class="nav-link" href="/page/myPage/profile">좋아한 모집글</a>
+        <a class="nav-link" href="/page/myPage/block">차단 유저관리</a>
     </data>
 
     <!-- 여기부터 본문 -->
@@ -96,43 +97,28 @@
 
     <!-- 수정내용 들어갈 곳 -->
     <div id="editProfile">
-        <div class="editProfile">
-            <div class="password-change">
-                <form>
-                    <h5>- 수정내용 입력 -</h5>
-                    <div id="image-input">
-                        <label for="image-input-text">이미지url 수정입력:</label>
-                        <input type="text" id="image-input-text" name="input-text" class="input-text"><br>
-                    </div>
-                    <div class="nickname-input">
-                        <label for="nickname-input-text">닉네임 수정입력:</label>
-                        <input type="text" id="nickname-input-text" name="input-text" class="input-text"><br>
-                    </div>
-                    <div id="comment-input" class="comment-input">
-                        <label for="comment-input-text">상태 수정입력:</label>
-                        <input type="text" id="comment-input-text" name="input-text" class="input-text"><br>
-                    </div>
-                    <div id="new-password-input" class="new-password-input">
-                        <label for="new-password">새 비밀번호:</label>
-                        <input type="text" id="new-password" name="new-password">
-                    </div>
-                    <div id="image-confirm-password--input" class="confirm-password--input">
-                        <label for="confirm-password">새 비밀번호 확인:</label>
-                        <input type="text" id="confirm-password" name="confirm-password">
-                    </div>
-                    <br><br>
-                    <div id="now-password--input-input" class="now-password--input">
-                        <label for="now-password">현재 비밀번호 확인:</label>
-                        <input type="text" id="now-password" name="now-password">
-                        <input type="submit" class="btn btn-primary rounded-pill" value="수정 적용"><br>
-                    </div>
-                </form>
+        <form>
+            <h5>- 수정내용 입력 -</h5>
+            <div id="image-input">
+                <label for="profileImg">이미지url 수정입력:</label>
+                <input type="text" id="profileImg" name="profileImg"><br>
             </div>
-        </div>
+            <div class="nickname-input">
+                <label for="nickname">닉네임 수정입력:</label>
+                <textarea id="nickname" name="nickname"></textarea>
+            </div>
+            <div id="comment-input" class="comment-input">
+                <label for="comment">상태메세지 수정입력:</label>
+                <textarea id="comment" name="comment"></textarea>
+            </div>
+            <div id="phoneNumber-input" class="comment-input">
+                <label for="phoneNumber">전화번호 수정입력:</label>
+                <textarea id="phoneNumber" name="phoneNumber"></textarea>
+            </div>
+        </form>
+        <button type="button" onclick="edit_profile()">수정</button>
     </div>
+
 </div>
-
-
-<script src="/js/mypage-profile.js"></script>
 </body>
 </html>

@@ -20,6 +20,19 @@ function getCookieValue(cookieName) {
     return "";
 }
 
+function partypostClick(postId) {
+    console.log(postId)
+    // input 요소에서 검색어를 가져옵니다.
+    // const searchText = document.getElementById("postId").value;
+    // // 검색어를 인코딩합니다.
+    // const encodedSearchText = encodeURIComponent(searchText);
+    // 검색 결과 페이지 URL을 생성합니다. ex)/search?searchText=검색어
+    const partypostPageUrl = `/page/partypost?partypostId=` + postId;
+
+    // 검색 결과 페이지로 이동합니다.
+    window.location.href = partypostPageUrl;
+}
+
 //페이지 바로 로딩시 검색어가 들어왔을때
 function firstsearchPartyPost(inputVal) {
     $('#searchPartyPostResult').empty()
@@ -50,7 +63,7 @@ function firstsearchPartyPost(inputVal) {
                 let tempHtml = `
         <div class="col-lg-4 my-5">
             <div class="card h-100 shadow border-0">
-                <div class="card-body p-4">
+                <div class="card-body p-4" onclick="partypostClick(${postId})">
                     <div class="badge bg-primary bg-gradient rounded-pill mb-2">모집상태 :${status}</div>
                     <a class="text-decoration-none link-dark stretched-link" href="#!"><h5 class="card-title mb-3">${title}</h5></a>
                     <p class="card-text mb-0">위치 정보: ${partyAddress} / ${partyPlace}</p>

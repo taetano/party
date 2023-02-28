@@ -1,5 +1,6 @@
 //페이지 시작 시 호출 함수
 jQuery(document).ready(function () {
+    getCategories();
     let partypostId=new URLSearchParams(window.location.search).get('partypostId');
     if(partypostId) {
         go_to_partypost(partypostId);
