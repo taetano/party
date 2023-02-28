@@ -29,8 +29,12 @@
           rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i"
           rel="stylesheet"/>
-    <!-- Core theme CSS (includes Bootstrap)-->
-    <link href="../static/css/styles.css" rel="stylesheet"/>
+    <!--    jquery 라이브러리 로드 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- css & javascript 불러오기 -->
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <script type="text/javascript" th:src="@{/js/others-profile.js}"></script>
+    <script type="text/javascript" th:src="@{/js/scripts.js}"></script>
 
     <title>내 정보</title>
     <style>
@@ -120,12 +124,8 @@
             </ul>
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item"><a class="nav-link"
-                                        href="http://localhost:63342/party/party.main/templates/signup.html?_ijt=2n2aoejdga53njq9ev9rpqql1&_ij_reload=RELOAD_ON_SAVE">회원가입</a>
+                                        onclick="logout()">로그아웃</a>
                 </li>
-                <li class="nav-item"><a class="nav-link"
-                                        href="http://localhost:63342/party/party.main/templates/login.html?_ijt=2n2aoejdga53njq9ev9rpqql1&_ij_reload=RELOAD_ON_SAVE">로그인</a>
-                </li>
-                <li class="nav-item"><a class="nav-link" href="#!">마이페이지</a></li>
             </ul>
         </div>
     </div>
@@ -140,7 +140,7 @@
     </div>
 </header>
 <div class="container">
-    <div class="pageEdit">
+    <div class="pageEdit" id="other-profile">
         <div id="nickname" class="nickname">
             <h2>상대 닉네임</h2>
         </div>

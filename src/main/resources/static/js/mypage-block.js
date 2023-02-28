@@ -34,7 +34,7 @@ function getBlockList() {
                     유저이름 : ${nickname}
                     <button class="btn btn-warning rounded-pill" onclick="unBlock(${blockedId})">차단 해제
                     </button>
-                    <button class="btn btn-warning rounded-pill" onclick="">유저정보
+                    <button class="btn btn-warning rounded-pill" onclick="otherProfilePageClick(${blockedId})">유저정보
                     </button>
                             </div>`
                     $('#block-list').append(block_list_temp)
@@ -48,7 +48,7 @@ function getBlockList() {
 function unBlock(blockedId) {
     $.ajax({
         type: "DELETE",
-        url: `/api/restriction/blocks/${blockedId}`,
+        url: `/api/restriction/blocks/` + blockedId,
         headers: {
             "Authorization": getCookieValue('Authorization')
         },
@@ -62,5 +62,13 @@ function unBlock(blockedId) {
             window.location.reload()
         }
     })
+}
+
+function otherProfilePageClick(userId) {
+    console.log(userId)
+    const otherProfilePageUrl = `/page/others/profile?userId=` + userId;
+
+    // 검색 결과 페이지로 이동합니다.
+    window.location.href = otherProfilePageUrl;
 }
 
