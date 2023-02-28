@@ -46,6 +46,8 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
     <script src="../js/search-result.js"></script>
+    <script src="../js/index.js"></script>
+    <script src="../js/scripts.js"></script>
 </head>
 <body id="page-top">
 <!-- Navigation-->
@@ -56,12 +58,16 @@
                 aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span
                 class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link" href="#!">|&emsp;음식</a></li>
-                <li class="nav-item"><a class="nav-link" href="#!">|&emsp;게임</a></li>
-                <li class="nav-item"><a class="nav-link" href="#!">|&emsp;공부</a></li>
-                <li class="nav-item"><a class="nav-link" href="#!">|&emsp;문화생활&emsp;|</a></li>
+            <ul class="navbar-nav ms-auto" id="categories">
+                |
+                <!-- 불러온 카테고리 들어갈 곳 -->
             </ul>
+            <!--            <ul class="navbar-nav ms-auto">-->
+            <!--                <li class="nav-item"><a class="nav-link" href="#!">|&emsp;음식</a></li>-->
+            <!--                <li class="nav-item"><a class="nav-link" href="#!">|&emsp;게임</a></li>-->
+            <!--                <li class="nav-item"><a class="nav-link" href="#!">|&emsp;공부</a></li>-->
+            <!--                <li class="nav-item"><a class="nav-link" href="#!">|&emsp;문화생활&emsp;|</a></li>-->
+            <!--            </ul>-->
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item"><a class="nav-link"
                                         href="/page/signup">회원가입</a>

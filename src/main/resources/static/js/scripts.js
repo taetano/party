@@ -40,9 +40,9 @@ function getCategories() {
             "Authorization": getCookieValue('Authorization')
         },
         error(error, response) {
-            alert(response.msg)
             console.error(error);
             console.error(response);
+            return 0
         },
         success: function (response) {
             console.log(response.data)
@@ -56,6 +56,8 @@ function getCategories() {
                     $('#categories').append(category_temp)
                 }
             }
+
+            return 1
         }
     });
 }
