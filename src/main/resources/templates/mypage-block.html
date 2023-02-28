@@ -29,8 +29,12 @@
           rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i"
           rel="stylesheet"/>
-    <!-- Core theme CSS (includes Bootstrap)-->
-    <link href="../static/css/styles.css" rel="stylesheet"/>
+    <!--    jquery 라이브러리 로드 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- css & javascript 불러오기 -->
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <script type="text/javascript" th:src="@{/js/mypage-block.js}"></script>
+    <script type="text/javascript" th:src="@{/js/scripts.js}"></script>
     <title>차단유저관리</title>
     <style>
         body {
@@ -116,12 +120,8 @@
             </ul>
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item"><a class="nav-link"
-                                        href="http://localhost:63342/party/party.main/templates/signup.html?_ijt=2n2aoejdga53njq9ev9rpqql1&_ij_reload=RELOAD_ON_SAVE">회원가입</a>
+                                        onclick="logout()">로그아웃</a>
                 </li>
-                <li class="nav-item"><a class="nav-link"
-                                        href="http://localhost:63342/party/party.main/templates/login.html?_ijt=2n2aoejdga53njq9ev9rpqql1&_ij_reload=RELOAD_ON_SAVE">로그인</a>
-                </li>
-                <li class="nav-item"><a class="nav-link" href="#!">마이페이지</a></li>
             </ul>
         </div>
     </div>
@@ -140,21 +140,21 @@
 
     <div class="mypageMain">
 
-        <data class="mypageLeftMenu">
-            <button class="mydata" onclick="window.location.href= 'mypage_profile.html'">내 정보</button>
-            <button class="mydata" onclick="window.location.href= 'login.html'">1:1 채팅</button>
-            <button class="mydata" onclick="window.location.href= 'mypage_partypost_created.html'">내 모집글 목록</button>
-            <button class="mydata" onclick="window.location.href= 'mypage_partypost_apply.html'">신청 모집글 목록</button>
-            <button class="mydata" onclick="window.location.href= 'mypage_partypost_likes.html'">좋아한 모집글</button>
-            <button class="mydata" onclick="window.location.href= 'mypage_blocks.html'">차단 유저관리</button>
+        <data class="mypageLeftMenu" >
+            <a class="nav-link" href="/page/myPage/profile">내 정보</a>
+            <a class="nav-link" href="/page/chatPage">1:1 채팅</a>
+            <a class="nav-link" href="/page/myPage/partypost/created">내 모집글 목록</a>
+            <a class="nav-link" href="/page/myPage/partypost/apply">신청 모집글 목록</a>
+            <a class="nav-link" href="/page/myPage/profile">좋아한 모집글</a>
+            <a class="nav-link" href="/page/myPage/block">차단 유저관리</a>
         </data>
 
         <div class="mypageEdit">
-            <div class="block-list">
+            <div class="block-list" id = "block-list" >
                 <div class="block-user">
                     <img src="../static/css/image/person.png" width=40 height=40>
                     유저이름 : 유저이름
-                    <input type="submit" id="block-remove1" class="btn btn-dark rounded-pill" value="차단 제거">
+                    <input type="submit" id="block-remove1" class="btn btn-dark rounded-pill" value="차단 해제">
 
                     <button class="btn btn-warning rounded-pill" onclick="window.location.href= 'login.html'">유저정보
                     </button>
@@ -162,7 +162,7 @@
                 <div class="block-user">
                     <img src="../static/css/image/person.png" width=40 height=40>
                     유저이름 : 유저이름
-                    <input type="submit" id="block-remove2" class="btn btn-dark rounded-pill" value="차단 제거">
+                    <input type="submit" id="block-remove2" class="btn btn-dark rounded-pill" value="차단 해제">
 
                     <button class="btn btn-warning rounded-pill" onclick="window.location.href= 'login.html'">유저정보
                     </button>
@@ -170,10 +170,10 @@
                 <div class="block-user">
                     <img src="../static/css/image/person.png" width=40 height=40>
                     유저이름 : 유저이름
-                    <input type="submit" id="block-remove3" class="btn btn-dark rounded-pill" value="차단 제거">
-
+                    <input type="submit" id="block-remove3" class="btn btn-dark rounded-pill" value="차단 해제">
                     <button class="btn btn-warning rounded-pill" onclick="window.location.href= 'login.html'">유저정보
                     </button>
+
                 </div>
             </div>
         </div>
