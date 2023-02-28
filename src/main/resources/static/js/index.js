@@ -30,6 +30,19 @@ function handleSearchButtonClick() {
     window.location.href = searchResultPageUrl;
 }
 
+function partypostClick(postId) {
+    console.log(postId)
+    // input 요소에서 검색어를 가져옵니다.
+    // const searchText = document.getElementById("postId").value;
+    // // 검색어를 인코딩합니다.
+    // const encodedSearchText = encodeURIComponent(searchText);
+    // 검색 결과 페이지 URL을 생성합니다. ex)/search?searchText=검색어
+    const partypostPageUrl = `/page/partypost?partypostId=` + postId;
+
+    // 검색 결과 페이지로 이동합니다.
+    window.location.href = partypostPageUrl;
+}
+
 //조회수 높은 핫한글 모집글 조회
 function getHotPartyPost() {
 
@@ -49,7 +62,7 @@ function getHotPartyPost() {
                 let title = obj['title']
                 let partyOwner = obj['partyOwner']
                 let status = obj['status']
-                let acceptedMember = obj['acceptedMember']
+                let acceptedMember = obj['acceptedMember'] +1
                 let maxMember = obj['maxMember']
                 let partyDate = new Date(obj['partyDate'])
                 let closeDate = new Date(obj['closeDate'])
@@ -106,7 +119,7 @@ function getNearPartyPost() {
                 let title = obj['title']
                 let partyOwner = obj['partyOwner']
                 let status = obj['status']
-                let acceptedMember = obj['acceptedMember']
+                let acceptedMember = obj['acceptedMember'] +1
                 let maxMember = obj['maxMember']
                 let partyDate = new Date(obj['partyDate'])
                 let closeDate = new Date(obj['closeDate'])
@@ -115,9 +128,9 @@ function getNearPartyPost() {
                 let tempHtml = `
         <div class="col-lg-4 my-5">
             <div class="card h-100 shadow border-0">
-                <div class="card-body p-4">
+                <div class="card-body p-4" onclick="partypostClick(${postId})">
                     <div class="badge bg-primary bg-gradient rounded-pill mb-2">모집상태 :${status}</div>
-                    <a class="text-decoration-none link-dark stretched-link" href="#!"><h5 class="card-title mb-3">${title}</h5></a>
+                    <a class="text-decoration-none link-dark stretched-link"><h5 class="card-title mb-3">제목: ${title}</h5></a>
                     <p class="card-text mb-0">위치 정보: ${partyAddress} / ${partyPlace}</p>
                     <p class="card-text mb-0">모임일: ${partyDate}</p>
                     <p class="card-text mb-0">모집 인원 ${acceptedMember}/${maxMember}</p>
@@ -137,6 +150,8 @@ function getNearPartyPost() {
             </div>
         </div>
           `
+                console.log(postId)
+
                 $('#nearPartyposts').append(tempHtml)
             }
         }

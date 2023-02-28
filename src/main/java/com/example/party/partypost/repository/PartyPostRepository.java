@@ -21,6 +21,7 @@ public interface PartyPostRepository extends JpaRepository<PartyPost, Long> {
 
 	//내가 작성한 모집글 리스트 조회
 	List<PartyPost> findByUserId(Long userId, Pageable pageable);
+
 	List<PartyPost> findAllByUserId(Long userId);
 
 	@Modifying
@@ -37,9 +38,9 @@ public interface PartyPostRepository extends JpaRepository<PartyPost, Long> {
 	@Query(value = "UPDATE partyPost p SET p.status = 'PROCESSING' WHERE p.active = true AND p.status = 'NO_SHOW_REPORTING' AND p.partyDate<=:beforeHourFromNow")
 	void changeStatusNoShowToProcessing(LocalDateTime beforeHourFromNow);
 
-	//FINDING -> PROCESSING (마감시간이 됐는데도 FINDING 상태면 PROCESSING 으로 변경)
+	//FINDING -> END (마감시간이 됐는데도 FINDING 상태면 END 으로 변경)
 	@Modifying
-	@Query(value = "UPDATE partyPost p SET p.status = 'PROCESSING' WHERE p.active = true AND p.status = 'FINDING' AND p.partyDate<=CURRENT_TIMESTAMP")
+	@Query(value = "UPDATE partyPost p SET p.status = 'END' WHERE p.active = true AND p.status = 'FINDING' AND p.partyDate<=CURRENT_TIMESTAMP")
 	void changeStatusFindingToProcessing();
 
 	//제목 혹은 주소 값이 검색문자에 포함시에 모집글 리스트 조회
