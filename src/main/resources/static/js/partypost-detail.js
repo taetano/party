@@ -1,10 +1,9 @@
 //페이지 시작 시 호출 함수
 jQuery(document).ready(function () {
     getCategories();
-    let partypostId=new URLSearchParams(window.location.search).get('partypostId');
-    if(partypostId) {
+    let partypostId = new URLSearchParams(window.location.search).get('partypostId');
+    if (partypostId) {
         go_to_partypost(partypostId);
-        console.log(partypostId);
     }
 });
 
@@ -75,7 +74,7 @@ function get_partypost(postId) {
                                     <!-- Post header-->
                                     <header class="mb-4 mt-5">
                                         <!-- Post title-->
-                                        <h1 class="fw-bolder mb-1">파티포스트 타이틀: ${title}</h1>
+                                        <h1 class="fw-bolder mb-1">${title}</h1>
                                         <!-- Post meta content-->
                                         <div class="fw-bold fst-italic mb-2 fs-4 text-end">마감일자 : ${closeDate}</div>
                                         <div class="text-muted fst-italic text-end">조회수: ${viewCnt}</div>
@@ -104,7 +103,7 @@ function get_partypost(postId) {
                                     </section>
                                 </article>
                                 <a class="btn-long btn-primary btn-xl-long rounded-pill" href="#!">신청 (1:1 채팅)</a>
-                                <a class="btn-long btn-primary btn-xl-long rounded-pill" href="#!">수정하기</a>
+                                <a class="btn-long btn-primary btn-xl-long rounded-pill" onclick="clickUpdate(${postId})">수정하기</a>
                             </div>
                         </div>
                     </div>
@@ -134,4 +133,13 @@ function get_partypost(postId) {
             }
         }
     });
+}
+
+//수정페이지로 옮겨가기
+function clickUpdate(postId) {
+    //postId값을 주소에 넣는다
+    const updatePartypostUrl = `/page/partypost/edit?postId=` + postId;
+    //수정페이지로 이동
+    window.location.href = updatePartypostUrl;
+
 }
