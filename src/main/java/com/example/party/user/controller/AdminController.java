@@ -1,10 +1,10 @@
 package com.example.party.user.controller;
 
+import com.example.party.global.common.ApiResponse;
 import com.example.party.global.common.DataApiResponse;
-import com.example.party.global.common.ItemApiResponse;
 import com.example.party.restriction.dto.ReportPostResponse;
 import com.example.party.restriction.dto.ReportUserResponse;
-import com.example.party.user.dto.AdminResponse;
+import com.example.party.user.dto.BlackListResponse;
 import com.example.party.user.entity.User;
 import com.example.party.user.service.AdminService;
 import lombok.RequiredArgsConstructor;
@@ -38,25 +38,25 @@ public class AdminController {
 
     //모집글 삭제
     @DeleteMapping("/party-posts/{partyPostId}/reportPost/{reportPostId}")
-    public ResponseEntity<ItemApiResponse<AdminResponse>> deletePost(@AuthenticationPrincipal User user, @PathVariable Long partyPostId) {
+    public ResponseEntity<ApiResponse> deletePost(@AuthenticationPrincipal User user, @PathVariable Long partyPostId) {
         return ResponseEntity.ok(adminService.deletePost(user, partyPostId));
     }
 
     //블랙리스트 등록
     @PostMapping("/blackList/suspended/{userId}")
-    public ResponseEntity<ItemApiResponse<AdminResponse>> setSuspended(@AuthenticationPrincipal User user, @PathVariable Long userId) {
+    public ResponseEntity<ApiResponse> setSuspended(@AuthenticationPrincipal User user, @PathVariable Long userId) {
         return ResponseEntity.ok(adminService.setSuspended(user, userId));
     }
 
     //블랙리스트 해제
     @PostMapping("/blackList/active/{userId}")
-    public ResponseEntity<?> setActive(@AuthenticationPrincipal User user, @PathVariable Long userId) {
+    public ResponseEntity<ApiResponse> setActive(@AuthenticationPrincipal User user, @PathVariable Long userId) {
         return ResponseEntity.ok(adminService.setActive(user, userId));
     }
 
     //블랙리스트 조회
     @GetMapping("/blackList")
-    private ResponseEntity<DataApiResponse<?>> getBlackList(@AuthenticationPrincipal User user) {
+    private ResponseEntity<DataApiResponse<BlackListResponse>> getBlackList(@AuthenticationPrincipal User user) {
         return ResponseEntity.ok(adminService.getBlackList(user));
     }
 }
