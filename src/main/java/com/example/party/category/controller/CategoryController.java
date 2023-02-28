@@ -26,7 +26,7 @@ public class CategoryController {
 	private final CategoryService categoryService;
 
 	//카테고리 작성
-	@PostMapping("")
+	@PostMapping
 	public ResponseEntity<ApiResponse> createCategory(
 		@RequestBody CategoryRequest request) {
 		return ResponseEntity.ok(categoryService.createCategory(request));

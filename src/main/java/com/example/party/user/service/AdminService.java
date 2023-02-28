@@ -56,7 +56,7 @@ public class AdminService {
 
     //노쇼 로그 조회
     public DataApiResponse<?> findNoShowList(User user) {
-        checkAdmin(user);
+//        checkAdmin(user);
 //        Pageable 적용 방법 찾아야함
         List<User> users = userRepository.findAllByNoShowList();
         return DataApiResponse.ok("노쇼 로그 조회 완료", users );
@@ -77,7 +77,7 @@ public class AdminService {
             createPostUser.setSuspended();
             reportPostRepository.deleteAll(reportPosts);
             partyPostRepository.delete(partyPost);
-            return ItemApiResponse.ok("삭제 및 블랙리스트 처리 완료");
+            return ApiResponse.ok("삭제 및 블랙리스트 처리 완료");
         }
 
         reportPostRepository.deleteAll(reportPosts);

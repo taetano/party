@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    getCategories();
     //검색어 값으로 받음
     let searchText = new URLSearchParams(window.location.search).get('searchText');
     if (searchText) {
@@ -20,9 +21,23 @@ function getCookieValue(cookieName) {
     return "";
 }
 
+function partypostClick(postId) {
+    console.log(postId)
+    // input 요소에서 검색어를 가져옵니다.
+    // const searchText = document.getElementById("postId").value;
+    // // 검색어를 인코딩합니다.
+    // const encodedSearchText = encodeURIComponent(searchText);
+    // 검색 결과 페이지 URL을 생성합니다. ex)/search?searchText=검색어
+    const partypostPageUrl = `/page/partypost?partypostId=` + postId;
+
+    // 검색 결과 페이지로 이동합니다.
+    window.location.href = partypostPageUrl;
+}
+
 //페이지 바로 로딩시 검색어가 들어왔을때
 function firstsearchPartyPost(inputVal) {
-    $('#searchPartyPostResult').empty()
+    $('#searchPartyPostResult').empty();
+    $("#search").val(inputVal);
     $.ajax({
         url: "http://localhost:8080/api/party-posts/search?",
         headers: {
@@ -37,20 +52,20 @@ function firstsearchPartyPost(inputVal) {
             let responseData = response['data']
             for (let i = 0; i < responseData.length; i++) {
                 let obj = responseData[i];
-                let postId = obj['postId']
-                let title = obj['title']
-                let partyOwner = obj['partyOwner']
-                let status = obj['status']
-                let acceptedMember = obj['acceptedMember'] +1
-                let maxMember = obj['maxMember']
-                let partyDate = new Date(obj['partyDate'])
-                let closeDate = new Date(obj['closeDate'])
-                let partyAddress = obj['partyAddress']
-                let partyPlace = obj['partyPlace']
+                let postId = obj['postId'];
+                let title = obj['title'];
+                let partyOwner = obj['partyOwner'];
+                let status = obj['status'];
+                let acceptedMember = obj['acceptedMember'] + 1;
+                let maxMember = obj['maxMember'];
+                let partyDate = new Date(obj['partyDate']);
+                let closeDate = new Date(obj['closeDate']);
+                let partyAddress = obj['partyAddress'];
+                let partyPlace = obj['partyPlace'];
                 let tempHtml = `
         <div class="col-lg-4 my-5">
             <div class="card h-100 shadow border-0">
-                <div class="card-body p-4">
+                <div class="card-body p-4" onclick="partypostClick(${postId})">
                     <div class="badge bg-primary bg-gradient rounded-pill mb-2">모집상태 :${status}</div>
                     <a class="text-decoration-none link-dark stretched-link" href="#!"><h5 class="card-title mb-3">${title}</h5></a>
                     <p class="card-text mb-0">위치 정보: ${partyAddress} / ${partyPlace}</p>
@@ -81,7 +96,7 @@ function firstsearchPartyPost(inputVal) {
 }
 
 //로딩 이후 따로 재검색시 이용
-function searchPartyPost() {
+function searchPartyPost(page) {
     var inputVal = document.getElementById("search").value;
 
     console.log("입력된 값은 " + inputVal + "입니다.");
@@ -89,12 +104,13 @@ function searchPartyPost() {
     $('#searchPartyPostResult').empty()
 
     $.ajax({
-        url: "http://localhost:8080/api/party-posts/search?",
+        url: "http://localhost:8080/api/party-posts/search",
         headers: {
             "Authorization": getCookieValue('Authorization')
         },
         data: {
-            searchText: inputVal
+            searchText: inputVal,
+            page: page
         },
         type: "GET",
         success: function (response) {
@@ -102,20 +118,20 @@ function searchPartyPost() {
             let responseData = response['data']
             for (let i = 0; i < responseData.length; i++) {
                 let obj = responseData[i];
-                let postId = obj['postId']
-                let title = obj['title']
-                let partyOwner = obj['partyOwner']
-                let status = obj['status']
-                let acceptedMember = obj['acceptedMember'] +1
-                let maxMember = obj['maxMember']
-                let partyDate = new Date(obj['partyDate'])
-                let closeDate = new Date(obj['closeDate'])
-                let partyAddress = obj['partyAddress']
-                let partyPlace = obj['partyPlace']
+                let postId = obj['postId'];
+                let title = obj['title'];
+                let partyOwner = obj['partyOwner'];
+                let status = obj['status'];
+                let acceptedMember = obj['acceptedMember'] + 1;
+                let maxMember = obj['maxMember'];
+                let partyDate = new Date(obj['partyDate']);
+                let closeDate = new Date(obj['closeDate']);
+                let partyAddress = obj['partyAddress'];
+                let partyPlace = obj['partyPlace'];
                 let tempHtml = `
         <div class="col-lg-4 my-5">
             <div class="card h-100 shadow border-0">
-                <div class="card-body p-4">
+                <div class="card-body p-4" onclick="partypostClick(${postId})">
                     <div class="badge bg-primary bg-gradient rounded-pill mb-2">모집상태 :${status}</div>
                     <a class="text-decoration-none link-dark stretched-link" href="#!"><h5 class="card-title mb-3">${title}</h5></a>
                     <p class="card-text mb-0">위치 정보: ${partyAddress} / ${partyPlace}</p>

@@ -1,7 +1,34 @@
 jQuery(document).ready(function () {
+    LoginCheck();
+    getCategories();
     getHotPartyPost()
     getNearPartyPost()
 })
+
+function LoginCheck() {
+    $.ajax({
+        type: "GET",
+        url: `http://localhost:8080/api/users/loginCheck`,
+        contentType: "application/json",
+        headers: {
+            "Authorization": getCookieValue('Authorization')
+        },
+        success: function () {
+            // 로그인함
+            $('#signupBtn').hide();
+            $('#loginBtn').hide();
+            $('#logoutBtn').show();
+            $('#mypageBtn').show();
+        }, error() {
+            //로그인 안함
+            $('#signupBtn').show();
+            $('#loginBtn').show();
+            $('#logoutBtn').hide();
+            $('#mypageBtn').hide();
+        }
+    })
+}
+
 
 // 토큰값 분리
 function getCookieValue(cookieName) {
@@ -25,21 +52,13 @@ function handleSearchButtonClick() {
     const encodedSearchText = encodeURIComponent(searchText);
     // 검색 결과 페이지 URL을 생성합니다. ex)/search?searchText=검색어
     const searchResultPageUrl = `/page/search?searchText=` + encodedSearchText;
-
     // 검색 결과 페이지로 이동합니다.
     window.location.href = searchResultPageUrl;
 }
 
 function partypostClick(postId) {
     console.log(postId)
-    // input 요소에서 검색어를 가져옵니다.
-    // const searchText = document.getElementById("postId").value;
-    // // 검색어를 인코딩합니다.
-    // const encodedSearchText = encodeURIComponent(searchText);
-    // 검색 결과 페이지 URL을 생성합니다. ex)/search?searchText=검색어
     const partypostPageUrl = `/page/partypost?partypostId=` + postId;
-
-    // 검색 결과 페이지로 이동합니다.
     window.location.href = partypostPageUrl;
 }
 
@@ -58,20 +77,20 @@ function getHotPartyPost() {
             let responseData = response['data']
             for (let i = 0; i < responseData.length; i++) {
                 let obj = responseData[i];
-                let postId = obj['id']
+                let postId = obj['postId']
                 let title = obj['title']
                 let partyOwner = obj['partyOwner']
                 let status = obj['status']
-                let acceptedMember = obj['acceptedMember'] +1
+                let acceptedMember = obj['acceptedMember'] + 1
                 let maxMember = obj['maxMember']
                 let partyDate = new Date(obj['partyDate'])
                 let closeDate = new Date(obj['closeDate'])
                 let partyAddress = obj['partyAddress']
                 let partyPlace = obj['partyPlace']
                 let tempHtml = `
-        <div class="col-lg-4 my-5">
+        <div class="col-lg-4 my-5" >
             <div class="card h-100 shadow border-0">
-                <div class="card-body p-4">
+                <div class="card-body p-4" onclick="partypostClick(${postId})">
                     <div class="badge bg-primary bg-gradient rounded-pill mb-2">모집상태 :${status}</div>
                     <a class="text-decoration-none link-dark stretched-link" href="#!"><h5 class="card-title mb-3">${title}</h5></a>
                     <p class="card-text mb-0">위치 정보: ${partyAddress} / ${partyPlace}</p>
@@ -119,7 +138,7 @@ function getNearPartyPost() {
                 let title = obj['title']
                 let partyOwner = obj['partyOwner']
                 let status = obj['status']
-                let acceptedMember = obj['acceptedMember'] +1
+                let acceptedMember = obj['acceptedMember'] + 1
                 let maxMember = obj['maxMember']
                 let partyDate = new Date(obj['partyDate'])
                 let closeDate = new Date(obj['closeDate'])
