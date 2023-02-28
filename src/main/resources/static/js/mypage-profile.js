@@ -1,6 +1,7 @@
 
 //페이지 시작 시 호출 함수
 jQuery(document).ready(function () {
+    getCategories();
     get_profile();
 });
 
@@ -40,6 +41,7 @@ function get_profile() {
             <!-- 여기부터 본문 -->
             <div class="mypage-info">
                 <div class="profile-profileImg">
+                    <span id="profile-profileImg">프로필 이미지: ${profileImg}</span>
                     <!-- 유저 프로필 이미지 들어갈 곳 -->
 <!--                    <img src="../static/css/image/person.png" width=100 height=80>-->
 
@@ -77,50 +79,28 @@ function get_profile() {
     });
 }
 
-//프로필 유저 정보 수정하기
+//프로필 수정하기
 function edit_profile() {
-    $('#editProfile').empty()
-
     $.ajax({
         type: "PATCH",
         url: `/api/users/profile`,
         headers: {
             "Authorization": getCookieValue('Authorization')
         },
+        contentType: "application/json; charset=UTF-8",
         data: JSON.stringify({
-            profileImg: profileImg, nickname: nickname, comment: comment,
-            newpassword: newpassword, confirmpassword: confirmpassword, nowpassword: nowpassword
-        }),
-        success: function (response, status, xhr) {
-            if (response === 'success') {
-                let host = window.location.host;
-                let url = host + '/api/index';
-
-                document.cookie =
-                    'Authorization' + '=' + xhr.getResponseHeader('Authorization') + ';path=/';
-                window.location.href = 'http://' + url;
-            } else {
-                alert('프로필 수정 적용을 실패했습니다')
-                window.location.reload();
-            }
-
-            let profileImg = $('#image-input-text').val();
-            let nickname = $('#nickname-input-text').val();
-            let comment = $('#comment-input-text').val();
-            let newpassword = $('#new-password').val();
-            let confirmpassword = $('#confirm-password').val();
-            let nowpassword = $('#now-password').val();
-            //빈 입력값 확인, 수정비번-재확인비번 일치확인
-            if (nickname == '') {
-                alert('닉네임를 입력해주세요');
-                return;
-            } else if (nowpassword == '') {
-                alert('현재 비밀번호를 입력해주세요');
-                return;
-            } else if (newpassword == confirmpassword) {
-                alert('수정 비밀번호와 확인 비밀번호가 불일치합니다.');
-                return;
-            }
+            "profileImg": $('#profileImg').val(),
+            "nickname": $('#nickname').val(),
+            "comment": $('#comment').val(),
+            "phoneNum": $('#phoneNumber').val()
+    }),
+        success: function (response) {
+            console.log(response);
+            alert('성공적으로 수정되었습니다.');
+            window.location.reload();
+        },
+        error(error, status, request) {
+            console.error(error);
         }
-    })
+    });
 }
