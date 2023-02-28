@@ -1,5 +1,19 @@
 let postId = new URLSearchParams(window.location.search).get('postId');
 
+function getCookieValue(cookieName) {
+    var name = cookieName + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var cookieParts = decodedCookie.split(';');
+    for (var i = 0; i < cookieParts.length; i++) {
+        var cookiePart = cookieParts[i].trim();
+        if (cookiePart.indexOf(name) === 0) {
+            return cookiePart.substring(name.length, cookiePart.length);
+        }
+    }
+    return "";
+}
+
+
 $(document).ready(function () {
     get_edit_category();
     loadPartyPost(postId);
@@ -22,6 +36,7 @@ function loadPartyPost(postId) {
             let title = data['title']
             let content = data['content']
             let address = data['address']
+            let category = data['categoryId']
             let detailAddress = data['detailAddress']
             let partyPlace = data['partyPlace']
 
@@ -30,29 +45,40 @@ function loadPartyPost(postId) {
             $('#place-address').val(address + ' ' + detailAddress)
             $('#place-name').val(partyPlace)
             $('#keyword').val(partyPlace)
+            $('#category-edit').val(category)
         }
     })
 }
 
 //수정 실행
 function submitUpdatePartyPost(postId) {
+
+
     $.ajax({
         type: "PATCH",
         url: `/api/party-posts/${postId}`,
         headers: {
             "Authorization": getCookieValue('Authorization')
         },
+        contentType: "application/json; charset=UTF-8",
         data: JSON.stringify({
             title: $('#title').val(),
             content: $('#content').val(),
-            categoryId: $('#category').val(),
+            categoryId: parseFloat($('#category-edit').val()),
             partyAddress: $('#place-address').val(),
-            partyPlace: $('#place-name').val
+            partyPlace: $('#place-name').val()
         }),
-        error() {
-            alert("오류가 발생했습니다. 계속 될경우 관리자에게 문의해주세요.")
+        error(request, response) {
+            console.log("아래는 request 임")
+            console.log(request)
+            console.log("아래는 response 임")
+            console.log(response)
+            alert(response.msg)
         },
-        success: function (response) {
+        success: function () {
+            alert("모집글 수정완료")
+            window.location.href = `/page/partypost?partypostId=` + postId
+
 
         }
 
@@ -82,7 +108,7 @@ function get_edit_category() {
                     let category_name = rows[i]['name']
                     let category_temp = `<option value= ${i + 1}> ${category_name} </option>`
 
-                    $('#category').append(category_temp)
+                    $('#category-edit').append(category_temp)
                 }
             }
         }

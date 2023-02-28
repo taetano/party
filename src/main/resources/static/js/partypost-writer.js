@@ -1,3 +1,16 @@
+function getCookieValue(cookieName) {
+    var name = cookieName + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var cookieParts = decodedCookie.split(';');
+    for (var i = 0; i < cookieParts.length; i++) {
+        var cookiePart = cookieParts[i].trim();
+        if (cookiePart.indexOf(name) === 0) {
+            return cookiePart.substring(name.length, cookiePart.length);
+        }
+    }
+    return "";
+}
+
 //페이지 로딩될때 실행되는 함수입니다
 $(document).ready(function () {
     get_writer_category();
