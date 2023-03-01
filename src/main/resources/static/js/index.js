@@ -122,7 +122,7 @@ function getHotPartyPost() {
 function getNearPartyPost() {
     $('#nearPartyposts').empty()
 
-    let Address = "서울시 마포구 연남동"; //임시로 주소 고정 입력
+    let Address = "서울 마포구 연남동"; //임시로 주소 고정 입력
     $.ajax({
         url: "http://localhost:8080/api/party-posts/near/" + Address,
         headers: {
@@ -149,7 +149,7 @@ function getNearPartyPost() {
             <div class="card h-100 shadow border-0">
                 <div class="card-body p-4" onclick="partypostClick(${postId})">
                     <div class="badge bg-primary bg-gradient rounded-pill mb-2">모집상태 :${status}</div>
-                    <a class="text-decoration-none link-dark stretched-link"><h5 class="card-title mb-3">제목: ${title}</h5></a>
+                    <a class="text-decoration-none link-dark stretched-link"><h5 class="card-title mb-3">${title}</h5></a>
                     <p class="card-text mb-0">위치 정보: ${partyAddress} / ${partyPlace}</p>
                     <p class="card-text mb-0">모임일: ${partyDate}</p>
                     <p class="card-text mb-0">모집 인원 ${acceptedMember}/${maxMember}</p>
@@ -175,4 +175,10 @@ function getNearPartyPost() {
             }
         }
     });
+}
+
+function handleKeyUp(e) {
+    if (e.keyCode === 13) {
+        handleSearchButtonClick();
+    }
 }

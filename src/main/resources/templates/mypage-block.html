@@ -107,16 +107,15 @@
 <!-- Navigation-->
 <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
     <div class="container px-5 py-3">
-        <a class="navbar-brand" href="#page-top">Let's PARTY</a>
+        <a class="navbar-brand" href="/page/indexPage">Let's PARTY</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
                 aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span
                 class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link" href="#!">|&emsp;음식</a></li>
-                <li class="nav-item"><a class="nav-link" href="#!">|&emsp;게임</a></li>
-                <li class="nav-item"><a class="nav-link" href="#!">|&emsp;공부</a></li>
-                <li class="nav-item"><a class="nav-link" href="#!">|&emsp;문화생활&emsp;|</a></li>
+            <ul class="navbar-nav ms-auto" id="categories">
+                |
+                <!-- 불러온 카테고리 들어갈 곳 -->
+
             </ul>
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item"><a class="nav-link"
@@ -140,17 +139,17 @@
 
     <div class="mypageMain">
 
-        <data class="mypageLeftMenu" >
+        <data class="mypageLeftMenu">
             <a class="nav-link" href="/page/myPage/profile">내 정보</a>
             <a class="nav-link" href="/page/chatPage">1:1 채팅</a>
             <a class="nav-link" href="/page/myPage/partypost/created">내 모집글 목록</a>
             <a class="nav-link" href="/page/myPage/partypost/apply">신청 모집글 목록</a>
-            <a class="nav-link" href="/page/myPage/profile">좋아한 모집글</a>
+            <a class="nav-link" href="/page/myPage/partypost/like">좋아한 모집글</a>
             <a class="nav-link" href="/page/myPage/block">차단 유저관리</a>
         </data>
 
         <div class="mypageEdit">
-            <div class="block-list" id = "block-list" >
+            <div class="block-list" id="block-list">
                 <div class="block-user">
                     <img src="../static/css/image/person.png" width=40 height=40>
                     유저이름 : 유저이름
