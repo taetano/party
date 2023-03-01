@@ -69,12 +69,8 @@
             <!--                <li class="nav-item"><a class="nav-link" href="#!">|&emsp;문화생활&emsp;|</a></li>-->
             <!--            </ul>-->
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item"><a class="nav-link"
-                                        href="/page/signup">회원가입</a>
-                </li>
-                <li class="nav-item"><a class="nav-link"
-                                        href="/page/loginPage">로그인</a>
-                </li>
+                <li id="logoutBtn" class="nav-item"><a class="nav-link"
+                                                       onclick="logout()">로그아웃</a>
                 <li class="nav-item"><a class="nav-link" href="/page/myPage/profile">마이페이지</a></li>
             </ul>
         </div>
@@ -84,9 +80,10 @@
 <header class="masthead text-center text-white">
     <div class="masthead-content">
         <div class="container px-5">
-            <form action="submit_form.php" method="POST">
+            <form onsubmit="return false">
                         <span style="font-size:1.5em;">
-                        <input type="text" id="search" name="search" placeholder="관심있는 제목 또는 지역을 입력해주세요.">
+                        <input type="text" id="search" name="search" placeholder="관심있는 제목 또는 지역을 입력해주세요."
+                               onkeyup="handleKeyUp(event)">
                         </span>
             </form>
             <a class="btn btn-primary btn-xl rounded-pill mt-5" id="searchPartyPost"

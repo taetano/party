@@ -176,3 +176,9 @@ function getNearPartyPost() {
         }
     });
 }
+
+function handleKeyUp(e) {
+    if (e.keyCode === 13) {
+        handleSearchButtonClick();
+    }
+}

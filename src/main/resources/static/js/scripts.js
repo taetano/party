@@ -23,7 +23,7 @@ function logout() {
         },
         success: function () {
             let host = window.location.host;
-            let url = host + '/page/indexPage';
+            let url = host + '/page/loginPage';
             window.location.href = 'http://' + url;
         }
     })

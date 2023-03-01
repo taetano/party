@@ -102,7 +102,7 @@ public class PageController {
 
 	//search-result 호출
 	@GetMapping("/search")
-	public ModelAndView showSerchResult() {
+	public ModelAndView showSearchResult() {
 		return new ModelAndView("search-result"); //view할 html의 파일이름 넣어주세요
 
 	}

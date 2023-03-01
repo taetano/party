@@ -223,3 +223,9 @@ function searchPartyPostCategory(categoryId) {
         }
     });
 }
+
+function handleKeyUp(e) {
+    if (e.keyCode === 13) {
+        searchPartyPost(1);
+    }
+}
