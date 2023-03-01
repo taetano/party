@@ -62,9 +62,10 @@
         <div class="container px-5">
             <h1 class="masthead-heading mb-0">Let's PARTY!</h1>
             <h2 class="masthead-subheading mb-0">관심있는 모임을 찾아봐요!</h2>
-            <form>
+            <form onsubmit="return false">
                         <span style="font-size:1.5em;">
-                        <input type="text" id="search" name="search" placeholder="관심있는 제목 또는 지역을 입력해주세요.">
+                        <input type="text" id="search" name="search" placeholder="관심있는 제목 또는 지역을 입력해주세요."
+                               onkeyup="if(e.keyCode===13){handleSearchButtonClick()}">
                         </span>
             </form>
             <a class="btn btn-primary btn-xl rounded-pill mt-5" id="searchPartyPost"

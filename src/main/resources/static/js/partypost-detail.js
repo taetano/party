@@ -1,12 +1,3 @@
-//페이지 시작 시 호출 함수
-jQuery(document).ready(function () {
-    getCategories();
-    let partypostId = new URLSearchParams(window.location.search).get('partypostId');
-    if (partypostId) {
-        go_to_partypost(partypostId);
-    }
-});
-
 function getCookieValue(cookieName) {
     var name = cookieName + "=";
     var decodedCookie = decodeURIComponent(document.cookie);
@@ -20,12 +11,7 @@ function getCookieValue(cookieName) {
     return "";
 }
 
-//포스트 아이디 가져오기
-function go_to_partypost(postId) {
-    get_partypost(postId);
-}
-
-//프로필 유저 정보 가져오기
+//partypost 상세정보 조회
 function get_partypost(postId) {
     $('#partypost').empty()
 
@@ -86,7 +72,7 @@ function get_partypost(postId) {
                                     <section>
                                         <div class="card bg-light mb-3">
                                             <div class="card-body my-2 fs-2">
-                                                내용: ${content}
+                                                ${content}
                                             </div>
                                         </div>
                                     </section>

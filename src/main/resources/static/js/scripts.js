@@ -51,7 +51,7 @@ function getCategories() {
                 for (let i = 0; i < rows.length; i++) {
                     let category_name = rows[i]['name']
                     let category_id = rows[i]['id']
-                    let category_temp = `<li class="nav-item"><a class="nav-link" onclick=""><hidden>${category_id}</hidden> ${category_name} |</a></li>`
+                    let category_temp = `<li class="nav-item"><a class="nav-link" onclick="gotoCategory(${category_id})">${category_name} |</a></li>`
 
                     $('#categories').append(category_temp)
                 }
@@ -60,4 +60,10 @@ function getCategories() {
             return 1
         }
     });
+}
+
+//카테고리별 조회로 넘어가기
+function gotoCategory(categoryId) {
+    const categoryPageUrl = `/page/search?categoryId=` + categoryId;
+    window.location.href = categoryPageUrl;
 }
