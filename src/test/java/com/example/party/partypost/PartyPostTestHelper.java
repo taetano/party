@@ -6,20 +6,14 @@ import com.example.party.category.dto.CategoryRequest;
 import com.example.party.category.entity.Category;
 import com.example.party.partypost.dto.PartyPostRequest;
 import com.example.party.partypost.entity.PartyPost;
-import com.example.party.user.dto.SignupRequest;
+import com.example.party.user.UserTestHelper;
 import com.example.party.user.entity.User;
 
 public class PartyPostTestHelper {
 	public static PartyPost partyPost1() {
-		SignupRequest signupRequest = new SignupRequest(
-			"test@email.com",
-			"password1!",
-			"nickname",
-			"010-1234-1234"
-		);
 
 		User user = new User(
-			signupRequest,
+			UserTestHelper.signupRequest(),
 			"encoded password"
 		);
 
@@ -35,12 +29,11 @@ public class PartyPostTestHelper {
 
 		Category category = new Category(new CategoryRequest("category"));
 
-		PartyPost partyPost = new PartyPost(
+		return new PartyPost(
 			user,
 			partyPostRequest,
 			LocalDateTime.now(),
 			category
 		);
-		return partyPost;
 	}
 }
