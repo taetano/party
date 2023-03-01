@@ -66,7 +66,7 @@ function get_partypost(postId) {
                                         <div class="text-muted fst-italic text-end">조회수: ${viewCnt}</div>
                                         <!-- Post categories-->
                                         <a class="badge bg-secondary text-decoration-none link-light">Status: ${status}</a>
-                                        <a class="badge bg-secondary text-decoration-none link-light" href="#!">카테고리 명: ${categoryId}</a>
+                                        <a class="badge bg-secondary text-decoration-none link-light" href="#!">카테고리 : ${categoryId}</a>
                                     </header>
                                     <!-- Post content-->
                                     <section>
@@ -78,8 +78,8 @@ function get_partypost(postId) {
                                     </section>
                                     <!-- Post feature-->
                                     <section class="mb-5">
-                                        <a class="badge bg-secondary text-decoration-none link-light p-sm-3 rounded-pill" href="#!">신고</a>
-                                        <a class="badge bg-secondary text-decoration-none link-light p-sm-3 rounded-pill" href="#!">좋아요</a>
+                                        <a class="badge bg-secondary text-decoration-none link-light p-sm-3 rounded-pill" href="#!">이 모집글 신고</a>
+                                        <a class="badge bg-secondary text-decoration-none link-light p-sm-3 rounded-pill" onclick="clicklike(${postId})">좋아요</a>
                                         <p class="fs-5 mb-2 fw-bold">현재 파티원: </p>
                                         <div id="joinmember"></div>
                                         <p class="fs-5 mb-2 fw-bold">모집 인원: ${acceptedMember} / ${maxMember}</p>
@@ -88,7 +88,7 @@ function get_partypost(postId) {
                                         <p class="fs-5 fw-bold">장소: ${partyPlace}</p>
                                     </section>
                                 </article>
-                                <a class="btn-long btn-primary btn-xl-long rounded-pill" href="#!">신청 (1:1 채팅)</a>
+                                <a class="btn-long btn-primary btn-xl-long rounded-pill" onclick="clickParticipation(${postId})">신청 (1:1 채팅)</a>
                                 <a class="btn-long btn-primary btn-xl-long rounded-pill" onclick="clickUpdate(${postId})">수정하기</a>
                             </div>
                         </div>
@@ -117,6 +117,10 @@ function get_partypost(postId) {
 
                 $('#joinmember').append(partypost_member_temp_html)
             }
+        },
+        error: function (error) {
+            alert("오류가 발생했습니다.")
+            window.history.back();
         }
     });
 }
@@ -128,4 +132,50 @@ function clickUpdate(postId) {
     //수정페이지로 이동
     window.location.href = updatePartypostUrl;
 
+}
+
+//참여신청
+function clickParticipation(postId) {
+    $.ajax({
+        type: "POST",
+        url: '/api/applications/join/' + postId,
+        headers: {
+            "Authorization": getCookieValue('Authorization')
+        },
+        success(response) {
+            console.log(response)
+            alert("참가신청이 완료됐습니다. 파티장의 응답을 기다려주세요.")
+            window.location.reload()
+        },
+        error(response) {
+            console.log(response)
+            alert("오류가 발생했습니다")
+            window.history.back()
+        }
+
+
+    })
+}
+
+// 모집글에 좋아요
+function clicklike(postId) {
+    $.ajax({
+        type: "POST",
+        url: '/api/party-posts/' + postId + '/likes',
+        headers: {
+            "Authorization": getCookieValue('Authorization')
+        },
+        success(response) {
+            console.log(response)
+            alert(response.msg)
+            window.location.reload()
+        },
+        error(response) {
+            console.log(response)
+            alert("오류가 발생했습니다")
+            window.history.back()
+        }
+
+
+    })
 }
