@@ -21,6 +21,7 @@ public class PartyPostResponse {
 	private final String title;
 	private final String content;
 	private final Long categoryId;
+	private final String categoryName;
 	private final Status status;
 	private final byte acceptedMember;
 	private final byte maxMember;
@@ -42,6 +43,7 @@ public class PartyPostResponse {
 		this.title = partyPost.getTitle();
 		this.content = partyPost.getContent();
 		this.categoryId = partyPost.getCategory().getId();
+		this.categoryName = partyPost.getCategory().getName();
 		this.viewCnt = partyPost.getViewCnt();
 		this.partyPlace = partyPost.getPartyPlace();
 		this.acceptedMember = partyPost.getAcceptedMember();

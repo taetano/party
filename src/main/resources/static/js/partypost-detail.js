@@ -28,7 +28,7 @@ function get_partypost(postId) {
             let nickname = responseData['nickname']
             let title = responseData['title']
             let content = responseData['content']
-            let categoryId = responseData['categoryId']
+            let categoryName = responseData['categoryName']
             let status = responseData['status']
             let acceptedMember = responseData['acceptedMember'] + 1
             let maxMember = responseData['maxMember']
@@ -69,7 +69,7 @@ function get_partypost(postId) {
                                         <div class="text-muted fst-italic text-end">조회수: ${viewCnt}</div>
                                         <!-- Post categories-->
                                         <a class="badge bg-secondary text-decoration-none link-light">Status: ${status}</a>
-                                        <a class="badge bg-secondary text-decoration-none link-light" href="#!">카테고리 : ${categoryId}</a>
+                                        <a class="badge bg-secondary text-decoration-none link-light">카테고리 : ${categoryName}</a>
                                     </header>
                                     <!-- Post content-->
                                     <section>
@@ -100,7 +100,7 @@ function get_partypost(postId) {
             </div>
                 `
 
-            console.log("포스트 정보" + nickname, title, content, categoryId, status, acceptedMember, maxMember, partyDate,
+            console.log("포스트 정보" + nickname, title, content, categoryName, status, acceptedMember, maxMember, partyDate,
                 closeDate, day, address, detailAddress, partyPlace, viewCnt, joinMember)
 
             $('#partypost').append(tempHtml)
