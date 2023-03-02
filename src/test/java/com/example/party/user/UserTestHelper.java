@@ -10,8 +10,7 @@ public class UserTestHelper {
 		return new SignupRequest(
 			"test@email.com",
 			"password1!",
-			"nickname",
-			"010-1234-1234"
+			"nickname"
 		);
 	}
 
