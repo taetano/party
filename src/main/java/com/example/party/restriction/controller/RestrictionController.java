@@ -65,9 +65,9 @@ public class RestrictionController {
 	}
 
 	//노쇼 신고
-	@PostMapping("/noShow/{applicationId}")
-	public ResponseEntity<ApiResponse> noShowReport(@PathVariable Long applicationId,
+	@PostMapping("/noShow")
+	public ResponseEntity<ApiResponse> noShowReport(@RequestBody NoShowRequest request,
 		@AuthenticationPrincipal User user) {
-		return ResponseEntity.ok(restrictionService.reportNoShow(user, applicationId));
+		return ResponseEntity.ok(restrictionService.reportNoShow(user, request));
 	}
 }
