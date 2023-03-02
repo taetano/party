@@ -1,6 +1,5 @@
 package com.example.party.restriction.controller;
 
-import com.example.party.restriction.dto.NoShowRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,9 +15,7 @@ import com.example.party.global.common.ApiResponse;
 import com.example.party.global.common.DataApiResponse;
 import com.example.party.restriction.dto.BlockResponse;
 import com.example.party.restriction.dto.ReportPostRequest;
-import com.example.party.restriction.dto.ReportPostResponse;
 import com.example.party.restriction.dto.ReportUserRequest;
-import com.example.party.restriction.dto.ReportUserResponse;
 import com.example.party.restriction.service.RestrictionService;
 import com.example.party.user.entity.User;
 
@@ -67,9 +64,9 @@ public class RestrictionController {
 	}
 
 	//노쇼 신고
-	@PostMapping("/noShow")
-	public ResponseEntity<ApiResponse> noShowReport(@RequestBody NoShowRequest request,
-													@AuthenticationPrincipal User user) {
-		return ResponseEntity.ok(restrictionService.reportNoShow(user, request));
+	@PostMapping("/noShow/{applicationId}")
+	public ResponseEntity<ApiResponse> noShowReport(@PathVariable Long applicationId,
+		@AuthenticationPrincipal User user) {
+		return ResponseEntity.ok(restrictionService.reportNoShow(user, applicationId));
 	}
 }
