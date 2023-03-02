@@ -57,10 +57,10 @@ function getOtherProfile(userId) {
         </div>
         <button class="btn btn-warning rounded-pill" onclick="Block(${userId})">해당유저 차단
                     </button>
-
-        <input type="submit" class="btn btn-primary rounded-pill" value="해당유저 신고">
-    </div>`
-
+        <button class="btn btn-primary rounded-pill" onclick="clickReportUser(${userId})">해당유저 신고
+        </button>
+    </div>
+        `
                 console.log("프로필정보" + nickname, comment, email, noshowcnt, participationcnt)
 
                 $('#other-profile').append(other_profile_temp)
@@ -87,4 +87,30 @@ function Block(userId) {
             window.location.reload()
         }
     })
+}
+
+//유저 신고
+function clickReportUser(userId) {
+    $.ajax({
+        type: "POST",
+        url: `/api/restriction/report/users`,
+        headers: {
+            "Authorization": getCookieValue('Authorization')
+        },
+        contentType: "application/json; charset=UTF-8",
+        data: JSON.stringify({
+            userId: userId,
+            reason: 'SPAM',
+            detailReason: "광고",
+        }),
+            success(response) {
+            console.log(response)
+            alert("유저 신고가 완료되었습니다.")
+            window.location.reload()
+            },
+            error(response, request) {
+            console.log(response, request)
+            alert("유저 신고 오류가 발생했습니다.")
+            }
+    });
 }

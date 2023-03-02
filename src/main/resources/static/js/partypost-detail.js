@@ -34,6 +34,7 @@ function get_partypost(postId) {
             let title = responseData['title']
             let content = responseData['content']
             let categoryId = responseData['categoryId']
+            let categoryName = responseData['categoryName']
             let status = responseData['status']
             let acceptedMember = responseData['acceptedMember'] + 1
             let maxMember = responseData['maxMember']
@@ -45,7 +46,6 @@ function get_partypost(postId) {
             let partyPlace = responseData['partyPlace']
             let viewCnt = responseData['viewCnt']
             let joinMember = responseData['joinMember']
-
             let tempHtml = `
 
             <!-- Page Content-->
@@ -75,7 +75,7 @@ function get_partypost(postId) {
                                         <div class="text-muted fst-italic text-end">조회수: ${viewCnt}</div>
                                         <!-- Post categories-->
                                         <a class="badge bg-secondary text-decoration-none link-light">Status: ${status}</a>
-                                        <a class="badge bg-secondary text-decoration-none link-light" href="#!">카테고리 : ${categoryId}</a>
+                                        <a class="badge bg-secondary text-decoration-none link-light">카테고리 : ${categoryName}</a>
                                     </header>
                                     <!-- Post content-->
                                     <section>
@@ -87,7 +87,7 @@ function get_partypost(postId) {
                                     </section>
                                     <!-- Post feature-->
                                     <section class="mb-5">
-                                        <a class="badge bg-secondary text-decoration-none link-light p-sm-3 rounded-pill" href="#!">이 모집글 신고</a>
+                                        <a class="badge bg-secondary text-decoration-none link-light p-sm-3 rounded-pill" onclick="clickReportPartyPost(${postId})">이 모집글 신고</a>
                                         <a class="badge bg-secondary text-decoration-none link-light p-sm-3 rounded-pill" onclick="clicklike(${postId})">좋아요</a>
                                         <p class="fs-5 mb-2 fw-bold">현재 파티원: </p>
                                         <div id="joinmember"></div>
@@ -107,7 +107,7 @@ function get_partypost(postId) {
             </div>
                 `
 
-            if (loginUserId === userId ) {
+            if (loginUserId === userId) {
                 tempHtml = `
 
             <div id="partypost">
@@ -170,7 +170,7 @@ function get_partypost(postId) {
             }
 
 
-            console.log("포스트 정보" + nickname, title, content, categoryId, status, acceptedMember, maxMember, partyDate,
+            console.log("포스트 정보" + nickname, title, content, categoryName, status, acceptedMember, maxMember, partyDate,
                 closeDate, day, address, detailAddress, partyPlace, viewCnt, joinMember)
 
             $('#partypost').append(tempHtml)
@@ -252,7 +252,33 @@ function clicklike(postId) {
             alert("오류가 발생했습니다")
             window.history.back()
         }
+    })
+}
 
+
+function clickReportPartyPost(PostId) {
+    $.ajax({
+        type: "POST",
+        url: '/api/restriction/report/partyposts',
+        contentType: "application/json; charset=UTF-8",
+        headers: {
+            "Authorization": getCookieValue('Authorization')
+        },
+        data: JSON.stringify({
+            postId: PostId,
+            reason: "SPAM",
+            detailReason: "광고"
+        }), success(response) {
+            console.log(response)
+            alert("모집글 신고가 완료되었습니다.")
+            window.location.reload()
+        }, error(request, status, error) {
+            console.log(request);
+            console.log(status);
+            console.log(error);
+            alert("모집글 신고 오류가 발생했습니다")
+            // window.history.back()
+        }
 
     })
 }
