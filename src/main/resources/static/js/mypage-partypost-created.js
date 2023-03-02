@@ -43,18 +43,28 @@ function getPartyPostCreated() {
                         let memberStatus = joinMemberRows[j]['status']
                         let noShowCnt = joinMemberRows[j]['noShowCnt']
 
+                        //수락/거절 버튼 있는 양식
                         let partypost_member_temp_html = `
                         <div class="user" id="user">참여자 -  [${applicationId}] ${memberNickname} / 신청 상태 : ${memberStatus} / 노쇼포인트 : ${noShowCnt}
                         <button class="btn btn-primary rounded-pill" onclick="applicationAccept(${applicationId})">수락</button>
                         <button class="btn btn-dark rounded-pill" onclick="applicationReject(${applicationId})">거절</button>
                     </div>`
-
+                        //노쇼신고버튼 있는 양식
+                        let partyPost_member_noshowReporting_temp_html = `
+                        <div class="user" id="user">참여자 -  [${applicationId}] ${memberNickname} / 신청 상태 : ${memberStatus} / 노쇼포인트 : ${noShowCnt}
+                        <button class="btn btn-primary rounded-pill" onclick="clickNoShowReport(${applicationId})">노쇼했어요!</button>                 
+                    </div>
+                        `
+                        //end 상태인 경우의 양식
                         let partypost_member_notPending_temp_html = `
                         <div class="user" id="user">참여자 -  [${applicationId}] ${memberNickname} / 신청 상태 : ${memberStatus} / 노쇼포인트 : ${noShowCnt}
                     </div>`
 
+                        //노쇼 리포팅 상태인경우 노쇼 버튼 있게 변경
                         if (memberStatus === 'PENDING') {
                             $('#createdPartyPostInfo').append(partypost_member_temp_html)
+                        } else if (status === 'NO_SHOW_REPORTING') {
+                            $('#createdPartyPostInfo').append(partyPost_member_noshowReporting_temp_html)
                         } else {
                             $('#createdPartyPostInfo').append(partypost_member_notPending_temp_html)
                         }
@@ -107,6 +117,28 @@ function applicationReject(applicationId) {
         success: function (response) {
             alert(response.msg)
             window.location.reload()
+
+        }
+    })
+}
+
+//노쇼신고
+function clickNoShowReport(applicationId) {
+    $.ajax({
+        type: "POST",
+        url: `/api/restriction/noShow/${applicationId}`,
+        headers: {
+            "Authorization": getCookieValue('Authorization')
+        },
+        error(error, response) {
+            alert("이미 노쇼신고 하셨습니다. 그렇지 않은경우 관리자에게 문의해주세요.")
+            console.log(error)
+            console.log(response)
+        },
+        success: function (response) {
+            alert("노쇼신고 성공")
+            console.log(response)
+            // window.location.reload()
 
         }
     })
