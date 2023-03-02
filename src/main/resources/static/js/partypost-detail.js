@@ -14,7 +14,6 @@ function getCookieValue(cookieName) {
 //partypost 상세정보 조회
 function get_partypost(postId) {
     $('#partypost').empty()
-
     $.ajax({
         type: "GET",
         url: '/api/party-posts/' + postId,
@@ -22,6 +21,12 @@ function get_partypost(postId) {
             "Authorization": getCookieValue('Authorization')
         },
         success: function (response) {
+            const token = getCookieValue('Authorization');
+            const tokenParts = token.split('.');
+            const tokenPayload = JSON.parse(atob(tokenParts[1]));
+            const loginUserId = tokenPayload.id;
+            console.log(loginUserId)
+
             let responseData = response['data']
             console.log(response)
             let userId = responseData['userId'] //파티장Id
@@ -40,6 +45,7 @@ function get_partypost(postId) {
             let partyPlace = responseData['partyPlace']
             let viewCnt = responseData['viewCnt']
             let joinMember = responseData['joinMember']
+
             let tempHtml = `
 
             <!-- Page Content-->
@@ -91,14 +97,78 @@ function get_partypost(postId) {
                                         <p class="fs-5 fw-bold">장소: ${partyPlace}</p>
                                     </section>
                                 </article>
+                                <div id="setbutton">
                                 <a class="btn-long btn-primary btn-xl-long rounded-pill" onclick="clickParticipation(${postId})">신청 (1:1 채팅)</a>
-                                <a class="btn-long btn-primary btn-xl-long rounded-pill" onclick="clickUpdate(${postId})">수정하기</a>
+                           </div>
                             </div>
                         </div>
                     </div>
                 </section>
             </div>
                 `
+
+            if (loginUserId === userId ) {
+                tempHtml = `
+
+            <div id="partypost">
+                <section class="py-5">
+                    <div class="container px-5 my-5">
+                        <div class="row gx-5">
+                            <div class="col-lg-3">
+                                <div class="d-flex align-items-center mt-lg-5 mb-4">
+                                    <img class="img-fluid rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." />
+                                    <div class="ms-3">
+                                        <div class="fw-bold">파티장 닉네임: ${nickname}</div>
+                                        <button class="btn btn-warning rounded-pill" onclick="otherProfilePageClick(${userId})">유저정보
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-9">
+                                <!-- Post content-->
+                                <article>
+                                    <!-- Post header-->
+                                    <header class="mb-4 mt-5">
+                                        <!-- Post title-->
+                                        <h1 class="fw-bolder mb-1">${title}</h1>
+                                        <!-- Post meta content-->
+                                        <div class="fw-bold fst-italic mb-2 fs-4 text-end">마감일자 : ${closeDate}</div>
+                                        <div class="text-muted fst-italic text-end">조회수: ${viewCnt}</div>
+                                        <!-- Post categories-->
+                                        <a class="badge bg-secondary text-decoration-none link-light">Status: ${status}</a>
+                                        <a class="badge bg-secondary text-decoration-none link-light" href="#!">카테고리 : ${categoryId}</a>
+                                    </header>
+                                    <!-- Post content-->
+                                    <section>
+                                        <div class="card bg-light mb-3">
+                                            <div class="card-body my-2 fs-2">
+                                                ${content}
+                                            </div>
+                                        </div>
+                                    </section>
+                                    <!-- Post feature-->
+                                    <section class="mb-5">
+                                        <a class="badge bg-secondary text-decoration-none link-light p-sm-3 rounded-pill" href="#!">이 모집글 신고</a>
+                                        <a class="badge bg-secondary text-decoration-none link-light p-sm-3 rounded-pill" onclick="clicklike(${postId})">좋아요</a>
+                                        <p class="fs-5 mb-2 fw-bold">현재 파티원: </p>
+                                        <div id="joinmember"></div>
+                                        <p class="fs-5 mb-2 fw-bold">모집 인원: ${acceptedMember} / ${maxMember}</p>
+                                        <p class="fs-5 mb-2 fw-bold">모임 일자: ${partyDate} + ${day} </p>
+                                        <p class="fs-5 mb-2 fw-bold">주소: ${address} ${detailAddress}</p>
+                                        <p class="fs-5 fw-bold">장소: ${partyPlace}</p>
+                                    </section>
+                                </article>
+                                <div id="setbutton">
+                                <a class="btn-long btn-primary btn-xl-long rounded-pill" onclick="clickUpdate(${postId})">수정하기</a>
+                           </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div> `
+
+            }
+
 
             console.log("포스트 정보" + nickname, title, content, categoryId, status, acceptedMember, maxMember, partyDate,
                 closeDate, day, address, detailAddress, partyPlace, viewCnt, joinMember)
