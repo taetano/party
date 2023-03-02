@@ -31,7 +31,7 @@ function getPartyPostLike() {
                     let like_partyPost_temp =
                         `<div id="mypartypost" class="mypartypost">
                                 [${postId}] ${title} / 모임날짜 : ${partyDate} / 지역 : ${partyAddress}
-                                <button class="btn btn-warning rounded-pill" onclick="">글이동</button>
+                                <button class="btn btn-warning rounded-pill" onclick="movePost(${postId})">글이동</button>
                                 <button class="btn btn-primary rounded-pill" onclick="dislike(${postId})">좋아요 취소</button>
                             </div>`
 
@@ -63,4 +63,9 @@ function dislike(postId) {
             window.location.reload()
         }
     })
+}
+
+//좋아요 취소
+function movePost(postId) {
+    window.location.href = `/page/partypost?partypostId=${postId}`;
 }
