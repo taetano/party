@@ -39,6 +39,7 @@ function getPartyPostCreated() {
                     let joinMemberRows = response['data'][i]['joinMember']
                     for (let j = 0; j < joinMemberRows.length; j++) {
                         let applicationId = joinMemberRows[j]['id']
+                        let memberUserId = joinMemberRows[j]['userId']
                         let memberNickname = joinMemberRows[j]['nickname']
                         let memberStatus = joinMemberRows[j]['status']
                         let noShowCnt = joinMemberRows[j]['noShowCnt']
@@ -52,7 +53,7 @@ function getPartyPostCreated() {
                         //노쇼신고버튼 있는 양식
                         let partyPost_member_noshowReporting_temp_html = `
                         <div class="user" id="user">참여자 -  [${applicationId}] ${memberNickname} / 신청 상태 : ${memberStatus} / 노쇼포인트 : ${noShowCnt}
-                        <button class="btn btn-primary rounded-pill" onclick="clickNoShowReport(${applicationId})">노쇼했어요!</button>                 
+                        <button class="btn btn-primary rounded-pill" onclick="clickNoShowReport(${memberUserId},${partyPostId})">노쇼했어요!</button>                 
                     </div>
                         `
                         //end 상태인 경우의 양식
@@ -123,13 +124,18 @@ function applicationReject(applicationId) {
 }
 
 //노쇼신고
-function clickNoShowReport(applicationId) {
+function clickNoShowReport(userId, partyPostId) {
     $.ajax({
         type: "POST",
-        url: `/api/restriction/noShow/${applicationId}`,
+        url: `/api/restriction/noShow`,
         headers: {
             "Authorization": getCookieValue('Authorization')
         },
+        contentType: "application/json; charset=UTF-8",
+        data: JSON.stringify({
+            userId: userId,
+            partyPostId: partyPostId
+        }),
         error(error, response) {
             alert("이미 노쇼신고 하셨습니다. 그렇지 않은경우 관리자에게 문의해주세요.")
             console.log(error)
