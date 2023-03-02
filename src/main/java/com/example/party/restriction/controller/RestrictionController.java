@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.party.global.common.ApiResponse;
 import com.example.party.global.common.DataApiResponse;
 import com.example.party.restriction.dto.BlockResponse;
+import com.example.party.restriction.dto.NoShowRequest;
 import com.example.party.restriction.dto.ReportPostRequest;
 import com.example.party.restriction.dto.ReportUserRequest;
 import com.example.party.restriction.service.RestrictionService;
@@ -57,7 +58,7 @@ public class RestrictionController {
 	}
 
 	//모집글 신고
-	@PostMapping("/report/party-posts")
+	@PostMapping("/report/partyposts")
 	public ResponseEntity<ApiResponse> createReportPost(@RequestBody ReportPostRequest request,
 		@AuthenticationPrincipal User user) {
 		return ResponseEntity.ok(restrictionService.createReportPost(user, request));

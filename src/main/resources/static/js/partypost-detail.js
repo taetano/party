@@ -81,7 +81,7 @@ function get_partypost(postId) {
                                     </section>
                                     <!-- Post feature-->
                                     <section class="mb-5">
-                                        <a class="badge bg-secondary text-decoration-none link-light p-sm-3 rounded-pill" href="#!">이 모집글 신고</a>
+                                        <a class="badge bg-secondary text-decoration-none link-light p-sm-3 rounded-pill" onclick="clickReportPartyPost(${postId})">이 모집글 신고</a>
                                         <a class="badge bg-secondary text-decoration-none link-light p-sm-3 rounded-pill" onclick="clicklike(${postId})">좋아요</a>
                                         <p class="fs-5 mb-2 fw-bold">현재 파티원: </p>
                                         <div id="joinmember"></div>
@@ -182,7 +182,33 @@ function clicklike(postId) {
             alert("오류가 발생했습니다")
             window.history.back()
         }
+    })
+}
 
+
+function clickReportPartyPost(PostId) {
+    $.ajax({
+        type: "POST",
+        url: '/api/restriction/report/partyposts',
+        contentType: "application/json; charset=UTF-8",
+        headers: {
+            "Authorization": getCookieValue('Authorization')
+        },
+        data: JSON.stringify({
+            postId: PostId,
+            reason: "SPAM",
+            detailReason: "광고"
+        }), success(response) {
+            console.log(response)
+            alert("모집글 신고가 완료되었습니다.")
+            window.location.reload()
+        }, error(request, status, error) {
+            console.log(request);
+            console.log(status);
+            console.log(error);
+            alert("모집글 신고 오류가 발생했습니다")
+            // window.history.back()
+        }
 
     })
 }
