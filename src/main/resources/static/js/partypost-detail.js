@@ -136,7 +136,7 @@ function get_partypost(postId) {
                                         <div class="text-muted fst-italic text-end">조회수: ${viewCnt}</div>
                                         <!-- Post categories-->
                                         <a class="badge bg-secondary text-decoration-none link-light">Status: ${status}</a>
-                                        <a class="badge bg-secondary text-decoration-none link-light" href="#!">카테고리 : ${categoryId}</a>
+                                        <a class="badge bg-secondary text-decoration-none link-light" href="#!">카테고리 : ${categoryName}</a>
                                     </header>
                                     <!-- Post content-->
                                     <section>
