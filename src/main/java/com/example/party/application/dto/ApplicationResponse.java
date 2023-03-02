@@ -9,7 +9,8 @@ import lombok.Getter;
 
 @Getter
 public class ApplicationResponse {
-	private final Long id; // 신청자의 id값
+	private final Long id; // 어플리케이션의 id값
+	private final Long userId; // 신청자의 id
 	private final String nickname; // 신청자의 닉네임
 	private final String profileImg; // 신청자의 프로필 이미지
 	private final int noShowCnt; // 신청자의 노쇼포인트 정보
@@ -19,6 +20,7 @@ public class ApplicationResponse {
 
 	public ApplicationResponse(Application application) {
 		this.id = application.getId();
+		this.userId = application.getUser().getId();
 		this.nickname = application.getNickname();
 		this.profileImg = application.getProfileImg();
 		this.noShowCnt = application.getNoShowCnt();
