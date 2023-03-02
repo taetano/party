@@ -21,6 +21,4 @@ public class SignupRequest {
 	@Pattern(regexp = "^[A-Za-z0-9가-힣+_]{2,10}$",
 		message = "대소문자, 숫자, 한글 범주 안에 최소 2자 최대 10자")
 	private String nickname;
-	@Pattern(regexp = "^[0-9]{3}-[0-9]{4}-[0-9]{4}$", message = "무조건 '-' 2개 포함 13자")
-	private String phoneNum;
 }

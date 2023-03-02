@@ -17,7 +17,6 @@
                 email: $("#email").val(),
                 password: $("#password").val(),
                 nickname: $("#nickname").val(),
-                phoneNum: $("#phone").val()
             };
             ev.preventDefault()
             // Ajax 요청 보내기
@@ -151,10 +150,6 @@
 
             <label for="nickname">닉네임:</label>
             <input type="text" id="nickname" name="nickname" placeholder="닉네임을 입력해주세요.">
-
-            <label for="phone">전화번호:</label>
-            <input type="tel" id="phone" name="phone" pattern="[0-9]{3}-[0-9]{4}-[0-9]{4}"
-                   placeholder="예) 010-0000-0000">
 
             <input type="submit" value="가입하기" id="signbtn">
         </span>
