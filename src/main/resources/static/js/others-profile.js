@@ -21,12 +21,12 @@ function getOtherProfile(userId) {
             if (response.code === 200) {
                 let rows = response['data']
                 let email = rows['email']
-                let nickname = rows['nickname']
+                let nickname = rows['nickName']
                 let comment = rows['comment']
                 let noshowcnt = rows['noshowcnt']
                 let participationcnt = rows['participationCount']
 
-            let other_profil_temp = `
+            let other_profile_temp = `
             <div id="email" class="email"><h2>${email}</h2></div>
                 <div id="nickname" class="nickname"><h2>${nickname}</h2></div>
         <div id="status-message" class="status-message"><h5>상태 메세지</h5>
@@ -63,7 +63,7 @@ function getOtherProfile(userId) {
 
                 console.log("프로필정보" + nickname, comment, email, noshowcnt, participationcnt)
 
-                $('#other-profile').append(other_profil_temp)
+                $('#other-profile').append(other_profile_temp)
             }
         }
     });

@@ -5,13 +5,25 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import com.example.party.application.entity.Application;
 import com.example.party.application.type.ApplicationStatus;
 import com.example.party.category.entity.Category;
-import com.example.party.partypost.dto.PartyPostRequest;
 import com.example.party.global.common.TimeStamped;
+import com.example.party.partypost.dto.PartyPostRequest;
 import com.example.party.partypost.dto.UpdatePartyPostRequest;
 import com.example.party.partypost.type.Status;
 import com.example.party.restriction.entity.NoShow;
@@ -74,7 +86,7 @@ public class PartyPost extends TimeStamped {
 	private List<ReportPost> reportPosts;
 	@OneToMany(mappedBy = "partyPost")
 	private List<NoShow> noShowReportPosts;
-	@OneToOne(fetch =  FetchType.LAZY, mappedBy = "partyPost", cascade = CascadeType.ALL)
+	@OneToOne(mappedBy = "partyPost", cascade = CascadeType.ALL)
 	private Party party;
 
 	//생성자
@@ -113,6 +125,7 @@ public class PartyPost extends TimeStamped {
 		this.title = request.getTitle();
 		this.content = request.getContent();
 		this.category = category;
+		this.partyPlace = request.getPartyPlace();
 		this.address = extractAddress(request.getPartyAddress());
 		this.detailAddress = extractDetailAddress(request.getPartyAddress());
 	}

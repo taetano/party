@@ -30,7 +30,7 @@ function getPartyPostApply() {
 
                     let temp_html = `<div id="mypartypost1" class="mypartypost">
                     ${partyPostId} 글 제목 : ${title} / 마감일 : ${closeDate} / 지역 : ${address} / 모집글상태 : ${status}
-                    <button class="btn btn-warning rounded-pill" onclick="window.location.href= 'login.html'">글이동</button>
+                    <button class="btn btn-warning rounded-pill" onclick="movePost(${partyPostId})">글이동</button>
                     <button class="btn btn-dark rounded-pill">신청취소</button>
                 </div>`
 
@@ -40,4 +40,8 @@ function getPartyPostApply() {
 
         }
     })
+}
+
+function movePost(postId) {
+    window.location.href = `/page/partypost?partypostId=${postId}`;
 }

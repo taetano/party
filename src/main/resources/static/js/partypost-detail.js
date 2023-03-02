@@ -24,6 +24,7 @@ function get_partypost(postId) {
         success: function (response) {
             let responseData = response['data']
             console.log(response)
+            let userId = responseData['userId'] //파티장Id
             let nickname = responseData['nickname']
             let title = responseData['title']
             let content = responseData['content']
@@ -51,6 +52,8 @@ function get_partypost(postId) {
                                     <img class="img-fluid rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." />
                                     <div class="ms-3">
                                         <div class="fw-bold">파티장 닉네임: ${nickname}</div>
+                                        <button class="btn btn-warning rounded-pill" onclick="otherProfilePageClick(${userId})">유저정보
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -102,9 +105,11 @@ function get_partypost(postId) {
 
             $('#partypost').append(tempHtml)
 
+            //참가신청한 멤버 불러오기
             let joinMemberRows = response['data']['joinMember']
             for (let j = 0; j < joinMemberRows.length; j++) {
                 let applicationId = joinMemberRows[j]['id']
+                let memberUserId = joinMemberRows[j]['userId'] //신청한 유저 Id
                 let memberNickname = joinMemberRows[j]['nickname']
                 let memberStatus = joinMemberRows[j]['status']
 
@@ -112,6 +117,8 @@ function get_partypost(postId) {
                     <div class="container" onclick="">
                         <div class="ms-3">
                             <div class="fw-bold mb-2">파티원 닉네임: ${memberNickname} / 상태: ${memberStatus}</div>
+                            <button class="btn btn-warning rounded-pill" onclick="otherProfilePageClick(${memberUserId})">유저정보
+                            </button>
                         </div>
                     </div>`
 
@@ -206,5 +213,9 @@ function clickReportPartyPost(PostId) {
     })
 }
 
-
-
+//특정유저 상세정보 페이지로 가기
+function otherProfilePageClick(userId) {
+    console.log(userId)
+    const otherProfilePageUrl = `/page/others/profile?userId=` + userId;
+    window.location.href = otherProfilePageUrl;
+}
