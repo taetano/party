@@ -40,9 +40,6 @@ public class User extends TimeStamped implements UserDetails {
     @Column(name = "nickname", nullable = false, unique = true, length = 10)
     private String nickname;
 
-    @Column(name = "phone_number", nullable = false, length = 13, columnDefinition = "CHAR(13)")
-    private String phoneNum;
-
     // enum
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false, length = 12)
@@ -88,7 +85,6 @@ public class User extends TimeStamped implements UserDetails {
         this.email = signupRequest.getEmail();
         this.password = password;
         this.nickname = signupRequest.getNickname();
-        this.phoneNum = signupRequest.getPhoneNum();
         this.role = UserRole.ROLE_USER;
         this.status = Status.ACTIVE;
         this.profile = new Profile();
@@ -137,7 +133,6 @@ public class User extends TimeStamped implements UserDetails {
 
     public void updateProfile(ProfilesRequest profilesRequest) {
         this.nickname = profilesRequest.getNickname();
-        this.phoneNum = profilesRequest.getPhoneNum();
     }
 
     public void increaseParticipationCnt() {

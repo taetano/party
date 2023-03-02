@@ -35,7 +35,6 @@ function get_profile() {
             let comment = responseData['comment']
             let profileImg = responseData['profileImg'] //프로필 사진
             let email = responseData['email']
-            let phoneNum = responseData['phoneNum']
             let tempHtml = `
                 
             <!-- 여기부터 본문 -->
@@ -66,13 +65,10 @@ function get_profile() {
                 <!-- 유저 이메일 들어갈 곳 -->
                 <span id="profile-email"></span>
                 <br>
-                <div>전화번호: ${phoneNum}</div>
-                    <!-- 유저 전화번호 들어갈 곳 -->
-                <span id="profile-phoneNum"></span>
             </div>
                 `
 
-            console.log("프로필정보" + nickname, comment, profileImg, email, phoneNum)
+            console.log("프로필정보" + nickname, comment, profileImg, email)
 
             $('#profile').append(tempHtml)
         }
@@ -92,7 +88,6 @@ function edit_profile() {
             "profileImg": $('#profileImg').val(),
             "nickname": $('#nickname').val(),
             "comment": $('#comment').val(),
-            "phoneNum": $('#phoneNumber').val()
     }),
         success: function (response) {
             console.log(response);

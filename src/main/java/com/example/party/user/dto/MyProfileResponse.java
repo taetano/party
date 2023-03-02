@@ -8,7 +8,6 @@ import lombok.Getter;
 public class MyProfileResponse {
 	private final String email; //user
 	private final String nickName; //user
-	private final String phoneNum; //user
 	private final String profileImg; //profile
 	private final String comment; //profile
 	private final int participationCount; //profile
@@ -16,7 +15,6 @@ public class MyProfileResponse {
 	public MyProfileResponse(User user) {
 		this.email = user.getEmail();
 		this.nickName = user.getNickname();
-		this.phoneNum = user.getPhoneNum();
 		this.profileImg = user.getProfileImg();
 		this.comment = user.getComment();
 		this.participationCount = user.getParticipationCnt();
