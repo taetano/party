@@ -191,7 +191,7 @@ public class RestrictionService {
 
 	private Party getParties(Long postId) {
 		return partyRepository.findByPartyPostId(postId)
-			.orElseThrow(NotFoundException::new);
+			.orElseThrow(() -> new IllegalArgumentException("파티 없음"));
 	}
 
 	private Application getApplication(Long applicationId) {
