@@ -114,4 +114,11 @@ public class PageController {
 		return new ModelAndView("admin-partypost-list"); //view할 html의 파일이름 넣어주세요
 
 	}
+
+	//mypage partypostreport list호출
+	@GetMapping("/myPage/MypagePartyPostReport")
+	public ModelAndView showMypagePartyPostReport() {
+		return new ModelAndView("mypage-partypost-report"); //view할 html의 파일이름 넣어주세요
+
+	}
 }

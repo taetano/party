@@ -23,6 +23,7 @@ import com.example.party.partypost.repository.PartyPostRepository;
 import com.example.party.partypost.repository.PartyRepository;
 import com.example.party.partypost.type.Status;
 import com.example.party.restriction.dto.BlockResponse;
+import com.example.party.restriction.dto.NoShowRequest;
 import com.example.party.restriction.dto.ReportPostRequest;
 import com.example.party.restriction.dto.ReportUserRequest;
 import com.example.party.restriction.entity.Block;
@@ -128,12 +129,11 @@ public class RestrictionService {
 	}
 
 	//노쇼 신고
-	public ApiResponse reportNoShow(User user, Long applicationId) {
-		Application application = getApplication(applicationId);
-		isMySelf(user, application.getUser().getId());
+	public ApiResponse reportNoShow(User user, NoShowRequest request) {
+		isMySelf(user, request.getUserId());
 		//신고할 유저
-		User reported = findByUser(application.getUser().getId());
-		Party party = getParties(application.getPartyPost().getId());
+		User reported = findByUser(request.getUserId());
+		Party party = getParties(request.getPartyPostId());
 		if (!party.getPartyPost().getStatus().equals(Status.NO_SHOW_REPORTING)) {
 			throw new BadRequestException("노쇼 신고 기간이 만료되었습니다");
 		}
@@ -191,7 +191,7 @@ public class RestrictionService {
 
 	private Party getParties(Long postId) {
 		return partyRepository.findByPartyPostId(postId)
-			.orElseThrow(NotFoundException::new);
+			.orElseThrow(() -> new IllegalArgumentException("파티 없음"));
 	}
 
 	private Application getApplication(Long applicationId) {

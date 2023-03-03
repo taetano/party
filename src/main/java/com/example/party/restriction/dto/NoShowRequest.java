@@ -4,7 +4,6 @@ import lombok.Getter;
 
 @Getter
 public class NoShowRequest {
-	// private Long userId;
-	// private Long postId;
-	private Long applicationId;
+	private Long userId;
+	private Long partyPostId;
 }
