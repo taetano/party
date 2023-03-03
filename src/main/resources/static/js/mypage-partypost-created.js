@@ -33,7 +33,7 @@ function getPartyPostCreated() {
                     let status = response['data'][i]['status']
 
                     let partypost_temp_html = ` <div id = "createdPartyPostInfo"> <strong> 글 제목 : [${partyPostId}] ${title} <br> 마감일자 : ${closeDate} / 위치 : ${address} / 모집 상태 : ${status}</strong> </div>`
-                    $('#mypartypost').append(partypost_temp_html)
+                    $('#mypartypost-created-list').append(partypost_temp_html)
 
 
                     let joinMemberRows = response['data'][i]['joinMember']
@@ -46,28 +46,28 @@ function getPartyPostCreated() {
 
                         //수락/거절 버튼 있는 양식
                         let partypost_member_temp_html = `
-                        <div class="user" id="user">참여자 -  [${applicationId}] ${memberNickname} / 신청 상태 : ${memberStatus} / 노쇼포인트 : ${noShowCnt}
+                        <div class="user" id="user">참여자 - 닉네임 : ${memberNickname} / 신청 상태 : ${memberStatus} / 노쇼포인트 : ${noShowCnt}
                         <button class="btn btn-primary rounded-pill" onclick="applicationAccept(${applicationId})">수락</button>
                         <button class="btn btn-dark rounded-pill" onclick="applicationReject(${applicationId})">거절</button>
                     </div>`
                         //노쇼신고버튼 있는 양식
                         let partyPost_member_noshowReporting_temp_html = `
-                        <div class="user" id="user">참여자 -  [${applicationId}] ${memberNickname} / 신청 상태 : ${memberStatus} / 노쇼포인트 : ${noShowCnt}
+                        <div class="user" id="user">참여자 - 닉네임 : ${memberNickname} / 신청 상태 : ${memberStatus} / 노쇼포인트 : ${noShowCnt}
                         <button class="btn btn-primary rounded-pill" onclick="clickNoShowReport(${memberUserId},${partyPostId})">노쇼했어요!</button>                 
                     </div>
                         `
                         //end 상태인 경우의 양식
                         let partypost_member_notPending_temp_html = `
-                        <div class="user" id="user">참여자 -  [${applicationId}] ${memberNickname} / 신청 상태 : ${memberStatus} / 노쇼포인트 : ${noShowCnt}
+                        <div class="user" id="user">참여자 - 닉네임 : ${memberNickname} / 신청 상태 : ${memberStatus} / 노쇼포인트 : ${noShowCnt}
                     </div>`
 
                         //노쇼 리포팅 상태인경우 노쇼 버튼 있게 변경
                         if (memberStatus === 'PENDING') {
-                            $('#createdPartyPostInfo').append(partypost_member_temp_html)
+                            $('#mypartypost-created-list').append(partypost_member_temp_html)
                         } else if (status === 'NO_SHOW_REPORTING') {
-                            $('#createdPartyPostInfo').append(partyPost_member_noshowReporting_temp_html)
+                            $('#mypartypost-created-list').append(partyPost_member_noshowReporting_temp_html)
                         } else {
-                            $('#createdPartyPostInfo').append(partypost_member_notPending_temp_html)
+                            $('#mypartypost-created-list').append(partypost_member_notPending_temp_html)
                         }
 
 

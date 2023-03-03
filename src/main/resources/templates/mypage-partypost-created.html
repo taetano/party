@@ -92,10 +92,11 @@
             text-align: left;
             border: 1px solid black;
             border-radius: 10px;
+            height: auto;
 
         }
 
-        .mypartypost-list {
+        .mypartypost-created-list {
             height: auto;
         }
 
@@ -103,8 +104,6 @@
             padding: 5px 5px 5px 5px;
         }
 
-        .user button {
-        }
     </style>
 </head>
 <body>
@@ -154,14 +153,14 @@
             <div class="mypartypost-created-list" id="mypartypost-created-list">
                 <div id="mypartypost" class="mypartypost">
                     <div id="createdPartyPostInfo"><strong> 글 제목 : 글 제목1 / 마감일자 : 마감일자 / 위치 : 위치 / 모집 상태 : 모집중</strong>
-                    </div>
 
-                    <div class="user" id="user">참여자 : 으아아 / 신청 상태 : 대기
-                        <button class="btn btn-primary rounded-pill">수락</button>
-                        <button class="btn btn-dark rounded-pill">거절</button>
-                        <button class="btn btn-warning rounded-pill" onclick="window.location.href= 'login.html'">유저정보
-                        </button>
-
+                        <div class="user" id="user">참여자 : 으아아 / 신청 상태 : 대기
+                            <button class="btn btn-primary rounded-pill">수락</button>
+                            <button class="btn btn-dark rounded-pill">거절</button>
+                            <button class="btn btn-warning rounded-pill" onclick="window.location.href= 'login.html'">
+                                유저정보
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
