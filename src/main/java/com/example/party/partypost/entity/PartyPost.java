@@ -16,7 +16,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.example.party.application.entity.Application;
@@ -77,7 +76,7 @@ public class PartyPost extends TimeStamped {
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "user_id")
 	private User user; //작성자
-	@OneToMany(mappedBy = "partyPost")
+	@OneToMany(mappedBy = "partyPost", cascade = CascadeType.ALL)
 	private List<Application> applications; //이 모집글에 작성된 참가신청
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "category_id")
@@ -86,8 +85,6 @@ public class PartyPost extends TimeStamped {
 	private List<ReportPost> reportPosts;
 	@OneToMany(mappedBy = "partyPost")
 	private List<NoShow> noShowReportPosts;
-	@OneToOne(mappedBy = "partyPost", cascade = CascadeType.ALL)
-	private Party party;
 
 	//생성자
 	public PartyPost(User user, PartyPostRequest request, LocalDateTime partyDate, Category category) {
@@ -104,20 +101,6 @@ public class PartyPost extends TimeStamped {
 		this.closeDate = partyDate.minusMinutes(15);
 		this.applications = Collections.emptyList();
 		this.active = true;
-		this.party = new Party(this);
-	}
-
-	//test용
-	public void changeParty(Party party) {
-		this.party = party;
-	}
-
-	public void addUser(User user) {
-		this.party.autoAddUser(user);
-	}
-
-	public List<User> getPartyUsers() {
-		return this.party.getUsers();
 	}
 
 	//제목, 상세내용, 카테고리, 주소만 변경 가능 /현재 모임시작시간 & 모임마감시간 & 모집인원 변경 불가능

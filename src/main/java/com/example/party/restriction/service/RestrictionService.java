@@ -1,5 +1,6 @@
 package com.example.party.restriction.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -16,7 +17,6 @@ import com.example.party.global.common.ApiResponse;
 import com.example.party.global.common.DataApiResponse;
 import com.example.party.global.exception.BadRequestException;
 import com.example.party.global.exception.NotFoundException;
-import com.example.party.partypost.entity.Party;
 import com.example.party.partypost.entity.PartyPost;
 import com.example.party.partypost.exception.PartyPostNotFoundException;
 import com.example.party.partypost.repository.PartyPostRepository;
@@ -46,7 +46,6 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 public class RestrictionService {
 	private final ApplicationRepository applicationRepository;
-
 	private final UserRepository userRepository;
 	private final PartyRepository partyRepository;
 	private final BlockRepository blockRepository;
@@ -130,25 +129,34 @@ public class RestrictionService {
 
 	//노쇼 신고
 	public ApiResponse reportNoShow(User user, NoShowRequest request) {
+		int checkByUser = 0;
+		int checkByMe = 0;
 		isMySelf(user, request.getUserId());
 		//신고할 유저
 		User reported = findByUser(request.getUserId());
-		Party party = getParties(request.getPartyPostId());
-		if (!party.getPartyPost().getStatus().equals(Status.NO_SHOW_REPORTING)) {
+		PartyPost partyPost = getPartyPost(request.getPartyPostId());
+		if (!partyPost.getStatus().equals(Status.NO_SHOW_REPORTING)) {
 			throw new BadRequestException("노쇼 신고 기간이 만료되었습니다");
 		}
-		List<User> users = party.getUsers();
-		if (!users.contains(reported)) {
-			throw new BadRequestException("참여한 파티원이 아닙니다");
+		// 파티에 참여한 유저와 신고할 유저, 로그인한 유저를 비교함
+		List<Application> applicationList = partyPost.getApplications();
+		for (Application application : applicationList) {
+			if (application.getUser().equals(reported)) {
+				checkByUser ++;
+			}
+			if (application.getUser().equals(user)) {
+				checkByMe ++;
+			}
 		}
-		if (!users.contains(user)) {
+		if (checkByUser == 0 || checkByMe == 0) {
 			throw new BadRequestException("파티 구성원이 아닙니다");
 		}
+
 		if (noShowRepository.existsByReporterIdAndReportedIdAndPartyPostId(user.getId(), reported.getId(),
-			party.getPartyPost().getId())) {
+			partyPost.getId())) {
 			throw new BadRequestException("이미 신고한 유저입니다");
 		}
-		NoShow noShow = new NoShow(user, reported, party.getPartyPost());
+		NoShow noShow = new NoShow(user, reported, partyPost);
 		noShow.PlusNoShowReportCnt();
 		noShowRepository.save(noShow);
 		return ApiResponse.ok("노쇼 신고 완료");
@@ -161,8 +169,7 @@ public class RestrictionService {
 			partyPost.ChangeStatusEnd();
 
 			// 파티 유저 size 를 알기 위해
-			Party party = getParties(partyPost.getId());
-			List<User> users = party.getUsers();
+			List<Application> users = partyPost.getApplications();
 
 			List<NoShow> noShowList = noShowRepository.findAllByPartyPostId(partyPost.getId());
 			for (NoShow noShowIf : noShowList) {
@@ -189,9 +196,9 @@ public class RestrictionService {
 		return blockRepository.findAllByBlockerId(userId);
 	}
 
-	private Party getParties(Long postId) {
-		return partyRepository.findByPartyPostId(postId)
-			.orElseThrow(() -> new IllegalArgumentException("파티 없음"));
+	private PartyPost getPartyPost(Long postId) {
+		return partyPostRepository.findById(postId)
+			.orElseThrow(NotFoundException::new);
 	}
 
 	private Application getApplication(Long applicationId) {

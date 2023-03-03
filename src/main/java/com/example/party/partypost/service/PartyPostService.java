@@ -2,14 +2,10 @@ package com.example.party.partypost.service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import com.example.party.global.exception.NotFoundException;
-import com.example.party.partypost.entity.Party;
-import com.example.party.restriction.entity.Block;
-import com.example.party.restriction.repository.BlockRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -23,7 +19,6 @@ import com.example.party.category.exception.CategoryNotActiveException;
 import com.example.party.category.exception.CategoryNotFoundException;
 import com.example.party.partypost.dto.PartyPostListResponse;
 import com.example.party.partypost.exception.IsNotWritterException;
-import com.example.party.partypost.exception.PartyPostNotDeletableException;
 import com.example.party.partypost.exception.PartyPostNotFoundException;
 import com.example.party.category.repository.CategoryRepository;
 import com.example.party.global.common.ApiResponse;
@@ -67,6 +62,9 @@ public class PartyPostService implements IPartyPostService {
 
         //3. PartyPost 객체 생성
         PartyPost partyPost = new PartyPost(user, request, partyDate, category);
+
+        // 모집글이 작성될 때 파티장을 Application 에 추가
+        Application application = new Application(user, partyPost);
 
         //4. repository 에 저장
         partyPostRepository.save(partyPost);
