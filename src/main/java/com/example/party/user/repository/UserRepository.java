@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import com.example.party.user.entity.User;
-import org.springframework.data.jpa.repository.Query;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 	Optional<User> findByEmail(String email);
@@ -23,4 +23,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	@Query(value = "SELECT p FROM Profile p WHERE p.noShowCnt >= 1 ")
 	List<User> findAllByNoShowList();
 
+	Optional<User> findByKakaoId(Long id); //카카오 Oauth2 용
 }

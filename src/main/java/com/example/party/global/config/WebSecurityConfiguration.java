@@ -13,17 +13,19 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.example.party.global.security.JwtAccessDeniedHandler;
 import com.example.party.global.security.JwtEntryPoint;
 import com.example.party.global.security.JwtVerificationFilter;
-import com.example.party.global.security.JwtAccessDeniedHandler;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @EnableWebSecurity
 public class WebSecurityConfiguration {
-	public static final String[] URL_PERMIT_ALL = "/api/users/signup,/api/users/signin,/api/party-posts,/api/party-posts/{party-postId:[\\d+]}".split(",");
-	public static final String[] URL_ROLE_USER_ADMIN = "/api/restriction/**,/api/users/**,/api/party-posts/**,/api/rooms,chatting".split(",");
+	public static final String[] URL_PERMIT_ALL = "/api/users/kakao/callback,/api/users/signup,/api/users/signin,/api/party-posts,/api/party-posts/{party-postId:[\\d+]}".split(
+		",");
+	public static final String[] URL_ROLE_USER_ADMIN = "/api/restriction/**,/api/users/**,/api/party-posts/**,/api/rooms,chatting".split(
+		",");
 	private final UserDetailsService userDetailsService;
 	private final RedisTemplate<String, String> redisTemplate;
 
