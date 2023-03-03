@@ -112,35 +112,20 @@ public class UserController {
 		JsonProcessingException {
 		String[] token = kakaoService.kakaoLogin(code, response).split(",");
 		HttpHeaders headers = new HttpHeaders();
+
+		System.out.println(token[0]);
+		System.out.println(token[1]);
+
 		headers.setBearerAuth(token[0]);
+		//accessToken 을 cookie에 넣기
+
 		headers.add("Set-Cookie",
-			String.format("Authorization=%s; Max-Age=1000; Path=/page; HttpOnly=false;", "Bearer " + token[0]));
+			String.format("Authorization=%s; Max-Age=1000; Path=/; HttpOnly=ture;", "Bearer " + token[0]));
+		
+		//RefreshToken 을 cookie에 넣기
 		headers.add("Set-Cookie", String.format("rfToken=%s; Max-Age=604800; Path=/; HttpOnly=true;", token[1]));
+
 		headers.setLocation(URI.create("http://localhost:8080/page/indexPage"));
 		return new ResponseEntity<>(headers, HttpStatus.FOUND);
 	}
 }
-
-//카카오 로그인 만들기 참고
-//	//기존 로그인
-// 	@PostMapping("/signin")
-// 	public ResponseEntity<ApiResponse> signIn(@RequestBody LoginRequest loginRequest) {
-// 		String[] token = userService.signIn(loginRequest).split(",");
-// 		HttpHeaders headers = new HttpHeaders();
-// 		headers.setBearerAuth(token[0]);
-// 		headers.add("Set-Cookie", String.format("rfToken=%s; Max-Age=604800; Path=/; HttpOnly=true;", token[1]));
-// 		return ResponseEntity.ok().headers(headers).body(ApiResponse.ok("로그인 완료"));
-// 	}
-//    @GetMapping("/kakao/callback")
-//     public String kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
-//         // code: 카카오 서버로부터 받은 인가 코드
-//
-//         String createToken = kakaoService.kakaoLogin(code, response);
-//
-//         // Cookie 생성 및 직접 브라우저에 Set
-//         Cookie cookie = new Cookie(JwtUtil.AUTHORIZATION_HEADER, createToken.substring(7));
-//         cookie.setPath("/");
-//         response.addCookie(cookie);
-//
-//         return "redirect:/api/shop";
-//     }

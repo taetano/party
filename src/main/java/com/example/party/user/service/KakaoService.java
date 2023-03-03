@@ -103,7 +103,7 @@ public class KakaoService {
 		// HTTP Header 생성
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Authorization", "Bearer " + accessToken);
-		headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
+		headers.add("Content-type", "application/json");
 
 		// HTTP 요청 보내기
 		HttpEntity<MultiValueMap<String, String>> kakaoUserInfoRequest = new HttpEntity<>(headers);
@@ -124,7 +124,6 @@ public class KakaoService {
 		String email = jsonNode.get("kakao_account")
 			.get("email").asText();
 
-		log.info("카카오 사용자 정보: " + id + ", " + nickname + ", " + email);
 		return new KakaoUserInfoDto(id, nickname, email);
 	}
 
@@ -146,6 +145,8 @@ public class KakaoService {
 				// 중복 kakaoId 값이 없는경우 : 카카오로 신규 회원가입
 				// 카카오로그인으로 회원가입 한 경우 비밀번호는 랜덤 UUID 사용 (일반 로그인 폼 통한 로그인 방지)
 				String password = UUID.randomUUID().toString();
+				System.out.println(kakaoEmail);
+				System.out.println(password);
 				String encodedPassword = passwordEncoder.encode(password);
 
 				// 이메일 : 카카오 이메일 사용
