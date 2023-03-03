@@ -27,7 +27,7 @@ function getPartyPostApply() {
                     let title = response['data'][i]['title'];
                     let closeDate = response['data'][i]['closeDate'];
                     let address = response['data'][i]['address'];
-                    let status = response['data'][i]['status']
+                    let status = response['data'][i]['status'];
 
                     let temp_html = `
                             <div id="myAppliyPartyPost" class="mypartypost">
@@ -46,7 +46,7 @@ function getPartyPostApply() {
                     let joinMemberRows = response['data'][i]['joinMember']
                     for (let j = 0; j < joinMemberRows.length; j++) {
                         let applicationId = joinMemberRows[j]['id']
-                        let memberUserId = joinMemberRows[j]['userid']
+                        let memberUserId = joinMemberRows[j]['userId']
                         let memberNickname = joinMemberRows[j]['nickname']
                         let memberStatus = joinMemberRows[j]['status']
                         let noShowCnt = joinMemberRows[j]['noShowCnt']
@@ -67,7 +67,7 @@ function getPartyPostApply() {
                             $('#mypartypost-apply-list').append(partypost_member_notPending_temp_html);
                         }
 
-
+                        console.log("신고되는 유저 " + applicationId + "/" + memberUserId + "/" + memberNickname + "/" + memberStatus + "/" + noShowCnt);
                     }
 
 
