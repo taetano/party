@@ -117,11 +117,11 @@ public class UserController {
 		System.out.println(token[1]);
 
 		headers.setBearerAuth(token[0]);
-		//accessToken 을 cookie에 넣기
 
+		//accessToken 을 cookie에 넣기
 		headers.add("Set-Cookie",
-			String.format("Authorization=%s; Max-Age=1000; Path=/; HttpOnly=ture;", "Bearer " + token[0]));
-		
+			String.format("Authorization=%s; Max-Age=; Path=/page;", "Bearer " + token[0]));
+
 		//RefreshToken 을 cookie에 넣기
 		headers.add("Set-Cookie", String.format("rfToken=%s; Max-Age=604800; Path=/; HttpOnly=true;", token[1]));
 
