@@ -29,6 +29,10 @@ public class Profile {
 		this.id = id;
 	}
 
+	public void setProfileImg(String profileImg) {
+		this.profileImg = profileImg;
+	}
+
 	public Profile(String profileImg, String comment, int participationCnt) {
 		this.profileImg = profileImg;
 		this.comment = comment;

@@ -1,13 +1,18 @@
 package com.example.party.user.service;
 
+import java.io.IOException;
+
+import com.example.party.global.util.S3Uploader;
 import com.example.party.user.entity.Profile;
 import com.example.party.user.type.Status;
+
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.example.party.global.common.ApiResponse;
@@ -41,6 +46,12 @@ public class UserService implements IUserService {
     private final ProfilesRepository profilesRepository;
     private final PasswordEncoder passwordEncoder;
     private final RedisTemplate<String, String> redisTemplate;
+    private final S3Uploader s3Uploader;
+
+    // public UserService(UserRepository userRepository) {
+    //     this.userRepository = userRepository;
+    // }
+
 
     //회원가입
     @Override
@@ -102,13 +113,24 @@ public class UserService implements IUserService {
 
     //프로필 수정
     @Override
-    public ApiResponse updateProfile(ProfilesRequest profilesRequest, User user) {
+    public ApiResponse updateProfile(ProfilesRequest profilesRequest, User user, MultipartFile image)
+        throws IOException {
         Profile profile = user.getProfile();
         profile.updateProfile(profilesRequest.getProfileImg(), profilesRequest.getComment());
         user.updateProfile(profilesRequest); //user 정보 수정
+
+        if(!image.isEmpty()) {
+            String storedFileName = s3Uploader.upload(image,"static");
+            profile.setProfileImg(storedFileName);
+        }
+
         profilesRepository.save(profile);
         userRepository.save(user); //변경한 user 저장
         return ApiResponse.ok("프로필 정보 수정 완료"); //결과값 반환
+
+        // if(!image.isEmpty()) {
+        //     thumbnailUrl = s3Uploader.upload(boardRegisterPostReq.getFileList().get(0), "static");
+        // }
     }
 
     //내 프로필 조회

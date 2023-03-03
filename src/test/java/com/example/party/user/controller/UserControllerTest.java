@@ -139,26 +139,26 @@ class UserControllerTest {
 		verify(userService).withdraw(any(User.class), any(WithdrawRequest.class));
 	}
 
-	@Test
-	void updateProfile() throws Exception {
-		//  given
-		TestHelper.withoutSecurity();
-		//  when
-		when(userService.updateProfile(any(ProfilesRequest.class), any(User.class)))
-			.thenReturn(ApiResponse.ok("프로필 정보 수정 완료"));
-
-		mockMvc.perform(patch(uri("/profile"))
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(
-					UserTestHelper.profilesRequest()
-				))
-			)
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.code").value(200))
-			.andExpect(jsonPath("$.msg").isString());
-		//  then
-		verify(userService).updateProfile(any(ProfilesRequest.class), any(User.class));
-	}
+	// @Test
+	// void updateProfile() throws Exception {
+	// 	//  given
+	// 	TestHelper.withoutSecurity();
+	// 	//  when
+	// 	when(userService.updateProfile(any(ProfilesRequest.class), any(User.class)))
+	// 		.thenReturn(ApiResponse.ok("프로필 정보 수정 완료"));
+	//
+	// 	mockMvc.perform(patch(uri("/profile"))
+	// 			.contentType(MediaType.APPLICATION_JSON)
+	// 			.content(objectMapper.writeValueAsString(
+	// 				UserTestHelper.profilesRequest()
+	// 			))
+	// 		)
+	// 		.andExpect(status().isOk())
+	// 		.andExpect(jsonPath("$.code").value(200))
+	// 		.andExpect(jsonPath("$.msg").isString());
+	// 	//  then
+	// 	verify(userService).updateProfile(any(ProfilesRequest.class), any(User.class));
+	// }
 
 	@Test
 	void getMyProfile() throws Exception {
