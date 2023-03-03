@@ -2,7 +2,6 @@ package com.example.party.user.service;
 
 import com.example.party.global.common.ApiResponse;
 import com.example.party.global.common.DataApiResponse;
-import com.example.party.global.common.ItemApiResponse;
 import com.example.party.global.exception.BadRequestException;
 import com.example.party.global.exception.NotFoundException;
 import com.example.party.partypost.entity.PartyPost;

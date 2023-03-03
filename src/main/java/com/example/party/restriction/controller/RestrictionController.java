@@ -58,7 +58,7 @@ public class RestrictionController {
 	}
 
 	//모집글 신고
-	@PostMapping("/report/partyposts")
+	@PostMapping("/report/party-posts")
 	public ResponseEntity<ApiResponse> createReportPost(@RequestBody ReportPostRequest request,
 		@AuthenticationPrincipal User user) {
 		return ResponseEntity.ok(restrictionService.createReportPost(user, request));

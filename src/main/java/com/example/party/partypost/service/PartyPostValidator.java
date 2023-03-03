@@ -46,19 +46,18 @@ public class PartyPostValidator {
 	//blockedList 검열
 	public List<PartyPostListResponse> filteringPosts(User user, List<PartyPost> partyPostList) {
 		List<Block> blockedList = blockRepository.findAllByBlockerId(user.getId());
-		List<PartyPost> returnPartyPost = new ArrayList<>();
 		if (blockedList.size() > 0) {
 			for (PartyPost post : partyPostList) {
 				for (Block block : blockedList) {
-					if (!post.getUser().getId().equals(block.getBlocked().getId())) {
-						returnPartyPost.add(post);
+					if (post.getUser().getId().equals(block.getBlocked().getId())) {
+						partyPostList.remove(post);
 					}
 				}
 			}
 		} else {
-			returnPartyPost = partyPostList;
+			return partyPostList.stream().map(PartyPostListResponse::new).collect(Collectors.toList());
 		}
-		return returnPartyPost.stream()
+		return partyPostList.stream()
 			.map(PartyPostListResponse::new).collect(Collectors.toList());
 	}
 }

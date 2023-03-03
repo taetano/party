@@ -1,6 +1,7 @@
 package com.example.party.partypost.entity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -16,7 +17,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.example.party.application.entity.Application;
@@ -86,8 +86,6 @@ public class PartyPost extends TimeStamped {
 	private List<ReportPost> reportPosts;
 	@OneToMany(mappedBy = "partyPost")
 	private List<NoShow> noShowReportPosts;
-	@OneToOne(mappedBy = "partyPost", cascade = CascadeType.ALL)
-	private Party party;
 
 	//생성자
 	public PartyPost(User user, PartyPostRequest request, LocalDateTime partyDate, Category category) {
@@ -102,22 +100,8 @@ public class PartyPost extends TimeStamped {
 		this.partyPlace = request.getPartyPlace();
 		this.partyDate = partyDate;
 		this.closeDate = partyDate.minusMinutes(15);
-		this.applications = Collections.emptyList();
+		this.applications = new ArrayList<>();
 		this.active = true;
-		this.party = new Party(this);
-	}
-
-	//test용
-	public void changeParty(Party party) {
-		this.party = party;
-	}
-
-	public void addUser(User user) {
-		this.party.autoAddUser(user);
-	}
-
-	public List<User> getPartyUsers() {
-		return this.party.getUsers();
 	}
 
 	//제목, 상세내용, 카테고리, 주소만 변경 가능 /현재 모임시작시간 & 모임마감시간 & 모집인원 변경 불가능

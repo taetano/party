@@ -23,11 +23,9 @@ import com.example.party.application.repository.ApplicationRepository;
 import com.example.party.global.common.ApiResponse;
 import com.example.party.global.common.DataApiResponse;
 import com.example.party.global.exception.ForbiddenException;
-import com.example.party.partypost.entity.Party;
 import com.example.party.partypost.entity.PartyPost;
 import com.example.party.partypost.exception.PartyPostNotFoundException;
 import com.example.party.partypost.repository.PartyPostRepository;
-import com.example.party.partypost.repository.PartyRepository;
 import com.example.party.user.entity.User;
 import com.example.party.user.repository.UserRepository;
 
@@ -41,8 +39,6 @@ class ApplicationServiceTest {
 	private ApplicationRepository applicationRepository;
 	@Mock
 	private PartyPostRepository partyPostRepository;
-	@Mock
-	private PartyRepository partyRepository;
 	@Mock
 	private UserRepository userRepository;
 	@Mock
@@ -134,13 +130,11 @@ class ApplicationServiceTest {
 		@DisplayName("내가 작성한 모집글에 신청한 하나의 참가신청서를 참가수락한다")
 		void acceptApplication() {
 			//  given
-			Party party = mock(Party.class);
 
 			//  when
 			when(applicationRepository.findById(anyLong())).thenReturn(Optional.of(application));
 			when(application.isSendToMe(anyLong())).thenReturn(true);
 			doNothing().when(applicationValidator).validateApplicationStatus(any(Application.class));
-			when(partyRepository.findByPartyPostId(anyLong())).thenReturn(Optional.of(party));
 			when(application.getPartyPost()).thenReturn(partyPost);
 			when(partyPost.getId()).thenReturn(1L);
 			when(application.getUser()).thenReturn(user);
@@ -150,9 +144,6 @@ class ApplicationServiceTest {
 			//  then
 			verify(applicationRepository).findById(anyLong());
 			verify(application).accept();
-			verify(partyRepository).findByPartyPostId(anyLong());
-			verify(party).autoAddUser(any(User.class));
-			verify(partyRepository).save(any(Party.class));
 			assertThat(result.getCode()).isEqualTo(200);
 			assertThat(result.getMsg()).isEqualTo("참가 신청 수락 완료");
 		}
@@ -298,7 +289,6 @@ class ApplicationServiceTest {
 			verify(application).isSendToMe(anyLong());
 			verify(applicationValidator).validateApplicationStatus(any(Application.class));
 			verify(application).accept();
-			verify(partyRepository).findByPartyPostId(anyLong());
 		}
 
 		@Test
