@@ -4,7 +4,6 @@ import com.example.party.application.entity.Application;
 import com.example.party.application.repository.ApplicationRepository;
 import com.example.party.partypost.dto.PartyPostRequest;
 import com.example.party.partypost.entity.PartyPost;
-import com.example.party.restriction.entity.NoShow;
 import com.example.party.user.dto.SignupRequest;
 import com.example.party.user.entity.User;
 import org.springframework.boot.CommandLineRunner;
@@ -18,7 +17,6 @@ import com.example.party.category.dto.CategoryRequest;
 import com.example.party.category.entity.Category;
 import com.example.party.category.repository.CategoryRepository;
 import com.example.party.partypost.repository.PartyPostRepository;
-import com.example.party.partypost.repository.PartyRepository;
 import com.example.party.restriction.repository.NoShowRepository;
 import com.example.party.user.repository.ProfilesRepository;
 import com.example.party.user.repository.UserRepository;
@@ -37,8 +35,8 @@ public class PartyApplication {
 	@Bean
 	public CommandLineRunner dummyData(
 		CategoryRepository categoryRepository, UserRepository userRepository, PasswordEncoder passwordEncoder,
-		ProfilesRepository profilesRepository, PartyPostRepository partyPostRepository, PartyRepository partyRepository,
-		NoShowRepository noShowRepository, ApplicationRepository applicationRepository
+		ProfilesRepository profilesRepository, PartyPostRepository partyPostRepository, NoShowRepository noShowRepository,
+		ApplicationRepository applicationRepository
 	) {
 		return args -> {
 			CategoryRequest categoryRequest1 = new CategoryRequest("음식");
@@ -114,20 +112,23 @@ public class PartyApplication {
 				 		partyPostRepository.save(partyPost1);
 				 		partyPostRepository.save(partyPost2);
 
-						Application application1 = new Application(user2, partyPost1);
-						Application application2 = new Application(user3, partyPost1);
-						Application application3 = new Application(user4, partyPost1);
-						Application application4 = new Application(user5, partyPost1);
+						Application application1 = new Application(user1, partyPost1);
+						Application application2 = new Application(user2, partyPost1);
+						Application application3 = new Application(user3, partyPost1);
+						Application application4 = new Application(user4, partyPost1);
+						Application application5 = new Application(user5, partyPost1);
 
 						application1.accept();
 						application2.accept();
 						application3.accept();
 						application4.accept();
+						application5.accept();
 
 						applicationRepository.save(application1);
 						applicationRepository.save(application2);
 						applicationRepository.save(application3);
 						applicationRepository.save(application4);
+						applicationRepository.save(application5);
 
 //				 		NoShow noShow1 = new NoShow(user1, user2, partyPost1);
 //				 		NoShow noShow2 = new NoShow(user3, user2, partyPost1);

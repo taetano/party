@@ -1,6 +1,7 @@
 package com.example.party.partypost.entity;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -76,7 +77,7 @@ public class PartyPost extends TimeStamped {
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "user_id")
 	private User user; //작성자
-	@OneToMany(mappedBy = "partyPost", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "partyPost")
 	private List<Application> applications; //이 모집글에 작성된 참가신청
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "category_id")
@@ -99,7 +100,7 @@ public class PartyPost extends TimeStamped {
 		this.partyPlace = request.getPartyPlace();
 		this.partyDate = partyDate;
 		this.closeDate = partyDate.minusMinutes(15);
-		this.applications = Collections.emptyList();
+		this.applications = new ArrayList<>();
 		this.active = true;
 	}
 

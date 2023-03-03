@@ -3,7 +3,6 @@ package com.example.party.application.service;
 import java.util.Collections;
 import java.util.List;
 
-import com.example.party.partypost.entity.Party;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +20,6 @@ import com.example.party.global.exception.ForbiddenException;
 import com.example.party.partypost.entity.PartyPost;
 import com.example.party.partypost.exception.PartyPostNotFoundException;
 import com.example.party.partypost.repository.PartyPostRepository;
-import com.example.party.partypost.repository.PartyRepository;
 import com.example.party.user.entity.User;
 import com.example.party.user.repository.UserRepository;
 
@@ -35,7 +33,6 @@ public class ApplicationService implements IApplicationService {
 	private final ApplicationRepository applicationRepository;
 	private final PartyPostRepository partyPostRepository;
 	private final UserRepository userRepository;
-	private final PartyRepository partyRepository;
 	private final ApplicationValidator applicationValidator;
 
 	//모집글에 참가 신청
@@ -112,14 +109,6 @@ public class ApplicationService implements IApplicationService {
 
 		applicationValidator.validateApplicationStatus(application);
 		application.accept();
-
-		//Accept 된 유저만 넘어감
-		Party party = partyRepository.findByPartyPostId(application.getPartyPost().getId())
-			.orElseThrow(PartyPostNotFoundException::new);
-
-		party.autoAddUser(application.getUser());
-		partyRepository.save(party);
-
 		return ApiResponse.ok("참가 신청 수락 완료");
 	}
 

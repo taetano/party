@@ -51,6 +51,8 @@ public class PartyPostService implements IPartyPostService {
     //모집글 작성
     @Override
     public ApiResponse createPartyPost(User user, PartyPostRequest request) { // 인자 달라질 수 있습니다
+        User user1 = userRepository.findById(user.getId()).orElseThrow(NotFoundException::new);
+
         //예시: "2023-02-16 12:00"
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime partyDate = LocalDateTime.parse(request.getPartyDate(), formatter);
@@ -62,13 +64,16 @@ public class PartyPostService implements IPartyPostService {
 
         //3. PartyPost 객체 생성
         PartyPost partyPost = new PartyPost(user, request, partyDate, category);
+        PartyPost partyPost1 = partyPostRepository.save(partyPost);
 
         // 모집글이 작성될 때 파티장을 Application 에 추가
-        Application application = new Application(user, partyPost);
+        Application application = new Application(user1, partyPost1);
+        application.accept();
+        applicationRepository.save(application);
 
-        //4. repository 에 저장
-        partyPostRepository.save(partyPost);
-        //5. return
+        partyPost1.addApplication(application);
+        user1.addApplication(application);
+
         return ApiResponse.create("모집글 작성 완료");
     }
 

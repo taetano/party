@@ -1,6 +1,5 @@
 package com.example.party.restriction.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -20,7 +19,6 @@ import com.example.party.global.exception.NotFoundException;
 import com.example.party.partypost.entity.PartyPost;
 import com.example.party.partypost.exception.PartyPostNotFoundException;
 import com.example.party.partypost.repository.PartyPostRepository;
-import com.example.party.partypost.repository.PartyRepository;
 import com.example.party.partypost.type.Status;
 import com.example.party.restriction.dto.BlockResponse;
 import com.example.party.restriction.dto.NoShowRequest;
@@ -47,7 +45,6 @@ import lombok.extern.slf4j.Slf4j;
 public class RestrictionService {
 	private final ApplicationRepository applicationRepository;
 	private final UserRepository userRepository;
-	private final PartyRepository partyRepository;
 	private final BlockRepository blockRepository;
 	private final NoShowRepository noShowRepository;
 	private final ReportUserRepository reportUserRepository;
@@ -129,9 +126,9 @@ public class RestrictionService {
 
 	//노쇼 신고
 	public ApiResponse reportNoShow(User user, NoShowRequest request) {
+		isMySelf(user, request.getUserId());
 		int checkByUser = 0;
 		int checkByMe = 0;
-		isMySelf(user, request.getUserId());
 		//신고할 유저
 		User reported = findByUser(request.getUserId());
 		PartyPost partyPost = getPartyPost(request.getPartyPostId());
@@ -151,7 +148,7 @@ public class RestrictionService {
 		if (checkByUser == 0 || checkByMe == 0) {
 			throw new BadRequestException("파티 구성원이 아닙니다");
 		}
-
+		// 이미 신고한 이력이 있는지 체크
 		if (noShowRepository.existsByReporterIdAndReportedIdAndPartyPostId(user.getId(), reported.getId(),
 			partyPost.getId())) {
 			throw new BadRequestException("이미 신고한 유저입니다");
