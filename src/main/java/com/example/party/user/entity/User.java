@@ -80,7 +80,7 @@ public class User extends TimeStamped implements UserDetails {
 	private Set<PartyPost> likePartyPosts;
 
 	public String getProfileImg() {
-		return this.profile.getImg();
+		return this.profile.getProfileImg();
 	}
 
 	public String getComment() {
