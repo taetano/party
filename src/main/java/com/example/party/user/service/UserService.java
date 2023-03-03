@@ -2,7 +2,6 @@ package com.example.party.user.service;
 
 import com.example.party.user.entity.Profile;
 import com.example.party.user.type.Status;
-import org.springframework.cglib.core.Block;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.http.HttpStatus;

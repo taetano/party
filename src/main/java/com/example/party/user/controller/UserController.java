@@ -2,6 +2,7 @@ package com.example.party.user.controller;
 
 import static com.example.party.global.util.JwtProvider.*;
 
+import java.net.URI;
 import java.security.Principal;
 
 import javax.servlet.http.Cookie;
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,7 +30,9 @@ import com.example.party.user.dto.ProfilesRequest;
 import com.example.party.user.dto.SignupRequest;
 import com.example.party.user.dto.WithdrawRequest;
 import com.example.party.user.entity.User;
+import com.example.party.user.service.KakaoService;
 import com.example.party.user.service.UserService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -37,6 +42,7 @@ import lombok.RequiredArgsConstructor;
 public class UserController {
 
 	private final UserService userService;
+	private final KakaoService kakaoService;
 
 	//회원가입
 	@PostMapping("/signup")
@@ -93,9 +99,33 @@ public class UserController {
 		return ResponseEntity.ok(userService.getOtherProfile(userId));
 	}
 
+	//index페이지에서 로그인한 유저인지 확인
 	@GetMapping("/loginCheck")
 	@ResponseBody
 	public Principal loginCheck(@AuthenticationPrincipal Principal principal) {
 		return principal;
+	}
+
+	// 카카오 로그인 (카카오로부터 콜백 받음)
+	@GetMapping("/kakao/callback")
+	public ResponseEntity<Void> kakaoSignIn(@RequestParam String code, HttpServletResponse response) throws
+		JsonProcessingException {
+		String[] token = kakaoService.kakaoLogin(code, response).split(",");
+		HttpHeaders headers = new HttpHeaders();
+
+		System.out.println(token[0]);
+		System.out.println(token[1]);
+
+		headers.setBearerAuth(token[0]);
+
+		//accessToken 을 cookie에 넣기
+		headers.add("Set-Cookie",
+			String.format("Authorization=%s; Max-Age=; Path=/page;", "Bearer " + token[0]));
+
+		//RefreshToken 을 cookie에 넣기
+		headers.add("Set-Cookie", String.format("rfToken=%s; Max-Age=604800; Path=/; HttpOnly=true;", token[1]));
+
+		headers.setLocation(URI.create("http://localhost:8080/page/indexPage"));
+		return new ResponseEntity<>(headers, HttpStatus.FOUND);
 	}
 }
