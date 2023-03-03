@@ -100,10 +100,11 @@ public class PartyApplication {
 				 			.partyPlace("맛집").build();
 
 				 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-				 		LocalDateTime partyDate = LocalDateTime.parse(partyPostRequest1.getPartyDate(), formatter);
+				 		LocalDateTime partyDate1 = LocalDateTime.parse(partyPostRequest1.getPartyDate(), formatter);
+						LocalDateTime partyDate2 = LocalDateTime.parse(partyPostRequest2.getPartyDate(), formatter);
 
-				 		PartyPost partyPost1 = new PartyPost(user1, partyPostRequest1, partyDate, category3);
-				 		PartyPost partyPost2 = new PartyPost(user6, partyPostRequest2, partyDate, category1);
+				 		PartyPost partyPost1 = new PartyPost(user1, partyPostRequest1, partyDate1, category3);
+				 		PartyPost partyPost2 = new PartyPost(user6, partyPostRequest2, partyDate2, category1);
 
 				 		//노쇼 신고시
 						partyPost1.changeStatusNoShow();

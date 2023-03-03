@@ -238,6 +238,7 @@ public class PartyPostService implements IPartyPostService {
 
         //1. user가 신청한 application의 리스트
         List<Application> myApplicationList = applicationRepository.findByUserId(user.getId(), pageable);
+        myApplicationList.removeIf(application -> application.getPartyPost().getUser().equals(user));
 
         //2. partyPost DTO의 LIST 생성
         List<MyPartyPostListResponse> myApplicationDtoList = myApplicationList.stream()
