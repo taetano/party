@@ -6,7 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.party.global.common.ApiResponse;
 import com.example.party.user.dto.LoginRequest;
-import com.example.party.user.dto.ProfilesRequest;
+import com.example.party.user.dto.ProfileRequest;
 import com.example.party.user.dto.SignupRequest;
 import com.example.party.user.dto.WithdrawRequest;
 import com.example.party.user.entity.User;
@@ -26,7 +26,7 @@ public interface IUserService {
 	ApiResponse withdraw(User user, WithdrawRequest withdrawRequest);
 
 	//프로필 수정
-	ApiResponse updateProfile(ProfilesRequest profilesRequest, User user, MultipartFile image) throws IOException;
+	ApiResponse updateProfile(ProfileRequest profileRequest, User user, MultipartFile file) throws IOException;
 
 	//내 프로필 조회
 	ApiResponse getMyProfile(User user);

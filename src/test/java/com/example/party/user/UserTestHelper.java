@@ -1,7 +1,7 @@
 package com.example.party.user;
 
 import com.example.party.user.dto.LoginRequest;
-import com.example.party.user.dto.ProfilesRequest;
+import com.example.party.user.dto.ProfileRequest;
 import com.example.party.user.dto.SignupRequest;
 import com.example.party.user.dto.WithdrawRequest;
 
@@ -25,10 +25,9 @@ public class UserTestHelper {
 		return new WithdrawRequest("password1!");
 	}
 
-	public static ProfilesRequest profilesRequest() {
-		return new ProfilesRequest(
+	public static ProfileRequest profilesRequest() {
+		return new ProfileRequest(
 			"nickname",
-			"010-1234-1234",
 			"",
 			"comment"
 		);

@@ -28,7 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.party.global.common.ApiResponse;
 import com.example.party.user.dto.LoginRequest;
-import com.example.party.user.dto.ProfilesRequest;
+import com.example.party.user.dto.ProfileRequest;
 import com.example.party.user.dto.SignupRequest;
 import com.example.party.user.dto.WithdrawRequest;
 import com.example.party.user.entity.User;
@@ -83,9 +83,9 @@ public class UserController {
 	//프로필 정보 수정
 	@PostMapping("/profile")
 	public ResponseEntity<ApiResponse> updateProfile(
-		@Validated @RequestPart ProfilesRequest profilesRequest,
-		@AuthenticationPrincipal User user, @RequestPart("image") MultipartFile image) throws IOException {
-		return ResponseEntity.ok(userService.updateProfile(profilesRequest, user, image));
+		@Validated @RequestPart(value = "dto") ProfileRequest profileRequest,
+		@AuthenticationPrincipal User user, @RequestPart(value = "file") MultipartFile file) throws IOException {
+		return ResponseEntity.ok(userService.updateProfile(profileRequest, user, file));
 	}
 
 	//내 프로필 조회

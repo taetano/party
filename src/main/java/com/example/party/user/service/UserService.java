@@ -22,7 +22,7 @@ import com.example.party.global.util.JwtProvider;
 import com.example.party.user.dto.LoginRequest;
 import com.example.party.user.dto.MyProfileResponse;
 import com.example.party.user.dto.OtherProfileResponse;
-import com.example.party.user.dto.ProfilesRequest;
+import com.example.party.user.dto.ProfileRequest;
 import com.example.party.user.dto.SignupRequest;
 import com.example.party.user.dto.WithdrawRequest;
 import com.example.party.user.entity.User;
@@ -113,24 +113,20 @@ public class UserService implements IUserService {
 
     //프로필 수정
     @Override
-    public ApiResponse updateProfile(ProfilesRequest profilesRequest, User user, MultipartFile image)
+    public ApiResponse updateProfile(ProfileRequest profileRequest, User user, MultipartFile file)
         throws IOException {
         Profile profile = user.getProfile();
-        profile.updateProfile(profilesRequest.getProfileImg(), profilesRequest.getComment());
-        user.updateProfile(profilesRequest); //user 정보 수정
+        profile.updateProfile(profileRequest.getProfileImg(), profileRequest.getComment());
+        user.updateProfile(profileRequest); //user 정보 수정
 
-        if(!image.isEmpty()) {
-            String storedFileName = s3Uploader.upload(image,"static");
+        if(!file.isEmpty()) {
+            String storedFileName = s3Uploader.upload(file,"static");
             profile.setProfileImg(storedFileName);
         }
 
         profilesRepository.save(profile);
         userRepository.save(user); //변경한 user 저장
         return ApiResponse.ok("프로필 정보 수정 완료"); //결과값 반환
-
-        // if(!image.isEmpty()) {
-        //     thumbnailUrl = s3Uploader.upload(boardRegisterPostReq.getFileList().get(0), "static");
-        // }
     }
 
     //내 프로필 조회

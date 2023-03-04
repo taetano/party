@@ -26,7 +26,6 @@ import com.example.party.TestHelper;
 import com.example.party.global.common.ApiResponse;
 import com.example.party.user.UserTestHelper;
 import com.example.party.user.dto.LoginRequest;
-import com.example.party.user.dto.ProfilesRequest;
 import com.example.party.user.dto.SignupRequest;
 import com.example.party.user.dto.WithdrawRequest;
 import com.example.party.user.entity.User;
