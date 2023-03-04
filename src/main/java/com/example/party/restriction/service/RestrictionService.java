@@ -1,11 +1,12 @@
 package com.example.party.restriction.service;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
+import com.example.party.user.entity.Profile;
+import com.example.party.user.repository.ProfilesRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -43,163 +44,174 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @AllArgsConstructor
 public class RestrictionService {
-	private final ApplicationRepository applicationRepository;
-	private final UserRepository userRepository;
-	private final BlockRepository blockRepository;
-	private final NoShowRepository noShowRepository;
-	private final ReportUserRepository reportUserRepository;
-	private final ReportPostRepository reportPostRepository;
-	private final PartyPostRepository partyPostRepository;
+    private final ApplicationRepository applicationRepository;
+    private final UserRepository userRepository;
+    private final BlockRepository blockRepository;
+    private final NoShowRepository noShowRepository;
+    private final ReportUserRepository reportUserRepository;
+    private final ReportPostRepository reportPostRepository;
+    private final PartyPostRepository partyPostRepository;
+	private final ProfilesRepository profilesRepository;
 
-	public ApiResponse blockUser(User user, Long userId) {
-		User blocked = findByUser(userId);
-		isMySelf(user, userId);
-		List<Block> blocks = getBlocks(user.getId());
-		if (blocks.size() > 0) {
-			for (Block blockIf : blocks) {
-				if (Objects.equals(blockIf.getBlocked().getId(), (blocked.getId()))) {
-					throw new BadRequestException("이미 신고한 유저입니다");
-				}
-			}
-		}
-		Block block = new Block(user, blocked);
-		blockRepository.save(block);
-		return ApiResponse.ok("차단등록 완료");
-	}
+    public ApiResponse blockUser(User user, Long userId) {
+        User blocked = findByUser(userId);
+        isMySelf(user, userId);
+        List<Block> blocks = getBlocks(user.getId());
+        if (blocks.size() > 0) {
+            for (Block blockIf : blocks) {
+                if (Objects.equals(blockIf.getBlocked().getId(), (blocked.getId()))) {
+                    throw new BadRequestException("이미 신고한 유저입니다");
+                }
+            }
+        }
+        Block block = new Block(user, blocked);
+        blockRepository.save(block);
+        return ApiResponse.ok("차단등록 완료");
+    }
 
-	//차단해제
-	public ApiResponse unBlockUser(User user, Long userId) {
-		User blocked = findByUser(userId);
-		isMySelf(user, userId);
-		List<Block> blocks = getBlocks(user.getId());
-		if (!blocks.isEmpty()) {
-			for (Block block : blocks) {
-				if (Objects.equals(block.getBlocked().getId(), (blocked.getId()))) {
-					blockRepository.delete(block);
-					return ApiResponse.ok("차단해제 완료");
-				}
-			}
-		} else {
-			throw new BadRequestException("차단한 유저가 아닙니다");
-		}
-		return ApiResponse.ok("차단해제 완료");
-	}
+    //차단해제
+    public ApiResponse unBlockUser(User user, Long userId) {
+        User blocked = findByUser(userId);
+        isMySelf(user, userId);
+        List<Block> blocks = getBlocks(user.getId());
+        if (!blocks.isEmpty()) {
+            for (Block block : blocks) {
+                if (Objects.equals(block.getBlocked().getId(), (blocked.getId()))) {
+                    blockRepository.delete(block);
+                    return ApiResponse.ok("차단해제 완료");
+                }
+            }
+        } else {
+            throw new BadRequestException("차단한 유저가 아닙니다");
+        }
+        return ApiResponse.ok("차단해제 완료");
+    }
 
-	//차단목록 조회
-	public DataApiResponse<BlockResponse> getBlockedList(int page, User user) {
-		Pageable pageable = PageRequest.of(page, 10);
-		List<Block> blocks = blockRepository.findAllByBlockerId(user.getId(), pageable);
-		if (blocks.size() == 0) {
-			throw new BadRequestException("차단한 유저가 없습니다");
-		}
-		List<BlockResponse> blockResponse = blocks.stream().map(BlockResponse::new).collect(Collectors.toList());
-		return DataApiResponse.ok("조회 성공", blockResponse);
-	}
+    //차단목록 조회
+    public DataApiResponse<BlockResponse> getBlockedList(int page, User user) {
+        Pageable pageable = PageRequest.of(page, 10);
+        List<Block> blocks = blockRepository.findAllByBlockerId(user.getId(), pageable);
+        if (blocks.size() == 0) {
+            throw new BadRequestException("차단한 유저가 없습니다");
+        }
+        List<BlockResponse> blockResponse = blocks.stream().map(BlockResponse::new).collect(Collectors.toList());
+        return DataApiResponse.ok("조회 성공", blockResponse);
+    }
 
-	//유저 신고
-	public ApiResponse createReportUser(User user, ReportUserRequest request) {
-		//신고할 유저
-		isMySelf(user, request.getUserId());
-		User reported = findByUser(request.getUserId());
-		if (reportUserRepository.existsByReporterIdAndReportedId(user.getId(), reported.getId())) {
-			throw new BadRequestException("이미 신고한 유저입니다");
-		}
-		ReportUser reportUser = new ReportUser(user, reported, request);
-		reportUserRepository.save(reportUser);
-		return ApiResponse.ok("유저 신고 완료");
-	}
+    //유저 신고
+    public ApiResponse createReportUser(User user, ReportUserRequest request) {
+        //신고할 유저
+        isMySelf(user, request.getUserId());
+        User reported = findByUser(request.getUserId());
+        if (reportUserRepository.existsByReporterIdAndReportedId(user.getId(), reported.getId())) {
+            throw new BadRequestException("이미 신고한 유저입니다");
+        }
+        ReportUser reportUser = new ReportUser(user, reported, request);
+        reportUserRepository.save(reportUser);
+        return ApiResponse.ok("유저 신고 완료");
+    }
 
-	//모집글 신고
-	public ApiResponse createReportPost(User user, ReportPostRequest request) {
-		PartyPost partyPost = partyPostRepository.findByIdAndActiveIsTrue(request.getPostId())
-			.orElseThrow(PartyPostNotFoundException::new);
-		if (partyPost.getUser().equals(user)) {
-			throw new BadRequestException("본인이 작성한 글입니다");
-		}
-		if (reportPostRepository.existsByUserIdAndPartyPostId(user.getId(), partyPost.getId())) {
-			throw new BadRequestException("이미 신고한 모집글입니다");
-		}
-		ReportPost reportsPost = new ReportPost(user, request, partyPost);
-		reportPostRepository.save(reportsPost);
-		return ApiResponse.ok("모집글 신고 완료");
-	}
+    //모집글 신고
+    public ApiResponse createReportPost(User user, ReportPostRequest request) {
+        PartyPost partyPost = partyPostRepository.findByIdAndActiveIsTrue(request.getPostId())
+                .orElseThrow(PartyPostNotFoundException::new);
+        if (partyPost.getUser().equals(user)) {
+            throw new BadRequestException("본인이 작성한 글입니다");
+        }
+        if (reportPostRepository.existsByUserIdAndPartyPostId(user.getId(), partyPost.getId())) {
+            throw new BadRequestException("이미 신고한 모집글입니다");
+        }
+        ReportPost reportsPost = new ReportPost(user, request, partyPost);
+        reportPostRepository.save(reportsPost);
+        return ApiResponse.ok("모집글 신고 완료");
+    }
 
-	//노쇼 신고
-	public ApiResponse reportNoShow(User user, NoShowRequest request) {
-		isMySelf(user, request.getUserId());
-		int checkByUser = 0;
-		int checkByMe = 0;
-		//신고할 유저
-		User reported = findByUser(request.getUserId());
-		PartyPost partyPost = getPartyPost(request.getPartyPostId());
-		if (!partyPost.getStatus().equals(Status.NO_SHOW_REPORTING)) {
-			throw new BadRequestException("노쇼 신고 기간이 만료되었습니다");
-		}
-		// 파티에 참여한 유저와 신고할 유저, 로그인한 유저를 비교함
-		List<Application> applicationList = partyPost.getApplications();
-		for (Application application : applicationList) {
-			if (application.getUser().equals(reported)) {
-				checkByUser ++;
-			}
-			if (application.getUser().equals(user)) {
-				checkByMe ++;
-			}
-		}
-		if (checkByUser == 0 || checkByMe == 0) {
-			throw new BadRequestException("파티 구성원이 아닙니다");
-		}
-		// 이미 신고한 이력이 있는지 체크
-		if (noShowRepository.existsByReporterIdAndReportedIdAndPartyPostId(user.getId(), reported.getId(),
-			partyPost.getId())) {
-			throw new BadRequestException("이미 신고한 유저입니다");
-		}
-		NoShow noShow = new NoShow(user, reported, partyPost);
-		noShow.PlusNoShowReportCnt();
-		noShowRepository.save(noShow);
-		return ApiResponse.ok("노쇼 신고 완료");
-	}
+    //노쇼 신고
+    public ApiResponse reportNoShow(User user, NoShowRequest request) {
+        isMySelf(user, request.getUserId());
+        int checkByUser = 0;
+        int checkByMe = 0;
+        //신고할 유저
+        User reported = findByUser(request.getUserId());
+        PartyPost partyPost = getPartyPost(request.getPartyPostId());
+        if (!partyPost.getStatus().equals(Status.NO_SHOW_REPORTING)) {
+            throw new BadRequestException("노쇼 신고 기간이 만료되었습니다");
+        }
+        // 파티에 참여한 유저와 신고할 유저, 로그인한 유저를 비교함
+        List<Application> applicationList = partyPost.getApplications();
+        for (Application application : applicationList) {
+            if (application.getUser().equals(reported)) {
+                checkByUser++;
+            }
+            if (application.getUser().equals(user)) {
+                checkByMe++;
+            }
+        }
+        if (checkByUser == 0 || checkByMe == 0) {
+            throw new BadRequestException("파티 구성원이 아닙니다");
+        }
+        // 이미 신고한 이력이 있는지 체크
+        if (noShowRepository.existsByReporterIdAndReportedIdAndPartyPostId(user.getId(), reported.getId(),
+                partyPost.getId())) {
+            throw new BadRequestException("이미 신고한 유저입니다");
+        }
+        NoShow noShow = new NoShow(user, reported, partyPost);
+        noShowRepository.save(noShow);
+        return ApiResponse.ok("노쇼 신고 완료");
+    }
 
-	//status.END 상태 파티글에 대한 노쇼 신고 처리
-	@Transactional
-	public void checkingNoShow(List<PartyPost> posts) {
-		for (PartyPost partyPost : posts) {
-			partyPost.ChangeStatusEnd();
+    //status.END 상태 파티글에 대한 노쇼 신고 처리
+    @Transactional
+    public void checkingNoShow(List<PartyPost> posts) {
+        for (PartyPost partyPost : posts) { // postId = 1
+            partyPost.ChangeStatusEnd();
+            int joinUserSize = partyPost.getApplications().size();
 
-			// 파티 유저 size 를 알기 위해
-			List<Application> users = partyPost.getApplications();
+            List<NoShow> noShowList = noShowRepository.findAllByPartyPostId(partyPost.getId());
 
-			List<NoShow> noShowList = noShowRepository.findAllByPartyPostId(partyPost.getId());
-			for (NoShow noShowIf : noShowList) {
-				if (noShowIf.getNoShowReportCnt() >= Math.round(users.size() / 2)) {
-					noShowIf.getReported().getProfile().plusNoShowCnt();
-				}
-			}
-		}
-		//		return ApiResponse.ok("노쇼 처리 완료");
-	}
+			// reportId 별로 NoShow 개체를 그룹화합니다.
+            Map<Long, List<NoShow>> reportedNoShowMap = new HashMap<>();
+            for (NoShow noShow : noShowList) {
+                Long reportedId = noShow.getReported().getId();
+				//reportId 가 검색되고 관련된 NoShow 개체 목록이 검색되고 보고된 Id가 reportedNoShowMap 에 추가
+                reportedNoShowMap.computeIfAbsent(reportedId, k -> new ArrayList<>()).add(noShow);
+            }
 
-	//private
-	private User findByUser(Long userId) {
-		return userRepository.findById(userId)
-			.orElseThrow(UserNotFoundException::new);
-	}
+            for (Map.Entry<Long, List<NoShow>> entry : reportedNoShowMap.entrySet()) {
+                Long reportedId = entry.getKey();
+                List<NoShow> reportedNoShowList = entry.getValue();
+                int noShowReportCnt = reportedNoShowList.size();
 
-	private void isMySelf(User users, Long blockedId) {
-		if (users.getId().equals(blockedId))
-			throw new BadRequestException("본인 아이디입니다");
-	}
+                if (noShowReportCnt >= Math.round(joinUserSize / 2.0)) {
+                    User reported = findByUser(reportedId);
+                    reported.getProfile().plusNoShowCnt();
+                }
+            }
+        }
+    }
 
-	private List<Block> getBlocks(Long userId) {
-		return blockRepository.findAllByBlockerId(userId);
-	}
+    //private
+    private User findByUser(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
+    }
 
-	private PartyPost getPartyPost(Long postId) {
-		return partyPostRepository.findById(postId)
-			.orElseThrow(NotFoundException::new);
-	}
+    private void isMySelf(User users, Long blockedId) {
+        if (users.getId().equals(blockedId))
+            throw new BadRequestException("본인 아이디입니다");
+    }
 
-	private Application getApplication(Long applicationId) {
-		return applicationRepository.findById(applicationId).orElseThrow(NotFoundException::new);
-	}
+    private List<Block> getBlocks(Long userId) {
+        return blockRepository.findAllByBlockerId(userId);
+    }
+
+    private PartyPost getPartyPost(Long postId) {
+        return partyPostRepository.findById(postId)
+                .orElseThrow(NotFoundException::new);
+    }
+
+    private Application getApplication(Long applicationId) {
+        return applicationRepository.findById(applicationId).orElseThrow(NotFoundException::new);
+    }
 }
 
