@@ -1,4 +1,4 @@
-package com.example.party.fixture;
+// package com.example.party.fixture;
 
 // public class PartyPostFixture {
 // 	public static PartyPost partyPost() {
