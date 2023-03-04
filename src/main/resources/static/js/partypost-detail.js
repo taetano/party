@@ -36,7 +36,7 @@ function get_partypost(postId) {
             let categoryId = responseData['categoryId']
             let categoryName = responseData['categoryName']
             let status = responseData['status']
-            let acceptedMember = responseData['acceptedMember'] + 1
+            let acceptedMember = responseData['acceptedMember']
             let maxMember = responseData['maxMember']
             let partyDate = responseData['partyDate']
             let closeDate = responseData['closeDate']

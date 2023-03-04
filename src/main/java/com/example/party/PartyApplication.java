@@ -4,6 +4,7 @@ import com.example.party.application.entity.Application;
 import com.example.party.application.repository.ApplicationRepository;
 import com.example.party.partypost.dto.PartyPostRequest;
 import com.example.party.partypost.entity.PartyPost;
+import com.example.party.restriction.entity.NoShow;
 import com.example.party.user.dto.SignupRequest;
 import com.example.party.user.entity.User;
 import org.springframework.boot.CommandLineRunner;
@@ -93,7 +94,7 @@ public class PartyApplication {
 //				 		userRepository.save(user6);
 //
 //				 		PartyPostRequest partyPostRequest1 = PartyPostRequest.builder().title("LOL 자유랭크").content("다이아 이상")
-//				 			.categoryId((long)3).maxMember((byte)5).partyDate("2023-03-03 18:40").partyAddress("onLine")
+//				 			.categoryId((long)3).maxMember((byte)5).partyDate("2023-03-03 23:40").partyAddress("onLine")
 //				 			.partyPlace("onLine").build();
 //				 		PartyPostRequest partyPostRequest2 = PartyPostRequest.builder().title("맛있는 녀석들").content("햄최 3개 이상")
 //				 			.categoryId((long)1).maxMember((byte)4).partyDate("2023-03-25 15:40").partyAddress("전국")
@@ -130,22 +131,16 @@ public class PartyApplication {
 //						applicationRepository.save(application3);
 //						applicationRepository.save(application4);
 //						applicationRepository.save(application5);
-
+//
 //				 		NoShow noShow1 = new NoShow(user1, user2, partyPost1);
 //				 		NoShow noShow2 = new NoShow(user3, user2, partyPost1);
 //				 		NoShow noShow3 = new NoShow(user4, user2, partyPost1);
 //				 		NoShow noShow4 = new NoShow(user5, user2, partyPost1);
 //
-//				 		noShow1.PlusNoShowReportCnt();
-//				 		noShow2.PlusNoShowReportCnt();
-//				 		noShow3.PlusNoShowReportCnt();
-//				 		noShow4.PlusNoShowReportCnt();
-//
 //				 		noShowRepository.save(noShow1);
 //				 		noShowRepository.save(noShow2);
 //				 		noShowRepository.save(noShow3);
 //				 		noShowRepository.save(noShow4);
-
 		};
 	}
 }

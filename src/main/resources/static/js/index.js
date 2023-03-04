@@ -81,7 +81,7 @@ function getHotPartyPost() {
                 let title = obj['title']
                 let partyOwner = obj['partyOwner']
                 let status = obj['status']
-                let acceptedMember = obj['acceptedMember'] + 1
+                let acceptedMember = obj['acceptedMember']
                 let maxMember = obj['maxMember']
                 let partyDate = new Date(obj['partyDate'])
                 let closeDate = new Date(obj['closeDate'])
@@ -138,7 +138,7 @@ function getNearPartyPost() {
                 let title = obj['title']
                 let partyOwner = obj['partyOwner']
                 let status = obj['status']
-                let acceptedMember = obj['acceptedMember'] + 1
+                let acceptedMember = obj['acceptedMember']
                 let maxMember = obj['maxMember']
                 let partyDate = new Date(obj['partyDate'])
                 let closeDate = new Date(obj['closeDate'])

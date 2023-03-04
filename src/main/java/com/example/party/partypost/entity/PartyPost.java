@@ -66,7 +66,7 @@ public class PartyPost extends TimeStamped {
 
 	// enum
 	@Enumerated(EnumType.STRING)
-	@Column(name = "status", nullable = false, columnDefinition = "ENUM('FINDING', 'FOUND', 'NO_SHOW_REPORTING', 'END')")
+	@Column(name = "status", nullable = false, columnDefinition = "ENUM('FINDING', 'FOUND', 'NO_SHOW_REPORTING', 'PROCESSING', 'END')")
 	private Status status; // 모집상태 FINDING 모집중 / FOUND 모집완료 / NO_SHOW_REPORTING 노쇼신고가능 / END 모임종료 ( 상세설명은 type.Status 에서 확인가능)
 	@Column(name = "close_date", nullable = false)
 	private LocalDateTime closeDate; //마감시간 (partyDate 에서 15분전)
@@ -162,8 +162,8 @@ public class PartyPost extends TimeStamped {
 	}
 
 	public void increaseAcceptedCnt() {
-		byte curMember = (byte)(this.acceptedMember + 1);
-		if (curMember + 1 == this.maxMember) {
+		byte curMember = (byte)(this.acceptedMember+1);
+		if (curMember  == this.maxMember) {
 			this.status = Status.FOUND;
 			isFullParty();
 		}
