@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.example.party.application.dto.ApplicationResponse;
 import com.example.party.global.exception.NotFoundException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -246,6 +247,13 @@ public class PartyPostService implements IPartyPostService {
                 .map(Application::getPartyPost)
                 .map(MyPartyPostListResponse::new).collect(Collectors.toList());
 
+        for (MyPartyPostListResponse users : myApplicationDtoList ) {
+            for (ApplicationResponse joinMember : users.getJoinMember()) {
+                if (joinMember.getUserId().equals(user.getId())) {
+                    users.removeJoinMember(joinMember);
+                }
+            }
+        }
         //3. DataResponseDto 생성 후 return
         return DataApiResponse.ok("내가 참가한 모집글 조회 완료", myApplicationDtoList);
     }

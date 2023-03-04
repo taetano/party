@@ -20,7 +20,7 @@ public class ReportUser extends TimeStamped {
 	@Column(name = "id")
 	private Long id;
 	@Enumerated(EnumType.STRING)
-	@Column(nullable = false)
+	@Column(name = "reason", nullable = false, columnDefinition = "ENUM('SPAM', 'HARASSMENT', 'INAPPROPRIATE_CONTENT', 'ETC')")
 	private ReportReason reason;
 	@Column(nullable = false)
 	private String detailReason;
