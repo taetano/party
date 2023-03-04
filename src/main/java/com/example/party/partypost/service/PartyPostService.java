@@ -250,7 +250,7 @@ public class PartyPostService implements IPartyPostService {
         for (MyPartyPostListResponse users : myApplicationDtoList ) {
             for (ApplicationResponse joinMember : users.getJoinMember()) {
                 if (joinMember.getUserId().equals(user.getId())) {
-                    users.removeIsMine(joinMember);
+                    users.removeJoinMember(joinMember);
                 }
             }
         }

@@ -36,7 +36,7 @@ public class MyPartyPostListResponse {
 			ApplicationResponse::new).collect(Collectors.toList());
 	}
 
-	public void removeIsMine(ApplicationResponse applicationResponse) {
+	public void removeJoinMember(ApplicationResponse applicationResponse) {
 		this.joinMember.remove(applicationResponse);
 	}
 }
