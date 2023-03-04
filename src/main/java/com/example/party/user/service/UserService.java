@@ -111,7 +111,7 @@ public class UserService implements IUserService {
         return ApiResponse.ok("회원탈퇴 완료");
     }
 
-    //프로필 수정
+    //프로필 정보 수정
     @Override
     public ApiResponse updateProfile(ProfileRequest profileRequest, User user, MultipartFile file)
         throws IOException {

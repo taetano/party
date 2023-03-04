@@ -55,13 +55,6 @@ function get_profile() {
                 <span id="profile-email"></span>
             </div>
                 `
-            //상태메세지가 없을 때
-            if (comment == null) {
-                comment = "상태메세지가 없습니다"
-            }
-
-            // //프로필 이미지가 없을 때
-            // profileUrl = (profileUrl ==null)? "../static/css/image/person.png":profileUrl;// 기본 프로필 이미지
 
             console.log("프로필정보" + nickname, comment, profileImg, email)
 
@@ -69,31 +62,6 @@ function get_profile() {
         }
     });
 }
-
-// //프로필 수정하기
-// function edit_profile() {
-//     $.ajax({
-//         type: "POST",
-//         url: `/api/users/profile`,
-//         headers: {
-//             "Authorization": getCookieValue('Authorization')
-//         },
-//         contentType: "application/json; charset=UTF-8",
-//         data: JSON.stringify({
-//             "profileImg": $('#profileImg').val(),
-//             "nickname": $('#nickname').val(),
-//             "comment": $('#comment').val(),
-//     }),
-//         success: function (response) {
-//             console.log(response);
-//             alert('성공적으로 수정되었습니다.');
-//             window.location.reload();
-//         },
-//         error(error, status, request) {
-//             console.error(error);
-//         }
-//     });
-// }
 
 //프로필 수정하기
 

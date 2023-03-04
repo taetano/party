@@ -13,5 +13,4 @@ public class ProfileRequest {
 	private String nickname; //user
 	private String profileImg; //profile
 	private String comment; //profile
-
 }

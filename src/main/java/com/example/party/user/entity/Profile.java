@@ -2,11 +2,11 @@ package com.example.party.user.entity;
 
 import javax.persistence.*;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "Profile")
 public class Profile {
@@ -33,11 +33,11 @@ public class Profile {
 		this.profileImg = profileImg;
 	}
 
-	public Profile(String profileImg, String comment, int participationCnt) {
-		this.profileImg = profileImg;
-		this.comment = comment;
+	public Profile() {
+		this.profileImg = "https://letsparty.s3.ap-northeast-2.amazonaws.com/static/unknown_user.png";
+		this.comment = "상태메세지를 변경해주세요.";
 		this.noShowCnt = 0;
-		this.participationCnt = participationCnt;
+		this.participationCnt = 0;
 		this.adminReportCnt = 0;
 	}
 

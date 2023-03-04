@@ -25,7 +25,7 @@ public interface IUserService {
 	//회원탈퇴
 	ApiResponse withdraw(User user, WithdrawRequest withdrawRequest);
 
-	//프로필 수정
+	//프로필 정보 수정
 	ApiResponse updateProfile(ProfileRequest profileRequest, User user, MultipartFile file) throws IOException;
 
 	//내 프로필 조회

@@ -65,6 +65,14 @@
         a {
             color: #BBBBBB;
         }
+
+        footer {
+            background-color: #f8f8f8;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
     </style>
 </head>
 <body>
@@ -92,7 +100,6 @@
     $(() => {
         $("#submit-btn").on("click", (ev) => login(ev))
     })
-
 
     function login(ev) {
 
@@ -132,9 +139,11 @@
             alert("로그인에 문제가 발생했습니다. 증상이 계속되는 경우 관리자에 문의주세요.")
         })
     }
-
-
 </script>
-
+<footer>
+    <div class="bottomlogo">
+        <a href="/page/indexPage">Let's PARTY</a>
+    </div>
+</footer>
 </body>
 </html>
