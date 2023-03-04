@@ -35,4 +35,8 @@ public class MyPartyPostListResponse {
 		this.joinMember = partyPost.getApplications().stream().map(
 			ApplicationResponse::new).collect(Collectors.toList());
 	}
+
+	public void removeIsMine(ApplicationResponse applicationResponse) {
+		this.joinMember.remove(applicationResponse);
+	}
 }
