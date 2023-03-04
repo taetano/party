@@ -1,8 +1,4 @@
-package com.example.party.fixture;
-
-import com.example.party.user.entity.User;
-import com.example.party.user.type.Status;
-import com.example.party.user.type.UserRole;
+// package com.example.party.fixture;
 
 // public class UserFixture {
 // 	public static User writer() {
