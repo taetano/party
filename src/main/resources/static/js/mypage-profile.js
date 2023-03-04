@@ -39,32 +39,20 @@ function get_profile() {
                 
             <!-- 여기부터 본문 -->
             <div class="mypage-info">
-                <div class="profile-profileImg">
-                    <span id="profile-profileImg">프로필 이미지: ${profileImg}</span>
-                    <!-- 유저 프로필 이미지 들어갈 곳 -->
-<!--                    <img src="../static/css/image/person.png" width=100 height=80>-->
-
-<!--            //프로필 이미지가 없을 때-->
-<!--            profileUrl = (profileUrl ==null)? "../static/css/image/person.png":profileUrl;// 기본 프로필 이미지-->
-
-                </div>
-                <div class="profile-nickname">
-                    <!-- 유저 이름 들어갈 곳 -->
-                    <span id="profile-nickname">유저 닉네임: ${nickname}</span>
-                    <br>
-                    <!-- 상태메세지 들어갈 곳 -->
-                    <span id="profile-comment">상태메세지: ${comment}</span>
-                    
-<!--                    //소개글이 없을git p 때-->
-<!--                    if (comment == null) {-->
-<!--                        comment = "소개글이 없습니다"-->
-<!--                    }-->
-            
-                </div>
-                <div>이메일: ${email}</div>
-                <!-- 유저 이메일 들어갈 곳 -->
-                <span id="profile-email"></span>
+              <div class="profile-profileImg">
+                <p><strong>프로필 이미지: </strong></p>
+                <img src="${profileImg}" id="profile-profileImg" width=100 height=80>
+              </div>
+              <div class="profile-nickname">
+                <!-- 유저 닉네임 들어갈 곳 -->
+                <span id="profile-nickname">유저 닉네임: ${nickname}</span>
                 <br>
+                <!-- 상태메세지 들어갈 곳 -->
+                <span id="profile-comment">상태메세지: ${comment}</span>
+              </div>
+              <div>이메일: ${email}</div>
+              <!-- 유저 이메일 들어갈 곳 -->
+                <span id="profile-email"></span>
             </div>
                 `
 
@@ -76,26 +64,36 @@ function get_profile() {
 }
 
 //프로필 수정하기
-function edit_profile() {
+
+$('#btn-save').on('click', editProfile);
+
+function editProfile() {
+    var file = $('#img')[0].files[0];
+    console.log(file)
+    var data = {"profileImg": $('#profileImg').val(),
+                "nickname": $('#nickname').val(),
+                "comment": $('#comment').val()
+                };
+    console.log(data)
+    var formData = new FormData();
+    formData.append('file', file);
+    formData.append('dto', new Blob([JSON.stringify(data)] , {type: "application/json"}));
+    console.log(formData)
+
     $.ajax({
-        type: "PATCH",
+        type: "POST",
         url: `/api/users/profile`,
         headers: {
             "Authorization": getCookieValue('Authorization')
         },
-        contentType: "application/json; charset=UTF-8",
-        data: JSON.stringify({
-            "profileImg": $('#profileImg').val(),
-            "nickname": $('#nickname').val(),
-            "comment": $('#comment').val(),
-    }),
-        success: function (response) {
-            console.log(response);
-            alert('성공적으로 수정되었습니다.');
-            window.location.reload();
-        },
-        error(error, status, request) {
-            console.error(error);
-        }
-    });
+        data: formData,
+        processData: false,
+        contentType: false
+    }).done(function (file) {
+        $('#result-image').attr("src", file);
+        alert("수정완료");
+        window.location.href = `/page/myPage/profile`
+    }).fail(function (error) {
+        alert("오류가 발생했습니다.");
+    })
 }

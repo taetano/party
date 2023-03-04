@@ -65,6 +65,14 @@
         a {
             color: #BBBBBB;
         }
+
+        footer {
+            background-color: #f8f8f8;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
     </style>
 </head>
 <body>
@@ -85,14 +93,13 @@
             onclick="location.href='https://kauth.kakao.com/oauth/authorize?client_id=94293d41f51b73a7ba87db77967da2b3&redirect_uri=http://localhost:8080/api/users/kakao/callback&response_type=code'">
         카카오로 로그인하기
     </button>
-    <p><a href="#">회원가입</a></p>
+    <p><a href="/page/signup">회원가입</a></p>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script>
     $(() => {
         $("#submit-btn").on("click", (ev) => login(ev))
     })
-
 
     function login(ev) {
 
@@ -132,9 +139,11 @@
             alert("로그인에 문제가 발생했습니다. 증상이 계속되는 경우 관리자에 문의주세요.")
         })
     }
-
-
 </script>
-
+<footer>
+    <div class="bottomlogo">
+        <a href="/page/indexPage">Let's PARTY</a>
+    </div>
+</footer>
 </body>
 </html>

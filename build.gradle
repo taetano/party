@@ -47,6 +47,10 @@ dependencies {
 
     // Redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+    //Spring Cloud Starter AWS
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+    implementation group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.12.410'
 }
 
 jar {

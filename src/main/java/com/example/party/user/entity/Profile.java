@@ -2,11 +2,11 @@ package com.example.party.user.entity;
 
 import javax.persistence.*;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "Profile")
 public class Profile {
@@ -14,8 +14,8 @@ public class Profile {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
-	@Column(name = "img")
-	private String img;
+	@Column(name = "profile_img")
+	private String profileImg;
 	@Column(name = "comment")
 	private String comment;
 	@Column(name = "no_show_cnt", nullable = false)
@@ -29,16 +29,20 @@ public class Profile {
 		this.id = id;
 	}
 
-	public Profile(String img, String comment, int participationCnt) {
-		this.img = img;
-		this.comment = comment;
+	public void setProfileImg(String profileImg) {
+		this.profileImg = profileImg;
+	}
+
+	public Profile() {
+		this.profileImg = "https://letsparty.s3.ap-northeast-2.amazonaws.com/static/unknown_user.png";
+		this.comment = "상태메세지를 변경해주세요.";
 		this.noShowCnt = 0;
-		this.participationCnt = participationCnt;
+		this.participationCnt = 0;
 		this.adminReportCnt = 0;
 	}
 
-	public void updateProfile(String img, String comment) {
-		this.img = img;
+	public void updateProfile(String profileImg, String comment) {
+		this.profileImg = profileImg;
 		this.comment = comment;
 	}
 
