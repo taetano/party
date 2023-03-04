@@ -91,7 +91,9 @@ function editProfile() {
         contentType: false
     }).done(function (file) {
         $('#result-image').attr("src", file);
+        alert("수정완료");
+        window.location.href = `/page/myPage/profile`
     }).fail(function (error) {
-        alert(error);
+        alert("오류가 발생했습니다.");
     })
 }
