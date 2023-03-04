@@ -27,21 +27,10 @@ public class NoShow extends TimeStamped {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "partyPost_id")
 	private PartyPost partyPost;
-	@Column(name = "no_show_cnt")
-	private int noShowReportCnt;
 
 	public NoShow(User reporter, User reported, PartyPost partyPost) {
 		this.reporter = reporter;
 		this.reported = reported;
 		this.partyPost = partyPost;
-		this.noShowReportCnt = 0;
-	}
-
-	public int getNoShowReportCnt() {
-		return noShowReportCnt;
-	}
-
-	public void PlusNoShowReportCnt() {
-		this.noShowReportCnt+=1;
 	}
 }
