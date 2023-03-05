@@ -8564,7 +8564,7 @@ textarea.form-control-lg {
 }
 
 .rounded-circle {
-    border-radius: 50% !important;
+    border-radius: 100% !important;
 }
 
 .rounded-pill {
@@ -12300,4 +12300,25 @@ header.masthead .bg-circle-4 {
 
 .dataTable-table {
     border-collapse: collapse;
+}
+
+.circle {
+    width: 70px;
+    height: 70px;
+    border: 2px solid gray;
+    border-radius: 100%;
+}
+
+.circle-joinmember {
+    width: 50px;
+    height: 50px;
+    border: 2px solid gray;
+    border-radius: 100%;
+}
+
+.circle-profile {
+    width: 200px;
+    height: 200px;
+    border: 2px solid gray;
+    border-radius: 100%;
 }

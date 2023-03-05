@@ -41,18 +41,19 @@ function get_profile() {
             <div class="mypage-info">
               <div class="profile-profileImg">
                 <p><strong>프로필 이미지: </strong></p>
-                <img src="${profileImg}" id="profile-profileImg" width=100 height=80>
+                <img class="circle-profile" src="${profileImg}">
               </div>
-              <div class="profile-nickname">
+              <div>
                 <!-- 유저 닉네임 들어갈 곳 -->
                 <span id="profile-nickname">유저 닉네임: ${nickname}</span>
                 <br>
                 <!-- 상태메세지 들어갈 곳 -->
                 <span id="profile-comment">상태메세지: ${comment}</span>
-              </div>
-              <div>이메일: ${email}</div>
-              <!-- 유저 이메일 들어갈 곳 -->
+                <br>
+                <span>이메일: ${email}</span>
+                  <!-- 유저 이메일 들어갈 곳 -->
                 <span id="profile-email"></span>
+               </div>
             </div>
                 `
 
