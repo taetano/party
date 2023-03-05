@@ -7939,7 +7939,7 @@ textarea.form-control-lg {
 
 .mt-3 {
     margin-top: 1rem !important;
-}
+}일
 
 .mt-4 {
     margin-top: 1.5rem !important;
@@ -7947,6 +7947,10 @@ textarea.form-control-lg {
 
 .mt-5 {
     margin-top: 3rem !important;
+}
+
+.mt-6 {
+    margin-top: 2.5rem !important;
 }
 
 .mt-auto {
@@ -11925,8 +11929,8 @@ html {
 
 .btn-xl {
     text-transform: uppercase;
-    padding: 1.5rem 3rem;
-    font-size: 0.9rem;
+    padding: 1.2rem 2.2rem;
+    font-size: 1rem;
     font-weight: 700;
     letter-spacing: 0.1rem;
 }
@@ -12321,4 +12325,141 @@ header.masthead .bg-circle-4 {
     height: 200px;
     border: 2px solid gray;
     border-radius: 100%;
+}
+
+.search-text {
+    text-align: center;
+    width: 70%;
+    padding: 1rem 2rem;
+    margin: 1rem 0;
+    box-sizing: border-box;
+    border: none;
+    border-radius: 20px;
+    background-color: #EEEEEE;
+    color: #33312E;
+    font-size: 1.2rem;
+    outline: none;
+}
+
+.write-btn {
+    display: inline-block;
+    line-height: 1.5;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    padding: 0.5rem 2rem;
+    border-radius: 75rem;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    color: #fff;
+    background-color: #ff6a00;
+    border-color: #ff6a00;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.1rem;
+}
+
+.write-btn:hover {
+    color: #fff;
+    background-color: #ff8026;
+    border-color: #ff791a;
+}
+
+.search-btn {
+    display: inline-block;
+    line-height: 1.5;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border-radius: 1rem;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    color: #fff;
+    background-color: #ff6a00;
+    border-color: #ff6a00;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.1rem;
+    padding: 1.1rem 2.1rem;
+    font-size: 1.1rem;
+}
+
+.search-btn:hover {
+    color: #fff;
+    background-color: #ff8026;
+    border-color: #ff791a;
+}
+
+.basic-btn {
+    display: inline-block;
+    line-height: 1.5;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border-radius: 1rem;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    color: #fff;
+    background-color: #ff6a00;
+    border-color: #ff6a00;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.1rem;
+    padding: 0.5rem 1.5rem;
+    font-size: 1.1rem;
+}
+
+.basic-btn:hover {
+    color: #fff;
+    background-color: #ff8026;
+    border-color: #ff791a;
+}
+
+.cancel-btn {
+    display: inline-block;
+    line-height: 1.5;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border-radius: 1rem;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.1rem;
+    padding: 0.5rem 1.5rem;
+    font-size: 1.1rem;
+}
+
+.test {
+    margin: 50%;
+}
+
+.outer {
+    text-align: center;
+}
+
+.inner {
+    margin: 0 auto;
+}
+
+.outer2 {
+    display: flex;
 }

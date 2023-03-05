@@ -25,14 +25,9 @@
 <h1>모집글 작성</h1>
 
 <label for="title">모집글 제목</label>
-<input type="text" id="title" name="title" required>
-<br>
-
-<br>
+<input type="text" id="title" name="title" class="mb-4" required>
 <div class="map_wrap">
     <div id="map" style="width:70%;height:100%;position:relative;overflow:hidden;"></div>
-
-
     <div id="menu_wrap" class="bg_white">
         <div class="option">
             <div>
@@ -49,7 +44,7 @@
 </div>
 
 <label for="place-name">모임 장소</label>
-<input type="text" id="place-name" name="place-name" width="200px" readonly required>
+<input type="text" id="place-name" name="place-name" width="200px"  readonly required>
 <br>
 
 <label for="place-address">모임장소 상세주소</label>
@@ -75,7 +70,7 @@
 <br>
 
 <label for="time">시간</label>
-<input type="text" id="time" name="time" required>
+<input type="text" id="time" name="time" class="mb-2" required>
 
 <br>
 
@@ -83,8 +78,8 @@
 <textarea id="content" name="content" rows="10" cols="50" required></textarea>
 <br>
 
-<button type="button" onclick="cancel()">취소</button>
-<button type="submit" onclick="sendPartyPost()">작성</button>
+<button type="button" class="cancel-btn mb-4 mt-2" onclick="cancel()">취소</button>
+<button type="submit" class="basic-btn mb-4 mt-2 " onclick="sendPartyPost()">작성</button>
 
 <script>
     <!--    카카오 지도 관련 스크립트 -->

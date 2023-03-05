@@ -83,8 +83,8 @@ function getHotPartyPost() {
                 let status = obj['status']
                 let acceptedMember = obj['acceptedMember']
                 let maxMember = obj['maxMember']
-                let partyDate = new Date(obj['partyDate'])
-                let closeDate = new Date(obj['closeDate'])
+                let partyDate = obj['partyDate']
+                let closeDate = obj['closeDate']
                 let partyAddress = obj['partyAddress']
                 let partyPlace = obj['partyPlace']
                 let profileImg = obj['profileImg']
@@ -95,7 +95,7 @@ function getHotPartyPost() {
                     <div class="badge bg-primary bg-gradient rounded-pill mb-2">모집상태 :${status}</div>
                     <a class="text-decoration-none link-dark stretched-link" href="#!"><h5 class="card-title mb-3">${title}</h5></a>
                     <p class="card-text mb-0">위치 정보: ${partyAddress} / ${partyPlace}</p>
-                    <p class="card-text mb-0">모임일: ${partyDate}</p>
+                    <p class="card-text mb-0">모임 일자: ${partyDate}</p>
                     <p class="card-text mb-0">모집 인원 ${acceptedMember}/${maxMember}</p>
                 </div>
                 <div class="card-footer p-4 pt-0 bg-transparent border-top-0">
@@ -141,8 +141,8 @@ function getNearPartyPost() {
                 let status = obj['status']
                 let acceptedMember = obj['acceptedMember']
                 let maxMember = obj['maxMember']
-                let partyDate = new Date(obj['partyDate'])
-                let closeDate = new Date(obj['closeDate'])
+                let partyDate = obj['partyDate']
+                let closeDate = obj['closeDate']
                 let partyAddress = obj['partyAddress']
                 let partyPlace = obj['partyPlace']
                 let profileImg = obj['profileImg']
@@ -153,7 +153,7 @@ function getNearPartyPost() {
                     <div class="badge bg-primary bg-gradient rounded-pill mb-2">모집상태 :${status}</div>
                     <a class="text-decoration-none link-dark stretched-link"><h5 class="card-title mb-3">${title}</h5></a>
                     <p class="card-text mb-0">위치 정보: ${partyAddress} / ${partyPlace}</p>
-                    <p class="card-text mb-0">모임일: ${partyDate}</p>
+                    <p class="card-text mb-0">모임 일자: ${partyDate}</p>
                     <p class="card-text mb-0">모집 인원 ${acceptedMember}/${maxMember}</p>
                 </div>
                 <div class="card-footer p-4 pt-0 bg-transparent border-top-0">

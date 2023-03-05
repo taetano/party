@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Let's PARTY|Signup</title>
-
+    <link rel="stylesheet" th:href="@{/css/signup-login.css}">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>
         $(() => {
@@ -45,101 +45,10 @@
         }
 
     </script>
-
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #FFFFFF;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 2rem;
-            box-sizing: border-box;
-            background-color: #FFFFFF;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            margin-top: 3rem;
-        }
-
-        .signup {
-            margin: 0;
-            margin-bottom: 20px;
-            color: #FFFFFF;
-            opacity: 0.75; /* 75% 불투명도 */
-            font-size: 2.5rem;
-            font-weight: bold;
-            text-align: center;
-            padding: 2rem 0;
-            background-color: #F7B718;
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
-        }
-
-        input[type="email"], input[type="password"], input[type="text"], input[type="tel"] {
-            width: 100%;
-            padding: 1rem 2rem;
-            margin: 1rem 0;
-            box-sizing: border-box;
-            border: none;
-            border-radius: 20px;
-            background-color: #EEEEEE;
-            color: #33312E;
-            font-size: 1.2rem;
-            outline: none;
-        }
-
-        input[type=submit] {
-            background-color: #F7B718;
-            color: #FFFFFF;
-            border: none;
-            border-radius: 20px;
-            padding: 1rem 3rem;
-            margin: 1rem 0;
-            font-size: 1.4rem;
-            font-weight: bolder;
-            cursor: pointer;
-        }
-
-        a {
-            color: #BBBBBB;
-        }
-
-        footer {
-            background-color: #f8f8f8;
-            height: 60px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .bottomlogo {
-            border: none;
-            padding: 10px 20px;
-        }
-
-        .bottomlogo a {
-            text-decoration: none;
-            color: #000000;
-            font-size: 2rem;
-        }
-
-        .bottomlogo:hover {
-            background-color: #F7B718;
-        }
-
-        .bottomlogo:hover a {
-            color: #fff;
-        }
-    </style>
 </head>
 <body>
 <div class="container">
-    <h1 class="signup">회원가입</h1>
+    <h1 class="title">회원가입</h1>
     <form action="submit_form.php" method="POST">
         <span style=" font-size:1.5em;">
             <label for="email">Email</label>

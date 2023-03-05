@@ -3,81 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>Let's PARTY|Login</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #FFFFFF;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 2rem;
-            box-sizing: border-box;
-            background-color: #FFFFFF;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            margin-top: 3rem;
-        }
-
-        .logo {
-            margin: 0;
-            margin-bottom: 20px;
-            color: #FFFFFF;
-            opacity: 0.75; /* 75% 불투명도 */
-            font-size: 3rem;
-            font-weight: bold;
-            text-align: center;
-            padding: 2rem 0;
-            background-color: #F7B718;
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
-        }
-
-        input[type=text], input[type=password] {
-            width: 100%;
-            padding: 1rem 2rem;
-            margin: 1rem 0;
-            box-sizing: border-box;
-            border: none;
-            border-radius: 20px;
-            background-color: #EEEEEE;
-            color: #33312E;
-            font-size: 1.2rem;
-            outline: none;
-        }
-
-        input[type=submit] {
-            background-color: #F7B718;
-            color: #FFFFFF;
-            border: none;
-            border-radius: 20px;
-            padding: 1rem 3rem;
-            margin: 1rem 0;
-            font-size: 1.4rem;
-            font-weight: bolder;
-            cursor: pointer;
-        }
-
-        a {
-            color: #BBBBBB;
-        }
-
-        footer {
-            background-color: #f8f8f8;
-            height: 60px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/signup-login.css}">
 </head>
 <body>
 <div class="container">
-    <h1 class="logo">Let's PARTY</h1>
+    <h1 class="title">로그인</h1>
     <form>
         <span style=" font-size:1.5em;">
         <label for="email">Email</label>
@@ -89,10 +19,8 @@
         <input type="submit" id="submit-btn" value="로그인">
         </span>
     </form>
-    <button id="login-kakao-btn"
+    <input type="submit" id="login-kakao-btn" value="카카오로 로그인하기"
             onclick="location.href='https://kauth.kakao.com/oauth/authorize?client_id=94293d41f51b73a7ba87db77967da2b3&redirect_uri=http://localhost:8080/api/users/kakao/callback&response_type=code'">
-        카카오로 로그인하기
-    </button>
     <p><a href="/page/signup">회원가입</a></p>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
