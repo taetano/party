@@ -32,7 +32,8 @@ function getPartyPostCreated() {
                     let address = response['data'][i]['address'];
                     let status = response['data'][i]['status']
 
-                    let partypost_temp_html = ` <div id = "createdPartyPostInfo"> <strong> 글 제목 : [${partyPostId}] ${title} <br> 마감일자 : ${closeDate} / 위치 : ${address} / 모집 상태 : ${status}</strong> </div>`
+                    let partypost_temp_html = ` <div id = "createdPartyPostInfo" class="createdPartyPostInfo" > <strong> 글 제목 : [${partyPostId}] ${title} <br> 마감일자 : ${closeDate} / 위치 : ${address} / 모집 상태 : ${status}</strong>
+                     <button class="btn btn-primary rounded-pill" onclick="movePost(${partyPostId})">글 이동</button></div>`
                     $('#mypartypost-created-list').append(partypost_temp_html)
 
 
@@ -148,4 +149,8 @@ function clickNoShowReport(userId, partyPostId) {
 
         }
     })
+}
+
+function movePost(postId) {
+    window.location.href = `/page/partypost?partypostId=${postId}`;
 }
