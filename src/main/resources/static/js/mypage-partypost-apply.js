@@ -30,7 +30,7 @@ function getPartyPostApply() {
                     let status = response['data'][i]['status'];
                     let temp_html = `
                             <div id="myAppliyPartyPost" class="mypartypost">
-                            ${partyPostId} 글 제목 : ${title} / 마감일 : ${closeDate} / 지역 : ${address} / 모집글상태 : ${status}
+                            ${partyPostId} 제목 : ${title} / 마감일 : ${closeDate} / 지역 : ${address} / 모집글상태 : ${status}
                             <button class="btn btn-warning rounded-pill" onclick="movePost(${partyPostId})">글이동</button>                
                             </div>`
 
@@ -52,7 +52,7 @@ function getPartyPostApply() {
 
                         //end 상태인 경우의 기본 양식
                         let partypost_member_notPending_temp_html = `
-                        <div class="user" id="user">참여자 -  [${applicationId}] ${memberNickname} / 신청 상태 : ${memberStatus} / 노쇼포인트 : ${noShowCnt}
+                        <div class="user" id="user">[${applicationId}] 참여자 - 닉네임: ${memberNickname} / 신청 상태 : ${memberStatus} / 노쇼포인트 : ${noShowCnt}
                     </div>`
 
                         //NO_SHOW_REPORTING 상태인경우 노쇼 신고버튼 활성화

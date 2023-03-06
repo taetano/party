@@ -6,21 +6,6 @@
     <meta name="description" content=""/>
     <meta name="author" content=""/>
     <title>Let's PARTY</title>
-    <style>
-        input[type="text"] {
-            text-align: center;
-            width: 100%;
-            padding: 1rem 2rem;
-            margin: 1rem 0;
-            box-sizing: border-box;
-            border: none;
-            border-radius: 20px;
-            background-color: #EEEEEE;
-            color: #33312E;
-            font-size: 1.2rem;
-            outline: none;
-        }
-    </style>
     <link rel="icon" type="image/x-icon" href="../assets/favicon.ico"/>
     <!-- Font Awesome icons (free version)-->
     <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
@@ -33,75 +18,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <!-- css & javascript 불러오기 -->
     <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/from-mypage.css}">
     <script type="text/javascript" th:src="@{/js/mypage-block.js}"></script>
     <script type="text/javascript" th:src="@{/js/scripts.js}"></script>
     <title>차단유저관리</title>
-    <style>
-        body {
-            /*background-color: #F7B718;*/
-        }
-
-        .mypagewrap {
-            align-items: center;
-            align-content: center;
-        }
-
-        .mypageMain {
-            display: flex;
-        }
-
-        .mypageLeftMenu {
-            float: left;
-            margin: 10px 20px 10px 20px;
-            display: flex;
-            flex-direction: column;
-            width: 200px;
-            height: 500px;
-            background-color: #FFFFFF;
-            padding: 0px;
-            box-sizing: border-box;
-            border: 4px solid #F7B718;
-
-            border-radius: 15px;
-        }
-
-        .mypageLeftMenu button {
-            margin: 8px 5px 8px 5px;
-            padding-left: 15px;
-            height: 80px;
-            font-size: 20px;
-            text-align: left;
-            border: #FFFFFF;
-            background-color: #FFFFFF;
-        }
-
-        .mypageLeftMenu button:hover {
-            color: #F7B718;
-            font-weight: bold;
-        }
-
-        .mypageEdit {
-            float: left;
-            margin: 10px 20px 10px 20px;
-            width: 700px;
-            height: 700px;
-            border: 4px solid #F7B718;
-            border-radius: 15px;
-        }
-
-        .block-user {
-            margin: 20px 20px 20px 20px;
-            text-align: left;
-            border: 1px solid black;
-
-        }
-
-        .block-user input {
-            padding-top: 0px;
-            height: 25px;
-        }
-
-    </style>
 </head>
 <body>
 <!-- Navigation-->
@@ -129,17 +49,15 @@
 <header class="masthead text-center text-white">
     <div class="masthead-content">
         <div class="container px-5">
-            <h1 class="masthead-heading mb-0">Let's PARTY!</h1>
-            <h2 class="masthead-subheading mb-0">마이이페이지 - 차단 유저 관리</h2>
+            <h2 class="masthead-subheading mb-0">마이페이지 - 차단 유저 관리</h2>
         </div>
     </div>
 </header>
 
 <div class="container">
-
     <div class="mypageMain">
-
-        <data class="mypageLeftMenu">
+        <!-- 사이드바 -->
+        <data class="mypageLeftMenu" align="left">
             <a class="nav-link" href="/page/myPage/profile">내 정보</a>
             <a class="nav-link" href="/page/chatPage">1:1 채팅</a>
             <a class="nav-link" href="/page/myPage/partypost/created">내 모집글 목록</a>
@@ -150,34 +68,16 @@
 
         <div class="mypageEdit">
             <div class="block-list" id="block-list">
-                <div class="block-user">
+                <div class="mypartypost">
                     <img src="../static/css/images/person.png" width=40 height=40>
                     유저이름 : 유저이름
                     <input type="submit" id="block-remove1" class="btn btn-dark rounded-pill" value="차단 해제">
-
                     <button class="btn btn-warning rounded-pill" onclick="window.location.href= 'login.html'">유저정보
                     </button>
-                </div>
-                <div class="block-user">
-                    <img src="../static/css/images/person.png" width=40 height=40>
-                    유저이름 : 유저이름
-                    <input type="submit" id="block-remove2" class="btn btn-dark rounded-pill" value="차단 해제">
-
-                    <button class="btn btn-warning rounded-pill" onclick="window.location.href= 'login.html'">유저정보
-                    </button>
-                </div>
-                <div class="block-user">
-                    <img src="../static/css/images/person.png" width=40 height=40>
-                    유저이름 : 유저이름
-                    <input type="submit" id="block-remove3" class="btn btn-dark rounded-pill" value="차단 해제">
-                    <button class="btn btn-warning rounded-pill" onclick="window.location.href= 'login.html'">유저정보
-                    </button>
-
                 </div>
             </div>
         </div>
     </div>
-
 </div>
 </body>
 </html>
