@@ -55,11 +55,11 @@ public class RestrictionService {
         User blocked = findByUser(userId);
         isMySelf(user, userId);
         List<Block> blocks = getBlocks(user.getId());
-        if (blocks.size() > 0) {
-            if (blocks.stream().anyMatch(b -> b.getBlocked().equals(blocked))) {
-                throw new BadRequestException("이미 신고한 유저입니다");
-            }
+
+        if (blocks.stream().anyMatch(b -> b.getBlocked().equals(blocked))) {
+            throw new BadRequestException("이미 신고한 유저입니다");
         }
+
         Block block = new Block(user, blocked);
         blockRepository.save(block);
         return ApiResponse.ok("차단등록 완료");
@@ -70,13 +70,11 @@ public class RestrictionService {
         User blocked = findByUser(userId);
         isMySelf(user, userId);
         List<Block> blocks = getBlocks(user.getId());
-        if (!blocks.isEmpty()) {
-            for (Block block : blocks) {
-                if (Objects.equals(block.getBlocked().getId(), (blocked.getId()))) {
-                    blockRepository.delete(block);
-                    return ApiResponse.ok("차단해제 완료");
-                }
-            }
+        Optional<Block> blockdate = blocks.stream()
+                .filter(b -> b.getBlocked().equals(blocked)).findFirst();
+
+        if (blockdate.isPresent()) {
+            blockRepository.delete(blockdate.get());
         } else {
             throw new BadRequestException("차단한 유저가 아닙니다");
         }
@@ -87,6 +85,7 @@ public class RestrictionService {
     public DataApiResponse<BlockResponse> getBlockedList(int page, User user) {
         Pageable pageable = PageRequest.of(page, 10);
         List<Block> blocks = blockRepository.findAllByBlockerId(user.getId(), pageable);
+
         if (blocks.size() == 0) {
             throw new BadRequestException("차단한 유저가 없습니다");
         }
@@ -109,9 +108,7 @@ public class RestrictionService {
     public ApiResponse createReportPost(User user, ReportPostRequest request) {
         PartyPost partyPost = partyPostRepository.findByIdAndActiveIsTrue(request.getPostId())
                 .orElseThrow(PartyPostNotFoundException::new);
-        if (partyPost.getUser().equals(user)) {
-            throw new BadRequestException("본인이 작성한 글입니다");
-        }
+        isMySelf(user, partyPost.getUser().getId());
         checkExistingData(user.getId(), null, partyPost.getId());
         ReportPost reportsPost = new ReportPost(user, request, partyPost);
         reportPostRepository.save(reportsPost);
@@ -124,11 +121,13 @@ public class RestrictionService {
         //신고할 유저
         User reported = findByUser(request.getUserId());
         PartyPost partyPost = getPartyPost(request.getPartyPostId());
+
         if (!partyPost.getStatus().equals(Status.NO_SHOW_REPORTING)) {
             throw new BadRequestException("노쇼 신고 기간이 만료되었습니다");
         }
         // 파티에 참여한 유저와 신고할 유저, 로그인한 유저를 비교함
         List<Application> applicationList = partyPost.getApplications();
+
         if (applicationList.stream().noneMatch(a -> a.getUser().equals(reported)) ||
                 applicationList.stream().noneMatch(a -> a.getUser().equals(user))) {
             throw new BadRequestException("Not a party member");
