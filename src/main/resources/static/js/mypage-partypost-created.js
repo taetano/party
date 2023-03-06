@@ -23,7 +23,7 @@ function getPartyPostCreated() {
                 let rows = response['data']
 
                 for (let i = 0; i < rows.length; i++) {
-                    let temp_html = `<div id="mypartypost" class="mypartypost"> </div>`
+                    let temp_html = `<div id="mypartypost"> </div>`
                     $('#mypartypost-created-list').append(temp_html)
 
                     let partyPostId = response['data'][i]['id'];
@@ -32,7 +32,7 @@ function getPartyPostCreated() {
                     let address = response['data'][i]['address'];
                     let status = response['data'][i]['status']
 
-                    let partypost_temp_html = ` <div id = "createdPartyPostInfo" class="createdPartyPostInfo" > <strong> 글 제목 : [${partyPostId}] ${title} <button class="btn btn-primary rounded-pill" onclick="movePost(${partyPostId})">글 이동</button><br> 마감일자 : ${closeDate} / 위치 : ${address} / 모집 상태 : ${status}</strong>
+                    let partypost_temp_html = ` <div id = "createdPartyPostInfo" class="mypartypost" > <strong>  [${partyPostId}] 제목 :${title} <button class="btn btn-primary rounded-pill" onclick="movePost(${partyPostId})">글 이동</button><br> 마감일자 : ${closeDate} / 위치 : ${address} / 모집 상태 : ${status}</strong>
                      </div>`
                     $('#mypartypost-created-list').append(partypost_temp_html)
 

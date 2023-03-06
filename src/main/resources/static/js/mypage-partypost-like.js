@@ -30,7 +30,7 @@ function getPartyPostLike() {
 
                     let like_partyPost_temp =
                         `<div id="mypartypost" class="mypartypost">
-                                [${postId}] ${title} / 모임날짜 : ${partyDate} / 지역 : ${partyAddress}
+                                [${postId}] 제목: ${title} / 모임날짜 : ${partyDate} / 지역 : ${partyAddress}
                                 <button class="btn btn-warning rounded-pill" onclick="movePost(${postId})">글이동</button>
                                 <button class="btn btn-primary rounded-pill" onclick="dislike(${postId})">좋아요 취소</button>
                             </div>`

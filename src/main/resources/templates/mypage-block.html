@@ -56,7 +56,8 @@
 
 <div class="container">
     <div class="mypageMain">
-        <data class="mypageLeftMenu">
+        <!-- 사이드바 -->
+        <data class="mypageLeftMenu" align="left">
             <a class="nav-link" href="/page/myPage/profile">내 정보</a>
             <a class="nav-link" href="/page/chatPage">1:1 채팅</a>
             <a class="nav-link" href="/page/myPage/partypost/created">내 모집글 목록</a>
@@ -67,12 +68,12 @@
 
         <div class="mypageEdit">
             <div class="block-list" id="block-list">
-                <div class="black-frame">
-                        <img src="../static/css/images/person.png" width=40 height=40>
-                        유저이름 : 유저이름
-                        <input type="submit" id="block-remove1" class="btn btn-dark rounded-pill" value="차단 해제">
-                        <button class="btn btn-warning rounded-pill" onclick="window.location.href= 'login.html'">유저정보
-                        </button>
+                <div class="mypartypost">
+                    <img src="../static/css/images/person.png" width=40 height=40>
+                    유저이름 : 유저이름
+                    <input type="submit" id="block-remove1" class="btn btn-dark rounded-pill" value="차단 해제">
+                    <button class="btn btn-warning rounded-pill" onclick="window.location.href= 'login.html'">유저정보
+                    </button>
                 </div>
             </div>
         </div>

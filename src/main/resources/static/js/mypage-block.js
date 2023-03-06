@@ -31,9 +31,9 @@ function getBlockList() {
 
                     let block_list_temp =
                         `
-                    <div class="black-frame">
+                    <div class="mypartypost">
                     <div id="myblocklist" class="myblocklist">
-                    유저이름 : ${nickname}
+                    닉네임 : ${nickname}
                     <button class="btn btn-warning rounded-pill" onclick="unBlock(${blockedId})">차단 해제
                     </button>
                     <button class="btn btn-warning rounded-pill" onclick="otherProfilePageClick(${blockedId})">유저정보
