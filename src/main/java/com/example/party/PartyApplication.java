@@ -20,9 +20,9 @@ import com.example.party.user.repository.UserRepository;
 @EnableScheduling
 public class PartyApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(PartyApplication.class, args);
-    }
+	public static void main(String[] args) {
+		SpringApplication.run(PartyApplication.class, args);
+	}
 
 	@Bean
 	public CommandLineRunner dummyData(
