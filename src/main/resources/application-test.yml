@@ -20,7 +20,7 @@ local:
 #        format_sql: true
 #
 #  redis:
-#    host: localhost
+#    host: 13.124.4.58
 #    port: 6379
 #
 #  thymeleaf:
