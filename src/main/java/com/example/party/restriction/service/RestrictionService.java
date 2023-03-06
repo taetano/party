@@ -194,6 +194,7 @@ public class RestrictionService {
             throw new BadRequestException("본인 아이디입니다");
     }
 
+    // DB에 존재하는 자료를 검증해주는 로직
     private void checkExistingData(Long userId, Long reportedId, Long partyPostId) {
         boolean userIsNull = userId == null;
         boolean targetIsNull = reportedId == null;
