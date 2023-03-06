@@ -78,6 +78,7 @@ public class RestrictionService {
         } else {
             throw new BadRequestException("차단한 유저가 아닙니다");
         }
+
         return ApiResponse.ok("차단해제 완료");
     }
 
@@ -89,6 +90,7 @@ public class RestrictionService {
         if (blocks.size() == 0) {
             throw new BadRequestException("차단한 유저가 없습니다");
         }
+
         List<BlockResponse> blockResponse = blocks.stream().map(BlockResponse::new).collect(Collectors.toList());
         return DataApiResponse.ok("조회 성공", blockResponse);
     }
@@ -98,6 +100,7 @@ public class RestrictionService {
         //신고할 유저
         isMySelf(user, request.getUserId());
         User reported = findByUser(request.getUserId());
+        // 이미 신고한 이력이 있는지 체크
         checkExistingData(user.getId(), reported.getId(), null);
         ReportUser reportUser = new ReportUser(user, reported, request);
         reportUserRepository.save(reportUser);
@@ -109,6 +112,7 @@ public class RestrictionService {
         PartyPost partyPost = partyPostRepository.findByIdAndActiveIsTrue(request.getPostId())
                 .orElseThrow(PartyPostNotFoundException::new);
         isMySelf(user, partyPost.getUser().getId());
+        // 이미 신고한 이력이 있는지 체크
         checkExistingData(user.getId(), null, partyPost.getId());
         ReportPost reportsPost = new ReportPost(user, request, partyPost);
         reportPostRepository.save(reportsPost);
@@ -125,6 +129,7 @@ public class RestrictionService {
         if (!partyPost.getStatus().equals(Status.NO_SHOW_REPORTING)) {
             throw new BadRequestException("노쇼 신고 기간이 만료되었습니다");
         }
+
         // 파티에 참여한 유저와 신고할 유저, 로그인한 유저를 비교함
         List<Application> applicationList = partyPost.getApplications();
 
@@ -132,6 +137,7 @@ public class RestrictionService {
                 applicationList.stream().noneMatch(a -> a.getUser().equals(user))) {
             throw new BadRequestException("Not a party member");
         }
+
         // 이미 신고한 이력이 있는지 체크
         checkExistingData(user.getId(), reported.getId(), partyPost.getId());
         NoShow noShow = new NoShow(user, reported, partyPost);
@@ -175,11 +181,6 @@ public class RestrictionService {
                 .orElseThrow(UserNotFoundException::new);
     }
 
-    private void isMySelf(User users, Long blockedId) {
-        if (users.getId().equals(blockedId))
-            throw new BadRequestException("본인 아이디입니다");
-    }
-
     private List<Block> getBlocks(Long userId) {
         return blockRepository.findAllByBlockerId(userId);
     }
@@ -187,6 +188,11 @@ public class RestrictionService {
     private PartyPost getPartyPost(Long postId) {
         return partyPostRepository.findById(postId)
                 .orElseThrow(NotFoundException::new);
+    }
+
+    private void isMySelf(User users, Long targetId) {
+        if (users.getId().equals(targetId))
+            throw new BadRequestException("본인 아이디입니다");
     }
 
     private void checkExistingData(Long userId, Long reportedId, Long partyPostId) {
@@ -208,7 +214,7 @@ public class RestrictionService {
             }
             if (postIsNull) {
                 if (reportUserRepository.existsByReporterIdAndReportedId(userId, reportedId)) {
-                    throw new BadRequestException("이미 신고한 유저입니다");
+                    throw new BadRequestException("이미 노쇼 신고한 유저입니다");
                 }
             }
         } else {
