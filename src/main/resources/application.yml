@@ -1,8 +1,8 @@
 spring:
   datasource:
-    username: ${{ secrets.DB_USER }}
-    password: ${{ secrets.DB_PASSWORD }}
-    url: ${{ secrets.DB_URL }}
+    username: jwadmin
+    password: abc!123#45678!#
+    url: jdbc:mysql://party.czqpruw2g0gl.ap-northeast-2.rds.amazonaws.com:3306/party?serverTimezone=Asia/Seoul
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
@@ -16,7 +16,7 @@ spring:
         format_sql: true
 
   redis:
-    host: ${{ secrets.REDIS_HOST }}
+    host: party-redis.ojt0iz.ng.0001.apn2.cache.amazonaws.com
     port: 6379
 
   thymeleaf:
@@ -37,5 +37,5 @@ cloud:
     stack:
       auto: false
     credentials:
-      accessKey: ${{ secrets.S3_ACCESS_KEY_ID }}
-      secretKey: ${{ secrets.S3_SECRET_KEY_ID }}
+      accessKey: AKIASKT34LBGLML6T4VN
+      secretKey: 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
