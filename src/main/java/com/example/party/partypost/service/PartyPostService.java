@@ -1,6 +1,5 @@
 package com.example.party.partypost.service;
 
-import com.example.party.application.dto.ApplicationResponse;
 import com.example.party.application.entity.Application;
 import com.example.party.application.repository.ApplicationRepository;
 import com.example.party.category.entity.Category;
@@ -233,21 +232,13 @@ public class PartyPostService implements IPartyPostService {
 
         //1. user가 신청한 application의 리스트
         List<Application> myApplicationList = applicationRepository.findByUserId(user.getId(), pageable);
-        myApplicationList.removeIf(application -> application.getPartyPost().getUser().equals(user));
 
         //2. partyPost DTO의 LIST 생성
         List<MyPartyPostListResponse> myApplicationDtoList = myApplicationList.stream()
-                .filter(application -> application.getUser().getId().equals(user.getId()))
                 .map(Application::getPartyPost)
-                .map(MyPartyPostListResponse::new).collect(Collectors.toList());
+                .filter(partyPost -> !partyPost.getUser().getId().equals(user.getId()))
+                .map(partyPost -> new MyPartyPostListResponse(partyPost, user.getId())).collect(Collectors.toList());
 
-        for (MyPartyPostListResponse users : myApplicationDtoList ) {
-            for (ApplicationResponse joinMember : users.getJoinMember()) {
-                if (joinMember.getUserId().equals(user.getId())) {
-                    users.removeJoinMember(joinMember);
-                }
-            }
-        }
         //3. DataResponseDto 생성 후 return
         return DataApiResponse.ok("내가 참가한 모집글 조회 완료", myApplicationDtoList);
     }
