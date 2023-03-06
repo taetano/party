@@ -12,6 +12,7 @@ import com.example.party.restriction.entity.ReportPost;
 import com.example.party.restriction.repository.ReportPostRepository;
 import com.example.party.restriction.repository.ReportUserRepository;
 import com.example.party.user.dto.BlackListResponse;
+import com.example.party.user.dto.NoShowRequest;
 import com.example.party.user.entity.User;
 import com.example.party.user.exception.UserNotFoundException;
 import com.example.party.user.repository.UserRepository;
@@ -31,7 +32,6 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class AdminService {
     private final String accountMsg = "\n계정 정책에 위반되어 삭제 처리 되었습니다\n\n\t문의는 asdfzxc@gmail.com\n";
-    private final String postMsg = "\n게시글 정책에 위반되어 블랙리스트 처리되었습니다\n\n\t문의는 asdfzxc@gmail.com\n";
     private final ReportUserRepository reportUserRepository;
     private final ReportPostRepository reportPostRepository;
     private final PartyPostRepository partyPostRepository;
@@ -54,21 +54,17 @@ public class AdminService {
     }
 
     //노쇼 로그 조회
-    public DataApiResponse<?> findNoShowList(User user) {
-//        checkAdmin(user);
+    public DataApiResponse<?> findNoShowList() {
 //        Pageable 적용 방법 찾아야함
         List<User> users = userRepository.findAllByNoShowList();
         return DataApiResponse.ok("노쇼 로그 조회 완료", users );
     }
 
     //모집글 삭제
-    public ApiResponse deletePost(User user, Long partyPostId) {
-        checkAdmin(user);
-
+    public ApiResponse deletePost(Long partyPostId) {
         PartyPost partyPost = partyPostRepository.findById(partyPostId)
                 .orElseThrow(NotFoundException::new);
         List<ReportPost> reportPosts = reportPostRepository.findAllByPartyPostId(partyPost.getId());
-        //나중에 다시 정해야함 기준이 없어서 일단 랜덤 사용
 
         User createPostUser = partyPost.getUser();
         createPostUser.getProfile().plusAdminReportCnt();
@@ -85,9 +81,7 @@ public class AdminService {
     }
 
     //회원 블랙리스트 등록
-    public ApiResponse setSuspended(User user, Long userId) {
-        checkAdmin(user);
-        isMySelf(user, userId);
+    public ApiResponse setSuspended(Long userId) {
         User blackuser = findByUser(userId);
         blackuser.setSuspended();
 
@@ -101,9 +95,7 @@ public class AdminService {
     }
 
     //회원 블랙리스트 해제
-    public ApiResponse setActive(User user, Long userId) {
-        checkAdmin(user);
-        isMySelf(user, userId);
+    public ApiResponse setActive(Long userId) {
         User userIf = findByUser(userId);
         userIf.setActive();
         userRepository.save(userIf);
@@ -111,27 +103,25 @@ public class AdminService {
     }
 
     //블랙리스트 조회
-    public DataApiResponse<BlackListResponse> getBlackList(User user) {
-        checkAdmin(user);
+    public DataApiResponse<BlackListResponse> getBlackList() {
         List<BlackListResponse> blackList = userRepository.statusEqualSuspended().stream()
                 .map(b -> new BlackListResponse(b,accountMsg)).collect(Collectors.toList());
         return DataApiResponse.ok("블랙리스트 조회 완료", blackList);
     }
 
-    //private
-    private void checkAdmin(User user) {
-        if (!user.getRole().equals(UserRole.ROLE_ADMIN)) {
-            throw new IllegalArgumentException("권한 없음");
+    //노쇼 차감
+    public ApiResponse setNoShowCnt(NoShowRequest request) {
+        User user = findByUser(request.getUserId());
+        if (user.getProfile().getNoShowCnt() < request.getMinusValue()) {
+            throw new BadRequestException("노쇼 횟수보다 큰 수 입니다");
         }
+        user.getProfile().minusNoShowCnt(request.getMinusValue());
+        return ApiResponse.ok("노쇼 카운트 차감 완료");
     }
 
+    //private
     private User findByUser(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
-    }
-
-    private void isMySelf(User users, Long blackedId) {
-        if (users.getId().equals(blackedId))
-            throw new BadRequestException("관리자 입니다");
     }
 }
