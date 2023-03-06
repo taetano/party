@@ -45,7 +45,7 @@ public class AdminController {
     }
 
     //모집글 삭제
-    @DeleteMapping("/party-posts/{partyPostId}/reportPost/{reportPostId}")
+    @DeleteMapping("/party-posts/{partyPostId}")
     public ResponseEntity<ApiResponse> deletePost(@PathVariable Long partyPostId) {
         return ResponseEntity.ok(adminService.deletePost(partyPostId));
     }

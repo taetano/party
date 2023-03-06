@@ -17,4 +17,5 @@ public interface ApplicationRepository extends JpaRepository<Application, Long> 
 	boolean existsByPartyPostAndUser(PartyPost partyPost, User user);
 
 	List<Application> findByUserId(Long userId, Pageable pageable);
+	List<Application> findAllByPartyPostId(Long partyPostId);
 }
