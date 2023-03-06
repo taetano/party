@@ -44,14 +44,12 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @AllArgsConstructor
 public class RestrictionService {
-    private final ApplicationRepository applicationRepository;
     private final UserRepository userRepository;
     private final BlockRepository blockRepository;
     private final NoShowRepository noShowRepository;
     private final ReportUserRepository reportUserRepository;
     private final ReportPostRepository reportPostRepository;
     private final PartyPostRepository partyPostRepository;
-	private final ProfilesRepository profilesRepository;
 
     public ApiResponse blockUser(User user, Long userId) {
         User blocked = findByUser(userId);
@@ -103,9 +101,7 @@ public class RestrictionService {
         //신고할 유저
         isMySelf(user, request.getUserId());
         User reported = findByUser(request.getUserId());
-        if (reportUserRepository.existsByReporterIdAndReportedId(user.getId(), reported.getId())) {
-            throw new BadRequestException("이미 신고한 유저입니다");
-        }
+        checkExistingData(user.getId(), reported.getId(), null);
         ReportUser reportUser = new ReportUser(user, reported, request);
         reportUserRepository.save(reportUser);
         return ApiResponse.ok("유저 신고 완료");
@@ -118,9 +114,7 @@ public class RestrictionService {
         if (partyPost.getUser().equals(user)) {
             throw new BadRequestException("본인이 작성한 글입니다");
         }
-        if (reportPostRepository.existsByUserIdAndPartyPostId(user.getId(), partyPost.getId())) {
-            throw new BadRequestException("이미 신고한 모집글입니다");
-        }
+        checkExistingData(user.getId(), null, partyPost.getId());
         ReportPost reportsPost = new ReportPost(user, request, partyPost);
         reportPostRepository.save(reportsPost);
         return ApiResponse.ok("모집글 신고 완료");
@@ -129,8 +123,6 @@ public class RestrictionService {
     //노쇼 신고
     public ApiResponse reportNoShow(User user, NoShowRequest request) {
         isMySelf(user, request.getUserId());
-        int checkByUser = 0;
-        int checkByMe = 0;
         //신고할 유저
         User reported = findByUser(request.getUserId());
         PartyPost partyPost = getPartyPost(request.getPartyPostId());
@@ -139,22 +131,12 @@ public class RestrictionService {
         }
         // 파티에 참여한 유저와 신고할 유저, 로그인한 유저를 비교함
         List<Application> applicationList = partyPost.getApplications();
-        for (Application application : applicationList) {
-            if (application.getUser().equals(reported)) {
-                checkByUser++;
-            }
-            if (application.getUser().equals(user)) {
-                checkByMe++;
-            }
-        }
-        if (checkByUser == 0 || checkByMe == 0) {
-            throw new BadRequestException("파티 구성원이 아닙니다");
+        if (applicationList.stream().noneMatch(a -> a.getUser().equals(reported)) ||
+                applicationList.stream().noneMatch(a -> a.getUser().equals(user))) {
+            throw new BadRequestException("Not a party member");
         }
         // 이미 신고한 이력이 있는지 체크
-        if (noShowRepository.existsByReporterIdAndReportedIdAndPartyPostId(user.getId(), reported.getId(),
-                partyPost.getId())) {
-            throw new BadRequestException("이미 신고한 유저입니다");
-        }
+        checkExistingData(user.getId(), reported.getId(), partyPost.getId());
         NoShow noShow = new NoShow(user, reported, partyPost);
         noShowRepository.save(noShow);
         return ApiResponse.ok("노쇼 신고 완료");
@@ -163,7 +145,7 @@ public class RestrictionService {
     //status.END 상태 파티글에 대한 노쇼 신고 처리
     @Transactional
     public void checkingNoShow(List<PartyPost> posts) {
-        for (PartyPost partyPost : posts) { // postId = 1
+        for (PartyPost partyPost : posts) {
             partyPost.ChangeStatusEnd();
             int joinUserSize = partyPost.getApplications().size();
 
@@ -210,8 +192,31 @@ public class RestrictionService {
                 .orElseThrow(NotFoundException::new);
     }
 
-    private Application getApplication(Long applicationId) {
-        return applicationRepository.findById(applicationId).orElseThrow(NotFoundException::new);
+    private void checkExistingData(Long userId, Long reportedId, Long partyPostId) {
+        boolean userIsNull = userId == null;
+        boolean targetIsNull = reportedId == null;
+        boolean postIsNull = partyPostId == null;
+
+        if (!userIsNull) {
+            if (!targetIsNull && !postIsNull) {
+                if (noShowRepository.existsByReporterIdAndReportedIdAndPartyPostId(userId, reportedId,
+                        partyPostId)) {
+                    throw new BadRequestException("이미 신고한 유저입니다");
+                }
+            }
+            if (targetIsNull) {
+                if (reportPostRepository.existsByUserIdAndPartyPostId(userId, partyPostId)) {
+                    throw new BadRequestException("이미 신고한 모집글입니다");
+                }
+            }
+            if (postIsNull) {
+                if (reportUserRepository.existsByReporterIdAndReportedId(userId, reportedId)) {
+                    throw new BadRequestException("이미 신고한 유저입니다");
+                }
+            }
+        } else {
+            throw new BadRequestException("잘못된 접근입니다");
+        }
     }
 }
 
