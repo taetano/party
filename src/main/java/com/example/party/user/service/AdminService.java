@@ -57,7 +57,6 @@ public class AdminService {
     //노쇼 로그 조회
     public DataApiResponse<NoShowResponse> findNoShowList(int page) {
         Pageable pageable = PageRequest.of(page, 10);
-        List<User> testUsers = userRepository.findAllByNoShowList(pageable);
         List<NoShowResponse> users = userRepository.findAllByNoShowList(pageable).stream()
                 .map(NoShowResponse::new).collect(Collectors.toList());
         return DataApiResponse.ok("노쇼 로그 조회 완료", users );
@@ -78,7 +77,7 @@ public class AdminService {
     public ApiResponse deletePost(Long partyPostId) {
         PartyPost partyPost = partyPostRepository.findById(partyPostId)
                 .orElseThrow(NotFoundException::new);
-        List<ReportPost> reportPosts = reportPostRepository.findAllByPartyPostId(partyPost.getId());
+        List<ReportPost> reportPosts = getReportPosts(partyPost.getId());
 
         User createPostUser = partyPost.getUser();
         createPostUser.getProfile().plusAdminReportCnt();
@@ -96,15 +95,21 @@ public class AdminService {
 
     //회원 블랙리스트 등록
     public ApiResponse setSuspended(Long userId) {
-        User blackuser = findByUser(userId);
-        blackuser.setSuspended();
+        User blackUser = findByUser(userId);
+        blackUser.setSuspended();
 
-        List<PartyPost> partyPost = partyPostRepository.findAllByUserId(blackuser.getId());
-        if (!partyPost.isEmpty()) {
-            partyPostRepository.deleteAll(partyPost);
+        // 블랙리스트 사유가 확실하다는 가정하에 설계함
+        List<PartyPost> partyPosts = partyPostRepository.findAllByUserId(blackUser.getId());
+        for (PartyPost partyPost : partyPosts) {
+            List<ReportPost> reportPosts = getReportPosts(partyPost.getId());
+            partyPost.resetApplications();
+            reportPostRepository.deleteAll(reportPosts);
+        }
+        if (!partyPosts.isEmpty()) {
+            partyPostRepository.deleteAll(partyPosts);
         }
 
-        userRepository.save(blackuser);
+        userRepository.save(blackUser);
         return ApiResponse.ok("블랙리스트 등록 완료");
     }
 
@@ -128,5 +133,9 @@ public class AdminService {
     private User findByUser(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
+    }
+
+    private List<ReportPost> getReportPosts(Long PartyPostId) {
+        return reportPostRepository.findAllByPartyPostId(PartyPostId);
     }
 }

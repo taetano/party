@@ -39,7 +39,7 @@ public class AdminController {
     }
 
     //노쇼 횟수 차감
-    @PostMapping("/noShow")
+    @PostMapping("/report/noShow")
     private ResponseEntity<ApiResponse> setNoShowCnt(@RequestBody NoShowRequest request) {
         return ResponseEntity.ok(adminService.setNoShowCnt(request));
     }
