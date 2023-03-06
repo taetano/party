@@ -130,9 +130,8 @@ public class RestrictionService {
             throw new BadRequestException("노쇼 신고 기간이 만료되었습니다");
         }
 
-        // 파티에 참여한 유저와 신고할 유저, 로그인한 유저를 비교함
         List<Application> applicationList = partyPost.getApplications();
-
+        // 파티 구성원에 신고할 유저, 로그인한 유저가 있는지 체크
         if (applicationList.stream().noneMatch(a -> a.getUser().equals(reported)) ||
                 applicationList.stream().noneMatch(a -> a.getUser().equals(user))) {
             throw new BadRequestException("Not a party member");
