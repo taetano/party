@@ -5,14 +5,11 @@ import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
-import com.example.party.user.entity.Profile;
-import com.example.party.user.repository.ProfilesRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.party.application.entity.Application;
-import com.example.party.application.repository.ApplicationRepository;
 import com.example.party.global.common.ApiResponse;
 import com.example.party.global.common.DataApiResponse;
 import com.example.party.global.exception.BadRequestException;
@@ -139,7 +136,7 @@ public class RestrictionService {
 
         // 이미 신고한 이력이 있는지 체크
         checkExistingData(user.getId(), reported.getId(), partyPost.getId());
-        NoShow noShow = new NoShow(user, reported, partyPost);
+        NoShow noShow = new NoShow(user.getId(), reported.getId(), partyPost.getId());
         noShowRepository.save(noShow);
         return ApiResponse.ok("노쇼 신고 완료");
     }
@@ -156,7 +153,7 @@ public class RestrictionService {
 			// reportId 별로 NoShow 개체를 그룹화합니다.
             Map<Long, List<NoShow>> reportedNoShowMap = new HashMap<>();
             for (NoShow noShow : noShowList) {
-                Long reportedId = noShow.getReported().getId();
+                Long reportedId = noShow.getReportedId();
 				//reportId 가 검색되고 관련된 NoShow 개체 목록이 검색되고 보고된 Id가 reportedNoShowMap 에 추가
                 reportedNoShowMap.computeIfAbsent(reportedId, k -> new ArrayList<>()).add(noShow);
             }
