@@ -1,24 +1,22 @@
 spring:
   datasource:
-    username: ${DB_USER}
-    password: ${DB_PASSWORD}
-    url: ${DB_URL}
+    username: ${{ secrets.DB_USER }}
+    password: ${{ secrets.DB_PASSWORD }}
+    url: ${{ secrets.DB_URL }}
     driver-class-name: com.mysql.cj.jdbc.Driver
-  config:
-    import: application-aws.yml
 
   jpa:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL8Dialect
     show-sql: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
 
   redis:
-    host: localhost
+    host: ${{ secrets.REDIS_HOST }}
     port: 6379
 
   thymeleaf:
@@ -29,3 +27,15 @@ spring:
 server:
   error:
     include-message: always
+
+cloud:
+  aws:
+    s3:
+      bucket: letsparty
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+    credentials:
+      accessKey: ${{ secrets.S3_ACCESS_KEY_ID }}
+      secretKey: ${{ secrets.S3_SECRET_KEY_ID }}
