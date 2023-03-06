@@ -2,7 +2,7 @@ spring:
   datasource:
     username: jwadmin
     password: abc!123#45678!#
-    url: jdbc:mysql://party.czqpruw2g0gl.ap-northeast-2.rds.amazonaws.com:3306/party?serverTimezone=Asia/Seoul
+    url: jdbc:mysql://party.czqpruw2g0gl.ap-northeast-2.rds.amazonaws.com
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
