@@ -1,9 +1,11 @@
 spring:
   datasource:
-    username: jwadmin
-    password: abc!123#45678!#
-    url: jdbc:mysql://party.czqpruw2g0gl.ap-northeast-2.rds.amazonaws.com:3306/party?serverTimezone=Asia/Seoul
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    url: ${DB_URL}
     driver-class-name: com.mysql.cj.jdbc.Driver
+  config:
+    import: application-aws.yml
 
   jpa:
     database: mysql
@@ -27,15 +29,3 @@ spring:
 server:
   error:
     include-message: always
-
-cloud:
-  aws:
-    s3:
-      bucket: letsparty
-    region:
-      static: ap-northeast-2
-    stack:
-      auto: false
-    credentials:
-      accessKey: AKIAT4USRYSPRW6PNXQR
-      secretKey: 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
