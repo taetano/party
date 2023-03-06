@@ -8,7 +8,7 @@ jQuery(document).ready(function () {
 function LoginCheck() {
     $.ajax({
         type: "GET",
-        url: `http://localhost:8080/api/users/loginCheck`,
+        url: `http://13.124.4.58:8080/api/users/loginCheck`,
         contentType: "application/json",
         headers: {
             "Authorization": getCookieValue('Authorization')
@@ -68,7 +68,7 @@ function getHotPartyPost() {
     $('#hotPartyposts').empty()
 
     $.ajax({
-        url: "http://localhost:8080/api/party-posts/hot",
+        url: "http://13.124.4.58:8080/api/party-posts/hot",
         headers: {
             "Authorization": getCookieValue('Authorization')
         },
@@ -83,10 +83,11 @@ function getHotPartyPost() {
                 let status = obj['status']
                 let acceptedMember = obj['acceptedMember']
                 let maxMember = obj['maxMember']
-                let partyDate = new Date(obj['partyDate'])
-                let closeDate = new Date(obj['closeDate'])
+                let partyDate = obj['partyDate']
+                let closeDate = obj['closeDate']
                 let partyAddress = obj['partyAddress']
                 let partyPlace = obj['partyPlace']
+                let profileImg = obj['profileImg']
                 let tempHtml = `
         <div class="col-lg-4 my-5" >
             <div class="card h-100 shadow border-0">
@@ -94,14 +95,13 @@ function getHotPartyPost() {
                     <div class="badge bg-primary bg-gradient rounded-pill mb-2">모집상태 :${status}</div>
                     <a class="text-decoration-none link-dark stretched-link" href="#!"><h5 class="card-title mb-3">${title}</h5></a>
                     <p class="card-text mb-0">위치 정보: ${partyAddress} / ${partyPlace}</p>
-                    <p class="card-text mb-0">모임일: ${partyDate}</p>
+                    <p class="card-text mb-0">모임 일자: ${partyDate}</p>
                     <p class="card-text mb-0">모집 인원 ${acceptedMember}/${maxMember}</p>
                 </div>
                 <div class="card-footer p-4 pt-0 bg-transparent border-top-0">
                     <div class="d-flex align-items-end justify-content-between">
                         <div class="d-flex align-items-center">
-                            <img class="rounded-circle me-3" src="https://dummyimage.com/40x40/ced4da/6c757d"
-                                 alt="..."/>
+                            <img class="circle" src="${profileImg}" />
                             <div class="small">
                                 <div class="fw-bold">파티장 : ${partyOwner}</div>
                                 <div class="text-muted">마감일: ${closeDate}</div>
@@ -124,7 +124,7 @@ function getNearPartyPost() {
 
     let Address = "서울 마포구 연남동"; //임시로 주소 고정 입력
     $.ajax({
-        url: "http://localhost:8080/api/party-posts/near/" + Address,
+        url: "http://13.124.4.58:8080/api/party-posts/near/" + Address,
         headers: {
             "Authorization": getCookieValue('Authorization')
         },
@@ -132,6 +132,7 @@ function getNearPartyPost() {
         contentType: "application/json; charset=UTF-8",
         success: function (response) {
             let responseData = response['data']
+            console.log("프로필이미지:" + responseData)
             for (let i = 0; i < responseData.length; i++) {
                 let obj = responseData[i];
                 let postId = obj['postId']
@@ -140,10 +141,11 @@ function getNearPartyPost() {
                 let status = obj['status']
                 let acceptedMember = obj['acceptedMember']
                 let maxMember = obj['maxMember']
-                let partyDate = new Date(obj['partyDate'])
-                let closeDate = new Date(obj['closeDate'])
+                let partyDate = obj['partyDate']
+                let closeDate = obj['closeDate']
                 let partyAddress = obj['partyAddress']
                 let partyPlace = obj['partyPlace']
+                let profileImg = obj['profileImg']
                 let tempHtml = `
         <div class="col-lg-4 my-5">
             <div class="card h-100 shadow border-0">
@@ -151,14 +153,13 @@ function getNearPartyPost() {
                     <div class="badge bg-primary bg-gradient rounded-pill mb-2">모집상태 :${status}</div>
                     <a class="text-decoration-none link-dark stretched-link"><h5 class="card-title mb-3">${title}</h5></a>
                     <p class="card-text mb-0">위치 정보: ${partyAddress} / ${partyPlace}</p>
-                    <p class="card-text mb-0">모임일: ${partyDate}</p>
+                    <p class="card-text mb-0">모임 일자: ${partyDate}</p>
                     <p class="card-text mb-0">모집 인원 ${acceptedMember}/${maxMember}</p>
                 </div>
                 <div class="card-footer p-4 pt-0 bg-transparent border-top-0">
                     <div class="d-flex align-items-end justify-content-between">
                         <div class="d-flex align-items-center">
-                            <img class="rounded-circle me-3" src="https://dummyimage.com/40x40/ced4da/6c757d"
-                                 alt="..."/>
+                            <img class="circle" src="${profileImg}" />
                             <div class="small">
                                 <div class="fw-bold">파티장 : ${partyOwner}</div>
                                 <div class="text-muted">마감일: ${closeDate}</div>

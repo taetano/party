@@ -8,21 +8,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>Let's PARTY</title>
-    <style>
-        input[type="text"] {
-            text-align: center;
-            width: 100%;
-            padding: 1rem 2rem;
-            margin: 1rem 0;
-            box-sizing: border-box;
-            border: none;
-            border-radius: 20px;
-            background-color: #EEEEEE;
-            color: #33312E;
-            font-size: 1.2rem;
-            outline: none;
-        }
-    </style>
     <link rel="icon" type="image/x-icon" th:href="@{/assets/favicon.ico}">
     <link rel="stylesheet" th:href="@{/css/styles.css}">
     <script src="../js/index.js"></script>
@@ -61,16 +46,15 @@
     <div class="masthead-content">
         <div class="container px-5">
             <h1 class="masthead-heading mb-0">Let's PARTY!</h1>
-            <h2 class="masthead-subheading mb-0">관심있는 모임을 찾아봐요!</h2>
+            <h2 class="masthead-subheading mb-4">관심있는 모임을 찾아봐요!</h2>
             <form onsubmit="return false">
                         <span style="font-size:1.5em;">
-                        <input type="text" id="search" name="search" placeholder="관심있는 제목 또는 지역을 입력해주세요."
+                        <input class="search-text" id="search" name="search" placeholder="관심있는 제목 또는 지역을 입력해주세요."
                                onkeyup="handleKeyUp(event)">
+                        <a class="search-btn" id="searchPartyPost" onclick="handleSearchButtonClick()">검색</a>
                         </span>
             </form>
-            <a class="btn btn-primary btn-xl rounded-pill mt-5" id="searchPartyPost"
-               onclick="handleSearchButtonClick()">검색하기</a>
-            <a class="btn btn-primary btn-xl rounded-pill mt-5" href="/page/partypost/writer">모집글 작성하기</a>
+            <a class="write-btn" href="/page/partypost/writer">모집글 작성하기</a>
         </div>
     </div>
     <div class="bg-circle-1 bg-circle"></div>

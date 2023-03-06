@@ -78,8 +78,6 @@ function submitUpdatePartyPost(postId) {
         success: function () {
             alert("모집글 수정완료")
             window.location.href = `/page/partypost?partypostId=` + postId
-
-
         }
 
     })

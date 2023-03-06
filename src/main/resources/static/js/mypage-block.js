@@ -30,13 +30,17 @@ function getBlockList() {
                     let nickname = rows[i]['nickname']
 
                     let block_list_temp =
-                        `<div id="myblocklist" class="myblocklist">
-                    유저이름 : ${nickname}
+                        `
+                    <div class="mypartypost">
+                    <div id="myblocklist" class="myblocklist">
+                    닉네임 : ${nickname}
                     <button class="btn btn-warning rounded-pill" onclick="unBlock(${blockedId})">차단 해제
                     </button>
                     <button class="btn btn-warning rounded-pill" onclick="otherProfilePageClick(${blockedId})">유저정보
                     </button>
-                            </div>`
+                    </div>
+                    </div>
+                        `
                     $('#block-list').append(block_list_temp)
                 }
             }

@@ -6,21 +6,6 @@
     <meta name="description" content=""/>
     <meta name="author" content=""/>
     <title>Let's PARTY</title>
-    <style>
-        input[type="text"] {
-            text-align: center;
-            width: 100%;
-            padding: 1rem 2rem;
-            margin: 1rem 0;
-            box-sizing: border-box;
-            border: none;
-            border-radius: 20px;
-            background-color: #EEEEEE;
-            color: #33312E;
-            font-size: 1.2rem;
-            outline: none;
-        }
-    </style>
     <link rel="icon" type="image/x-icon" href="../assets/favicon.ico"/>
     <!-- Font Awesome icons (free version)-->
     <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
@@ -34,100 +19,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <!-- css & javascript 불러오기 -->
     <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/from-mypage.css}">
     <script type="text/javascript" th:src="@{/js/mypage-partypost-apply.js}"></script>
     <script type="text/javascript" th:src="@{/js/scripts.js}"></script>
     <title>내가 신청한 모집글</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            /*background-color: #F7B718;*/
-        }
-
-        .mypage-top {
-            width: 100%;
-            width: 940px;
-            align-items: center;
-            text-align: center;
-            border: 4px solid #F7B718;
-
-            margin: 10px 20px 10px 20px;
-            border-radius: 15px;
-        }
-
-        .mypage-title {
-            width: 100%;
-            width: 940px;
-            align-items: center;
-            text-align: center;
-            border: 4px solid #F7B718;
-
-            margin: 10px 20px 10px 20px;
-            border-radius: 15px;
-        }
-
-        .mypageMain {
-            align-content: center;
-            display: flex;
-            width: 100%;
-        }
-
-        .mypageLeftMenu {
-            float: left;
-            margin: 10px 20px 10px 20px;
-            display: flex;
-            flex-direction: column;
-            width: 200px;
-            height: 500px;
-            background-color: #FFFFFF;
-            padding: 0px;
-            box-sizing: border-box;
-            border: 4px solid #F7B718;
-
-            border-radius: 15px;
-        }
-
-        .mypageLeftMenu button {
-            margin: 8px 5px 8px 5px;
-            padding-left: 15px;
-            height: 80px;
-            font-size: 20px;
-            text-align: left;
-            border: #FFFFFF;
-            background-color: #FFFFFF;
-        }
-
-        .mypageLeftMenu button:hover {
-            color: #F7B718;
-            font-weight: bold;
-        }
-
-        .mypageEdit {
-            float: left;
-            margin: 10px 20px 10px 20px;
-            width: 700px;
-            border: 4px solid #F7B718;
-            border-radius: 15px;
-        }
-
-        .mypartypost {
-            margin: 10px 10px 10px 10px;
-            padding: 10px 10px 10px 10px;
-            padding-bottom: 10px;
-            text-align: center;
-            align-content: center;
-            border: 1px solid black;
-            border-radius: 10px;
-        }
-
-        .mypageEdit mypartypost button {
-            align-items: center;
-        }
-
-        .mypartypost button {
-            border-radius: 10px;
-        }
-    </style>
 </head>
 <body>
 <!-- Navigation-->
@@ -139,7 +34,7 @@
                 class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ms-auto" id="categories">
-                |
+
                 <!-- 불러온 카테고리 들어갈 곳 -->
 
             </ul>
@@ -155,16 +50,14 @@
 <header class="masthead text-center text-white">
     <div class="masthead-content">
         <div class="container px-5">
-            <h1 class="masthead-heading mb-0">Let's PARTY!</h1>
             <h2 class="masthead-subheading mb-0">마이이페이지 - 신청한 모집글</h2>
         </div>
     </div>
 </header>
 <div class="container">
-
     <div class="mypageMain">
-
-        <data class="mypageLeftMenu">
+        <!-- 사이드바 -->
+        <data class="mypageLeftMenu" align="left">
             <a class="nav-link" href="/page/myPage/profile">내 정보</a>
             <a class="nav-link" href="/page/chatPage">1:1 채팅</a>
             <a class="nav-link" href="/page/myPage/partypost/created">내 모집글 목록</a>
@@ -172,8 +65,7 @@
             <a class="nav-link" href="/page/myPage/partypost/like">좋아한 모집글</a>
             <a class="nav-link" href="/page/myPage/block">차단 유저관리</a>
         </data>
-
-        <div class="mypageEdit">
+        <div class="mypageEdit-created">
             <div class="mypartypost-apply-list" id="mypartypost-apply-list">
                 <!--             모집글 목록 나오는 곳 -->
 

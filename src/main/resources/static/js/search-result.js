@@ -45,7 +45,7 @@ function firstsearchPartyPost(inputVal) {
     $('#searchPartyPostResult').empty();
     $("#search").val(inputVal);
     $.ajax({
-        url: "http://localhost:8080/api/party-posts/search?",
+        url: "http://13.124.4.58:8080/api/party-posts/search?",
         headers: {
             "Authorization": getCookieValue('Authorization')
         },
@@ -68,6 +68,7 @@ function firstsearchPartyPost(inputVal) {
                 let closeDate = new Date(obj['closeDate']);
                 let partyAddress = obj['partyAddress'];
                 let partyPlace = obj['partyPlace'];
+                let profileImg = obj['profileImg'];
                 let tempHtml = `
         <div class="col-lg-4 my-5">
             <div class="card h-100 shadow border-0">
@@ -81,8 +82,7 @@ function firstsearchPartyPost(inputVal) {
                 <div class="card-footer p-4 pt-0 bg-transparent border-top-0">
                     <div class="d-flex align-items-end justify-content-between">
                         <div class="d-flex align-items-center">
-                            <img class="rounded-circle me-3" src="https://dummyimage.com/40x40/ced4da/6c757d"
-                                 alt="..."/>
+                            <img class="circle" src="${profileImg}" />
                             <div class="small">
                                 <div class="fw-bold">파티장 : ${partyOwner}</div>
                                 <div class="text-muted">마감일: ${closeDate}</div>
@@ -110,7 +110,7 @@ function searchPartyPost(page) {
     $('#searchPartyPostResult').empty()
 
     $.ajax({
-        url: "http://localhost:8080/api/party-posts/search",
+        url: "http://13.124.4.58:8080/api/party-posts/search",
         headers: {
             "Authorization": getCookieValue('Authorization')
         },
@@ -171,7 +171,7 @@ function searchPartyPost(page) {
 function searchPartyPostCategory(categoryId) {
     $('#searchPartyPostResult').empty();
     $.ajax({
-        url: `http://localhost:8080/api/party-posts/categories/${categoryId}`,
+        url: `http://13.124.4.58:8080/api/party-posts/categories/${categoryId}`,
         headers: {
             "Authorization": getCookieValue('Authorization')
         },

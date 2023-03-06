@@ -1,14 +1,13 @@
 package com.example.party.partypost.dto;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.example.party.application.dto.ApplicationResponse;
 import com.example.party.partypost.entity.PartyPost;
 import com.example.party.partypost.type.Status;
-
 import lombok.Getter;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 public class MyPartyPostListResponse {
@@ -23,6 +22,24 @@ public class MyPartyPostListResponse {
 	private final String address; //주소
 	private final List<ApplicationResponse> joinMember; //참가한 맴버리스트
 
+	public MyPartyPostListResponse(PartyPost partyPost, Long userId) {
+		this.id = partyPost.getId();
+		this.ownerUserId = partyPost.getUser().getId();
+		this.title = partyPost.getTitle();
+		this.status = partyPost.getStatus();
+		this.maxMember = partyPost.getMaxMember();
+		this.partyDate = partyPost.getPartyDate();
+		this.closeDate = partyPost.getCloseDate();
+		this.address = partyPost.getAddress();
+		this.joinMember = partyPost.getApplications().stream()
+				.filter(application -> !application.getUser().getId().equals(userId))
+				.map(ApplicationResponse::new).collect(Collectors.toList());
+	}
+
+	public void removeJoinMember(ApplicationResponse applicationResponse) {
+		this.joinMember.remove(applicationResponse);
+	}
+
 	public MyPartyPostListResponse(PartyPost partyPost) {
 		this.id = partyPost.getId();
 		this.ownerUserId = partyPost.getUser().getId();
@@ -32,11 +49,7 @@ public class MyPartyPostListResponse {
 		this.partyDate = partyPost.getPartyDate();
 		this.closeDate = partyPost.getCloseDate();
 		this.address = partyPost.getAddress();
-		this.joinMember = partyPost.getApplications().stream().map(
-			ApplicationResponse::new).collect(Collectors.toList());
-	}
-
-	public void removeJoinMember(ApplicationResponse applicationResponse) {
-		this.joinMember.remove(applicationResponse);
+		this.joinMember = partyPost.getApplications().stream()
+				.map(ApplicationResponse::new).collect(Collectors.toList());
 	}
 }

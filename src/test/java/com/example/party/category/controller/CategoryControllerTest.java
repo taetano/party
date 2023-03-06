@@ -47,7 +47,7 @@
 // 	private String port;
 //
 // 	private URI uri(String path) throws URISyntaxException {
-// 		return new URI(format("http://localhost:%s/api/categories%s", port, path));
+// 		return new URI(format("http://13.124.4.58:%s/api/categories%s", port, path));
 // 	}
 //
 // 	@DisplayName("SUCCESS")

@@ -42,7 +42,7 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <!-- 카테고리 -->
             <ul class="navbar-nav ms-auto" id="categories">
-                |
+
                 <!-- 불러온 카테고리 들어갈 곳 -->
 
             </ul>
@@ -58,60 +58,59 @@
 <header class="masthead text-center text-white">
     <div class="masthead-content">
         <div class="container px-5">
-            <h1 class="masthead-heading mb-0">Let's PARTY!</h1>
             <h2 class="masthead-subheading mb-0">마이페이지 - 내 정보</h2>
         </div>
     </div>
 </header>
 
-<div class="mypageMain">
-    <!-- 사이드바 -->
-    <data class="mypageLeftMenu">
-        <a class="nav-link" href="/page/myPage/profile">내 정보</a>
-        <a class="nav-link" href="/page/chatPage">1:1 채팅</a>
-        <a class="nav-link" href="/page/myPage/partypost/created">내 모집글 목록</a>
-        <a class="nav-link" href="/page/myPage/partypost/apply">신청 모집글 목록</a>
-        <a class="nav-link" href="/page/myPage/partypost/like">좋아한 모집글</a>
-        <a class="nav-link" href="/page/myPage/block">차단 유저관리</a>
-    </data>
-
-    <!-- 여기부터 본문 -->
-    <div id="profile">
+<div class="container">
+    <div class="mypageMain">
+        <!-- 사이드바 -->
+        <data class="mypageLeftMenu" align="left">
+            <a class="nav-link" href="/page/myPage/profile">내 정보</a>
+            <a class="nav-link" href="/page/chatPage">1:1 채팅</a>
+            <a class="nav-link" href="/page/myPage/partypost/created">내 모집글 목록</a>
+            <a class="nav-link" href="/page/myPage/partypost/apply">신청 모집글 목록</a>
+            <a class="nav-link" href="/page/myPage/partypost/like">좋아한 모집글</a>
+            <a class="nav-link" href="/page/myPage/block">차단 유저관리</a>
+        </data>
+        <!-- 여기부터 본문 -->
         <div class="mypage-info">
-            <p><strong>프로필 이미지: </strong></p>
-            <img src="" id="profile-profileImg">
-                <!-- 유저 프로필 이미지 들어갈 곳 -->
-        </div>
-        <div class="profile-nickname">
-            <!-- 유저 이름 들어갈 곳 -->
-            <span id="profile-nickname"></span>
-            <!-- 상태메세지 들어갈 곳 -->
-            <span id="profile-comment"></span>
-        </div>
-        <div>이메일:</div>
-        <!-- 유저 이메일 들어갈 곳 -->
-            <span id="profile-email"></span>
-        <br>
-    </div>
+            <div class="outer">
+                <div id="profile">
+                    <!-- 유저 프로필 들어갈 곳 -->
+                    <img class="circle-profile margin-bottom" src="${profileImg}">
+                    <!-- 유저 닉네임 들어갈 곳 -->
+                    <div id="profile-nickname"><h2>유저 닉네임: </h2></div>
+                    <!-- 유저 이메일 들어갈 곳 -->
+                    <div id="profile-email"><h2>이메일: </h2></div>
+                    <!-- 상태메세지 들어갈 곳 -->
+                    <div id="profile-comment" class="status-message"><h5>상태메세지: </h5>
+                        <br> ${comment}
+                    </div>
+                </div>
 
-    <!-- 수정내용 들어갈 곳 -->
-    <div id="editProfile">
-        <form>
-            <h5>- 수정내용 입력 -</h5>
-            <div id="image-input">
-                <label for="img">파일 업로드: </label>
-                <input type="file" id="img">
+                <!-- 수정내용 들어갈 곳 -->
+                <div id="editProfile" class="mt-5">
+                        <h5>- 수정내용 입력 -</h5>
+                    <div class="edit-message">
+                        <div id="image-input">
+                            <label for="img" class="mt-3">프로필 이미지 업로드: </label>
+                            <input type="file" id="img">
+                        </div>
+                        <div class="nickname-input mb-3">
+                            <label for="nickname">닉네임 수정입력:</label>
+                            <textarea id="nickname" name="nickname"></textarea>
+                        </div>
+                        <div id="comment-input" class="comment-input mb-3">
+                            <label for="comment">상태메세지 수정입력:</label>
+                            <textarea id="comment" name="comment"></textarea>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-primary mb-3" onclick="editProfile()">수정하기</button>
+                </div>
             </div>
-            <div class="nickname-input">
-                <label for="nickname">닉네임 수정입력:</label>
-                <textarea id="nickname" name="nickname"></textarea>
-            </div>
-            <div id="comment-input" class="comment-input">
-                <label for="comment">상태메세지 수정입력:</label>
-                <textarea id="comment" name="comment"></textarea>
-            </div>
-        </form>
-        <button type="button" class="btn btn-primary" onclick="editProfile()">수정하기</button>
+        </div>
     </div>
 </div>
 </body>

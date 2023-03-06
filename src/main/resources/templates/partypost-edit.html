@@ -54,7 +54,7 @@
 <input type="text" id="place-address" name="place-address" readonly required>
 <br>
 <label for="category-edit">카테고리</label>
-<select id="category-edit" name="category" required>
+<select id="category-edit" name="category" class="mb-4" required>
     <option value="">--선택--</option>
 </select>
 <br>
@@ -62,8 +62,8 @@
 <textarea id="content" name="content" rows="10" cols="50" required></textarea>
 <br>
 
-<button type="button" onclick="cancel()">취소</button>
-<button type="submit" onclick="submitUpdatePartyPost(postId)">수정</button>
+<button type="button" class="cancel-btn mb-4 mt-2" onclick="cancel()">취소</button>
+<button type="submit" class="basic-btn mb-4 mt-2" onclick="submitUpdatePartyPost(postId)">수정</button>
 
 <script>
     <!--    카카오 지도 관련 스크립트 -->
