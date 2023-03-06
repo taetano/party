@@ -28,7 +28,6 @@ function getPartyPostApply() {
                     let closeDate = response['data'][i]['closeDate'];
                     let address = response['data'][i]['address'];
                     let status = response['data'][i]['status'];
-
                     let temp_html = `
                             <div id="myAppliyPartyPost" class="mypartypost">
                             ${partyPostId} 글 제목 : ${title} / 마감일 : ${closeDate} / 지역 : ${address} / 모집글상태 : ${status}
