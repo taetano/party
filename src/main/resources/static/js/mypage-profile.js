@@ -38,12 +38,10 @@ function get_profile() {
             let tempHtml = `
                 
             <!-- 여기부터 본문 -->
-            <div class="mypage-info">
-              <div class="profile-profileImg">
+              <div class="profile-profileImg margin-bottom">
                 <p><strong>프로필 이미지: </strong></p>
                 <img class="circle-profile" src="${profileImg}">
-              </div>
-              <div>
+                <br>
                 <!-- 유저 닉네임 들어갈 곳 -->
                 <span id="profile-nickname">유저 닉네임: ${nickname}</span>
                 <br>
@@ -52,9 +50,8 @@ function get_profile() {
                 <br>
                 <span>이메일: ${email}</span>
                   <!-- 유저 이메일 들어갈 곳 -->
-                <span id="profile-email"></span>
+                <span id="profile-email" ></span>
                </div>
-            </div>
                 `
 
             console.log("프로필정보" + nickname, comment, profileImg, email)

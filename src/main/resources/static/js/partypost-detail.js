@@ -61,7 +61,7 @@ function get_partypost(postId) {
                                         <div class="fw-bold">파티장 닉네임: ${nickname}</div>
                                         <button class="btn btn-warning rounded-pill" onclick="otherProfilePageClick(${userId})">유저정보
                                         </button>
-                                    </div>지
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-lg-9">

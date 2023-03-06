@@ -4230,7 +4230,7 @@ textarea.form-control-lg {
 .nav-link {
     display: block;
     padding: 0.5rem 1rem;
-    color: #ee0979;
+    color: #000000;
     text-decoration: none;
     transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
 }
@@ -4242,7 +4242,7 @@ textarea.form-control-lg {
 }
 
 .nav-link:hover, .nav-link:focus {
-    color: #be0761;
+    color: #bbbbbb;
 }
 
 .nav-link.disabled {
@@ -12321,8 +12321,8 @@ header.masthead .bg-circle-4 {
 }
 
 .circle-profile {
-    width: 200px;
-    height: 200px;
+    width: 150px;
+    height: 150px;
     border: 2px solid gray;
     border-radius: 100%;
 }
