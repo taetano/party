@@ -31,6 +31,8 @@ public class PartyPostListResponse {
 	private final String partyAddress;
 	//모임 장소 (파델라)
 	private final String partyPlace;
+	//파티장 프로필 이미지
+	private final String profileImg;
 
 
 
@@ -45,5 +47,6 @@ public class PartyPostListResponse {
 		this.closeDate = partyPost.getCloseDate();
 		this.partyAddress = partyPost.getAddress();
 		this.partyPlace = partyPost.getPartyPlace();
+		this.profileImg = partyPost.getUser().getProfile().getProfileImg();
 	}
 }

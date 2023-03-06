@@ -10,18 +10,19 @@ body {
 }
 
 .mypageLeftMenu {
+    display: inline-block;
     float: left;
     margin: 10px 20px 10px 20px;
-    display: flex;
     flex-direction: column;
     width: 200px;
     height: 500px;
     background-color: #FFFFFF;
-    padding: 0px;
+    padding: 1rem;
     box-sizing: border-box;
     border: 4px solid #F7B718;
-
     border-radius: 15px;
+    text-align: center;
+    vertical-align: baseline;
 }
 
 .mypageLeftMenu button {
@@ -43,7 +44,6 @@ body {
     float: left;
     margin: 10px 20px 10px 20px;
     width: 700px;
-    height: 1100px;
     padding-bottom: 10px;
     border: 4px solid #F7B718;
     border-radius: 15px;
@@ -102,4 +102,8 @@ body {
     color: #33312E;
     font-size: 1.2rem;
     outline: none;
+}
+
+.margin-bottom{
+    margin-bottom: 10rem;
 }

@@ -18,6 +18,7 @@ public class PartyPostResponse {
 	private final Long id;
 	private final Long userId; // 파티장 Id
 	private final String nickname;
+	private final String profileImg; //파티장 프로필 이미지
 	private final String title;
 	private final String content;
 	private final Long categoryId;
@@ -30,7 +31,6 @@ public class PartyPostResponse {
 	private final String day;
 	private final String address;
 	private final String detailAddress;
-
 	private final String partyPlace;
 	private final int viewCnt;
 	private final List<ApplicationResponse> joinMember;
@@ -40,6 +40,7 @@ public class PartyPostResponse {
 		this.id = partyPost.getId();
 		this.userId = partyPost.getUser().getId();
 		this.nickname = partyPost.getUser().getNickname();
+		this.profileImg = partyPost.getUser().getProfile().getProfileImg();
 		this.title = partyPost.getTitle();
 		this.content = partyPost.getContent();
 		this.categoryId = partyPost.getCategory().getId();
