@@ -1,8 +1,8 @@
 spring:
   datasource:
-    username: root
-    password: 9999
-    url: jdbc:mysql://localhost:3306/party?serverTimezone=Asia/Seoul
+    username: jwadmin
+    password: abc!123#45678!#
+    url: jdbc:mysql://party.czqpruw2g0gl.ap-northeast-2.rds.amazonaws.com:3306/party?serverTimezone=Asia/Seoul
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
@@ -16,7 +16,7 @@ spring:
         format_sql: true
 
   redis:
-    host: localhost
+    host: party-redis.ojt0iz.ng.0001.apn2.cache.amazonaws.com
     port: 6379
 
   thymeleaf:
