@@ -4,8 +4,6 @@ spring:
     password: ${DB_PASSWORD}
     url: ${DB_URL}
     driver-class-name: com.mysql.cj.jdbc.Driver
-  config:
-    import: application-aws.yml
 
   jpa:
     database: mysql
