@@ -5,6 +5,7 @@ import com.example.party.global.common.DataApiResponse;
 import com.example.party.restriction.dto.ReportPostResponse;
 import com.example.party.restriction.dto.ReportUserResponse;
 import com.example.party.user.dto.BlackListResponse;
+import com.example.party.user.dto.NoShowRequest;
 import com.example.party.user.entity.User;
 import com.example.party.user.service.AdminService;
 import lombok.RequiredArgsConstructor;
@@ -32,31 +33,37 @@ public class AdminController {
 
     //노쇼 로그 조회
     @GetMapping("/report/noShow")
-    public ResponseEntity<DataApiResponse<?>> findNoShowList(@AuthenticationPrincipal User user) {
-        return ResponseEntity.ok(adminService.findNoShowList(user));
+    public ResponseEntity<DataApiResponse<?>> findNoShowList() {
+        return ResponseEntity.ok(adminService.findNoShowList());
+    }
+
+    //노쇼 횟수 차감
+    @PostMapping("/noShow")
+    private ResponseEntity<ApiResponse> setNoShowCnt(NoShowRequest request) {
+        return ResponseEntity.ok(adminService.setNoShowCnt(request));
     }
 
     //모집글 삭제
     @DeleteMapping("/party-posts/{partyPostId}/reportPost/{reportPostId}")
-    public ResponseEntity<ApiResponse> deletePost(@AuthenticationPrincipal User user, @PathVariable Long partyPostId) {
-        return ResponseEntity.ok(adminService.deletePost(user, partyPostId));
+    public ResponseEntity<ApiResponse> deletePost(@PathVariable Long partyPostId) {
+        return ResponseEntity.ok(adminService.deletePost(partyPostId));
     }
 
     //블랙리스트 등록
     @PostMapping("/blackList/suspended/{userId}")
-    public ResponseEntity<ApiResponse> setSuspended(@AuthenticationPrincipal User user, @PathVariable Long userId) {
-        return ResponseEntity.ok(adminService.setSuspended(user, userId));
+    public ResponseEntity<ApiResponse> setSuspended(@PathVariable Long userId) {
+        return ResponseEntity.ok(adminService.setSuspended(userId));
     }
 
     //블랙리스트 해제
     @PostMapping("/blackList/active/{userId}")
-    public ResponseEntity<ApiResponse> setActive(@AuthenticationPrincipal User user, @PathVariable Long userId) {
-        return ResponseEntity.ok(adminService.setActive(user, userId));
+    public ResponseEntity<ApiResponse> setActive(@PathVariable Long userId) {
+        return ResponseEntity.ok(adminService.setActive(userId));
     }
 
     //블랙리스트 조회
     @GetMapping("/blackList")
-    private ResponseEntity<DataApiResponse<BlackListResponse>> getBlackList(@AuthenticationPrincipal User user) {
-        return ResponseEntity.ok(adminService.getBlackList(user));
+    private ResponseEntity<DataApiResponse<BlackListResponse>> getBlackList() {
+        return ResponseEntity.ok(adminService.getBlackList());
     }
 }
