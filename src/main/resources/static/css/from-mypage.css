@@ -1,0 +1,145 @@
+
+
+.mypage-profile img {
+    float: left;
+    border: 4px solid #F7B718;
+    margin: 10px 20px 10px 20px;
+    border-radius: 100%;
+}
+
+.status-message {
+    padding: 10px 10px 10px 10px;
+    width: 400px;
+    height: 150px;
+    margin-left: 140px;
+    overflow: hidden; /* 내용이 넘칠 때 숨김 */
+    border: 2px solid #000000;
+    border-radius: 15px;
+}
+
+.profile-info {
+    height: 100px;
+    margin: 20px 0px 0px 0px;
+}
+
+.pageEdit {
+    float: left;
+    margin: 10px 20px 10px 300px;
+    width: 700px;
+    padding-bottom: 10px;
+    border: 4px solid #F7B718;
+    border-radius: 15px;
+    align-items: center;
+    text-align: center;
+}
+
+.otherpartypost {
+    border-radius: 15px;
+    margin: 7px;
+    padding: 10px 10px 10px 10px;
+    height: 50px;
+    background: #F7B718;
+    color: #2c3034;
+}
+
+.partypost {
+    border: 4px solid #33312E;
+    border-radius: 15px;
+    margin: 5px 5px 5px 5px;
+    padding: 10px 10px 10px 10px;
+
+}
+
+.pageEdit input {
+    float: right;
+    margin: 10px 10px 10px 10px;
+}
+
+input[type="text"] {
+    text-align: center;
+    width: 100%;
+    padding: 1rem 2rem;
+    margin: 1rem 0;
+    box-sizing: border-box;
+    border: none;
+    border-radius: 20px;
+    background-color: #EEEEEE;
+    color: #33312E;
+    font-size: 1.2rem;
+    outline: none;
+}
+
+.black-frame {
+    padding: 10px 10px 10px 10px;
+    width: 400px;
+    height: auto;
+    margin-left: 140px;
+    overflow: hidden; /* 내용이 넘칠 때 숨김 */
+    border: 2px solid #000000;
+    border-radius: 15px;
+}
+
+.mypagewrap {
+    align-items: center;
+    align-content: center;
+}
+
+.mypageMain {
+    display: flex;
+}
+
+.mypageLeftMenu {
+    float: left;
+    margin: 10px 20px 10px 20px;
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+    height: 500px;
+    background-color: #FFFFFF;
+    padding: 0px;
+    box-sizing: border-box;
+    border: 4px solid #F7B718;
+
+    border-radius: 15px;
+}
+
+.mypageLeftMenu button {
+    margin: 8px 5px 8px 5px;
+    padding-left: 15px;
+    height: 80px;
+    font-size: 20px;
+    text-align: left;
+    border: #FFFFFF;
+    background-color: #FFFFFF;
+}
+
+.mypageLeftMenu button:hover {
+    color: #F7B718;
+    font-weight: bold;
+}
+
+.mypageEdit {
+    float: left;
+    margin: 10px 20px 10px 20px;
+    width: 700px;
+    height: 700px;
+    border: 4px solid #F7B718;
+    border-radius: 15px;
+}
+
+.block-user input {
+    padding-top: 0px;
+    height: 25px;
+}
+
+.black-frame {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 10px 10px 10px 10px;
+    width: 400px;
+    height: auto;
+    margin-left: 140px;
+    overflow: hidden; /* 내용이 넘칠 때 숨김 */
+    border: 2px solid #000000;
+    border-radius: 15px;
+}

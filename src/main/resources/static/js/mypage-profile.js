@@ -35,23 +35,18 @@ function get_profile() {
             let comment = responseData['comment']
             let profileImg = responseData['profileImg'] //프로필 사진
             let email = responseData['email']
-            let tempHtml = `
-                
+            let tempHtml =
+                `
             <!-- 여기부터 본문 -->
-              <div class="profile-profileImg margin-bottom">
-                <p><strong>프로필 이미지: </strong></p>
-                <img class="circle-profile" src="${profileImg}">
-                <br>
+                <img class="circle-profile mt-5 mb-3" src="${profileImg}">
                 <!-- 유저 닉네임 들어갈 곳 -->
-                <span id="profile-nickname">유저 닉네임: ${nickname}</span>
-                <br>
+                <div id="profile-nickname"><h2>${nickname}</h2></div>
+                <!-- 유저 이메일 들어갈 곳 -->
+                <div id="profile-email"><h4>${email}</h4></div>
                 <!-- 상태메세지 들어갈 곳 -->
-                <span id="profile-comment">상태메세지: ${comment}</span>
-                <br>
-                <span>이메일: ${email}</span>
-                  <!-- 유저 이메일 들어갈 곳 -->
-                <span id="profile-email" ></span>
-               </div>
+                <div id="profile-comment" class="status-message"><h5>상태메세지: </h5>
+                    <br> ${comment} 
+                </div>
                 `
 
             console.log("프로필정보" + nickname, comment, profileImg, email)

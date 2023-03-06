@@ -107,3 +107,24 @@ body {
 .margin-bottom{
     margin-bottom: 10rem;
 }
+
+.status-message {
+    padding: 10px 10px 10px 10px;
+    width: 400px;
+    height: 150px;
+    margin-left: 140px;
+    overflow: hidden; /* 내용이 넘칠 때 숨김 */
+    border: 2px solid #000000;
+    border-radius: 15px;
+}
+
+.edit-message {
+    padding: 10px 10px 10px 10px;
+    width: 400px;
+    height: 270px;
+    margin-bottom: 20px;
+    margin-left: 140px;
+    overflow: hidden; /* 내용이 넘칠 때 숨김 */
+    border: 2px solid #000000;
+    border-radius: 15px;
+}
