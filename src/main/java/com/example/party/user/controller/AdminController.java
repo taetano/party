@@ -6,6 +6,7 @@ import com.example.party.restriction.dto.ReportPostResponse;
 import com.example.party.restriction.dto.ReportUserResponse;
 import com.example.party.user.dto.BlackListResponse;
 import com.example.party.user.dto.NoShowRequest;
+import com.example.party.user.dto.NoShowResponse;
 import com.example.party.user.entity.User;
 import com.example.party.user.service.AdminService;
 import lombok.RequiredArgsConstructor;
@@ -33,13 +34,13 @@ public class AdminController {
 
     //노쇼 로그 조회
     @GetMapping("/report/noShow")
-    public ResponseEntity<DataApiResponse<?>> findNoShowList(@RequestParam int page) {
+    public ResponseEntity<DataApiResponse<NoShowResponse>> findNoShowList(@RequestParam int page) {
         return ResponseEntity.ok(adminService.findNoShowList(page -1));
     }
 
     //노쇼 횟수 차감
     @PostMapping("/noShow")
-    private ResponseEntity<ApiResponse> setNoShowCnt(NoShowRequest request) {
+    private ResponseEntity<ApiResponse> setNoShowCnt(@RequestBody NoShowRequest request) {
         return ResponseEntity.ok(adminService.setNoShowCnt(request));
     }
 

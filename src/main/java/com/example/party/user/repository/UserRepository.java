@@ -22,7 +22,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	@Query(value = "SELECT u FROM User u WHERE u.status = 'SUSPENDED'")
 	List<User> statusEqualSuspended(Pageable pageable);
 
-	@Query(value = "SELECT p FROM Profile p WHERE p.noShowCnt >= 1 ")
+	@Query(value = "SELECT u FROM User u WHERE u.profile.noShowCnt >= 1 ")
 	List<User> findAllByNoShowList(Pageable pageable);
 
 	Optional<User> findByKakaoId(Long id); //카카오 Oauth2 용

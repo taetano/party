@@ -13,6 +13,7 @@ import com.example.party.restriction.repository.ReportPostRepository;
 import com.example.party.restriction.repository.ReportUserRepository;
 import com.example.party.user.dto.BlackListResponse;
 import com.example.party.user.dto.NoShowRequest;
+import com.example.party.user.dto.NoShowResponse;
 import com.example.party.user.entity.User;
 import com.example.party.user.exception.UserNotFoundException;
 import com.example.party.user.repository.UserRepository;
@@ -54,10 +55,23 @@ public class AdminService {
     }
 
     //노쇼 로그 조회
-    public DataApiResponse<?> findNoShowList(int page) {
+    public DataApiResponse<NoShowResponse> findNoShowList(int page) {
         Pageable pageable = PageRequest.of(page, 10);
-        List<User> users = userRepository.findAllByNoShowList(pageable);
+        List<User> testUsers = userRepository.findAllByNoShowList(pageable);
+        List<NoShowResponse> users = userRepository.findAllByNoShowList(pageable).stream()
+                .map(NoShowResponse::new).collect(Collectors.toList());
         return DataApiResponse.ok("노쇼 로그 조회 완료", users );
+    }
+
+    //노쇼 차감
+    public ApiResponse setNoShowCnt(NoShowRequest request) {
+        User user = findByUser(request.getUserId());
+        if (user.getProfile().getNoShowCnt() < request.getMinusValue()) {
+            throw new BadRequestException("노쇼 횟수보다 큰 수 입니다");
+        }
+        user.getProfile().minusNoShowCnt(request.getMinusValue());
+        userRepository.save(user);
+        return ApiResponse.ok("노쇼 카운트 차감 완료");
     }
 
     //모집글 삭제
@@ -91,7 +105,7 @@ public class AdminService {
         }
 
         userRepository.save(blackuser);
-        return ApiResponse.ok("블랙리스트 해제 완료");
+        return ApiResponse.ok("블랙리스트 등록 완료");
     }
 
     //회원 블랙리스트 해제
@@ -108,16 +122,6 @@ public class AdminService {
         List<BlackListResponse> blackList = userRepository.statusEqualSuspended(pageable).stream()
                 .map(b -> new BlackListResponse(b,accountMsg)).collect(Collectors.toList());
         return DataApiResponse.ok("블랙리스트 조회 완료", blackList);
-    }
-
-    //노쇼 차감
-    public ApiResponse setNoShowCnt(NoShowRequest request) {
-        User user = findByUser(request.getUserId());
-        if (user.getProfile().getNoShowCnt() < request.getMinusValue()) {
-            throw new BadRequestException("노쇼 횟수보다 큰 수 입니다");
-        }
-        user.getProfile().minusNoShowCnt(request.getMinusValue());
-        return ApiResponse.ok("노쇼 카운트 차감 완료");
     }
 
     //private
