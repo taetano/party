@@ -17,7 +17,6 @@ import com.example.party.user.dto.NoShowResponse;
 import com.example.party.user.entity.User;
 import com.example.party.user.exception.UserNotFoundException;
 import com.example.party.user.repository.UserRepository;
-import com.example.party.user.type.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -96,19 +95,17 @@ public class AdminService {
     //회원 블랙리스트 등록
     public ApiResponse setSuspended(Long userId) {
         User blackUser = findByUser(userId);
-        blackUser.setSuspended();
 
         // 블랙리스트 사유가 확실하다는 가정하에 설계함
         List<PartyPost> partyPosts = partyPostRepository.findAllByUserId(blackUser.getId());
         for (PartyPost partyPost : partyPosts) {
             List<ReportPost> reportPosts = getReportPosts(partyPost.getId());
-            partyPost.resetApplications();
+//            partyPost.clearApplications();
             reportPostRepository.deleteAll(reportPosts);
-        }
-        if (!partyPosts.isEmpty()) {
-            partyPostRepository.deleteAll(partyPosts);
+            partyPostRepository.delete(partyPost);
         }
 
+        blackUser.setSuspended();
         userRepository.save(blackUser);
         return ApiResponse.ok("블랙리스트 등록 완료");
     }
