@@ -1,5 +1,7 @@
 package com.example.party.user.service;
 
+import com.example.party.application.entity.Application;
+import com.example.party.application.repository.ApplicationRepository;
 import com.example.party.global.common.ApiResponse;
 import com.example.party.global.common.DataApiResponse;
 import com.example.party.global.exception.BadRequestException;
@@ -36,6 +38,7 @@ public class AdminService {
     private final ReportPostRepository reportPostRepository;
     private final PartyPostRepository partyPostRepository;
     private final UserRepository userRepository;
+    private final ApplicationRepository applicationRepository;
 
     //유저 신고 로그 조회
     public DataApiResponse<ReportUserResponse> findReportUserList(int page) {
@@ -77,18 +80,17 @@ public class AdminService {
         PartyPost partyPost = partyPostRepository.findById(partyPostId)
                 .orElseThrow(NotFoundException::new);
         List<ReportPost> reportPosts = getReportPosts(partyPost.getId());
-
+        List<Application> applications = applicationRepository.findAllByPartyPostId(partyPost.getId());
         User createPostUser = partyPost.getUser();
         createPostUser.getProfile().plusAdminReportCnt();
+
         if (createPostUser.getProfile().getAdminReportCnt() >= 3) {
             createPostUser.setSuspended();
-            reportPostRepository.deleteAll(reportPosts);
-            partyPostRepository.delete(partyPost);
+            deleteMasterObject(applications, reportPosts, partyPost);
             return ApiResponse.ok("삭제 및 블랙리스트 처리 완료");
         }
 
-        reportPostRepository.deleteAll(reportPosts);
-        partyPostRepository.delete(partyPost);
+        deleteMasterObject(applications, reportPosts, partyPost);
         return ApiResponse.ok("게시글 삭제 완료");
     }
 
@@ -100,11 +102,10 @@ public class AdminService {
         List<PartyPost> partyPosts = partyPostRepository.findAllByUserId(blackUser.getId());
         for (PartyPost partyPost : partyPosts) {
             List<ReportPost> reportPosts = getReportPosts(partyPost.getId());
-//            partyPost.clearApplications();
-            reportPostRepository.deleteAll(reportPosts);
-            partyPostRepository.delete(partyPost);
+            List<Application> applications = applicationRepository.findAllByPartyPostId(partyPost.getId());
+            deleteMasterObject(applications, reportPosts, null);
         }
-
+        partyPostRepository.deleteAll(partyPosts);
         blackUser.setSuspended();
         userRepository.save(blackUser);
         return ApiResponse.ok("블랙리스트 등록 완료");
@@ -134,5 +135,13 @@ public class AdminService {
 
     private List<ReportPost> getReportPosts(Long PartyPostId) {
         return reportPostRepository.findAllByPartyPostId(PartyPostId);
+    }
+
+    private void deleteMasterObject(List<Application> applications, List<ReportPost> reportPosts, PartyPost partyPost) {
+        applicationRepository.deleteAll(applications);
+        reportPostRepository.deleteAll(reportPosts);
+        if (partyPost != null) {
+            partyPostRepository.delete(partyPost);
+        }
     }
 }
