@@ -16,7 +16,7 @@ spring:
         format_sql: true
 
   redis:
-    host: party-redis.ojt0iz.ng.0001.apn2.cache.amazonaws.com
+    host: ${PARTY_REDIS}
     port: 6379
 
   thymeleaf:
