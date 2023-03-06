@@ -54,9 +54,9 @@ public class AdminService {
     }
 
     //노쇼 로그 조회
-    public DataApiResponse<?> findNoShowList() {
-//        Pageable 적용 방법 찾아야함
-        List<User> users = userRepository.findAllByNoShowList();
+    public DataApiResponse<?> findNoShowList(int page) {
+        Pageable pageable = PageRequest.of(page, 10);
+        List<User> users = userRepository.findAllByNoShowList(pageable);
         return DataApiResponse.ok("노쇼 로그 조회 완료", users );
     }
 
@@ -103,8 +103,9 @@ public class AdminService {
     }
 
     //블랙리스트 조회
-    public DataApiResponse<BlackListResponse> getBlackList() {
-        List<BlackListResponse> blackList = userRepository.statusEqualSuspended().stream()
+    public DataApiResponse<BlackListResponse> getBlackList(int page) {
+        Pageable pageable = PageRequest.of(page, 10);
+        List<BlackListResponse> blackList = userRepository.statusEqualSuspended(pageable).stream()
                 .map(b -> new BlackListResponse(b,accountMsg)).collect(Collectors.toList());
         return DataApiResponse.ok("블랙리스트 조회 완료", blackList);
     }

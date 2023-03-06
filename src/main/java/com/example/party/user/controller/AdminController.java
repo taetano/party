@@ -33,8 +33,8 @@ public class AdminController {
 
     //노쇼 로그 조회
     @GetMapping("/report/noShow")
-    public ResponseEntity<DataApiResponse<?>> findNoShowList() {
-        return ResponseEntity.ok(adminService.findNoShowList());
+    public ResponseEntity<DataApiResponse<?>> findNoShowList(@RequestParam int page) {
+        return ResponseEntity.ok(adminService.findNoShowList(page -1));
     }
 
     //노쇼 횟수 차감
@@ -63,7 +63,7 @@ public class AdminController {
 
     //블랙리스트 조회
     @GetMapping("/blackList")
-    private ResponseEntity<DataApiResponse<BlackListResponse>> getBlackList() {
-        return ResponseEntity.ok(adminService.getBlackList());
+    private ResponseEntity<DataApiResponse<BlackListResponse>> getBlackList(@RequestParam int page) {
+        return ResponseEntity.ok(adminService.getBlackList(page -1));
     }
 }

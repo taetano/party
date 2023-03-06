@@ -3,6 +3,7 @@ package com.example.party.user.repository;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -19,10 +20,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	List<User> findAllByNicknameIn(List<String> nicknames);
 
 	@Query(value = "SELECT u FROM User u WHERE u.status = 'SUSPENDED'")
-	List<User> statusEqualSuspended();
+	List<User> statusEqualSuspended(Pageable pageable);
 
 	@Query(value = "SELECT p FROM Profile p WHERE p.noShowCnt >= 1 ")
-	List<User> findAllByNoShowList();
+	List<User> findAllByNoShowList(Pageable pageable);
 
 	Optional<User> findByKakaoId(Long id); //카카오 Oauth2 용
 }
