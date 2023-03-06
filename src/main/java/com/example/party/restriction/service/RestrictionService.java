@@ -56,10 +56,8 @@ public class RestrictionService {
         isMySelf(user, userId);
         List<Block> blocks = getBlocks(user.getId());
         if (blocks.size() > 0) {
-            for (Block blockIf : blocks) {
-                if (Objects.equals(blockIf.getBlocked().getId(), (blocked.getId()))) {
-                    throw new BadRequestException("이미 신고한 유저입니다");
-                }
+            if (blocks.stream().anyMatch(b -> b.getBlocked().equals(blocked))) {
+                throw new BadRequestException("이미 신고한 유저입니다");
             }
         }
         Block block = new Block(user, blocked);
