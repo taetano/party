@@ -1,12 +1,9 @@
 package com.example.party.user.controller;
 
-import static com.example.party.global.util.JwtProvider.*;
-
 import java.io.IOException;
 import java.net.URI;
 import java.security.Principal;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
@@ -64,13 +61,18 @@ public class UserController {
 
 	//로그아웃
 	@PostMapping("/signout")
-	public ResponseEntity<ApiResponse> signOut(@AuthenticationPrincipal User user,
-		HttpServletResponse response) {
-		Cookie cookie = new Cookie("rfToken", null);
-		cookie.setMaxAge(0);
-		response.setHeader(AUTHORIZATION_HEADER, "");
-		response.addCookie(cookie);
-		return ResponseEntity.ok(userService.signOut(user));
+	public ResponseEntity<ApiResponse> signOut(@AuthenticationPrincipal User user) {
+		userService.signOut(user);
+		HttpHeaders headers = new HttpHeaders();
+		//accessToken 을 cookie에 넣기
+		headers.add("Set-Cookie",
+			String.format("Authorization=%s; Max-Age=0; Path=/page;", "Bearer " + ""));
+
+		//RefreshToken 을 cookie에 넣기
+		headers.add("Set-Cookie", String.format("rfToken=%s; Max-Age=0; Path=/; HttpOnly=true;", ""));
+
+		headers.setLocation(URI.create("/page/indexPage"));
+		return new ResponseEntity<>(headers, HttpStatus.OK);
 	}
 
 	//회원탈퇴
