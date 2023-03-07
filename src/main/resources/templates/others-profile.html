@@ -5,22 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
     <meta name="description" content=""/>
     <meta name="author" content=""/>
-    <title>Let's PARTY</title>
-    <style>
-        input[type="text"] {
-            text-align: center;
-            width: 100%;
-            padding: 1rem 2rem;
-            margin: 1rem 0;
-            box-sizing: border-box;
-            border: none;
-            border-radius: 20px;
-            background-color: #EEEEEE;
-            color: #33312E;
-            font-size: 1.2rem;
-            outline: none;
-        }
-    </style>
     <link rel="icon" type="image/x-icon" href="../assets/favicon.ico"/>
     <!-- Font Awesome icons (free version)-->
     <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
@@ -33,79 +17,12 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <!-- css & javascript 불러오기 -->
     <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/from-mypage.css}">
     <script type="text/javascript" th:src="@{/js/others-profile.js}"></script>
     <script type="text/javascript" th:src="@{/js/scripts.js}"></script>
 
-    <title>내 정보</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            /*background-color: #F7B718;*/
-        }
+    <title>상대 유저 정보</title>
 
-
-        .pageEdit {
-            text-align: center;
-        }
-
-        .mypage-profile img {
-            float: left;
-            border: 4px solid #F7B718;
-            margin: 10px 20px 10px 20px;
-            border-radius: 100%;
-        }
-
-        .status-message {
-            padding: 10px 10px 10px 10px;
-            width: 400px;
-            height: 200px;
-            margin-left: 140px;
-            overflow: hidden; /* 내용이 넘칠 때 숨김 */
-            border: 2px solid #000000;
-            border-radius: 15px;
-        }
-
-        .profile-info {
-            height: 100px;
-            margin: 20px 0px 0px 0px;
-        }
-
-        .pageEdit {
-            float: left;
-            margin: 10px 20px 10px 250px;
-            width: 700px;
-            padding-bottom: 10px;
-            border: 4px solid #F7B718;
-            border-radius: 15px;
-            align-items: center;
-        }
-
-        .otherpartypost {
-            border: 4px solid #33312E;
-            border-radius: 15px;
-            margin: 5px 5px 5px 5px;
-            padding: 10px 10px 10px 10px;
-            height: 50px;
-            background: #F7B718;
-
-        }
-
-        .partypost {
-            border: 4px solid #33312E;
-            border-radius: 15px;
-            margin: 5px 5px 5px 5px;
-            padding: 10px 10px 10px 10px;
-
-        }
-
-        .pageEdit input {
-            float: right;
-            margin: 10px 10px 10px 10px;
-        }
-
-
-    </style>
 </head>
 <body>
 <!-- Navigation-->
@@ -117,7 +34,6 @@
                 class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ms-auto" id="categories">
-                |
                 <!-- 불러온 카테고리 들어갈 곳 -->
 
             </ul>
@@ -133,8 +49,7 @@
 <header class="masthead text-center text-white">
     <div class="masthead-content">
         <div class="container px-5">
-            <h1 class="masthead-heading mb-0">Let's PARTY!</h1>
-            <h2 class="masthead-subheading mb-0">상대 정보페이지</h2>
+            <h2 class="masthead-subheading mb-0">상대 유저 정보</h2>
         </div>
     </div>
 </header>
@@ -147,10 +62,6 @@
         <div id="status-message" class="status-message"><h5>상태 메세지</h5>
             <br> 나는 오늘도 배고프다 몹시 배고프다 소고기가 먹고싶다, 업진살...
         </div>
-
-        <div class="profile-info">
-        </div>
-
         <div class="otherpartypost-list">
             <div class="otherpartypost">
                 <strong> 상대방 모집글</strong>
@@ -161,22 +72,6 @@
                 <button class="btn btn-warning rounded-pill" onclick="window.location.href= 'login.html'">유저정보
                 </button>
             </div>
-            <div id="partypost2" class="partypost">
-                <strong>글 제목 : 글 제목2 / 마감일자 : 마감일자 / 위치 : 위치 / 모집 상태 : 모집중</strong>
-                <button class="btn btn-warning rounded-pill" onclick="window.location.href= 'login.html'">유저정보
-                </button>
-            </div>
-            <div id="partypost3" class="partypost">
-                <strong>글 제목 : 글 제목3 / 마감일자 : 마감일자 / 위치 : 위치 / 모집 상태 : 모집중</strong>
-                <button class="btn btn-warning rounded-pill" onclick="window.location.href= 'login.html'">유저정보
-                </button>
-            </div>
-            <div id="partypost4" class="partypost">
-                <strong>글 제목 : 글 제목4 / 마감일자 : 마감일자 / 위치 : 위치 / 모집 상태 : 모집중</strong>
-                <button class="btn btn-warning rounded-pill" onclick="window.location.href= 'login.html'">유저정보
-                </button>
-            </div>
-
         </div>
         <div class="partypost-list">
             <div class="otherpartypost">
@@ -185,11 +80,6 @@
 
             <div id="partypost6" class="partypost">
                 <strong> 글 제목 : 글 제목1 / 마감일자 : 마감일자 / 위치 : 위치 / 모집 상태 : 모집중</strong>
-                <button class="btn btn-warning rounded-pill" onclick="window.location.href= 'login.html'">유저정보
-                </button>
-            </div>
-            <div id="partypost7" class="partypost">
-                <strong>글 제목 : 글 제목2 / 마감일자 : 마감일자 / 위치 : 위치 / 모집 상태 : 모집중</strong>
                 <button class="btn btn-warning rounded-pill" onclick="window.location.href= 'login.html'">유저정보
                 </button>
             </div>
@@ -205,14 +95,8 @@
                 <button class="btn btn-warning rounded-pill" onclick="window.location.href= 'login.html'">유저정보
                 </button>
             </div>
-            <div id="partypost5" class="partypost">
-                <strong>글 제목 : 글 제목2 / 마감일자 : 마감일자 / 위치 : 위치 / 모집 상태 : 모집중</strong>
-                <button class="btn btn-warning rounded-pill" onclick="window.location.href= 'login.html'">유저정보
-                </button>
-            </div>
         </div>
         <input type="submit" class="btn btn-danger rounded-pill" value="해당유저 신고">
-
         <input type="submit" class="btn btn-primary rounded-pill" value="해당유저 차단">
     </div>
 </div>

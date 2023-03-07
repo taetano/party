@@ -3319,7 +3319,7 @@ textarea.form-control-lg {
 }
 
 .btn-warning {
-    color: #000;
+    color: #2c3034;
     background-color: #ffc107;
     border-color: #ffc107;
 }
@@ -4229,7 +4229,8 @@ textarea.form-control-lg {
 
 .nav-link {
     display: block;
-    padding: 0.5rem 1rem;
+    padding: 1rem 1rem;
+    font-size: 22px;
     color: #000000;
     text-decoration: none;
     transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
@@ -7939,7 +7940,7 @@ textarea.form-control-lg {
 
 .mt-3 {
     margin-top: 1rem !important;
-}일
+}
 
 .mt-4 {
     margin-top: 1.5rem !important;

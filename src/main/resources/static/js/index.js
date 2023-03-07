@@ -8,7 +8,7 @@ jQuery(document).ready(function () {
 function LoginCheck() {
     $.ajax({
         type: "GET",
-        url: `/api/users/loginCheck`,
+        url: `http://13.124.4.58:8080/api/users/loginCheck`,
         contentType: "application/json",
         headers: {
             "Authorization": getCookieValue('Authorization')
@@ -68,7 +68,7 @@ function getHotPartyPost() {
     $('#hotPartyposts').empty()
 
     $.ajax({
-        url: "/api/party-posts/hot",
+        url: "http://13.124.4.58:8080/api/party-posts/hot",
         headers: {
             "Authorization": getCookieValue('Authorization')
         },
@@ -124,7 +124,7 @@ function getNearPartyPost() {
 
     let Address = "서울 마포구 연남동"; //임시로 주소 고정 입력
     $.ajax({
-        url: "/api/party-posts/near/" + Address,
+        url: "http://13.124.4.58:8080/api/party-posts/near/" + Address,
         headers: {
             "Authorization": getCookieValue('Authorization')
         },

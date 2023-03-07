@@ -45,7 +45,7 @@ function firstsearchPartyPost(inputVal) {
     $('#searchPartyPostResult').empty();
     $("#search").val(inputVal);
     $.ajax({
-        url: "http://localhost:8080/api/party-posts/search?",
+        url: "http://13.124.4.58:8080/api/party-posts/search?",
         headers: {
             "Authorization": getCookieValue('Authorization')
         },
@@ -62,7 +62,7 @@ function firstsearchPartyPost(inputVal) {
                 let title = obj['title'];
                 let partyOwner = obj['partyOwner'];
                 let status = obj['status'];
-                let acceptedMember = obj['acceptedMember'] + 1;
+                let acceptedMember = obj['acceptedMember'];
                 let maxMember = obj['maxMember'];
                 let partyDate = new Date(obj['partyDate']);
                 let closeDate = new Date(obj['closeDate']);
@@ -110,7 +110,7 @@ function searchPartyPost(page) {
     $('#searchPartyPostResult').empty()
 
     $.ajax({
-        url: "http://localhost:8080/api/party-posts/search",
+        url: "http://13.124.4.58:8080/api/party-posts/search",
         headers: {
             "Authorization": getCookieValue('Authorization')
         },
@@ -171,7 +171,7 @@ function searchPartyPost(page) {
 function searchPartyPostCategory(categoryId) {
     $('#searchPartyPostResult').empty();
     $.ajax({
-        url: `http://localhost:8080/api/party-posts/categories/${categoryId}`,
+        url: `http://13.124.4.58:8080/api/party-posts/categories/${categoryId}`,
         headers: {
             "Authorization": getCookieValue('Authorization')
         },

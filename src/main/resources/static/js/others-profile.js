@@ -22,45 +22,41 @@ function getOtherProfile(userId) {
                 let rows = response['data']
                 let email = rows['email']
                 let nickname = rows['nickName']
+                let profileImg = rows['profileImg'] //프로필 사진
                 let comment = rows['comment']
                 let noshowcnt = rows['noshowcnt']
                 let participationcnt = rows['participationCount']
 
-            let other_profile_temp = `
-            <div id="email" class="email"><h2>${email}</h2></div>
-                <div id="nickname" class="nickname"><h2>${nickname}</h2></div>
-        <div id="status-message" class="status-message"><h5>상태 메세지</h5>
-            <br> ${comment}
-        </div>
-
-        <div class="profile-info">
-        </div>
-
-        <div class="otherpartypost-list">
-            <div class="otherpartypost">
-                <strong> 상대방 모집글</strong>
+            let other_profile_temp =
+                `
+            <img class="circle-profile mt-5 mb-3" src="${profileImg}">
+            <div id="nickname" class="nickname"><h2>${nickname}</h2></div>
+            <div id="email" class="email"><h4>${email}</h4></div>
+            <div id="status-message" class="status-message"><h5>상태 메세지</h5>
+                <br> ${comment}
             </div>
+    
+            <div class="otherpartypost-list">
+                <div class="otherpartypost mt-6">
+                    <strong> 작성한 모집글 </strong>
+                </div>
             </div>
-
-        </div>
-        <div class="partypost-list">
-            <div class="otherpartypost">
-                <strong> 신청한 모집글: ${participationcnt}</strong>
+            <div class="partypost-list">
+                <div class="otherpartypost">
+                    <strong> 신청한 모집글: ${participationcnt}</strong>
+                </div>
             </div>
-        </div>
-
-        <div class="noshowpartypost-list">
-            <div class="otherpartypost">
-                <strong> 노쇼한 모집글 : ${noshowcnt}</strong>
+    
+            <div class="noshowpartypost-list">
+                <div class="otherpartypost mb-4">
+                    <strong> 노쇼한 모집글 : ${noshowcnt}</strong>
+                </div>
             </div>
-            </div>
-        </div>
-        <button class="btn btn-warning rounded-pill" onclick="Block(${userId})">해당유저 차단
-                    </button>
-        <button class="btn btn-primary rounded-pill" onclick="clickReportUser(${userId})">해당유저 신고
-        </button>
-    </div>
-        `
+            <button class="btn btn-warning rounded-pill" onclick="Block(${userId})">해당유저 차단
+                        </button>
+            <button class="btn btn-primary rounded-pill" onclick="clickReportUser(${userId})">해당유저 신고
+            </button>
+            `
                 console.log("프로필정보" + nickname, comment, email, noshowcnt, participationcnt)
 
                 $('#other-profile').append(other_profile_temp)
