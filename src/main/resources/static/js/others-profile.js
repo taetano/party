@@ -17,6 +17,15 @@ function getOtherProfile(userId) {
             "Authorization": getCookieValue('Authorization')
         },
         success: function (response) {
+            const token = getCookieValue('Authorization');
+            const tokenParts = token.split('.');
+            const tokenPayload = JSON.parse(atob(tokenParts[1]));
+            const loginUserId = tokenPayload.id;
+
+            if (loginUserId === userId) {
+                window.location.href = "/page/myPage/profile";
+            }
+
             console.log("받아왔음" + response.data)
             if (response.code === 200) {
                 let rows = response['data']
@@ -57,6 +66,7 @@ function getOtherProfile(userId) {
             <button class="btn btn-primary rounded-pill" onclick="clickReportUser(${userId})">해당유저 신고
             </button>
             `
+
                 console.log("프로필정보" + nickname, comment, email, noshowcnt, participationcnt)
 
                 $('#other-profile').append(other_profile_temp)
