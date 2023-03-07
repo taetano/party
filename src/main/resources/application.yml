@@ -4,8 +4,6 @@ spring:
     password: abc!12345#678!
     url: jdbc:mysql://party.czqpruw2g0gl.ap-northeast-2.rds.amazonaws.com:3306/party?serverTimezone=Asia/Seoul
     driver-class-name: com.mysql.cj.jdbc.Driver
-  config:
-    import: application-aws.yml
 
   jpa:
     database: mysql
