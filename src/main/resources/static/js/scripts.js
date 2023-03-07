@@ -22,6 +22,8 @@ function logout() {
             "Authorization": getCookieValue('Authorization')
         },
         success: function () {
+            document.cookie = 'Authorization' + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+            document.cookie = 'rfToken' + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
             let host = window.location.host;
             let url = host + '/page/loginPage';
             window.location.href = 'http://' + url;
@@ -64,6 +66,5 @@ function getCategories() {
 
 //카테고리별 조회로 넘어가기
 function gotoCategory(categoryId) {
-    const categoryPageUrl = `/page/search?categoryId=` + categoryId;
-    window.location.href = categoryPageUrl;
+    window.location.href = `/page/search?categoryId=` + categoryId;
 }
