@@ -147,17 +147,15 @@ public class RestrictionService {
         for (PartyPost partyPost : posts) {
             partyPost.ChangeStatusEnd();
             int joinUserSize = partyPost.getApplications().size();
-
             List<NoShow> noShowList = noShowRepository.findAllByPartyPostId(partyPost.getId());
-
 			// reportId 별로 NoShow 개체를 그룹화합니다.
             Map<Long, List<NoShow>> reportedNoShowMap = new HashMap<>();
             for (NoShow noShow : noShowList) {
                 Long reportedId = noShow.getReportedId();
-				//reportId 가 검색되고 관련된 NoShow 개체 목록이 검색되고 보고된 Id가 reportedNoShowMap 에 추가
+				// key 를 가지고 있는지 체크하고 없으면 해당 키값을 가진 ArrayList를 만들고 noShow 를 넣음
                 reportedNoShowMap.computeIfAbsent(reportedId, k -> new ArrayList<>()).add(noShow);
             }
-
+            // Map.Entry : 한번의 조작으로 key, Value 값을 가져올 수 있음
             for (Map.Entry<Long, List<NoShow>> entry : reportedNoShowMap.entrySet()) {
                 Long reportedId = entry.getKey();
                 List<NoShow> reportedNoShowList = entry.getValue();
