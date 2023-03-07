@@ -50,7 +50,7 @@ public class Profile {
 	public void plusNoShowCnt() {
 		this.noShowCnt += 1;
 	}
-	public void minusNoShowCnt(int input) { this.noShowCnt = noShowCnt - input; }
+	public void minusNoShowCnt(int minusValue) { this.noShowCnt = noShowCnt - minusValue; }
 	public void increaseParticipationCnt() {
 		this.participationCnt = this.participationCnt + 1;
 	}

@@ -1,5 +1,7 @@
 package com.example.party.user.service;
 
+import com.example.party.application.entity.Application;
+import com.example.party.application.repository.ApplicationRepository;
 import com.example.party.global.common.ApiResponse;
 import com.example.party.global.common.DataApiResponse;
 import com.example.party.global.exception.BadRequestException;
@@ -13,10 +15,10 @@ import com.example.party.restriction.repository.ReportPostRepository;
 import com.example.party.restriction.repository.ReportUserRepository;
 import com.example.party.user.dto.BlackListResponse;
 import com.example.party.user.dto.NoShowRequest;
+import com.example.party.user.dto.NoShowResponse;
 import com.example.party.user.entity.User;
 import com.example.party.user.exception.UserNotFoundException;
 import com.example.party.user.repository.UserRepository;
-import com.example.party.user.type.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -36,6 +38,7 @@ public class AdminService {
     private final ReportPostRepository reportPostRepository;
     private final PartyPostRepository partyPostRepository;
     private final UserRepository userRepository;
+    private final ApplicationRepository applicationRepository;
 
     //유저 신고 로그 조회
     public DataApiResponse<ReportUserResponse> findReportUserList(int page) {
@@ -54,44 +57,58 @@ public class AdminService {
     }
 
     //노쇼 로그 조회
-    public DataApiResponse<?> findNoShowList() {
-//        Pageable 적용 방법 찾아야함
-        List<User> users = userRepository.findAllByNoShowList();
+    public DataApiResponse<NoShowResponse> findNoShowList(int page) {
+        Pageable pageable = PageRequest.of(page, 10);
+        List<NoShowResponse> users = userRepository.findAllByNoShowList(pageable).stream()
+                .map(NoShowResponse::new).collect(Collectors.toList());
         return DataApiResponse.ok("노쇼 로그 조회 완료", users );
+    }
+
+    //노쇼 차감
+    public ApiResponse setNoShowCnt(NoShowRequest request) {
+        User user = findByUser(request.getUserId());
+        if (user.getProfile().getNoShowCnt() < request.getMinusValue()) {
+            throw new BadRequestException("노쇼 횟수보다 큰 수 입니다");
+        }
+        user.getProfile().minusNoShowCnt(request.getMinusValue());
+        userRepository.save(user);
+        return ApiResponse.ok("노쇼 카운트 차감 완료");
     }
 
     //모집글 삭제
     public ApiResponse deletePost(Long partyPostId) {
         PartyPost partyPost = partyPostRepository.findById(partyPostId)
                 .orElseThrow(NotFoundException::new);
-        List<ReportPost> reportPosts = reportPostRepository.findAllByPartyPostId(partyPost.getId());
-
+        List<ReportPost> reportPosts = getReportPosts(partyPost.getId());
+        List<Application> applications = applicationRepository.findAllByPartyPostId(partyPost.getId());
         User createPostUser = partyPost.getUser();
         createPostUser.getProfile().plusAdminReportCnt();
+
         if (createPostUser.getProfile().getAdminReportCnt() >= 3) {
             createPostUser.setSuspended();
-            reportPostRepository.deleteAll(reportPosts);
-            partyPostRepository.delete(partyPost);
+            deleteMasterObject(applications, reportPosts, partyPost);
             return ApiResponse.ok("삭제 및 블랙리스트 처리 완료");
         }
 
-        reportPostRepository.deleteAll(reportPosts);
-        partyPostRepository.delete(partyPost);
+        deleteMasterObject(applications, reportPosts, partyPost);
         return ApiResponse.ok("게시글 삭제 완료");
     }
 
     //회원 블랙리스트 등록
     public ApiResponse setSuspended(Long userId) {
-        User blackuser = findByUser(userId);
-        blackuser.setSuspended();
+        User blackUser = findByUser(userId);
 
-        List<PartyPost> partyPost = partyPostRepository.findAllByUserId(blackuser.getId());
-        if (!partyPost.isEmpty()) {
-            partyPostRepository.deleteAll(partyPost);
+        // 블랙리스트 사유가 확실하다는 가정하에 설계함
+        List<PartyPost> partyPosts = partyPostRepository.findAllByUserId(blackUser.getId());
+        for (PartyPost partyPost : partyPosts) {
+            List<ReportPost> reportPosts = getReportPosts(partyPost.getId());
+            List<Application> applications = applicationRepository.findAllByPartyPostId(partyPost.getId());
+            deleteMasterObject(applications, reportPosts, null);
         }
-
-        userRepository.save(blackuser);
-        return ApiResponse.ok("블랙리스트 해제 완료");
+        partyPostRepository.deleteAll(partyPosts);
+        blackUser.setSuspended();
+        userRepository.save(blackUser);
+        return ApiResponse.ok("블랙리스트 등록 완료");
     }
 
     //회원 블랙리스트 해제
@@ -103,25 +120,28 @@ public class AdminService {
     }
 
     //블랙리스트 조회
-    public DataApiResponse<BlackListResponse> getBlackList() {
-        List<BlackListResponse> blackList = userRepository.statusEqualSuspended().stream()
+    public DataApiResponse<BlackListResponse> getBlackList(int page) {
+        Pageable pageable = PageRequest.of(page, 10);
+        List<BlackListResponse> blackList = userRepository.statusEqualSuspended(pageable).stream()
                 .map(b -> new BlackListResponse(b,accountMsg)).collect(Collectors.toList());
         return DataApiResponse.ok("블랙리스트 조회 완료", blackList);
-    }
-
-    //노쇼 차감
-    public ApiResponse setNoShowCnt(NoShowRequest request) {
-        User user = findByUser(request.getUserId());
-        if (user.getProfile().getNoShowCnt() < request.getMinusValue()) {
-            throw new BadRequestException("노쇼 횟수보다 큰 수 입니다");
-        }
-        user.getProfile().minusNoShowCnt(request.getMinusValue());
-        return ApiResponse.ok("노쇼 카운트 차감 완료");
     }
 
     //private
     private User findByUser(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
+    }
+
+    private List<ReportPost> getReportPosts(Long PartyPostId) {
+        return reportPostRepository.findAllByPartyPostId(PartyPostId);
+    }
+
+    private void deleteMasterObject(List<Application> applications, List<ReportPost> reportPosts, PartyPost partyPost) {
+        applicationRepository.deleteAll(applications);
+        reportPostRepository.deleteAll(reportPosts);
+        if (partyPost != null) {
+            partyPostRepository.delete(partyPost);
+        }
     }
 }
