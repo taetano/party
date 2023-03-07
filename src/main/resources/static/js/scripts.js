@@ -68,3 +68,8 @@ function getCategories() {
 function gotoCategory(categoryId) {
     window.location.href = `/page/search?categoryId=` + categoryId;
 }
+
+// 1:1채팅 버튼 클릭시
+function clickChat() {
+    alert("현재 1:1 채팅은 미구현 상태입니다")
+}
