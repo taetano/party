@@ -23,7 +23,7 @@ function getOtherProfile(userId) {
             const loginUserId = tokenPayload.id;
 
             if (loginUserId === userId) {
-                window.location.href = "/page/myPage/profile";
+                moveMyPage();
             }
 
             console.log("받아왔음" + response.data)
@@ -36,8 +36,8 @@ function getOtherProfile(userId) {
                 let noshowcnt = rows['noshowcnt']
                 let participationcnt = rows['participationCount']
 
-            let other_profile_temp =
-                `
+                let other_profile_temp =
+                    `
             <img class="circle-profile mt-5 mb-3" src="${profileImg}">
             <div id="nickname" class="nickname"><h2>${nickname}</h2></div>
             <div id="email" class="email"><h4>${email}</h4></div>
@@ -109,14 +109,18 @@ function clickReportUser(userId) {
             reason: 'SPAM',
             detailReason: "광고",
         }),
-            success(response) {
+        success(response) {
             console.log(response)
             alert("유저 신고가 완료되었습니다.")
             window.location.reload()
-            },
-            error(response, request) {
+        },
+        error(response, request) {
             console.log(response, request)
             alert("유저 신고 오류가 발생했습니다.")
-            }
+        }
     });
+}
+
+function moveMyPage() {
+    window.location.href = "/page/myPage/profile";
 }
