@@ -20,7 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 @EnableWebSecurity
 public class WebSecurityConfiguration {
-	public static final String[] URL_PERMIT_ALL = "/api/users/kakao/callback,/api/users/signup,/api/users/signin,/api/party-posts,/api/party-posts/{party-postId:[\\d+]},/api/party-posts/hot,/api/party-posts/near/{Address:[\\s+]},/api/party-posts/search/{searchText:[\\s+]},/api/party-posts/categories/{categoryId:[\\d+]}".split(
+	public static final String[] URL_PERMIT_ALL = "/api/users/kakao/callback,/api/users/signup,/api/users/signin,/api/party-posts,/api/party-posts/{party-postId:[\\d+]},/api/party-posts/hot,/api/party-posts/near/{Address},/api/party-posts/search/**,/api/categories,/api/party-posts/categories/{categoryId}".split(
 		",");
 	public static final String[] URL_ROLE_USER_ADMIN = "/api/restriction/**,/api/users/**,/api/party-posts/**,/api/rooms,chatting".split(
 		",");

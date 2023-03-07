@@ -88,7 +88,7 @@ public class PartyPostController {
 	public DataApiResponse<PartyPostListResponse> searchPartyPost(
 		@RequestParam(name = "searchText") String searchText,
 		@RequestParam(name = "page", defaultValue = "1") int page,
-		@AuthenticationPrincipal User user) {
+		User user) {
 		return partyPostService.searchPartyPost(user, searchText, page);
 	}
 
@@ -102,14 +102,14 @@ public class PartyPostController {
 	@GetMapping("/categories/{categoryId}")
 	public ResponseEntity<DataApiResponse<PartyPostListResponse>> searchPartyPostByCategory(
 		@PathVariable Long categoryId, @RequestParam(name = "page", defaultValue = "1") int page,
-		@AuthenticationPrincipal User user) {
+		User user) {
 		return ResponseEntity.ok(partyPostService.searchPartyPostByCategory(user, categoryId, page));
 	}
 
 	//가까운 모집글 조회
 	@GetMapping("/near/{Address}")
 	public DataApiResponse<PartyPostListResponse> findNearPartyPost(
-		@PathVariable String Address, @AuthenticationPrincipal User user) {
+		@PathVariable String Address, User user) {
 		return partyPostService.findNearPartyPost(user, Address);
 	}
 }
