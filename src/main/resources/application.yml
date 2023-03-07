@@ -1,8 +1,8 @@
 spring:
   datasource:
-    username: jwadmin
-    password: abc!12345#678!
-    url: jdbc:mysql://party.czqpruw2g0gl.ap-northeast-2.rds.amazonaws.com:3306/party?serverTimezone=Asia/Seoul
+    username: root
+    password: jwMySQl
+    url: jdbc:mysql://localhost:3306/party?serverTimezone=Asia/Seoul
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
@@ -16,7 +16,7 @@ spring:
         format_sql: true
 
   redis:
-    host: party-redis.ojt0iz.ng.0001.apn2.cache.amazonaws.com
+    host: localhost
     port: 6379
     #redis의 host 값은 로컬기동시 :localhost / 원격 기동시 AWS redis 접속주소 입력해야 합니다
 
