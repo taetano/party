@@ -57,9 +57,25 @@ function handleSearchButtonClick() {
 }
 
 function partypostClick(postId) {
-    console.log(postId)
-    const partypostPageUrl = `/page/partypost?partypostId=` + postId;
-    window.location.href = partypostPageUrl;
+    $.ajax({
+        type: "GET",
+        url: `/api/users/loginCheck`,
+        contentType: "application/json",
+        headers: {
+            "Authorization": getCookieValue('Authorization')
+        },
+        success: function () {
+            // 로그인함
+            const partypostPageUrl = `/page/partypost?partypostId=` + postId;
+            window.location.href = partypostPageUrl;
+
+
+        }, error: function () {
+            //로그인 안함
+            alert("로그인 페이지로 이동합니다")
+            window.location.href = `/page/loginPage`;
+        }
+    })
 }
 
 //조회수 높은 핫한글 모집글 조회
