@@ -265,11 +265,11 @@ function clicklike(postId) {
 function clickReportPartyPost(PostId) {
     $.ajax({
         type: "POST",
-        url: '/api/restriction/report/partyposts',
-        contentType: "application/json; charset=UTF-8",
+        url: '/api/restriction/report/party-posts',
         headers: {
             "Authorization": getCookieValue('Authorization')
         },
+        contentType: "application/json; charset=UTF-8",
         data: JSON.stringify({
             postId: PostId,
             reason: "SPAM",
