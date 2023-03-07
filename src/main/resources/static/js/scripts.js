@@ -22,8 +22,8 @@ function logout() {
             "Authorization": getCookieValue('Authorization')
         },
         success: function () {
-            document.cookie = 'Authorization' + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-            document.cookie = 'rfToken' + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+            document.cookie = 'Authorization=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;'
+            document.cookie = 'rfToken=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;'
             let host = window.location.host;
             let url = host + '/page/loginPage';
             window.location.href = 'http://' + url;
