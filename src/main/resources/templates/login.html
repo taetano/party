@@ -56,10 +56,6 @@
                 let host = window.location.host;
                 let url = host + '/page/indexPage';
                 window.location.href = 'http://' + url;
-
-                //포스트맨 참고
-                //pm.environment.set('token', pm.response.headers.get("Authorization")); (로그인)
-                //pm.environment.set('token', postman.getResponseHeader('Authorization')); (토큰을 사용해야할때)
             }
 
         }).fail((json) => {
