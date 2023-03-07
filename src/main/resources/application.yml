@@ -1,23 +1,26 @@
 spring:
   datasource:
-    username: root
-    password: wjtmd1
-    url: jdbc:mysql://localhost:3306/party?serverTimezone=Asia/Seoul
+    username: jwadmin
+    password: abc!12345#678!
+    url: jdbc:mysql://party.czqpruw2g0gl.ap-northeast-2.rds.amazonaws.com:3306/party?serverTimezone=Asia/Seoul
     driver-class-name: com.mysql.cj.jdbc.Driver
+  config:
+    import: application-aws.yml
 
   jpa:
     database: mysql
     database-platform: org.hibernate.dialect.MySQL8Dialect
     show-sql: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
 
   redis:
-    host: localhost
+    host: party-redis.ojt0iz.ng.0001.apn2.cache.amazonaws.com
     port: 6379
+    #redis의 host 값은 로컬기동시 :localhost / 원격 기동시 AWS redis 접속주소 입력해야 합니다
 
   thymeleaf:
     prefix: "classpath:/templates/"
@@ -37,5 +40,5 @@ cloud:
     stack:
       auto: false
     credentials:
-      accessKey: AKIAT4USRYSPRW6PNXQR
-      secretKey: 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
+      accessKey: AKIAT4USRYSP7WHED24W
+      secretKey: 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

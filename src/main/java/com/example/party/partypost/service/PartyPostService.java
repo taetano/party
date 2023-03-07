@@ -144,9 +144,12 @@ public class PartyPostService implements IPartyPostService {
         Pageable pageable = PageRequest.of(0, 3, Sort.by("ViewCnt"));
 
         List<PartyPost> partyPostList = partyPostRepository.findFirst3ByOrderByViewCntDesc(pageable);
-
-        List<PartyPostListResponse> filteredPosts = partyPostValidator.filteringPosts(user, partyPostList);
-
+        List<PartyPostListResponse> filteredPosts;
+        if (user.isEnabled()) {
+            filteredPosts = partyPostValidator.filteringPosts(user, partyPostList);
+        } else {
+            filteredPosts = partyPostList.stream().map(PartyPostListResponse::new).collect(Collectors.toList());
+        }
         return DataApiResponse.ok("핫한 모집글 조회 완료", filteredPosts);
     }
 

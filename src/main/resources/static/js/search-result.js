@@ -45,7 +45,7 @@ function firstsearchPartyPost(inputVal) {
     $('#searchPartyPostResult').empty();
     $("#search").val(inputVal);
     $.ajax({
-        url: "http://13.124.4.58:8080/api/party-posts/search?",
+        url: "/api/party-posts/search?",
         headers: {
             "Authorization": getCookieValue('Authorization')
         },
@@ -110,7 +110,7 @@ function searchPartyPost(page) {
     $('#searchPartyPostResult').empty()
 
     $.ajax({
-        url: "http://13.124.4.58:8080/api/party-posts/search",
+        url: "/api/party-posts/search",
         headers: {
             "Authorization": getCookieValue('Authorization')
         },
@@ -171,7 +171,7 @@ function searchPartyPost(page) {
 function searchPartyPostCategory(categoryId) {
     $('#searchPartyPostResult').empty();
     $.ajax({
-        url: `http://13.124.4.58:8080/api/party-posts/categories/${categoryId}`,
+        url: `/api/party-posts/categories/${categoryId}`,
         headers: {
             "Authorization": getCookieValue('Authorization')
         },

@@ -127,7 +127,7 @@ public class UserController {
 		//RefreshToken 을 cookie에 넣기
 		headers.add("Set-Cookie", String.format("rfToken=%s; Max-Age=604800; Path=/; HttpOnly=true;", token[1]));
 
-		headers.setLocation(URI.create("http://13.124.4.58:8080/page/indexPage"));
+		headers.setLocation(URI.create("/page/indexPage"));
 		return new ResponseEntity<>(headers, HttpStatus.FOUND);
 	}
 }
