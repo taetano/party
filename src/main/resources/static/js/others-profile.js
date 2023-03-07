@@ -5,7 +5,6 @@ $(document).ready(function () {
     if (userId) {
         getOtherProfile(userId); //검색어가 들어왔을때 검색적용
     }
-
 });
 
 //상대방 프로필 조회
@@ -17,15 +16,6 @@ function getOtherProfile(userId) {
             "Authorization": getCookieValue('Authorization')
         },
         success: function (response) {
-            const token = getCookieValue('Authorization');
-            const tokenParts = token.split('.');
-            const tokenPayload = JSON.parse(atob(tokenParts[1]));
-            const loginUserId = tokenPayload.id;
-
-            if (loginUserId === userId) {
-                moveMyPage();
-            }
-
             console.log("받아왔음" + response.data)
             if (response.code === 200) {
                 let rows = response['data']
@@ -119,8 +109,4 @@ function clickReportUser(userId) {
             alert("유저 신고 오류가 발생했습니다.")
         }
     });
-}
-
-function moveMyPage() {
-    window.location.href = "/page/myPage/profile";
 }

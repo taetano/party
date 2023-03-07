@@ -59,7 +59,7 @@ function get_partypost(postId) {
                                     <img class="circle" src="${profileImg}" />
                                     <div class="ms-3">
                                         <div class="fw-bold">파티장 닉네임: ${nickname}</div>
-                                        <button class="btn btn-warning rounded-pill" onclick="otherProfilePageClick(${userId})">유저정보
+                                        <button class="btn btn-warning rounded-pill" onclick="otherProfilePageClick(${userId}, ${loginUserId})">유저정보
                                         </button>
                                     </div>
                                 </div>
@@ -123,7 +123,7 @@ function get_partypost(postId) {
                                     <img class="circle" src="${profileImg}" />
                                     <div class="ms-3">
                                         <div class="fw-bold">파티장 닉네임: ${nickname}</div>
-                                        <button class="btn btn-warning rounded-pill" onclick="otherProfilePageClick(${userId})">유저정보
+                                        <button class="btn btn-warning rounded-pill" onclick="otherProfilePageClick(${userId}, ${loginUserId})">유저정보
                                         </button>
                                     </div>
                                 </div>
@@ -290,8 +290,13 @@ function clickReportPartyPost(PostId) {
 }
 
 //특정유저 상세정보 페이지로 가기
-function otherProfilePageClick(userId) {
+function otherProfilePageClick(userId, loginUserId) {
     console.log(userId)
-    const otherProfilePageUrl = `/page/others/profile?userId=` + userId;
-    window.location.href = otherProfilePageUrl;
+    console.log(loginUserId)
+    if (userId === loginUserId) {
+        window.location.href = `/page/myPage/profile`;
+    } else {
+        const otherProfilePageUrl = `/page/others/profile?userId=` + userId;
+        window.location.href = otherProfilePageUrl;
+    }
 }
