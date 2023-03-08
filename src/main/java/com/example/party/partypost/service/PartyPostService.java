@@ -112,8 +112,8 @@ public class PartyPostService implements IPartyPostService {
         List<PartyPost> partyPostList = partyPostRepository.findByTitleContainingOrAddressContaining(searchText,
                 searchText,
                 pageable);
-        
-        List<PartyPostListResponse> filteredPosts = partyPostValidator.filteringPosts(user, partyPostList);
+        // 유저의 차단 리스트를 필터링 ,유저가 로그인 상태일때에 적용
+        List<PartyPostListResponse> filteredPosts = userFilteredPosts(user,partyPostList);
 
         return DataApiResponse.ok("모집글 검색 완료", filteredPosts);
     }
@@ -133,7 +133,8 @@ public class PartyPostService implements IPartyPostService {
 
         List<PartyPost> partyPostList = partyPostRepository.findByCategoryId(categoryId, pageable);
 
-        List<PartyPostListResponse> filteredPosts = partyPostValidator.filteringPosts(user, partyPostList);
+        // 유저의 차단 리스트를 필터링 ,유저가 로그인 상태일때에 적용
+        List<PartyPostListResponse> filteredPosts = userFilteredPosts(user,partyPostList);
 
         return DataApiResponse.ok("카테고리별 모집글 조회 완료", filteredPosts);
     }
@@ -144,14 +145,13 @@ public class PartyPostService implements IPartyPostService {
         Pageable pageable = PageRequest.of(0, 3, Sort.by("ViewCnt"));
 
         List<PartyPost> partyPostList = partyPostRepository.findFirst3ByOrderByViewCntDesc(pageable);
-        List<PartyPostListResponse> filteredPosts;
-        if (user.isEnabled()) {
-            filteredPosts = partyPostValidator.filteringPosts(user, partyPostList);
-        } else {
-            filteredPosts = partyPostList.stream().map(PartyPostListResponse::new).collect(Collectors.toList());
-        }
+
+        // 유저의 차단 리스트를 필터링 ,유저가 로그인 상태일때에 적용
+        List<PartyPostListResponse> filteredPosts = userFilteredPosts(user,partyPostList);
+
         return DataApiResponse.ok("핫한 모집글 조회 완료", filteredPosts);
     }
+
 
     //내주변 모집글 조회
     @Override
@@ -163,8 +163,8 @@ public class PartyPostService implements IPartyPostService {
 
         //1.검색 문자에 맞는 리스트 조회
         List<PartyPost> partyPostList = partyPostRepository.findByAddressContaining(searchAddress, pageable);
-
-        List<PartyPostListResponse> filteredPosts = partyPostValidator.filteringPosts(user, partyPostList);
+        //2. 유저의 차단 리스트를 필터링 ,유저가 로그인 상태일때에 적용
+        List<PartyPostListResponse> filteredPosts = userFilteredPosts(user,partyPostList);
 
         return DataApiResponse.ok("주변 모집글 조회 완료", filteredPosts);
     }
@@ -272,6 +272,18 @@ public class PartyPostService implements IPartyPostService {
         List<PartyPostListResponse> partyPost = userIf.getLikePartyPosts().stream()
                 .map(PartyPostListResponse::new).collect(Collectors.toList());
         return DataApiResponse.ok("좋아요 게시글 조회 완료", partyPost);
+    }
+
+    //유저의 차단 리스트를 필터링 ,유저가 로그인 상태일때에 적용
+    private List<PartyPostListResponse> userFilteredPosts(User user,List<PartyPost> partyPostList)
+    {
+        List<PartyPostListResponse> filteredPosts;
+        if (user==null) {
+            filteredPosts = partyPostList.stream().map(PartyPostListResponse::new).collect(Collectors.toList());
+        } else {
+            filteredPosts = partyPostValidator.filteringPosts(user, partyPostList);
+        }
+        return filteredPosts;
     }
 
 }

@@ -1,20 +1,19 @@
 package com.example.party.partypost.service;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.stereotype.Service;
-
 import com.example.party.partypost.dto.PartyPostListResponse;
 import com.example.party.partypost.entity.PartyPost;
 import com.example.party.partypost.exception.PartyPostNotDeletableException;
 import com.example.party.restriction.entity.Block;
 import com.example.party.restriction.repository.BlockRepository;
 import com.example.party.user.entity.User;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -46,18 +45,24 @@ public class PartyPostValidator {
 	//blockedList 검열
 	public List<PartyPostListResponse> filteringPosts(User user, List<PartyPost> partyPostList) {
 		List<Block> blockedList = blockRepository.findAllByBlockerId(user.getId());
+		Iterator<PartyPost> iterator = partyPostList.iterator();
+		List<PartyPost> partyPostList_temp = new ArrayList<>();
+
 		if (blockedList.size() > 0) {
-			for (PartyPost post : partyPostList) {
+			while (iterator.hasNext()) {
+				PartyPost post = iterator.next();
 				for (Block block : blockedList) {
 					if (post.getUser().getId().equals(block.getBlocked().getId())) {
-						partyPostList.remove(post);
+						partyPostList_temp.add(post);
+						iterator.remove();
 					}
 				}
 			}
+			partyPostList.removeAll(partyPostList_temp);
 		} else {
 			return partyPostList.stream().map(PartyPostListResponse::new).collect(Collectors.toList());
 		}
 		return partyPostList.stream()
-			.map(PartyPostListResponse::new).collect(Collectors.toList());
+				.map(PartyPostListResponse::new).collect(Collectors.toList());
 	}
 }
