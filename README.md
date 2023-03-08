@@ -43,6 +43,7 @@ https://www.notion.so/47a47b7b603c42f0b99f898e98fe49b3?v=0d0802a2acd34da68bbabba
 - Spring Security 를 통한 인증/인가 구현 
 - JWT 사용(Access Token & RefreshToken 구현 
 : RefreshToken은 Redis로 관리)
+- 로그아웃 기능
 
 ### 2. 유저 관련
 - 내 프로필 정보 조회 & 수정
