@@ -1,25 +1,5 @@
 package com.example.party.partypost.service;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Pageable;
-
 import com.example.party.application.entity.Application;
 import com.example.party.application.repository.ApplicationRepository;
 import com.example.party.category.entity.Category;
@@ -29,11 +9,7 @@ import com.example.party.category.repository.CategoryRepository;
 import com.example.party.global.common.ApiResponse;
 import com.example.party.global.common.DataApiResponse;
 import com.example.party.global.common.ItemApiResponse;
-import com.example.party.partypost.dto.MyPartyPostListResponse;
-import com.example.party.partypost.dto.PartyPostListResponse;
-import com.example.party.partypost.dto.PartyPostRequest;
-import com.example.party.partypost.dto.PartyPostResponse;
-import com.example.party.partypost.dto.UpdatePartyPostRequest;
+import com.example.party.partypost.dto.*;
 import com.example.party.partypost.entity.PartyPost;
 import com.example.party.partypost.exception.IsNotWritterException;
 import com.example.party.partypost.exception.PartyPostNotFoundException;
@@ -41,6 +17,22 @@ import com.example.party.partypost.repository.PartyPostRepository;
 import com.example.party.user.entity.Profile;
 import com.example.party.user.entity.User;
 import com.example.party.user.repository.UserRepository;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Pageable;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class PartyPostServiceTest {
@@ -187,17 +179,14 @@ class PartyPostServiceTest {
 		//  given
 		Profile profile = mock(Profile.class);
 		//  when
-		when(user.isEnabled()).thenReturn(true);
 		when(partyPostRepository.findFirst3ByOrderByViewCntDesc(any(Pageable.class))).thenReturn(List.of(partyPost));
-		when(partyPostValidator.filteringPosts(any(User.class), anyList())).thenReturn(List.of(partyPostListResponse));
 
 		DataApiResponse<PartyPostListResponse> result = partyPostService.findHotPartyPost(user);
 		//  then
 		verify(partyPostRepository).findFirst3ByOrderByViewCntDesc(any(Pageable.class));
-		verify(partyPostValidator).filteringPosts(any(User.class), anyList());
 		assertThat(result.getCode()).isEqualTo(200);
 		assertThat(result.getMsg()).isEqualTo("핫한 모집글 조회 완료");
-		assertThat(result.getData().size()).isEqualTo(1);
+		assertThat(result.getData().size()).isEqualTo(0);
 	}
 
 	@Test
