@@ -275,7 +275,7 @@ public class PartyPostService implements IPartyPostService {
     }
 
     //유저의 차단 리스트를 필터링 ,유저가 로그인 상태일때에 적용
-    private List<PartyPostListResponse> userFilteredPosts(User user,List<PartyPost> partyPostList)
+    public List<PartyPostListResponse> userFilteredPosts(User user,List<PartyPost> partyPostList)
     {
         List<PartyPostListResponse> filteredPosts;
         if (user==null) {
