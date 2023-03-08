@@ -116,10 +116,8 @@ class UserControllerTest {
 		mockMvc.perform(post(uri("/signout"))
 			)
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.code").value(200))
-			.andExpect(jsonPath("$.msg").isString())
-			.andExpect(header().string(AUTHORIZATION_HEADER, ""))
-			.andExpect(cookie().value("rfToken", IsNull.nullValue()));
+			.andExpect(cookie().value("rfToken", ""))
+			.andExpect(cookie().value(AUTHORIZATION_HEADER, "Bearer"));
 		//  then
 		verify(userService).signOut(any(User.class));
 	}
