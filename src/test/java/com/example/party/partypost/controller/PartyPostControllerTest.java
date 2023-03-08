@@ -232,77 +232,77 @@ class PartyPostControllerTest {
 			verify(partyPostService).deletePartyPost(anyLong(), any(User.class));
 		}
 
-//		@Test
-//		void searchPartyPost() throws Exception{
-//		//  given
-//
-//		//  when
-//			when(partyPostService.searchPartyPost(any(User.class), anyString(), anyInt()))
-//				.thenReturn(DataApiResponse.ok("모집글 검색 완료", Collections.emptyList()));
-//
-//			mockMvc.perform(get(uri("/search"))
-//				.param("searchText", "searchText")
-//				.param("page", "999")
-//			)
-//				.andExpect(status().isOk())
-//				.andExpect(jsonPath("$.code").value(200))
-//				.andExpect(jsonPath("$.msg").isString())
-//				.andExpect(jsonPath("$.data").isArray());
-//		//  then
-//			verify(partyPostService).searchPartyPost(any(User.class), anyString(), anyInt());
-//		}
+		@Test
+		void searchPartyPost() throws Exception{
+		//  given
 
-//		@Test
-//		void findHotPartyPost() throws Exception{
-//		//  given
-//
-//		//  when
-//			when(partyPostService.findHotPartyPost(any(User.class)))
-//				.thenReturn(DataApiResponse.ok("핫한 모집글 조회 완료", Collections.emptyList()));
-//
-//			mockMvc.perform(get(uri("/hot")))
-//				.andExpect(status().isOk())
-//				.andExpect(jsonPath("$.code").value(200))
-//				.andExpect(jsonPath("$.msg").isString());
-//		//  then
-//			verify(partyPostService).findHotPartyPost(any(User.class));
-//		}
+		//  when
+			when(partyPostService.searchPartyPost(any(User.class), anyString(), anyInt()))
+				.thenReturn(DataApiResponse.ok("모집글 검색 완료", Collections.emptyList()));
 
-//		@Test
-//		void searchPartyPostByCategory() throws Exception{
-//			//  given
-//
-//			//  when
-//			when(partyPostService.searchPartyPostByCategory(any(User.class), anyLong(), anyInt()))
-//				.thenReturn(DataApiResponse.ok("카테고리별 모집글 조회 완료", Collections.emptyList()));
-//
-//			mockMvc.perform(get(uri("/categories/995"))
-//					.param("page", "999")
-//				)
-//				.andExpect(status().isOk())
-//				.andExpect(jsonPath("$.code").value(200))
-//				.andExpect(jsonPath("$.msg").isString())
-//				.andExpect(jsonPath("$.data").isArray());
-//			//  then
-//			verify(partyPostService).searchPartyPostByCategory(any(User.class), anyLong(), anyInt());
-//		}
+			mockMvc.perform(get(uri("/search"))
+				.param("searchText", "searchText")
+				.param("page", "999")
+			)
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.code").value(200))
+				.andExpect(jsonPath("$.msg").isString())
+				.andExpect(jsonPath("$.data").isArray());
+		//  then
+			verify(partyPostService).searchPartyPost(any(User.class), anyString(), anyInt());
+		}
 
-//		@Test
-//		void findNearPartyPost() throws Exception{
-//		//  given
-//
-//		//  when
-//			when(partyPostService.findNearPartyPost(any(User.class), anyString()))
-//				.thenReturn(DataApiResponse.ok("주변 모집글 조회 완료", Collections.emptyList()));
-//
-//			mockMvc.perform(get(uri("/near/서울시중랑구망우동")))
-//				.andExpect(status().isOk())
-//				.andExpect(jsonPath("$.code").value(200))
-//				.andExpect(jsonPath("$.msg").isString())
-//				.andExpect(jsonPath("$.data").isArray());
-//		//  then
-//			verify(partyPostService).findNearPartyPost(any(User.class), anyString());
-//		}
+		@Test
+		void findHotPartyPost() throws Exception{
+		//  given
+
+		//  when
+			when(partyPostService.findHotPartyPost(any(User.class)))
+				.thenReturn(DataApiResponse.ok("핫한 모집글 조회 완료", Collections.emptyList()));
+
+			mockMvc.perform(get(uri("/hot")))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.code").value(200))
+				.andExpect(jsonPath("$.msg").isString());
+		//  then
+			verify(partyPostService).findHotPartyPost(any(User.class));
+		}
+
+		@Test
+		void searchPartyPostByCategory() throws Exception{
+			//  given
+
+			//  when
+			when(partyPostService.searchPartyPostByCategory(any(User.class), anyLong(), anyInt()))
+				.thenReturn(DataApiResponse.ok("카테고리별 모집글 조회 완료", Collections.emptyList()));
+
+			mockMvc.perform(get(uri("/categories/995"))
+					.param("page", "999")
+				)
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.code").value(200))
+				.andExpect(jsonPath("$.msg").isString())
+				.andExpect(jsonPath("$.data").isArray());
+			//  then
+			verify(partyPostService).searchPartyPostByCategory(any(User.class), anyLong(), anyInt());
+		}
+
+		@Test
+		void findNearPartyPost() throws Exception{
+		//  given
+
+		//  when
+			when(partyPostService.findNearPartyPost(any(User.class), anyString()))
+				.thenReturn(DataApiResponse.ok("주변 모집글 조회 완료", Collections.emptyList()));
+
+			mockMvc.perform(get(uri("/near/서울시중랑구망우동")))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.code").value(200))
+				.andExpect(jsonPath("$.msg").isString())
+				.andExpect(jsonPath("$.data").isArray());
+		//  then
+			verify(partyPostService).findNearPartyPost(any(User.class), anyString());
+		}
 
 	}
 }

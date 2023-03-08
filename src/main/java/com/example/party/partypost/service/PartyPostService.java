@@ -147,7 +147,7 @@ public class PartyPostService implements IPartyPostService {
         List<PartyPost> partyPostList = partyPostRepository.findFirst3ByOrderByViewCntDesc(pageable);
 
         // 유저의 차단 리스트를 필터링 ,유저가 로그인 상태일때에 적용
-        List<PartyPostListResponse> filteredPosts = userFilteredPosts(user,partyPostList);
+        List<PartyPostListResponse> filteredPosts = userFilteredPosts(user, partyPostList);
 
         return DataApiResponse.ok("핫한 모집글 조회 완료", filteredPosts);
     }
