@@ -28,7 +28,7 @@ public class UserTestHelper {
 	public static ProfileRequest profilesRequest() {
 		return new ProfileRequest(
 			"nickname",
-			"",
+			"profileImg",
 			"comment"
 		);
 	}

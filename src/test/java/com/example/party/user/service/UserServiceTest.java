@@ -1,280 +1,208 @@
-// package com.example.party.user.service;
-//
-// import static org.assertj.core.api.AssertionsForClassTypes.*;
-// import static org.mockito.Mockito.*;
-//
-// import java.util.Objects;
-// import java.util.Optional;
-//
-// import org.junit.jupiter.api.DisplayName;
-// import org.junit.jupiter.api.Test;
-// import org.junit.jupiter.api.extension.ExtendWith;
-// import org.mockito.InjectMocks;
-// import org.mockito.Mock;
-// import org.mockito.Spy;
-// import org.mockito.junit.jupiter.MockitoExtension;
-// import org.springframework.mock.web.MockHttpServletResponse;
-// import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-//
-// import com.example.party.global.dto.ResponseDto;
-// import com.example.party.user.dto.LoginRequest;
-// import com.example.party.user.dto.ProfileRequest;
-// import com.example.party.user.dto.SignupRequest;
-// import com.example.party.user.dto.WithdrawRequest;
-// import com.example.party.user.entity.Profile;
-// import com.example.party.user.entity.User;
-// import com.example.party.user.repository.UserRepository;
-// import com.example.party.user.type.Status;
-// import com.example.party.user.type.UserRole;
-//
-// @ExtendWith(MockitoExtension.class)
-// class UserServiceTest {
-//
-// 	@Mock
-// 	private UserRepository userRepository;
-//
-// 	@InjectMocks
-// 	private UserService userService;
-//
-// 	@Spy
-// 	private BCryptPasswordEncoder passwordEncoder;
-//
-// 	@Test
-// 	@DisplayName("회원가입")
-// 	void 회원가입_성공() {
-// 		// given
-// 		SignupRequest request = SignupRequest.builder()
-// 			.email("asd123@gmail.com")
-// 			.password("asd123!@#")
-// 			.nickname("김김김")
-// 			.phoneNum("123-1234-1234")
-// 			.build();
-//
-// 		when(userRepository.findByEmail(any(String.class)))
-// 			.thenReturn(Optional.empty());
-//
-// 		// when
-// 		ResponseDto response = userService.signUp(request);
-//
-// 		// then
-// 		assertThat(response.getCode()).isEqualTo(201);
-// 		assertThat(response.getMsg()).isEqualTo("회원가입 완료");
-//
-// 		verify(userRepository, times(1)).save(any(User.class));
-// 	}
-//
-// 	@Test
-// 	@DisplayName("회원가입")
-// 	void 중복된_이메일_실패() {
-// 		// given
-// 		SignupRequest request = SignupRequest.builder()
-// 			.email("asd123@gmail.com")
-// 			.password("asd123!@#")
-// 			.nickname("김김김")
-// 			.phoneNum("123-1234-1234")
-// 			.build();
-//
-// 		String email = "asd123@gmail.com";
-// 		String password = "asd123!@#";
-// 		String nickname = "ㅁㄴㅇ";
-// 		String phoneNum = "123-1234-1234";
-// 		User user = new User(email, password, nickname, phoneNum
-// 			, UserRole.ROLE_USER, Status.ACTIVE);
-//
-// 		when(userRepository.findByEmail(any(String.class)))
-// 			.thenReturn((Optional.of(user)));
-//
-// 		// when
-// 		ResponseDto response = userService.signUp(request);
-//
-// 		// then
-// 		assertThat(response.getCode()).isEqualTo(201);
-// 		assertThat(response.getMsg()).isEqualTo("회원가입 완료");
-//
-// 		verify(userRepository, times(1)).save(any(User.class));
-// 	}
-//
-// 	@Test
-// 	@DisplayName("로그인")
-// 	void 로그인_성공() {
-// 		// given
-// 		LoginRequest request = LoginRequest.builder()
-// 			.email("asd123@gmail.com")
-// 			.password("asd123!@#")
-// 			.build();
-//
-// 		String email = "asd123@gmail.com";
-// 		String password = "asd123!@#";
-// 		String nickname = "ㅁㄴㅇ";
-// 		String phoneNum = "123-1234-1234";
-// 		User user = new User(email, passwordEncoder.encode(password), nickname, phoneNum
-// 			, UserRole.ROLE_USER, Status.ACTIVE);
-//
-// 		MockHttpServletResponse servletResponse = new MockHttpServletResponse();
-//
-// 		when(userRepository.findByEmail(any(String.class)))
-// 			.thenReturn((Optional.of(user)));
-//
-// 		// when
-// 		ResponseDto response = userService.signIn(request);
-//
-// 		// then
-// 		assertThat(response.getCode()).isEqualTo(200);
-// 		assertThat(response.getMsg()).isEqualTo("로그인 완료");
-// 		assertThat(Objects.requireNonNull(servletResponse.getHeaderValue("Authorization")).toString()).isNotEmpty();
-// 	}
-//
-// 	@Test
-// 	@DisplayName("로그인")
-// 	void 입력값_다름_실패() {
-// 		// given
-// 		LoginRequest request = LoginRequest.builder()
-// 			.email("asd123@gmail.com")
-// 			.password("asd123!@#")
-// 			.build();
-//
-// 		String email = "asd123@gmail.com";
-// 		String password = "asd123!";
-// 		String nickname = "ㅁㄴㅇ";
-// 		String phoneNum = "123-1234-1234";
-// 		User user = new User(email, passwordEncoder.encode(password), nickname, phoneNum
-// 			, UserRole.ROLE_USER, Status.ACTIVE);
-//
-// 		MockHttpServletResponse servletResponse = new MockHttpServletResponse();
-//
-// 		when(userRepository.findByEmail(any(String.class)))
-// 			.thenReturn((Optional.of(user)));
-//
-// 		// when
-// 		ResponseDto response = userService.signIn(request, servletResponse);
-//
-// 		// then
-// 		assertThat(response.getCode()).isEqualTo(200);
-// 		assertThat(response.getMsg()).isEqualTo("로그인 완료");
-// 		assertThat(Objects.requireNonNull(servletResponse.getHeaderValue("Authorization")).toString()).isNotEmpty();
-// 	}
-//
-// 	@Test
-// 	@DisplayName("로그인")
-// 	void 레포짓토리_이메일_없음() {
-// 		// given
-// 		LoginRequest request = LoginRequest.builder()
-// 			.email("asd123@gmail.com")
-// 			.password("asd123!@#")
-// 			.build();
-//
-// 		MockHttpServletResponse servletResponse = new MockHttpServletResponse();
-//
-// 		when(userRepository.findByEmail(any(String.class)))
-// 			.thenReturn((Optional.empty()));
-//
-// 		// when
-// 		ResponseDto response = userService.signIn(request, servletResponse);
-//
-// 		// then
-// 		assertThat(response.getCode()).isEqualTo(200);
-// 		assertThat(response.getMsg()).isEqualTo("로그인 완료");
-// 		assertThat(Objects.requireNonNull(servletResponse.getHeaderValue("Authorization")).toString()).isNotEmpty();
-// 	}
-//
-// 	@Test
-// 	@DisplayName("로그아웃")
-// 	void 로그아웃() {
-//
-// 	}
-//
-// 	@Test
-// 	@DisplayName("회원탈퇴")
-// 	void 회원탈퇴_성공() {
-// 		// given
-// 		WithdrawRequest request = WithdrawRequest.builder()
-// 			.password("asd123!@#")
-// 			.build();
-//
-// 		String email = "asd123@gmail.com";
-// 		String password = "asd123!@#";
-// 		String nickname = "ㅁㄴㅇ";
-// 		String phoneNum = "123-1234-1234";
-// 		User userDetails = new User(email, passwordEncoder.encode(password), nickname, phoneNum
-// 			, UserRole.ROLE_USER, Status.ACTIVE);
-//
-// 		when(userRepository.findByEmail(any(String.class)))
-// 			.thenReturn((Optional.of(userDetails)));
-//
-// 		// when
-// 		ResponseDto response = userService.withdraw(userDetails, request);
-//
-// 		// then
-// 		assertThat(response.getCode()).isEqualTo(200);
-// 		assertThat(response.getMsg()).isEqualTo("로그인 완료");
-// 	}
-//
-// 	@Test
-// 	@DisplayName("회원탈퇴")
-// 	void 비밀번호_비일치() {
-// 		// given
-// 		WithdrawRequest request = WithdrawRequest.builder()
-// 			.password("asd12!")
-// 			.build();
-//
-// 		String email = "asd123@gmail.com";
-// 		String password = "asd123!@#";
-// 		String nickname = "ㅁㄴㅇ";
-// 		String phoneNum = "123-1234-1234";
-// 		User userDetails = new User(email, passwordEncoder.encode(password), nickname, phoneNum
-// 			, UserRole.ROLE_USER, Status.ACTIVE);
-//
-// 		userRepository.save(userDetails);
-//
-// 		when(userRepository.findByEmail(any(String.class)))
-// 			.thenReturn((Optional.of(userDetails)));
-//
-// 		// when
-// 		ResponseDto response = userService.withdraw(userDetails, request);
-//
-// 		// then
-// 		assertThat(response.getCode()).isEqualTo(200);
-// 		assertThat(response.getMsg()).isEqualTo("로그인 완료");
-//
-// 	}
-//
-// 	@Test
-// 	void updateProfile() {
-//
-// 		// given
-// 		String email = "asd123@gmail.com";
-// 		String password = "asd123!@#";
-// 		String nickname = "ㅁㄴㅇ";
-// 		String phoneNum = "123-1234-1234";
-// 		User user = new User(email, passwordEncoder.encode(password), nickname, phoneNum, UserRole.ROLE_USER,
-// 			Status.ACTIVE);
-// 		user.setId(1l);
-// 		Long id = user.getId();
-//
-// 		String proFileUrl = "0ㄱㄱㄷㄱ0";
-// 		String comment = "프로필 내용을 수정합니다.";
-//
-// 		Profile profile = new Profile(proFileUrl, comment, 5, 5);
-// 		profile.setId(id);
-//
-// 		//수정할 수정사항
-// 		ProfileRequest profileRequest = ProfileRequest.builder()
-// 			.nickName("김홍길동")
-// 			.phoneNum("010-1234-4321")
-// 			.proFileUrl("0ㄱㄱㄷㄱ0")
-// 			.comment("프로필 내용을 수정합니다.")
-// 			.build();
-//
-// 		// when
-// 		ResponseDto responseDto = userService.updateProfile(profileRequest, 0l);
-//
-// 		//then 검증
-// 		assertThat(responseDto.getCode()).isEqualTo(200);
-// 		assertThat(responseDto.getMsg()).isEqualTo("프로필 정보 수정 완료");
-// 		// assertThat(responseDto.getMsg().getNickName()).isEqualTo("test");
-// 		// assertThat(responseDto.getMsg().getPhoneNum()).isEqualTo("01012345678");
-// 		// assertThat(responseDto.getMsg().getProFileUrl()).isEqualTo("test.com");
-// 		// assertThat(responseDto.getMsg().getComment()).isEqualTo("test comment");
-//
-// 	}
-// }
+package com.example.party.user.service;
+
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Optional;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.redis.core.RedisOperations;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.example.party.global.common.ApiResponse;
+import com.example.party.user.dto.LoginRequest;
+import com.example.party.user.dto.ProfileRequest;
+import com.example.party.user.dto.SignupRequest;
+import com.example.party.user.dto.WithdrawRequest;
+import com.example.party.user.entity.Profile;
+import com.example.party.user.entity.User;
+import com.example.party.user.exception.EmailOverlapException;
+import com.example.party.user.exception.ExistNicknameException;
+import com.example.party.user.repository.ProfilesRepository;
+import com.example.party.user.repository.UserRepository;
+import com.example.party.user.type.Status;
+
+@ExtendWith(MockitoExtension.class)
+class UserServiceTest {
+	@Mock
+	private UserRepository userRepository;
+	@Mock
+	private PasswordEncoder passwordEncoder;
+	@Mock
+	private RedisTemplate<String, String> redisTemplate;
+	@Mock
+	private ProfilesRepository profilesRepository;
+	@InjectMocks
+	private UserService userService;
+	private User user;
+	private ValueOperations<String, String> valueOperations;
+	private LoginRequest loginRequest;
+
+	@BeforeEach
+	public void setup() {
+		this.user = mock(User.class);
+		this.valueOperations = mock(ValueOperations.class);
+		this.loginRequest = mock(LoginRequest.class);
+	}
+
+	@Test
+	void signUp() {
+		//  given
+		SignupRequest signupRequest = mock(SignupRequest.class);
+		//  when
+		when(signupRequest.getEmail()).thenReturn("email@test.com");
+		when(signupRequest.getNickname()).thenReturn("NICKNAME");
+		when(signupRequest.getPassword()).thenReturn("password1!");
+		when(userRepository.existsUserByEmail(anyString())).thenReturn(false);
+		when(userRepository.existsUserByNickname(anyString())).thenReturn(false);
+		when(passwordEncoder.encode(anyString())).thenReturn("ENCODED_PASSWORD");
+
+		ApiResponse result = userService.signUp(signupRequest);
+		//  then
+		verify(userRepository).existsUserByEmail(anyString());
+		verify(userRepository).existsUserByNickname(anyString());
+		verify(passwordEncoder).encode(anyString());
+		verify(userRepository).save(any(User.class));
+		assertThat(result.getCode()).isEqualTo(201);
+		assertThat(result.getMsg()).isEqualTo("회원가입 완료");
+	}
+
+	@Test
+	void signIn() {
+		//  given
+
+		//  when
+		when(loginRequest.getEmail()).thenReturn("EMAIL");
+		when(loginRequest.getPassword()).thenReturn("test1234!");
+		when(user.getPassword()).thenReturn("test1234!");
+		when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
+		when(passwordEncoder.matches(anyString(), anyString())).thenReturn(true);
+		when(redisTemplate.opsForValue()).thenReturn(valueOperations);
+		when(valueOperations.get(anyString())).thenReturn(null);
+		when(user.getStatus()).thenReturn(Status.ACTIVE);
+		String result = userService.signIn(loginRequest);
+		//  then
+		verify(userRepository).findByEmail(anyString());
+		verify(passwordEncoder).matches(anyString(), anyString());
+		verify(redisTemplate).opsForValue();
+		verify(valueOperations).get(anyString());
+		verify(valueOperations).set(anyString(), anyString());
+		assertThat(result).isNotBlank();
+	}
+
+	@Test
+	void signOut() {
+		//  given
+		RedisOperations<String, String> operations = mock(RedisOperations.class);
+
+		//  when
+		when(user.getId()).thenReturn(1L);
+		when(redisTemplate.opsForValue()).thenReturn(valueOperations);
+		when(valueOperations.getOperations()).thenReturn(operations);
+		when(operations.delete(anyString())).thenReturn(true);
+		ApiResponse result = userService.signOut(user);
+		//  then
+		verify(operations).delete(anyString());
+		assertThat(result.getCode()).isEqualTo(200);
+		assertThat(result.getMsg()).isEqualTo("로그아웃 완료");
+	}
+
+	@Test
+	void withdraw() {
+		//  given
+		WithdrawRequest withdrawRequest = mock(WithdrawRequest.class);
+		RedisOperations operations = mock(RedisOperations.class);
+		//  when
+		when(user.getEmail()).thenReturn("EMAIL");
+		when(userRepository.findByEmail(anyString())).thenReturn(Optional.of(user));
+		when(user.getPassword()).thenReturn("password1!");
+		when(withdrawRequest.getPassword()).thenReturn("password1!");
+		when(passwordEncoder.matches(anyString(), anyString())).thenReturn(true);
+		when(redisTemplate.opsForValue()).thenReturn(valueOperations);
+		when(valueOperations.getOperations()).thenReturn(operations);
+		when(operations.delete(anyString())).thenReturn(true);
+		when(user.getId()).thenReturn(1L);
+
+		ApiResponse result = userService.withdraw(user, withdrawRequest);
+		//  then
+		verify(userRepository).findByEmail(anyString());
+		verify(passwordEncoder).matches(anyString(), anyString());
+		verify(user).DormantState();
+		assertThat(result.getCode()).isEqualTo(200);
+		assertThat(result.getMsg()).isEqualTo("회원탈퇴 완료");
+	}
+
+	@Test
+	void updateProfile() throws IOException {
+		//  given
+		ProfileRequest profileRequest = mock(ProfileRequest.class);
+		Profile profile = mock(Profile.class);
+		MultipartFile file = mock(MultipartFile.class);
+		//  when
+		when(user.getProfile()).thenReturn(profile);
+		when(userRepository.save(any(User.class))).thenReturn(user);
+		when(profileRequest.getProfileImg()).thenReturn("profileImg");
+		when(profileRequest.getComment()).thenReturn("comment");
+		doNothing().when(user).updateProfile(any(ProfileRequest.class));
+		when(file.isEmpty()).thenReturn(true);
+
+
+		ApiResponse result = userService.updateProfile(profileRequest, user, file);
+		//  then
+		verify(userRepository).save(any(User.class));
+		verify(user).updateProfile(any(ProfileRequest.class));
+		verify(profilesRepository).save(any(Profile.class));
+		verify(userRepository).save(any(User.class));
+		assertThat(result.getCode()).isEqualTo(200);
+		assertThat(result.getMsg()).isEqualTo("프로필 정보 수정 완료");
+	}
+
+	// throw Exception
+
+	@Test
+	void signUp_EmailOverlapException() {
+		//  given
+		SignupRequest signupRequest = mock(SignupRequest.class);
+		//  when
+		when(signupRequest.getEmail()).thenReturn("email@test.com");
+		when(userRepository.existsUserByEmail(anyString())).thenReturn(true);
+
+		var thrown = assertThatThrownBy(
+			() -> userService.signUp(signupRequest));
+		//  then
+		verify(userRepository).existsUserByEmail(anyString());
+		thrown.isInstanceOf(EmailOverlapException.class)
+			.hasMessage(EmailOverlapException.MSG);
+	}
+
+	@Test
+	void signUp_ExistNicknameException() {
+		//  given
+		SignupRequest signupRequest = mock(SignupRequest.class);
+		//  when
+		when(signupRequest.getEmail()).thenReturn("email@test.com");
+		when(signupRequest.getNickname()).thenReturn("NICKNAME");
+		when(userRepository.existsUserByNickname(anyString())).thenReturn(true);
+
+		var thrown = assertThatThrownBy(
+			() -> userService.signUp(signupRequest));
+		//  then
+		// verify(userRepository).existsUserByEmail(anyString());
+		verify(userRepository).existsUserByNickname(anyString());
+		thrown.isInstanceOf(ExistNicknameException.class)
+			.hasMessage(ExistNicknameException.MSG);
+	}
+}

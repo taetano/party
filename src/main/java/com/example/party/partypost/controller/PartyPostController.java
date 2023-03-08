@@ -61,6 +61,13 @@ public class PartyPostController {
 		return ResponseEntity.ok(partyPostService.getLikePartyPost(user));
 	}
 
+	//모집글 삭제
+	@DeleteMapping("/{party-postId}")
+	public ResponseEntity<ApiResponse> deletePartyPost(@PathVariable(name = "party-postId") Long partyPostId,
+		@AuthenticationPrincipal User user) {
+		return ResponseEntity.ok(partyPostService.deletePartyPost(partyPostId, user));
+	}
+
 	//모집글전체조회
 	@GetMapping()
 	public ResponseEntity<DataApiResponse<PartyPostListResponse>> findPartyList(
@@ -76,13 +83,6 @@ public class PartyPostController {
 		return ResponseEntity.ok(partyPostService.getPartyPost(partyPostId, user));
 	}
 
-	//모집글 삭제
-	@DeleteMapping("/{party-postId}")
-	public ResponseEntity<ApiResponse> deletePartyPost(@PathVariable(name = "party-postId") Long partyPostId,
-		@AuthenticationPrincipal User user) {
-		return ResponseEntity.ok(partyPostService.deletePartyPost(partyPostId, user));
-	}
-
 	// 모집글 검색 (지역명 & 제목)
 	@GetMapping("/search")
 	public DataApiResponse<PartyPostListResponse> searchPartyPost(
@@ -94,8 +94,8 @@ public class PartyPostController {
 
 	//조회수 많은 핫한 모집글 조회
 	@GetMapping("/hot")
-	public DataApiResponse<PartyPostListResponse> findHotPartyPost( User user) {
-		return partyPostService.findHotPartyPost(user);
+	public DataApiResponse<PartyPostListResponse> findHotPartyPost() {
+		return partyPostService.findHotPartyPost();
 	}
 
 	//카테고리명 별로 모집글 조회

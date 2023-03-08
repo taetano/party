@@ -72,8 +72,9 @@ public class UserController {
 	//프로필 정보 수정
 	@PostMapping("/profile")
 	public ResponseEntity<ApiResponse> updateProfile(
-		@Validated @RequestPart(value = "dto") ProfileRequest profileRequest,
-		@AuthenticationPrincipal User user, @RequestPart(value = "file") MultipartFile file) throws IOException {
+		@RequestPart(value = "file") MultipartFile file,
+		@RequestBody ProfileRequest profileRequest,
+		@AuthenticationPrincipal User user) throws IOException {
 		return ResponseEntity.ok(userService.updateProfile(profileRequest, user, file));
 	}
 
