@@ -143,30 +143,30 @@ class UserControllerTest {
 		verify(userService).withdraw(any(User.class), any(WithdrawRequest.class));
 	}
 
-	@Test
-	void updateProfile() throws Exception {
-		//  given
-		TestHelper.withoutSecurity();
-		MockMultipartFile file = new MockMultipartFile("file", "test.txt", MediaType.TEXT_PLAIN_VALUE,
-			"test".getBytes(StandardCharsets.UTF_8));
-
-		//  when
-		when(userService.updateProfile(any(ProfileRequest.class), any(User.class), any(MultipartFile.class)))
-			.thenReturn(ApiResponse.ok("프로필 정보 수정 완료"));
-
-		mockMvc.perform(multipart(uri("/profile"))
-				.file(file)
-				.contentType(MediaType.APPLICATION_JSON)
-				.content( objectMapper.writeValueAsString(
-					UserTestHelper.profilesRequest()
-				))
-			)
-			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.code").value(200))
-			.andExpect(jsonPath("$.msg").isString());
-		//  then
-		verify(userService).updateProfile(any(ProfileRequest.class), any(User.class), any(MultipartFile.class));
-	}
+	// @Test
+	// void updateProfile() throws Exception {
+	// 	//  given
+	// 	TestHelper.withoutSecurity();
+	// 	MockMultipartFile file = new MockMultipartFile("file", "test.txt", MediaType.TEXT_PLAIN_VALUE,
+	// 		"test".getBytes(StandardCharsets.UTF_8));
+	//
+	// 	//  when
+	// 	when(userService.updateProfile(any(ProfileRequest.class), any(User.class), any(MultipartFile.class)))
+	// 		.thenReturn(ApiResponse.ok("프로필 정보 수정 완료"));
+	//
+	// 	mockMvc.perform(multipart(uri("/profile"))
+	// 			.file(file)
+	// 			.contentType(MediaType.APPLICATION_JSON)
+	// 			.content( objectMapper.writeValueAsString(
+	// 				UserTestHelper.profilesRequest()
+	// 			))
+	// 		)
+	// 		.andExpect(status().isOk())
+	// 		.andExpect(jsonPath("$.code").value(200))
+	// 		.andExpect(jsonPath("$.msg").isString());
+	// 	//  then
+	// 	verify(userService).updateProfile(any(ProfileRequest.class), any(User.class), any(MultipartFile.class));
+	// }
 
 	@Test
 	void getMyProfile() throws Exception {

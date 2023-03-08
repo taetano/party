@@ -86,7 +86,7 @@ public class UserController {
 	@PostMapping("/profile")
 	public ResponseEntity<ApiResponse> updateProfile(
 		@RequestPart(value = "file") MultipartFile file,
-		@RequestBody ProfileRequest profileRequest,
+		@RequestPart(value = "dto") ProfileRequest profileRequest,
 		@AuthenticationPrincipal User user) throws IOException {
 		return ResponseEntity.ok(userService.updateProfile(profileRequest, user, file));
 	}
