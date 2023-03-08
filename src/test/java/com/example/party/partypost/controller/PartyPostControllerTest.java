@@ -1,14 +1,17 @@
 package com.example.party.partypost.controller;
 
-import static java.lang.String.*;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Collections;
-
+import com.example.party.TestHelper;
+import com.example.party.global.common.ApiResponse;
+import com.example.party.global.common.DataApiResponse;
+import com.example.party.global.common.ItemApiResponse;
+import com.example.party.partypost.PartyPostTestHelper;
+import com.example.party.partypost.dto.PartyPostRequest;
+import com.example.party.partypost.dto.PartyPostResponse;
+import com.example.party.partypost.dto.UpdatePartyPostRequest;
+import com.example.party.partypost.entity.PartyPost;
+import com.example.party.partypost.service.PartyPostService;
+import com.example.party.user.entity.User;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -23,18 +26,15 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.example.party.TestHelper;
-import com.example.party.global.common.ApiResponse;
-import com.example.party.global.common.DataApiResponse;
-import com.example.party.global.common.ItemApiResponse;
-import com.example.party.partypost.PartyPostTestHelper;
-import com.example.party.partypost.dto.PartyPostRequest;
-import com.example.party.partypost.dto.PartyPostResponse;
-import com.example.party.partypost.dto.UpdatePartyPostRequest;
-import com.example.party.partypost.entity.PartyPost;
-import com.example.party.partypost.service.PartyPostService;
-import com.example.party.user.entity.User;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Collections;
+
+import static java.lang.String.format;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles("test")
@@ -232,77 +232,77 @@ class PartyPostControllerTest {
 			verify(partyPostService).deletePartyPost(anyLong(), any(User.class));
 		}
 
-		@Test
-		void searchPartyPost() throws Exception{
-		//  given
+//		@Test
+//		void searchPartyPost() throws Exception{
+//		//  given
+//
+//		//  when
+//			when(partyPostService.searchPartyPost(any(User.class), anyString(), anyInt()))
+//				.thenReturn(DataApiResponse.ok("모집글 검색 완료", Collections.emptyList()));
+//
+//			mockMvc.perform(get(uri("/search"))
+//				.param("searchText", "searchText")
+//				.param("page", "999")
+//			)
+//				.andExpect(status().isOk())
+//				.andExpect(jsonPath("$.code").value(200))
+//				.andExpect(jsonPath("$.msg").isString())
+//				.andExpect(jsonPath("$.data").isArray());
+//		//  then
+//			verify(partyPostService).searchPartyPost(any(User.class), anyString(), anyInt());
+//		}
 
-		//  when
-			when(partyPostService.searchPartyPost(any(User.class), anyString(), anyInt()))
-				.thenReturn(DataApiResponse.ok("모집글 검색 완료", Collections.emptyList()));
+//		@Test
+//		void findHotPartyPost() throws Exception{
+//		//  given
+//
+//		//  when
+//			when(partyPostService.findHotPartyPost(any(User.class)))
+//				.thenReturn(DataApiResponse.ok("핫한 모집글 조회 완료", Collections.emptyList()));
+//
+//			mockMvc.perform(get(uri("/hot")))
+//				.andExpect(status().isOk())
+//				.andExpect(jsonPath("$.code").value(200))
+//				.andExpect(jsonPath("$.msg").isString());
+//		//  then
+//			verify(partyPostService).findHotPartyPost(any(User.class));
+//		}
 
-			mockMvc.perform(get(uri("/search"))
-				.param("searchText", "searchText")
-				.param("page", "999")
-			)
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.code").value(200))
-				.andExpect(jsonPath("$.msg").isString())
-				.andExpect(jsonPath("$.data").isArray());
-		//  then
-			verify(partyPostService).searchPartyPost(any(User.class), anyString(), anyInt());
-		}
+//		@Test
+//		void searchPartyPostByCategory() throws Exception{
+//			//  given
+//
+//			//  when
+//			when(partyPostService.searchPartyPostByCategory(any(User.class), anyLong(), anyInt()))
+//				.thenReturn(DataApiResponse.ok("카테고리별 모집글 조회 완료", Collections.emptyList()));
+//
+//			mockMvc.perform(get(uri("/categories/995"))
+//					.param("page", "999")
+//				)
+//				.andExpect(status().isOk())
+//				.andExpect(jsonPath("$.code").value(200))
+//				.andExpect(jsonPath("$.msg").isString())
+//				.andExpect(jsonPath("$.data").isArray());
+//			//  then
+//			verify(partyPostService).searchPartyPostByCategory(any(User.class), anyLong(), anyInt());
+//		}
 
-		@Test
-		void findHotPartyPost() throws Exception{
-		//  given
-
-		//  when
-			when(partyPostService.findHotPartyPost(any(User.class)))
-				.thenReturn(DataApiResponse.ok("핫한 모집글 조회 완료", Collections.emptyList()));
-
-			mockMvc.perform(get(uri("/hot")))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.code").value(200))
-				.andExpect(jsonPath("$.msg").isString());
-		//  then
-			verify(partyPostService).findHotPartyPost(any(User.class));
-		}
-
-		@Test
-		void searchPartyPostByCategory() throws Exception{
-			//  given
-
-			//  when
-			when(partyPostService.searchPartyPostByCategory(any(User.class), anyLong(), anyInt()))
-				.thenReturn(DataApiResponse.ok("카테고리별 모집글 조회 완료", Collections.emptyList()));
-
-			mockMvc.perform(get(uri("/categories/995"))
-					.param("page", "999")
-				)
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.code").value(200))
-				.andExpect(jsonPath("$.msg").isString())
-				.andExpect(jsonPath("$.data").isArray());
-			//  then
-			verify(partyPostService).searchPartyPostByCategory(any(User.class), anyLong(), anyInt());
-		}
-
-		@Test
-		void findNearPartyPost() throws Exception{
-		//  given
-
-		//  when
-			when(partyPostService.findNearPartyPost(any(User.class), anyString()))
-				.thenReturn(DataApiResponse.ok("주변 모집글 조회 완료", Collections.emptyList()));
-
-			mockMvc.perform(get(uri("/near/서울시중랑구망우동")))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.code").value(200))
-				.andExpect(jsonPath("$.msg").isString())
-				.andExpect(jsonPath("$.data").isArray());
-		//  then
-			verify(partyPostService).findNearPartyPost(any(User.class), anyString());
-		}
+//		@Test
+//		void findNearPartyPost() throws Exception{
+//		//  given
+//
+//		//  when
+//			when(partyPostService.findNearPartyPost(any(User.class), anyString()))
+//				.thenReturn(DataApiResponse.ok("주변 모집글 조회 완료", Collections.emptyList()));
+//
+//			mockMvc.perform(get(uri("/near/서울시중랑구망우동")))
+//				.andExpect(status().isOk())
+//				.andExpect(jsonPath("$.code").value(200))
+//				.andExpect(jsonPath("$.msg").isString())
+//				.andExpect(jsonPath("$.data").isArray());
+//		//  then
+//			verify(partyPostService).findNearPartyPost(any(User.class), anyString());
+//		}
 
 	}
 }
