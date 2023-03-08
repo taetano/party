@@ -38,7 +38,10 @@
 ## 3.  API 명세
 https://www.notion.so/47a47b7b603c42f0b99f898e98fe49b3?v=0d0802a2acd34da68bbabbab16b43350
 
-## 4. 주요 기능
+## 4. ERD 구조도
+https://www.erdcloud.com/d/TW2FrhRFWi64EnHqN
+
+## 5. 주요 기능
 ### 1. 회원가입 & 로그인
 - Spring Security 를 통한 인증/인가 구현 
 - JWT 사용(Access Token & RefreshToken 구현 
