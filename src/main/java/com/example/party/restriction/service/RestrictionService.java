@@ -5,14 +5,11 @@ import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
-import com.example.party.user.entity.Profile;
-import com.example.party.user.repository.ProfilesRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.party.application.entity.Application;
-import com.example.party.application.repository.ApplicationRepository;
 import com.example.party.global.common.ApiResponse;
 import com.example.party.global.common.DataApiResponse;
 import com.example.party.global.exception.BadRequestException;
@@ -139,7 +136,7 @@ public class RestrictionService {
 
         // 이미 신고한 이력이 있는지 체크
         checkExistingData(user.getId(), reported.getId(), partyPost.getId());
-        NoShow noShow = new NoShow(user, reported, partyPost);
+        NoShow noShow = new NoShow(user.getId(), reported.getId(), partyPost.getId());
         noShowRepository.save(noShow);
         return ApiResponse.ok("노쇼 신고 완료");
     }
@@ -150,17 +147,15 @@ public class RestrictionService {
         for (PartyPost partyPost : posts) {
             partyPost.ChangeStatusEnd();
             int joinUserSize = partyPost.getApplications().size();
-
             List<NoShow> noShowList = noShowRepository.findAllByPartyPostId(partyPost.getId());
-
 			// reportId 별로 NoShow 개체를 그룹화합니다.
             Map<Long, List<NoShow>> reportedNoShowMap = new HashMap<>();
             for (NoShow noShow : noShowList) {
-                Long reportedId = noShow.getReported().getId();
-				//reportId 가 검색되고 관련된 NoShow 개체 목록이 검색되고 보고된 Id가 reportedNoShowMap 에 추가
+                Long reportedId = noShow.getReportedId();
+				// key 를 가지고 있는지 체크하고 없으면 해당 키값을 가진 ArrayList를 만들고 noShow 를 넣음
                 reportedNoShowMap.computeIfAbsent(reportedId, k -> new ArrayList<>()).add(noShow);
             }
-
+            // Map.Entry : 한번의 조작으로 key, Value 값을 가져올 수 있음
             for (Map.Entry<Long, List<NoShow>> entry : reportedNoShowMap.entrySet()) {
                 Long reportedId = entry.getKey();
                 List<NoShow> reportedNoShowList = entry.getValue();

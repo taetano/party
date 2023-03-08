@@ -22,6 +22,8 @@ function logout() {
             "Authorization": getCookieValue('Authorization')
         },
         success: function () {
+            document.cookie = 'Authorization=; expires=Thu, 01 Jan 1970 00:00:01 UTC; path=/page;'
+            document.cookie = 'rfToken=; expires=Thu, 01 Jan 1970 00:00:01 UTC; path=/;'
             let host = window.location.host;
             let url = host + '/page/loginPage';
             window.location.href = 'http://' + url;
@@ -64,6 +66,10 @@ function getCategories() {
 
 //카테고리별 조회로 넘어가기
 function gotoCategory(categoryId) {
-    const categoryPageUrl = `/page/search?categoryId=` + categoryId;
-    window.location.href = categoryPageUrl;
+    window.location.href = `/page/search?categoryId=` + categoryId;
+}
+
+// 1:1채팅 버튼 클릭시
+function clickChat() {
+    alert("현재 1:1 채팅은 미구현 상태입니다")
 }

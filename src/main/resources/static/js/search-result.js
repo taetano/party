@@ -28,16 +28,27 @@ function getCookieValue(cookieName) {
 }
 
 function partypostClick(postId) {
-    console.log(postId)
-    // input 요소에서 검색어를 가져옵니다.
-    // const searchText = document.getElementById("postId").value;
-    // // 검색어를 인코딩합니다.
-    // const encodedSearchText = encodeURIComponent(searchText);
-    // 검색 결과 페이지 URL을 생성합니다. ex)/search?searchText=검색어
-    const partypostPageUrl = `/page/partypost?partypostId=` + postId;
+    $.ajax({
+        type: "GET",
+        url: `/api/users/loginCheck`,
+        contentType: "application/json",
+        headers: {
+            "Authorization": getCookieValue('Authorization')
+        },
+        success: function () {
+            const partypostPageUrl = `/page/partypost?partypostId=` + postId;
 
-    // 검색 결과 페이지로 이동합니다.
-    window.location.href = partypostPageUrl;
+            // 검색 결과 페이지로 이동합니다.
+            window.location.href = partypostPageUrl;
+
+
+        }, error: function () {
+            //로그인 안함
+            alert("로그인 페이지로 이동합니다")
+            window.location.href = `/page/loginPage`;
+        }
+    })
+
 }
 
 //페이지 바로 로딩시 검색어가 들어왔을때
@@ -45,7 +56,7 @@ function firstsearchPartyPost(inputVal) {
     $('#searchPartyPostResult').empty();
     $("#search").val(inputVal);
     $.ajax({
-        url: "http://13.124.4.58:8080/api/party-posts/search?",
+        url: "/api/party-posts/search?",
         headers: {
             "Authorization": getCookieValue('Authorization')
         },
@@ -110,7 +121,7 @@ function searchPartyPost(page) {
     $('#searchPartyPostResult').empty()
 
     $.ajax({
-        url: "http://13.124.4.58:8080/api/party-posts/search",
+        url: "/api/party-posts/search",
         headers: {
             "Authorization": getCookieValue('Authorization')
         },
@@ -128,7 +139,7 @@ function searchPartyPost(page) {
                 let title = obj['title'];
                 let partyOwner = obj['partyOwner'];
                 let status = obj['status'];
-                let acceptedMember = obj['acceptedMember'] + 1;
+                let acceptedMember = obj['acceptedMember'];
                 let maxMember = obj['maxMember'];
                 let partyDate = new Date(obj['partyDate']);
                 let closeDate = new Date(obj['closeDate']);
@@ -171,7 +182,7 @@ function searchPartyPost(page) {
 function searchPartyPostCategory(categoryId) {
     $('#searchPartyPostResult').empty();
     $.ajax({
-        url: `http://13.124.4.58:8080/api/party-posts/categories/${categoryId}`,
+        url: `/api/party-posts/categories/${categoryId}`,
         headers: {
             "Authorization": getCookieValue('Authorization')
         },
@@ -185,7 +196,7 @@ function searchPartyPostCategory(categoryId) {
                 let title = obj['title'];
                 let partyOwner = obj['partyOwner'];
                 let status = obj['status'];
-                let acceptedMember = obj['acceptedMember'] + 1;
+                let acceptedMember = obj['acceptedMember'];
                 let maxMember = obj['maxMember'];
                 let partyDate = new Date(obj['partyDate']);
                 let closeDate = new Date(obj['closeDate']);

@@ -45,8 +45,8 @@
 <header class="masthead text-center text-white">
     <div class="masthead-content">
         <div class="container px-5">
-            <h1 class="masthead-heading mb-0">글자 없~다</h1>
-            <h2 class="masthead-subheading mb-4">진짜 없~~다</h2>
+            <h1 class="masthead-heading mb-0">Let's PARTY</h1>
+            <h2 class="masthead-subheading mb-4">관심있는 모임을 찾아봐요!</h2>
             <form onsubmit="return false">
                         <span style="font-size:1.5em;">
                         <input class="search-text" id="search" name="search" placeholder="관심있는 제목 또는 지역을 입력해주세요."
@@ -54,7 +54,7 @@
                         <a class="search-btn" id="searchPartyPost" onclick="handleSearchButtonClick()">검색</a>
                         </span>
             </form>
-            <a class="write-btn" href="/page/partypost/writer">모집글 작성하기</a>
+            <a class="write-btn" onclick="clickToPostWriter()">모집글 작성하기</a>
         </div>
     </div>
     <div class="bg-circle-1 bg-circle"></div>
@@ -64,7 +64,8 @@
 </header>
 <!-- Content section 1-->
 <section id="scroll">
-    <a class="text-decoration-none link-dark" href="#!"><h5 class="card-title mt-5 ms-2 fs-4">내 주변 모임</h5></a>
+    <a class="text-decoration-none link-dark"><h5 class="card-title mt-5 ms-2 fs-4">지금 진행중인 주변 모임 TOP 3</h5><h6>(현재 연남동
+        기준입니다)</h6></a>
     <div id="nearPartyposts" class="row gx-5 ms-5">
         <div class="col-lg-4 my-5">
             <div class="card h-100 shadow border-0">
@@ -118,7 +119,7 @@
             <div class="card h-100 shadow border-0 me-5">
                 <div class="card-body p-4">
                     <div class="badge bg-primary bg-gradient rounded-pill mb-2">Status</div>
-                    <a class="text-decoration-none link-dark stretched-link" href="#!"><h5 class="card-title mb-3">Party
+                    <a class="text-decoration-none link-dark stretched-link"><h5 class="card-title mb-3">Party
                         post title</h5></a>
                     <p class="card-text mb-0">위치 정보: 00시 00동</p>
                     <p class="card-text mb-0">모임일: 2023-03-12 15:15</p>
@@ -142,7 +143,8 @@
 </section>
 <!-- Content section 2-->
 <section>
-    <a class="text-decoration-none link-dark" href="#!"><h5 class="card-title mt-5 ms-2 fs-4"> 핫한 모임</h5></a>
+    <a class="text-decoration-none link-dark"><h5 class="card-title mt-5 ms-2 fs-4">조회수 높은 핫한 모임 TOP 3</h5>
+    </a>
     <div id="hotPartyposts" class="row gx-5 ms-5">
         <div class="col-lg-4 my-5">
             <div class="card h-100 shadow border-0">
@@ -220,7 +222,8 @@
 </section>
 <!-- Footer-->
 <footer class="py-3 bg-black">
-    <div class="container px-5"><p class="m-0 text-center text-white small">Copyright &copy; Your Website 2023</p></div>
+    <div class="container px-5"><p class="m-0 text-center text-white small">Copyright &copy; Let's Party team 2023</p>
+    </div>
 </footer>
 <!-- Bootstrap core JS-->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>

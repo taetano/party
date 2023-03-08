@@ -9,8 +9,8 @@ DEPLOY_LOG="$PROJECT_ROOT/deploy.log"
 
 TIME_NOW=$(date +%c)
 
-# 환경변수 읽도록 추가
-source ~/.bashrc
+# 환경변수 읽도록 추가 코드인데, 현재 동작하지 않아 잠시 주석처리 했습니다.
+#source ~/.bashrc
 
 # build 파일 복사
 echo "$TIME_NOW > $JAR_FILE 파일 복사" >> $DEPLOY_LOG

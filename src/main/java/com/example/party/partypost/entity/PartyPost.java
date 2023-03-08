@@ -2,11 +2,9 @@ package com.example.party.partypost.entity;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -26,7 +24,6 @@ import com.example.party.global.common.TimeStamped;
 import com.example.party.partypost.dto.PartyPostRequest;
 import com.example.party.partypost.dto.UpdatePartyPostRequest;
 import com.example.party.partypost.type.Status;
-import com.example.party.restriction.entity.NoShow;
 import com.example.party.restriction.entity.ReportPost;
 import com.example.party.user.entity.User;
 
@@ -84,8 +81,6 @@ public class PartyPost extends TimeStamped {
 	private Category category; //카테고리
 	@OneToMany(mappedBy = "partyPost")
 	private List<ReportPost> reportPosts;
-	@OneToMany(mappedBy = "partyPost")
-	private List<NoShow> noShowReportPosts;
 
 	//생성자
 	public PartyPost(User user, PartyPostRequest request, LocalDateTime partyDate, Category category) {
@@ -122,6 +117,9 @@ public class PartyPost extends TimeStamped {
 		}
 	}
 
+	public void clearApplications() {
+		this.applications.clear();
+	}
 	//모집마감전인지 확인
 	public boolean beforeCloseDate(LocalDateTime now) {
 		return this.closeDate.isAfter(now);

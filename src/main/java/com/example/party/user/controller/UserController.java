@@ -1,5 +1,28 @@
 package com.example.party.user.controller;
 
+import java.io.IOException;
+import java.net.URI;
+import java.security.Principal;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.example.party.global.common.ApiResponse;
 import com.example.party.user.dto.LoginRequest;
 import com.example.party.user.dto.ProfileRequest;
@@ -9,23 +32,8 @@ import com.example.party.user.entity.User;
 import com.example.party.user.service.KakaoService;
 import com.example.party.user.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-import java.io.IOException;
-import java.net.URI;
-import java.security.Principal;
-
-import static com.example.party.global.util.JwtProvider.AUTHORIZATION_HEADER;
 
 @RestController
 @RequiredArgsConstructor
@@ -53,13 +61,18 @@ public class UserController {
 
 	//로그아웃
 	@PostMapping("/signout")
-	public ResponseEntity<ApiResponse> signOut(@AuthenticationPrincipal User user,
-		HttpServletResponse response) {
-		Cookie cookie = new Cookie("rfToken", null);
-		cookie.setMaxAge(0);
-		response.setHeader(AUTHORIZATION_HEADER, "");
-		response.addCookie(cookie);
-		return ResponseEntity.ok(userService.signOut(user));
+	public ResponseEntity<ApiResponse> signOut(@AuthenticationPrincipal User user) {
+		userService.signOut(user);
+		HttpHeaders headers = new HttpHeaders();
+		//accessToken 을 cookie에 넣기
+		headers.add("Set-Cookie",
+			String.format("Authorization=%s; Max-Age=0; Path=/page;", "Bearer " + ""));
+
+		//RefreshToken 을 cookie에 넣기
+		headers.add("Set-Cookie", String.format("rfToken=%s; Max-Age=0; Path=/; HttpOnly=true;", ""));
+
+		headers.setLocation(URI.create("/page/indexPage"));
+		return new ResponseEntity<>(headers, HttpStatus.OK);
 	}
 
 	//회원탈퇴
@@ -117,7 +130,7 @@ public class UserController {
 		//RefreshToken 을 cookie에 넣기
 		headers.add("Set-Cookie", String.format("rfToken=%s; Max-Age=604800; Path=/; HttpOnly=true;", token[1]));
 
-		headers.setLocation(URI.create("http://13.124.4.58:8080/page/indexPage"));
+		headers.setLocation(URI.create("/page/indexPage"));
 		return new ResponseEntity<>(headers, HttpStatus.FOUND);
 	}
 }

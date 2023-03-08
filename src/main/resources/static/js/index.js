@@ -8,7 +8,7 @@ jQuery(document).ready(function () {
 function LoginCheck() {
     $.ajax({
         type: "GET",
-        url: `http://13.124.4.58:8080/api/users/loginCheck`,
+        url: `/api/users/loginCheck`,
         contentType: "application/json",
         headers: {
             "Authorization": getCookieValue('Authorization')
@@ -57,9 +57,25 @@ function handleSearchButtonClick() {
 }
 
 function partypostClick(postId) {
-    console.log(postId)
-    const partypostPageUrl = `/page/partypost?partypostId=` + postId;
-    window.location.href = partypostPageUrl;
+    $.ajax({
+        type: "GET",
+        url: `/api/users/loginCheck`,
+        contentType: "application/json",
+        headers: {
+            "Authorization": getCookieValue('Authorization')
+        },
+        success: function () {
+            // 로그인함
+            const partypostPageUrl = `/page/partypost?partypostId=` + postId;
+            window.location.href = partypostPageUrl;
+
+
+        }, error: function () {
+            //로그인 안함
+            alert("로그인 페이지로 이동합니다")
+            window.location.href = `/page/loginPage`;
+        }
+    })
 }
 
 //조회수 높은 핫한글 모집글 조회
@@ -68,7 +84,7 @@ function getHotPartyPost() {
     $('#hotPartyposts').empty()
 
     $.ajax({
-        url: "http://13.124.4.58:8080/api/party-posts/hot",
+        url: "/api/party-posts/hot",
         headers: {
             "Authorization": getCookieValue('Authorization')
         },
@@ -124,7 +140,7 @@ function getNearPartyPost() {
 
     let Address = "서울 마포구 연남동"; //임시로 주소 고정 입력
     $.ajax({
-        url: "http://13.124.4.58:8080/api/party-posts/near/" + Address,
+        url: "/api/party-posts/near/" + Address,
         headers: {
             "Authorization": getCookieValue('Authorization')
         },
@@ -182,4 +198,25 @@ function handleKeyUp(e) {
     if (e.keyCode === 13) {
         handleSearchButtonClick();
     }
+}
+
+function clickToPostWriter() {
+    $.ajax({
+        type: "GET",
+        url: `/api/users/loginCheck`,
+        contentType: "application/json",
+        headers: {
+            "Authorization": getCookieValue('Authorization')
+        },
+        success: function () {
+            // 로그인함
+            window.location.href = `/page/partypost/writer`
+
+
+        }, error: function () {
+            //로그인 안함
+            alert("로그인 페이지로 이동합니다")
+            window.location.href = `/page/loginPage`;
+        }
+    })
 }

@@ -5,7 +5,6 @@ $(document).ready(function () {
     if (userId) {
         getOtherProfile(userId); //검색어가 들어왔을때 검색적용
     }
-
 });
 
 //상대방 프로필 조회
@@ -27,8 +26,8 @@ function getOtherProfile(userId) {
                 let noshowcnt = rows['noshowcnt']
                 let participationcnt = rows['participationCount']
 
-            let other_profile_temp =
-                `
+                let other_profile_temp =
+                    `
             <img class="circle-profile mt-5 mb-3" src="${profileImg}">
             <div id="nickname" class="nickname"><h2>${nickname}</h2></div>
             <div id="email" class="email"><h4>${email}</h4></div>
@@ -57,6 +56,7 @@ function getOtherProfile(userId) {
             <button class="btn btn-primary rounded-pill" onclick="clickReportUser(${userId})">해당유저 신고
             </button>
             `
+
                 console.log("프로필정보" + nickname, comment, email, noshowcnt, participationcnt)
 
                 $('#other-profile').append(other_profile_temp)
@@ -99,14 +99,14 @@ function clickReportUser(userId) {
             reason: 'SPAM',
             detailReason: "광고",
         }),
-            success(response) {
+        success(response) {
             console.log(response)
             alert("유저 신고가 완료되었습니다.")
             window.location.reload()
-            },
-            error(response, request) {
+        },
+        error(response, request) {
             console.log(response, request)
             alert("유저 신고 오류가 발생했습니다.")
-            }
+        }
     });
 }
