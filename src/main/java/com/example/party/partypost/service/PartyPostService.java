@@ -106,7 +106,7 @@ public class PartyPostService implements IPartyPostService {
     @Override
     @Transactional
     public DataApiResponse<PartyPostListResponse> searchPartyPost(User user, String searchText, int page) {
-        Pageable pageable = PageRequest.of(page - 1, 6 , Sort.by("createdAt").ascending());
+        Pageable pageable = PageRequest.of(page - 1, 6 , Sort.by("createdAt").descending());
 
         //1.검색 문자에 맞는 리스트 조회
         List<PartyPost> partyPostList = partyPostRepository.findByTitleContainingOrAddressContaining(searchText,
@@ -121,7 +121,7 @@ public class PartyPostService implements IPartyPostService {
     //카테고리 별 모집글 조회
     @Override
     public DataApiResponse<PartyPostListResponse> searchPartyPostByCategory(User user, Long categoryId, int page) {
-        Pageable pageable = PageRequest.of(page - 1, 6 , Sort.by("createdAt").ascending());
+        Pageable pageable = PageRequest.of(page - 1, 6 , Sort.by("createdAt").descending());
 
         Category category = categoryRepository.findById(categoryId).orElseThrow(
                 CategoryNotFoundException::new
