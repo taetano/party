@@ -32,7 +32,7 @@ server:
 cloud:
   aws:
     s3:
-      bucket: letsparty
+      bucket: letsparty-image-bucket
     region:
       static: ap-northeast-2
     stack:
