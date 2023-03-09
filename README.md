@@ -7,33 +7,25 @@
 
 
 ## 1. 사용기술
-- 백엔드 환경 
 
-  <img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=for-the-badge&logo=SpringBoot&logoColor=white"> <img src="https://img.shields.io/badge/Spring Security-6DB33F?style=for-the-badge&logo=SpringSecurity&logoColor=white"> 
-- DB 환경  
-<img src="https://img.shields.io/badge/MYSQL-4479A1?style=for-the-badge&logo=MYSQL&logoColor=white"> <img src="https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=Redis&logoColor=white">
-
-- 프론트엔드  
-<img src="https://img.shields.io/badge/Thymeleaf-6DB33F?style=for-the-badge&logo=Thymeleaf&logoColor=white"> <img src="https://img.shields.io/badge/Html-E34F26?style=for-the-badge&logo=html5&logoColor=white"> <img src="https://img.shields.io/badge/css-E34F26?style=for-the-badge&logo=html5&logoColor=white"> <img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=white"> 
-
-- 배포  
-<img src="https://img.shields.io/badge/amazon aws-232F3E?style=for-the-badge&logo=amazon aws&logoColor=white"> <img src="https://img.shields.io/badge/Github actions-2088FF?style=for-the-badge&logo=githubActions&logoColor=white">
-
-- 협업 도구 및 기타 개발 환경  
-<img src="https://img.shields.io/badge/Github-181717?style=for-the-badge&logo=github&logoColor=white"> <img src="https://img.shields.io/badge/intelli J-181717?style=for-the-badge&logo=intelliJIDEA&logoColor=white">
+ <img src="https://img.shields.io/badge/Spring Boot-6DB33F?style=for-the-badge&logo=SpringBoot&logoColor=white"> <img src="https://img.shields.io/badge/Spring Security-6DB33F?style=for-the-badge&logo=SpringSecurity&logoColor=white"> 
+<img src="https://img.shields.io/badge/MYSQL-4479A1?style=for-the-badge&logo=MYSQL&logoColor=white"> <img src="https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=Redis&logoColor=white">  
+  <img src="https://img.shields.io/badge/Thymeleaf-6DB33F?style=for-the-badge&logo=Thymeleaf&logoColor=white"> <img src="https://img.shields.io/badge/Html-E34F26?style=for-the-badge&logo=html5&logoColor=white"> <img src="https://img.shields.io/badge/css-E34F26?style=for-the-badge&logo=html5&logoColor=white"> <img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=white"> <img src="https://img.shields.io/badge/KAKAO API-FFCD00?style=for-the-badge&logo=KAKAO&logoColor=white">     
+<img src="https://img.shields.io/badge/amazon EC2-FF9900?style=for-the-badge&logo=amazon EC2&logoColor=white"> <img src="https://img.shields.io/badge/amazon RDS-527FFF?style=for-the-badge&logo=amazon RDS&logoColor=white"> <img src="https://img.shields.io/badge/amazon S3-569A31?style=for-the-badge&logo=amazon S3&logoColor=white"> <img src="https://img.shields.io/badge/Github actions-2088FF?style=for-the-badge&logo=githubActions&logoColor=white">   
+<img src="https://img.shields.io/badge/Github-181717?style=for-the-badge&logo=github&logoColor=white"> <img src="https://img.shields.io/badge/intelli J-181717?style=for-the-badge&logo=intelliJIDEA&logoColor=white"> <img src="https://img.shields.io/badge/POSTMAN-FF6C37?style=for-the-badge&logo=POSTMAN&logoColor=white">
 
 - JDK 11
 - SpringBoot 2.7.8
 
 
 ##  2. 팀원
-1. 리더 - 조운 [깃허브](https://github.com/jwoon1013)   
-2. 부리더 - 최찬호 [깃허브](https://github.com/chanoChoi) 
-3. 팀원   
-김민재 [깃허브](https://github.com/hobakk)    
-예진선 [깃허브](https://github.com/JinseonYe)    
-이상환 [깃허브](https://github.com/sang-hwann)    
-
+| 이름 | 깃허브 링크 | 
+| --- | --- | 
+| 조운 | [깃허브](https://github.com/jwoon1013)   | 
+| 최찬호 | [깃허브](https://github.com/chanoChoi) | 
+| 김민재| [깃허브](https://github.com/hobakk) | 
+| 예진선| [깃허브](https://github.com/JinseonYe) | 
+| 이상환| [깃허브](https://github.com/sang-hwann)  | 
 
 ## 3.  API 명세
 https://www.notion.so/47a47b7b603c42f0b99f898e98fe49b3?v=0d0802a2acd34da68bbabbab16b43350
@@ -46,6 +38,7 @@ https://www.erdcloud.com/d/TW2FrhRFWi64EnHqN
 - Spring Security 를 통한 인증/인가 구현 
 - JWT 사용(Access Token & RefreshToken 구현 
 : RefreshToken은 Redis로 관리)
+- 카카오 로그인 Oauth2
 - 로그아웃 기능
 
 ### 2. 유저 관련
@@ -55,7 +48,7 @@ https://www.erdcloud.com/d/TW2FrhRFWi64EnHqN
 - 내가 작성한 or 신청한 모집글 조회 기능
 
 ### 3. 모집글 관련 기능
-- 모집글 작성 & 수정 기능
+- 모집글 작성 & 수정 기능 (카카오 지도 api 사용)
 - 작성시 입력한 [모임시간] 기준 [15분전]을 [모집마감시간]으로 설정
 - 모집글 검색 기능 (주소 & 장소명 & 제목)
 - 카테고리별 모집글 조회 기능
@@ -71,8 +64,8 @@ https://www.erdcloud.com/d/TW2FrhRFWi64EnHqN
 - 참가인원이 차지 않은경우 모집글은 자동으로 [종료] 처리 됨
 
 ### 5. 노쇼 시스템 기능
-- 참가자는 [모임시간] 으로부터 1시간동안 노쇼 신고가 가능
-- 노쇼 신고 시간이 종료되면, 참가자의 과반수(반올림)에게 신고받은 유저는 노쇼포인트가 +1 됨
+- 참가자는 [노쇼투표시간] ("모임시간" 으로부터 1시간동안) 동안 다른유저 노쇼 투표가 가능
+- 노쇼 투표 시간이 종료되면, 참가자의 과반수(반올림)에게 신고받은 유저는 노쇼포인트가 +1 됨
 
 ### 6. 유저 차단 기능
 - 유저-유저 개인간의 차단 기능
@@ -94,4 +87,3 @@ https://www.erdcloud.com/d/TW2FrhRFWi64EnHqN
 - 특정유저 신고로그 조회 기능
 
 ※ 현재 관리자 기능의 경우 프론트 페이지가 구현되어있지 않습니다.
-
