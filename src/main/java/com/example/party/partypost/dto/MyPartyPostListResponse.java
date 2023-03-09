@@ -2,6 +2,7 @@ package com.example.party.partypost.dto;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 import com.example.party.application.dto.ApplicationResponse;
@@ -47,8 +48,10 @@ public class MyPartyPostListResponse {
 		this.title = partyPost.getTitle();
 		this.status = changeStatusTextToKorean(partyPost.getStatus());
 		this.maxMember = partyPost.getMaxMember();
-		this.partyDate = partyPost.getPartyDate().format(DateTimeFormatter.ofPattern("yy/MM/dd(E) HH:mm"));
-		this.closeDate = partyPost.getCloseDate().format(DateTimeFormatter.ofPattern("yy/MM/dd(E) HH:mm"));
+		this.partyDate = partyPost.getPartyDate().format(DateTimeFormatter.ofPattern("yy/MM/dd(E) HH:mm").localizedBy(
+			Locale.KOREAN));
+		this.closeDate = partyPost.getCloseDate().format(DateTimeFormatter.ofPattern("yy/MM/dd(E) HH:mm").localizedBy(
+			Locale.KOREAN));
 		this.address = partyPost.getAddress();
 		this.joinMember = partyPost.getApplications().stream()
 			.map(ApplicationResponse::new).collect(Collectors.toList());

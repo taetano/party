@@ -1,6 +1,7 @@
 package com.example.party.partypost.dto;
 
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 import com.example.party.partypost.entity.PartyPost;
 import com.example.party.partypost.type.Status;
@@ -41,8 +42,10 @@ public class PartyPostListResponse {
 		this.status = changeStatusTextToKorean(partyPost.getStatus());
 		this.acceptedMember = partyPost.getAcceptedMember();
 		this.maxMember = partyPost.getMaxMember();
-		this.partyDate = partyPost.getPartyDate().format(DateTimeFormatter.ofPattern("yy/MM/dd(E) a hh:mm"));
-		this.closeDate = partyPost.getCloseDate().format(DateTimeFormatter.ofPattern("yy/MM/dd(E) a hh:mm"));
+		this.partyDate = partyPost.getPartyDate().format(DateTimeFormatter.ofPattern("yy/MM/dd(E) a hh:mm").localizedBy(
+			Locale.KOREAN));
+		this.closeDate = partyPost.getCloseDate().format(DateTimeFormatter.ofPattern("yy/MM/dd(E) a hh:mm").localizedBy(
+			Locale.KOREAN));
 		this.partyAddress = partyPost.getAddress();
 		this.partyPlace = partyPost.getPartyPlace();
 		this.profileImg = partyPost.getUser().getProfile().getProfileImg();
