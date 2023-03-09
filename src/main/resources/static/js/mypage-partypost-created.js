@@ -63,9 +63,9 @@ function getPartyPostCreated() {
                     </div>`
 
                         //노쇼 리포팅 상태인경우 노쇼 버튼 있게 변경
-                        if (memberStatus === 'PENDING') {
+                        if (memberStatus === '대기중') {
                             $('#mypartypost-created-list').append(partypost_member_temp_html)
-                        } else if (status === 'NO_SHOW_REPORTING') {
+                        } else if (status === '노쇼 투표 진행중') {
                             $('#mypartypost-created-list').append(partyPost_member_noshowReporting_temp_html)
                         } else {
                             $('#mypartypost-created-list').append(partypost_member_notPending_temp_html)

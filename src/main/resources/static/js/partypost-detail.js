@@ -41,7 +41,6 @@ function get_partypost(postId) {
             let maxMember = responseData['maxMember']
             let partyDate = responseData['partyDate']
             let closeDate = responseData['closeDate']
-            let day = responseData['day']
             let address = responseData['address']
             let detailAddress = responseData['detailAddress']
             let partyPlace = responseData['partyPlace']
@@ -94,7 +93,7 @@ function get_partypost(postId) {
                                         <div class ="mt-6 mb-5">
                                             <p class="fs-5 fw-bold">주소: ${address} ${detailAddress}</p>
                                             <p class="fs-5 fw-bold">장소: ${partyPlace}</p>
-                                            <p class="fs-5 fw-bold">모임 일자: ${partyDate} ${day} </p>
+                                            <p class="fs-5 fw-bold">모임 일자: ${partyDate} </p>
                                             <p class="fs-5 fw-bold">모집 인원: ${acceptedMember} / ${maxMember}</p>
                                             <p class="fs-5 fw-bold">현재 파티원: </p>
                                         <div id="joinmember"></div>
@@ -154,7 +153,7 @@ function get_partypost(postId) {
                                     <section class="mb-5 mt-6">
                                         <p class="fs-5 fw-bold">주소: ${address} ${detailAddress}</p>
                                         <p class="fs-5 fw-bold">장소: ${partyPlace}</p>
-                                        <p class="fs-5 fw-bold">모임 일자: ${partyDate} + ${day} </p>
+                                        <p class="fs-5 fw-bold">모임 일자: ${partyDate}</p>
                                         <p class="fs-5 fw-bold">모집 인원: ${acceptedMember} / ${maxMember}</p>
                                         <p class="fs-5 fw-bold">현재 파티원: </p>
                                         <div id="joinmember"></div>
@@ -173,7 +172,7 @@ function get_partypost(postId) {
 
 
             console.log("포스트 정보" + nickname, title, content, profileImg, categoryName, status, acceptedMember, maxMember, partyDate,
-                closeDate, day, address, detailAddress, partyPlace, viewCnt, joinMember)
+                closeDate, address, detailAddress, partyPlace, viewCnt, joinMember)
 
             $('#partypost').append(tempHtml)
 
