@@ -100,7 +100,7 @@ function get_partypost(postId) {
                                         </div>
                                 </article>
                                 <div id="setbutton">
-                                <a class="btn-long btn-primary btn-xl-long rounded-pill" onclick="clickParticipation(${postId})">신청 (1:1 채팅)</a>
+                                <a class="btn-long btn-primary btn-xl-long rounded-pill" onclick="clickParticipation(${postId})">신청</a>
                            </div>
                             </div>
                         </div>
