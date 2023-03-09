@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
-    <meta name="description" content=""/>
-    <meta name="author" content=""/>
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+    <meta content="" name="description"/>
+    <meta content="" name="author"/>
     <title>Let's PARTY</title>
-    <link rel="icon" type="image/x-icon" href="../assets/favicon.ico"/>
+    <link href="../assets/favicon.ico" rel="icon" type="image/x-icon"/>
     <!-- Font Awesome icons (free version)-->
-    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+    <script crossorigin="anonymous" src="https://use.fontawesome.com/releases/v6.1.0/js/all.js"></script>
     <!-- Google fonts-->
     <link href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900"
           rel="stylesheet"/>
@@ -19,8 +19,8 @@
     <!-- css & javascript 불러오기 -->
     <link rel="stylesheet" th:href="@{/css/styles.css}">
     <link rel="stylesheet" th:href="@{/css/from-mypage.css}">
-    <script type="text/javascript" th:src="@{/js/mypage-block.js}"></script>
-    <script type="text/javascript" th:src="@{/js/scripts.js}"></script>
+    <script th:src="@{/js/mypage-block.js}" type="text/javascript"></script>
+    <script th:src="@{/js/scripts.js}" type="text/javascript"></script>
     <title>차단유저관리</title>
 </head>
 <body>
@@ -28,8 +28,8 @@
 <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top">
     <div class="container px-5 py-3">
         <a class="navbar-brand" href="/page/indexPage">Let's PARTY</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive"
-                aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span
+        <button aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
+                data-bs-target="#navbarResponsive" data-bs-toggle="collapse" type="button"><span
                 class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ms-auto" id="categories">
@@ -57,9 +57,8 @@
 <div class="container">
     <div class="mypageMain">
         <!-- 사이드바 -->
-        <data class="mypageLeftMenu" align="left">
+        <data align="left" class="mypageLeftMenu">
             <a class="nav-link" href="/page/myPage/profile">내 정보</a>
-            <a class="nav-link" onclick="clickChat()">1:1 채팅</a>
             <a class="nav-link" href="/page/myPage/partypost/created">내 모집글 목록</a>
             <a class="nav-link" href="/page/myPage/partypost/apply">신청 모집글 목록</a>
             <a class="nav-link" href="/page/myPage/partypost/like">좋아한 모집글</a>
@@ -69,9 +68,9 @@
         <div class="mypageEdit">
             <div class="block-list" id="block-list">
                 <div class="mypartypost">
-                    <img src="../static/css/images/person.png" width=40 height=40>
+                    <img height=40 src="../static/css/images/person.png" width=40>
                     유저이름 : 유저이름
-                    <input type="submit" id="block-remove1" class="btn btn-dark rounded-pill" value="차단 해제">
+                    <input class="btn btn-dark rounded-pill" id="block-remove1" type="submit" value="차단 해제">
                     <button class="btn btn-warning rounded-pill" onclick="window.location.href= 'login.html'">유저정보
                     </button>
                 </div>
