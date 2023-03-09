@@ -1,9 +1,7 @@
 package com.example.party.partypost.dto;
 
-import java.time.LocalDateTime;
-import java.time.format.TextStyle;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 import com.example.party.application.dto.ApplicationResponse;
@@ -23,12 +21,11 @@ public class PartyPostResponse {
 	private final String content;
 	private final Long categoryId;
 	private final String categoryName;
-	private final Status status;
+	private final String status;
 	private final byte acceptedMember;
 	private final byte maxMember;
-	private final LocalDateTime partyDate;
-	private final LocalDateTime closeDate;
-	private final String day;
+	private final String partyDate;
+	private final String closeDate;
 	private final String address;
 	private final String detailAddress;
 	private final String partyPlace;
@@ -48,14 +45,30 @@ public class PartyPostResponse {
 		this.viewCnt = partyPost.getViewCnt();
 		this.partyPlace = partyPost.getPartyPlace();
 		this.acceptedMember = partyPost.getAcceptedMember();
-		this.status = partyPost.getStatus();
+		this.status = changeStatusTextToKorean(partyPost.getStatus());
 		this.maxMember = partyPost.getMaxMember();
-		this.partyDate = partyPost.getPartyDate();
-		this.closeDate = partyPost.getCloseDate();
-		this.day = partyDate.getDayOfWeek().getDisplayName(TextStyle.NARROW, Locale.KOREAN);
+		this.partyDate = partyPost.getPartyDate().format(DateTimeFormatter.ofPattern("yy/MM/dd(E) a hh:mm"));
+		this.closeDate = partyPost.getCloseDate().format(DateTimeFormatter.ofPattern("yy/MM/dd(E) a hh:mm"));
 		this.address = partyPost.getAddress();
 		this.detailAddress = partyPost.getDetailAddress();
 		this.joinMember = partyPost.getApplications().stream().map(
 			ApplicationResponse::new).collect(Collectors.toList());
+	}
+
+	private String changeStatusTextToKorean(Status partyPostStatus) {
+		switch (partyPostStatus) {
+			case FINDING:
+				return "모집중";
+			case FOUND:
+				return "모집완료";
+			case NO_SHOW_REPORTING:
+				return "노쇼 투표 진행중";
+			case PROCESSING:
+				return "노쇼 결과 정산중";
+			case END:
+				return "종료됨";
+			default:
+				return partyDate.toString();
+		}
 	}
 }

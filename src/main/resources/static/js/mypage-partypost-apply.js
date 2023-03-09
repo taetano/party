@@ -37,7 +37,7 @@ function getPartyPostApply() {
                     $('#mypartypost-apply-list').append(temp_html);
 
                     //NO_SHOW_REPORTING 활성상태인경우 파티장 노쇼 버튼 활성화
-                    if (status === 'NO_SHOW_REPORTING') {
+                    if (status === '노쇼 투표 진행중') {
                         let owner_noshow_report_btn_temp = `<button class="btn btn-warning rounded-pill" onclick="clickNoShowReportApply(${OwnerUserId}, ${partyPostId})">파티장 노쇼!</button>`
                         $('#mypartypost-apply-list').append(owner_noshow_report_btn_temp);
                     }
@@ -60,7 +60,7 @@ function getPartyPostApply() {
                     <button class="btn btn-warning rounded-pill" onclick="clickNoShowReportApply(${memberUserId}, ${partyPostId})">노쇼했어요!</button></div>`
 
 
-                        if (status === 'NO_SHOW_REPORTING') {
+                        if (status === '노쇼 투표 진행중') {
                             $('#mypartypost-apply-list').append(noshow_report_btn_temp_html);
                         } else {
                             $('#mypartypost-apply-list').append(partypost_member_notPending_temp_html);

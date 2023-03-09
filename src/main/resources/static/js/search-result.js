@@ -75,8 +75,8 @@ function firstsearchPartyPost(inputVal) {
                 let status = obj['status'];
                 let acceptedMember = obj['acceptedMember'];
                 let maxMember = obj['maxMember'];
-                let partyDate = new Date(obj['partyDate']);
-                let closeDate = new Date(obj['closeDate']);
+                let partyDate = obj['partyDate'];
+                let closeDate = obj['closeDate'];
                 let partyAddress = obj['partyAddress'];
                 let partyPlace = obj['partyPlace'];
                 let profileImg = obj['profileImg'];
@@ -160,8 +160,8 @@ function searchPartyPost(page) {
                 let status = obj['status'];
                 let acceptedMember = obj['acceptedMember'];
                 let maxMember = obj['maxMember'];
-                let partyDate = new Date(obj['partyDate']);
-                let closeDate = new Date(obj['closeDate']);
+                let partyDate = obj['partyDate'];
+                let closeDate = obj['closeDate'];
                 let partyAddress = obj['partyAddress'];
                 let partyPlace = obj['partyPlace'];
                 let tempHtml = `
@@ -236,8 +236,8 @@ function searchPartyPostCategory(categoryId) {
                 let status = obj['status'];
                 let acceptedMember = obj['acceptedMember'];
                 let maxMember = obj['maxMember'];
-                let partyDate = new Date(obj['partyDate']);
-                let closeDate = new Date(obj['closeDate']);
+                let partyDate = obj['partyDate'];
+                let closeDate = obj['closeDate'];
                 let partyAddress = obj['partyAddress'];
                 let partyPlace = obj['partyPlace'];
                 let tempHtml = `
@@ -293,7 +293,7 @@ function searchPartyPostCategory(categoryId) {
 }
 
 //카테고리 조회 페이지별로 재조회
-function searchPartyPostCategoryPage(categoryId,page) {
+function searchPartyPostCategoryPage(categoryId, page) {
     $('#searchPartyPostResult').empty();
     $.ajax({
         url: `/api/party-posts/categories/${categoryId}`,
@@ -315,8 +315,8 @@ function searchPartyPostCategoryPage(categoryId,page) {
                 let status = obj['status'];
                 let acceptedMember = obj['acceptedMember'];
                 let maxMember = obj['maxMember'];
-                let partyDate = new Date(obj['partyDate']);
-                let closeDate = new Date(obj['closeDate']);
+                let partyDate = obj['partyDate'];
+                let closeDate = obj['closeDate'];
                 let partyAddress = obj['partyAddress'];
                 let partyPlace = obj['partyPlace'];
                 let tempHtml = `
