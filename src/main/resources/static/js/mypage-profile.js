@@ -63,7 +63,7 @@ function editProfile() {
     var file = $('#img')[0].files[0];
     console.log(file)
     var data = {
-        "profileImg": XSSCheck($('#profileImg').val() || "https://letsparty.s3.ap-northeast-2.amazonaws.com/static/unknown_user.png"),
+        "profileImg": XSSCheck($('#profileImg').val() || ""),
         "nickname": XSSCheck($('#nickname').val() || ""),
         "comment": XSSCheck($('#comment').val() || "")
     };

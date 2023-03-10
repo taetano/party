@@ -13,7 +13,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.example.party.global.common.ApiResponse;
 import com.example.party.global.common.ItemApiResponse;
-import com.example.party.global.exception.BadRequestException;
 import com.example.party.global.exception.LoginException;
 import com.example.party.global.util.JwtProvider;
 import com.example.party.global.util.S3Uploader;
@@ -47,10 +46,6 @@ public class UserService implements IUserService {
 	private final PasswordEncoder passwordEncoder;
 	private final RedisTemplate<String, String> redisTemplate;
 	private final S3Uploader s3Uploader;
-
-	// public UserService(UserRepository userRepository) {
-	//     this.userRepository = userRepository;
-	// }
 
 	//회원가입
 	@Override
@@ -114,11 +109,16 @@ public class UserService implements IUserService {
 	@Override
 	public ApiResponse updateProfile(User user, ProfileRequest profileRequest, MultipartFile file)
 		throws IOException {
-		ProfileRequest uniqueInput = checkingInput(user, profileRequest);
+		ProfileRequest uniqueInput = profileRequest.checkingInput(user);
+		if (!uniqueInput.getNickname().equals(user.getNickname())) {
+			if (userRepository.existsUserByNickname(profileRequest.getNickname())) {
+				throw new ExistNicknameException();
+			}
+		}
 
 		Profile profile = user.getProfile();
 		profile.updateProfile(uniqueInput.getProfileImg(), uniqueInput.getComment());
-		user.updateProfile(uniqueInput); //user 정보 수정
+		user.updateProfile(uniqueInput);
 
 		if (!file.isEmpty()) {
 			String storedFileName = s3Uploader.upload(file, "static");
@@ -156,27 +156,5 @@ public class UserService implements IUserService {
 		if (!passwordEncoder.matches(requestPassword, savedPassword)) {
 			throw new LoginException();
 		}
-	}
-
-	// 요청값 조정
-	private ProfileRequest checkingInput(User user, ProfileRequest request) {
-		if (request.getProfileImg().equals("") && request.getComment().equals("") && request.getNickname().equals("")) {
-			throw new BadRequestException("값을 입력해 주세요");
-		}
-		if (request.getProfileImg().equals("")) {
-			request.setProfileImg(user.getProfileImg());
-		}
-		if (request.getComment().equals("")) {
-			request.setComment(user.getComment());
-		}
-		if (request.getNickname().equals("")) {
-			request.setNickname(user.getNickname());
-		}
-		if (!user.getNickname().equals(request.getNickname())) {
-			if (userRepository.existsUserByNickname(request.getNickname())) {
-				throw new ExistNicknameException();
-			}
-		}
-		return request;
 	}
 }

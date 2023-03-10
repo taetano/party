@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
+import java.io.IOException;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -16,11 +17,14 @@ import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.party.global.common.ApiResponse;
 import com.example.party.user.dto.LoginRequest;
+import com.example.party.user.dto.ProfileRequest;
 import com.example.party.user.dto.SignupRequest;
 import com.example.party.user.dto.WithdrawRequest;
+import com.example.party.user.entity.Profile;
 import com.example.party.user.entity.User;
 import com.example.party.user.exception.EmailOverlapException;
 import com.example.party.user.exception.ExistNicknameException;
@@ -138,31 +142,29 @@ class UserServiceTest {
 		assertThat(result.getMsg()).isEqualTo("회원탈퇴 완료");
 	}
 
-	// @Test
-	// void updateProfile() throws IOException {
-	// 	// //  given
-	// 	// ProfileRequest profileRequest = mock(ProfileRequest.class);
-	// 	// Profile profile = mock(Profile.class);
-	// 	// MultipartFile file = mock(MultipartFile.class);
-	// 	// //  when
-	// 	// when(user.getProfile()).thenReturn(profile);
-	// 	// when(userRepository.save(any(User.class))).thenReturn(user);
-	// 	// when(profileRequest.getProfileImg()).thenReturn("profileImg");
-	// 	// when(profileRequest.getComment()).thenReturn("comment");
-	// 	// doNothing().when(user).updateProfile(any(ProfileRequest.class));
-	// 	// when(file.isEmpty()).thenReturn(true);
-	// 	//
-	// 	// ApiResponse result = userService.updateProfile(user, profileRequest, file);
-	// 	// //  then
-	// 	// verify(userRepository).save(any(User.class));
-	// 	// verify(user).updateProfile(any(ProfileRequest.class));
-	// 	// verify(profilesRepository).save(any(Profile.class));
-	// 	// verify(userRepository).save(any(User.class));
-	// 	// assertThat(result.getCode()).isEqualTo(200);
-	// 	// assertThat(result.getMsg()).isEqualTo("프로필 정보 수정 완료");
-	// }
+	@Test
+	void updateProfile() throws IOException {
+		//  given
+		ProfileRequest profileRequest = mock(ProfileRequest.class);
+		Profile profile = mock(Profile.class);
+		MultipartFile file = mock(MultipartFile.class);
+		//  when
+		when(user.getProfile()).thenReturn(profile);
+		when(userRepository.save(any(User.class))).thenReturn(user);
+		when(profileRequest.getProfileImg()).thenReturn("profileImg");
+		when(profileRequest.getComment()).thenReturn("comment");
+		doNothing().when(user).updateProfile(any(ProfileRequest.class));
+		when(file.isEmpty()).thenReturn(true);
 
-	// throw Exception
+		ApiResponse result = userService.updateProfile(user, profileRequest, file);
+		//  then
+		verify(userRepository).save(any(User.class));
+		verify(user).updateProfile(any(ProfileRequest.class));
+		verify(profilesRepository).save(any(Profile.class));
+		verify(userRepository).save(any(User.class));
+		assertThat(result.getCode()).isEqualTo(200);
+		assertThat(result.getMsg()).isEqualTo("프로필 정보 수정 완료");
+	}
 
 	@Test
 	void signUp_EmailOverlapException() {
