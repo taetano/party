@@ -68,7 +68,7 @@ function sendPartyPost() {
                 "categoryId": XSSCheck($('#category').val()),
                 "maxMember": XSSCheck($('#max-member').val()),
                 "partyDate": $('#date').val() + ' ' + $('#time').val(),
-                "partyAddress": XSSCheck(('#place-address').val()),
+                "partyAddress": XSSCheck($('#place-address').val()),
                 "partyPlace": XSSCheck($('#place-name').val())
             }),
             success: function (json) {
