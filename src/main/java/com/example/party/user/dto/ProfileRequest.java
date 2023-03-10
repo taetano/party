@@ -24,7 +24,7 @@ public class ProfileRequest {
 	}
 
 	public ProfileRequest checkingInput(User user) {
-		if (profileImg.equals(empty)) {
+		if (profileImg == null) {
 			this.profileImg = user.getProfileImg();
 		}
 		if (comment.equals(empty)) {
@@ -35,5 +35,4 @@ public class ProfileRequest {
 		}
 		return this;
 	}
-
 }
