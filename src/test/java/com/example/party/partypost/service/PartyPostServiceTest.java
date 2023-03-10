@@ -160,7 +160,7 @@ class PartyPostServiceTest {
 		//  when
 		when(categoryRepository.findById(anyLong())).thenReturn(Optional.of(category));
 		when(category.isActive()).thenReturn(true);
-		when(partyPostRepository.findByCategoryId(anyLong(), any(Pageable.class))).thenReturn(Collections.emptyList());
+		when(partyPostRepository.findByCategoryIdAndActiveIsTrue(anyLong(), any(Pageable.class))).thenReturn(Collections.emptyList());
 		when(partyPostValidator.filteringPosts(any(User.class), anyList())).thenReturn(Collections.emptyList());
 
 		DataApiResponse<PartyPostListResponse> result = partyPostService.searchPartyPostByCategory(
@@ -168,7 +168,7 @@ class PartyPostServiceTest {
 		//  then
 		verify(categoryRepository).findById(anyLong());
 		verify(category).isActive();
-		verify(partyPostRepository).findByCategoryId(anyLong(), any(Pageable.class));
+		verify(partyPostRepository).findByCategoryIdAndActiveIsTrue(anyLong(), any(Pageable.class));
 		verify(partyPostValidator).filteringPosts(any(User.class), anyList());
 		assertThat(result.getCode()).isEqualTo(200);
 		assertThat(result.getMsg()).isEqualTo("카테고리별 모집글 조회 완료");
@@ -248,13 +248,13 @@ class PartyPostServiceTest {
 		//  given
 
 		//  when
-		when(partyPostRepository.findByUserId(anyLong(), any(Pageable.class))).thenReturn(List.of(partyPost));
+		when(partyPostRepository.findByUserIdAndActiveIsTrue(anyLong(), any(Pageable.class))).thenReturn(List.of(partyPost));
 		when(partyPost.getUser()).thenReturn(user);
 		when(user.getId()).thenReturn(1L);
 
 		DataApiResponse<MyPartyPostListResponse> result = partyPostService.findMyCreatedPartyList(user, 99);
 		//  then
-		verify(partyPostRepository).findByUserId(anyLong(), any(Pageable.class));
+		verify(partyPostRepository).findByUserIdAndActiveIsTrue(anyLong(), any(Pageable.class));
 		assertThat(result.getCode()).isEqualTo(200);
 		assertThat(result.getMsg()).isEqualTo("내가 작성한 모집글 조회 완료");
 		assertThat(result.getData().size()).isEqualTo(1);

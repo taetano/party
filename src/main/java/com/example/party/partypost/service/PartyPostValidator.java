@@ -38,7 +38,8 @@ public class PartyPostValidator {
 		}
 		//3. 참가신청한 모집자가 없는지 확인
 		if (!partyPost.haveNoApplications()) {
-			throw new PartyPostNotDeletableException("참가신청자가 있는 경우 삭제할 수 없습니다");
+			if (!partyPost.isWrittenByMe(user.getId()))
+				throw new PartyPostNotDeletableException("참가신청자가 있는 경우 삭제할 수 없습니다");
 		}
 	}
 

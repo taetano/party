@@ -19,6 +19,9 @@ public interface PartyPostRepository extends JpaRepository<PartyPost, Long> {
 	// postId 로 특정 모집글 가져오기
 	Optional<PartyPost> findByIdAndActiveIsTrue(Long postId);
 
+	// userId 로 active된 특정 모집글 가져오기
+	List<PartyPost> findByUserIdAndActiveIsTrue(Long userId, Pageable pageable);
+
 	//내가 작성한 모집글 리스트 조회
 	List<PartyPost> findByUserId(Long userId, Pageable pageable);
 
@@ -51,6 +54,9 @@ public interface PartyPostRepository extends JpaRepository<PartyPost, Long> {
 
 	//categoryId 로 모집글 리스트 조회
 	List<PartyPost> findByCategoryId(Long categoryId, Pageable pageable);
+
+	//categoryId 로 active된 모집글 리스트 조회
+	List<PartyPost> findByCategoryIdAndActiveIsTrue(Long categoryId, Pageable pageable);
 
 	// 읍면동으로 모집글 리스트 조회
 	List<PartyPost> findByAddressContaining(String place, Pageable pageable);
