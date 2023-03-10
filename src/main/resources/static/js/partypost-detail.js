@@ -161,6 +161,7 @@ function get_partypost(postId) {
                                 </article>
                                 <div id="setbutton">
                                 <a class="btn-long btn-primary btn-xl-long rounded-pill" onclick="clickUpdate(${postId})">수정하기</a>
+                                <a class="btn-long btn-primary btn-xl-long rounded-pill mt-3" onclick="deletePostClick(${postId})">삭제하기</a>
                            </div>
                             </div>
                         </div>
@@ -298,4 +299,25 @@ function otherProfilePageClick(userId, loginUserId) {
         const otherProfilePageUrl = `/page/others/profile?userId=` + userId;
         window.location.href = otherProfilePageUrl;
     }
+}
+
+//모집글 삭제하기
+function deletePostClick(postId) {
+    $.ajax({
+        type: "DELETE",
+        url: `/api/party-posts/${postId}`,
+        headers: {
+            "Authorization": getCookieValue('Authorization')
+        },
+        error(error) {
+            console.log("아래는 error 임")
+            console.log(error)
+            alert("해당 모집글은 삭제가 불가능합니다.")
+        },
+        success: function () {
+            alert("모집글 삭제완료")
+            window.location.href = `/page/indexPage`
+        }
+
+    })
 }
