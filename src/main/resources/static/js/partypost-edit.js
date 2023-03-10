@@ -62,11 +62,11 @@ function submitUpdatePartyPost(postId) {
         },
         contentType: "application/json; charset=UTF-8",
         data: JSON.stringify({
-            title: $('#title').val(),
-            content: $('#content').val(),
-            categoryId: parseFloat($('#category-edit').val()),
-            partyAddress: $('#place-address').val(),
-            partyPlace: $('#place-name').val()
+            title: XSSCheck($('#title').val()),
+            content: XSSCheck($('#content').val()),
+            categoryId: XSSCheck($('#category-edit').val()),
+            partyAddress: XSSCheck($('#place-address').val()),
+            partyPlace: XSSCheck($('#place-name').val())
         }),
         error(request, response) {
             console.log("아래는 request 임")
@@ -112,4 +112,10 @@ function get_edit_category() {
         }
 
     });
+}
+
+function XSSCheck(str) {
+    str = str.replace(/\</g, "&lt;");
+    str = str.replace(/\>/g, "&gt;");
+    return str;
 }
