@@ -131,7 +131,7 @@ public class PartyPostService implements IPartyPostService {
             throw new CategoryNotActiveException();
         }
 
-        List<PartyPost> partyPostList = partyPostRepository.findByCategoryId(categoryId, pageable);
+        List<PartyPost> partyPostList = partyPostRepository.findByCategoryIdAndActiveIsTrue(categoryId, pageable);
 
         // 유저의 차단 리스트를 필터링 ,유저가 로그인 상태일때에 적용
         List<PartyPostListResponse> filteredPosts = userFilteredPosts(user,partyPostList);

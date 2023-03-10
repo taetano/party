@@ -55,6 +55,9 @@ public interface PartyPostRepository extends JpaRepository<PartyPost, Long> {
 	//categoryId 로 모집글 리스트 조회
 	List<PartyPost> findByCategoryId(Long categoryId, Pageable pageable);
 
+	//categoryId 로 active된 모집글 리스트 조회
+	List<PartyPost> findByCategoryIdAndActiveIsTrue(Long categoryId, Pageable pageable);
+
 	// 읍면동으로 모집글 리스트 조회
 	List<PartyPost> findByAddressContaining(String place, Pageable pageable);
 }
