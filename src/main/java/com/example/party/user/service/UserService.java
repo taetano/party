@@ -127,7 +127,6 @@ public class UserService implements IUserService {
 
 		profilesRepository.save(profile);
 		userRepository.save(user); //변경한 user 저장
-
 		return ApiResponse.ok("프로필 정보 수정 완료"); //결과값 반환
 	}
 
