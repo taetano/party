@@ -1,22 +1,16 @@
 package com.example.party.partypost.service;
 
-import com.example.party.application.entity.Application;
-import com.example.party.application.repository.ApplicationRepository;
-import com.example.party.category.entity.Category;
-import com.example.party.category.exception.CategoryNotActiveException;
-import com.example.party.category.exception.CategoryNotFoundException;
-import com.example.party.category.repository.CategoryRepository;
-import com.example.party.global.common.ApiResponse;
-import com.example.party.global.common.DataApiResponse;
-import com.example.party.global.common.ItemApiResponse;
-import com.example.party.partypost.dto.*;
-import com.example.party.partypost.entity.PartyPost;
-import com.example.party.partypost.exception.IsNotWritterException;
-import com.example.party.partypost.exception.PartyPostNotFoundException;
-import com.example.party.partypost.repository.PartyPostRepository;
-import com.example.party.user.entity.Profile;
-import com.example.party.user.entity.User;
-import com.example.party.user.repository.UserRepository;
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -26,13 +20,28 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Pageable;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.*;
+import com.example.party.application.entity.Application;
+import com.example.party.application.repository.ApplicationRepository;
+import com.example.party.category.entity.Category;
+import com.example.party.category.exception.CategoryNotActiveException;
+import com.example.party.category.exception.CategoryNotFoundException;
+import com.example.party.category.repository.CategoryRepository;
+import com.example.party.global.common.ApiResponse;
+import com.example.party.global.common.DataApiResponse;
+import com.example.party.global.common.ItemApiResponse;
+import com.example.party.partypost.dto.MyPartyPostListResponse;
+import com.example.party.partypost.dto.PartyPostListResponse;
+import com.example.party.partypost.dto.PartyPostRequest;
+import com.example.party.partypost.dto.PartyPostResponse;
+import com.example.party.partypost.dto.UpdatePartyPostRequest;
+import com.example.party.partypost.entity.PartyPost;
+import com.example.party.partypost.exception.IsNotWritterException;
+import com.example.party.partypost.exception.PartyPostNotFoundException;
+import com.example.party.partypost.repository.PartyPostRepository;
+import com.example.party.partypost.type.Status;
+import com.example.party.user.entity.Profile;
+import com.example.party.user.entity.User;
+import com.example.party.user.repository.UserRepository;
 
 @ExtendWith(MockitoExtension.class)
 class PartyPostServiceTest {
@@ -119,11 +128,13 @@ class PartyPostServiceTest {
 		when(user.getNickname()).thenReturn("nickname");
 		when(partyPost.getCategory()).thenReturn(category);
 		when(category.getId()).thenReturn(999L);
-		when(partyPost.getPartyDate()).thenReturn(
-			LocalDateTime.parse("2023-02-16 12:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+		LocalDateTime.parse("2023-02-16 12:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
 		when(user.getId()).thenReturn(1L);
 		when(user.getProfile()).thenReturn(profile);
 		when(profile.getProfileImg()).thenReturn("testImg");
+		when(partyPost.getStatus()).thenReturn(Status.FINDING);
+		when(partyPost.getPartyDate()).thenReturn(LocalDateTime.now());
+		when(partyPost.getCloseDate()).thenReturn(LocalDateTime.now());
 
 		ItemApiResponse<PartyPostResponse> result = partyPostService.getPartyPost(partyPost.getId(), user);
 		//  then
@@ -160,7 +171,8 @@ class PartyPostServiceTest {
 		//  when
 		when(categoryRepository.findById(anyLong())).thenReturn(Optional.of(category));
 		when(category.isActive()).thenReturn(true);
-		when(partyPostRepository.findByCategoryIdAndActiveIsTrue(anyLong(), any(Pageable.class))).thenReturn(Collections.emptyList());
+		when(partyPostRepository.findByCategoryIdAndActiveIsTrue(anyLong(), any(Pageable.class))).thenReturn(
+			Collections.emptyList());
 		when(partyPostValidator.filteringPosts(any(User.class), anyList())).thenReturn(Collections.emptyList());
 
 		DataApiResponse<PartyPostListResponse> result = partyPostService.searchPartyPostByCategory(
@@ -248,9 +260,13 @@ class PartyPostServiceTest {
 		//  given
 
 		//  when
-		when(partyPostRepository.findByUserIdAndActiveIsTrue(anyLong(), any(Pageable.class))).thenReturn(List.of(partyPost));
+		when(partyPostRepository.findByUserIdAndActiveIsTrue(anyLong(), any(Pageable.class))).thenReturn(
+			List.of(partyPost));
 		when(partyPost.getUser()).thenReturn(user);
 		when(user.getId()).thenReturn(1L);
+		when(partyPost.getStatus()).thenReturn(Status.FINDING);
+		when(partyPost.getPartyDate()).thenReturn(LocalDateTime.now());
+		when(partyPost.getCloseDate()).thenReturn(LocalDateTime.now());
 
 		DataApiResponse<MyPartyPostListResponse> result = partyPostService.findMyCreatedPartyList(user, 99);
 		//  then
@@ -273,6 +289,9 @@ class PartyPostServiceTest {
 		when(user.getId()).thenReturn(1L);
 		when(application.getPartyPost()).thenReturn(partyPost);
 		when(partyPost.getApplications()).thenReturn(List.of(application));
+		when(partyPost.getStatus()).thenReturn(Status.FINDING);
+		when(partyPost.getPartyDate()).thenReturn(LocalDateTime.now());
+		when(partyPost.getCloseDate()).thenReturn(LocalDateTime.now());
 
 		DataApiResponse<MyPartyPostListResponse> result = partyPostService.findMyJoinedPartyList(user, 99);
 		//  then
@@ -316,6 +335,9 @@ class PartyPostServiceTest {
 		when(user.getProfile()).thenReturn(profile);
 		when(profile.getProfileImg()).thenReturn("testImg");
 		when(user.getNickname()).thenReturn("nickname");
+		when(partyPost.getStatus()).thenReturn(Status.FINDING);
+		when(partyPost.getPartyDate()).thenReturn(LocalDateTime.now());
+		when(partyPost.getCloseDate()).thenReturn(LocalDateTime.now());
 
 		DataApiResponse<PartyPostListResponse> result = partyPostService.getLikePartyPost(user);
 		//  then
