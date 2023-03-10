@@ -217,7 +217,7 @@ public class PartyPostService implements IPartyPostService {
         Pageable pageable = PageRequest.of(page - 1, 6, Sort.by(Sort.Direction.DESC, "modifiedAt"));
 
         //1. user가 작성한 partyPost의 리스트
-        List<PartyPost> myPartyPostList = partyPostRepository.findByUserId(user.getId(), pageable);
+        List<PartyPost> myPartyPostList = partyPostRepository.findByUserIdAndActiveIsTrue(user.getId(), pageable);
 
         //2. partyPost DTO의 LIST 생성
         List<MyPartyPostListResponse> myPartyPostDtoList = myPartyPostList.stream()
