@@ -1,4 +1,3 @@
-
 //페이지 시작 시 호출 함수
 jQuery(document).ready(function () {
     getCategories();
@@ -24,7 +23,7 @@ function get_profile() {
 
     $.ajax({
         type: "GET",
-        url:'/api/users/profile',
+        url: '/api/users/profile',
         headers: {
             "Authorization": getCookieValue('Authorization')
         },
@@ -63,14 +62,15 @@ $('#btn-save').on('click', editProfile);
 function editProfile() {
     var file = $('#img')[0].files[0];
     console.log(file)
-    var data = {"profileImg": $('#profileImg').val(),
-                "nickname": $('#nickname').val(),
-                "comment": $('#comment').val()
-                };
+    var data = {
+        "profileImg": $('#profileImg').val() || "https://letsparty.s3.ap-northeast-2.amazonaws.com/static/unknown_user.png",
+        "nickname": $('#nickname').val() || "",
+        "comment": $('#comment').val() || "",
+    };
     console.log(data)
     var formData = new FormData();
     formData.append('file', file);
-    formData.append('dto', new Blob([JSON.stringify(data)] , {type: "application/json"}));
+    formData.append('dto', new Blob([JSON.stringify(data)], {type: "application/json"}));
     console.log(formData)
 
     $.ajax({
