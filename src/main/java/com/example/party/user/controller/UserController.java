@@ -11,7 +11,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -88,7 +87,7 @@ public class UserController {
 		@RequestPart(value = "file") MultipartFile file,
 		@RequestPart(value = "dto") ProfileRequest profileRequest,
 		@AuthenticationPrincipal User user) throws IOException {
-		return ResponseEntity.ok(userService.updateProfile(profileRequest, user, file));
+		return ResponseEntity.ok(userService.updateProfile(user, profileRequest, file));
 	}
 
 	//내 프로필 조회

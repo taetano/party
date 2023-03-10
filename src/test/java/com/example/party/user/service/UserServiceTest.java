@@ -5,7 +5,6 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -17,8 +16,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
-import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -159,8 +156,7 @@ class UserServiceTest {
 		doNothing().when(user).updateProfile(any(ProfileRequest.class));
 		when(file.isEmpty()).thenReturn(true);
 
-
-		ApiResponse result = userService.updateProfile(profileRequest, user, file);
+		ApiResponse result = userService.updateProfile(user, profileRequest, file);
 		//  then
 		verify(userRepository).save(any(User.class));
 		verify(user).updateProfile(any(ProfileRequest.class));
@@ -169,8 +165,6 @@ class UserServiceTest {
 		assertThat(result.getCode()).isEqualTo(200);
 		assertThat(result.getMsg()).isEqualTo("프로필 정보 수정 완료");
 	}
-
-	// throw Exception
 
 	@Test
 	void signUp_EmailOverlapException() {

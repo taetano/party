@@ -1,4 +1,3 @@
-
 //페이지 시작 시 호출 함수
 jQuery(document).ready(function () {
     getCategories();
@@ -24,7 +23,7 @@ function get_profile() {
 
     $.ajax({
         type: "GET",
-        url:'/api/users/profile',
+        url: '/api/users/profile',
         headers: {
             "Authorization": getCookieValue('Authorization')
         },
@@ -64,14 +63,14 @@ function editProfile() {
     var file = $('#img')[0].files[0];
     console.log(file)
     var data = {
-        "profileImg": XSSCheck($('#profileImg').val()),
-        "nickname": XSSCheck($('#nickname').val()),
-        "comment": XSSCheck($('#comment').val())
+        "profileImg": XSSCheck($('#profileImg').val() || ""),
+        "nickname": XSSCheck($('#nickname').val() || ""),
+        "comment": XSSCheck($('#comment').val() || "")
     };
     console.log(data)
     var formData = new FormData();
     formData.append('file', file);
-    formData.append('dto', new Blob([JSON.stringify(data)] , {type: "application/json"}));
+    formData.append('dto', new Blob([JSON.stringify(data)], {type: "application/json"}));
     console.log(formData)
 
     $.ajax({
