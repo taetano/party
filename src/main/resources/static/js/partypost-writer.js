@@ -63,13 +63,13 @@ function sendPartyPost() {
             },
             contentType: "application/json; charset=UTF-8",
             data: JSON.stringify({
-                "title": $('#title').val(),
-                "content": $('#content').val(),
-                "categoryId": $('#category').val(),
-                "maxMember": $('#max-member').val(),
+                "title": XSSCheck($('#title').val()),
+                "content": XSSCheck($('#content').val()),
+                "categoryId": XSSCheck($('#category').val()),
+                "maxMember": XSSCheck($('#max-member').val()),
                 "partyDate": $('#date').val() + ' ' + $('#time').val(),
-                "partyAddress": $('#place-address').val(),
-                "partyPlace": $('#place-name').val()
+                "partyAddress": XSSCheck(('#place-address').val()),
+                "partyPlace": XSSCheck($('#place-name').val())
             }),
             success: function (json) {
                 console.log("갔어요")
@@ -128,4 +128,10 @@ function get_writer_category() {
         }
 
     });
+}
+
+function XSSCheck(str) {
+        str = str.replace(/\</g, "&lt;");
+        str = str.replace(/\>/g, "&gt;");
+    return str;
 }

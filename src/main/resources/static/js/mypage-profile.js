@@ -63,10 +63,11 @@ $('#btn-save').on('click', editProfile);
 function editProfile() {
     var file = $('#img')[0].files[0];
     console.log(file)
-    var data = {"profileImg": $('#profileImg').val(),
-                "nickname": $('#nickname').val(),
-                "comment": $('#comment').val()
-                };
+    var data = {
+        "profileImg": XSSCheck($('#profileImg').val()),
+        "nickname": XSSCheck($('#nickname').val()),
+        "comment": XSSCheck($('#comment').val())
+    };
     console.log(data)
     var formData = new FormData();
     formData.append('file', file);
@@ -89,4 +90,10 @@ function editProfile() {
     }).fail(function (error) {
         alert("오류가 발생했습니다.");
     })
+}
+
+function XSSCheck(str) {
+    str = str.replace(/\</g, "&lt;");
+    str = str.replace(/\>/g, "&gt;");
+    return str;
 }
