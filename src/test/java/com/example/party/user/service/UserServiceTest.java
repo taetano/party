@@ -149,6 +149,9 @@ class UserServiceTest {
 		Profile profile = mock(Profile.class);
 		MultipartFile file = mock(MultipartFile.class);
 		//  when
+		when(profileRequest.checkingInput(user)).thenReturn(profileRequest);
+		when(profileRequest.getNickname()).thenReturn("nickname");
+		when(user.getNickname()).thenReturn("nickname");
 		when(user.getProfile()).thenReturn(profile);
 		when(userRepository.save(any(User.class))).thenReturn(user);
 		when(profileRequest.getProfileImg()).thenReturn("profileImg");
@@ -159,6 +162,7 @@ class UserServiceTest {
 		ApiResponse result = userService.updateProfile(user, profileRequest, file);
 		//  then
 		verify(userRepository).save(any(User.class));
+		verify(userRepository, times(0)).existsUserByNickname(profileRequest.getNickname());
 		verify(user).updateProfile(any(ProfileRequest.class));
 		verify(profilesRepository).save(any(Profile.class));
 		verify(userRepository).save(any(User.class));
