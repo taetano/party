@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    LoginCheck();
     //검색어 값으로 받음
     let searchText = new URLSearchParams(window.location.search).get('searchText');
     let categoryId = new URLSearchParams(window.location.search).get('categoryId');
@@ -12,6 +13,30 @@ $(document).ready(function () {
     }
 
 });
+
+function LoginCheck() {
+    $.ajax({
+        type: "GET",
+        url: `/api/users/loginCheck`,
+        contentType: "application/json",
+        headers: {
+            "Authorization": getCookieValue('Authorization')
+        },
+        success: function () {
+            // 로그인함
+            $('#signupBtn').hide();
+            $('#loginBtn').hide();
+            $('#logoutBtn').show();
+            $('#mypageBtn').show();
+        }, error() {
+            //로그인 안함
+            $('#signupBtn').show();
+            $('#loginBtn').show();
+            $('#logoutBtn').hide();
+            $('#mypageBtn').hide();
+        }
+    })
+}
 
 // 토큰값 분리
 function getCookieValue(cookieName) {

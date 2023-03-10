@@ -16,7 +16,7 @@
             var formData = {
                 email: $("#email").val(),
                 password: $("#password").val(),
-                nickname: $("#nickname").val(),
+                nickname: XSSCheck($("#nickname").val),
             };
             ev.preventDefault()
             // Ajax 요청 보내기
@@ -43,6 +43,11 @@
                 console.log("singup_fail");
             })
         }
+        function XSSCheck(str) {
+            str = str.replace(/\</g, "&lt;");
+            str = str.replace(/\>/g, "&gt;");
+            return str;
+        }
 
     </script>
 </head>
@@ -52,15 +57,15 @@
     <form action="submit_form.php" method="POST">
         <span style=" font-size:1.5em;">
             <label for="email">Email</label>
-            <input type="text" id="email" name="email" placeholder="예) lets@party.com">
+            <input id="email" name="email" placeholder="예) lets@party.com" type="text">
 
             <label for="password">Password</label>
-            <input type="password" id="password" name="password" placeholder="영문, 숫자, 특수문자 조합 8-60자">
+            <input id="password" name="password" placeholder="영문, 숫자, 특수문자 조합 8-60자" type="password">
 
             <label for="nickname">닉네임:</label>
-            <input type="text" id="nickname" name="nickname" placeholder="닉네임을 입력해주세요.">
+            <input id="nickname" name="nickname" placeholder="닉네임을 입력해주세요." type="text">
 
-            <input type="submit" value="가입하기" id="signbtn">
+            <input id="signbtn" type="submit" value="가입하기">
         </span>
     </form>
     <p><a href="/page/loginPage">이미 가입한 계정이 있으신가요?</a></p>

@@ -63,9 +63,9 @@ function editProfile() {
     var file = $('#img')[0].files[0];
     console.log(file)
     var data = {
-        "profileImg": $('#profileImg').val() || "https://letsparty.s3.ap-northeast-2.amazonaws.com/static/unknown_user.png",
-        "nickname": $('#nickname').val() || "",
-        "comment": $('#comment').val() || "",
+        "profileImg": XSSCheck($('#profileImg').val() || "https://letsparty.s3.ap-northeast-2.amazonaws.com/static/unknown_user.png"),
+        "nickname": XSSCheck($('#nickname').val() || ""),
+        "comment": XSSCheck($('#comment').val() || "")
     };
     console.log(data)
     var formData = new FormData();
@@ -89,4 +89,10 @@ function editProfile() {
     }).fail(function (error) {
         alert("오류가 발생했습니다.");
     })
+}
+
+function XSSCheck(str) {
+    str = str.replace(/\</g, "&lt;");
+    str = str.replace(/\>/g, "&gt;");
+    return str;
 }
