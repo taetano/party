@@ -117,12 +117,16 @@ public class PartyPost extends TimeStamped {
 		}
 	}
 
+	public Long getWriterId() {
+		return this.user.getId();
+	}
+
 	public void clearApplications() {
 		this.applications.clear();
 	}
 	//모집마감전인지 확인
-	public boolean beforeCloseDate(LocalDateTime now) {
-		return this.closeDate.isAfter(now);
+	public boolean beforeCloseDate() {
+		return this.closeDate.isAfter(LocalDateTime.now());
 	}
 
 	//참가신청한 모집자가 없는지 확인
@@ -145,27 +149,23 @@ public class PartyPost extends TimeStamped {
 		this.applications.add(application);
 	}
 
-	// 이미 참가신청한 유저인지 확인
-	public boolean isAlreadyApplied() {
-		return false;
-	}
-
 	//모집상태(FINDING)인지 확인
 	public boolean isFinding() {
-		return this.status == Status.FINDING;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
+		return this.status.isFinding();
 	}
 
 	public void increaseAcceptedCnt() {
-		byte curMember = (byte)(this.acceptedMember+1);
-		if (curMember  == this.maxMember) {
+		byte curMember = (byte)(this.acceptedMember + 1);
+		if (파티멤버추가가능확인(curMember)) {
+			// status 변경 메소드로 추출
 			this.status = Status.FOUND;
 			isFullParty();
-		}
+		};
 		this.acceptedMember = curMember;
+	}
+
+	private boolean 파티멤버추가가능확인(byte curMember) {
+		return curMember == this.maxMember;
 	}
 
 	public void ChangeStatusEnd() {

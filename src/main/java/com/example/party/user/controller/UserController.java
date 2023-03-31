@@ -7,6 +7,8 @@ import java.security.Principal;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
+import com.example.party.user.service.AccountService;
+import com.example.party.user.service.ProfileService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,14 +24,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.party.JwtToken;
 import com.example.party.global.common.ApiResponse;
-import com.example.party.user.dto.LoginRequest;
+import com.example.party.user.dto.LoginCommand;
 import com.example.party.user.dto.ProfileRequest;
 import com.example.party.user.dto.SignupRequest;
-import com.example.party.user.dto.WithdrawRequest;
 import com.example.party.user.entity.User;
 import com.example.party.user.service.KakaoService;
-import com.example.party.user.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import lombok.RequiredArgsConstructor;
@@ -38,47 +39,37 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("/api/users")
 public class UserController {
-
-	private final UserService userService;
+	private final AccountService accountService;
+	private final ProfileService profileService;
 	private final KakaoService kakaoService;
 
 	//회원가입
 	@PostMapping("/signup")
-	public ResponseEntity<ApiResponse> signup(@RequestBody @Valid SignupRequest signupRequest) {
-		return ResponseEntity.ok(userService.signUp(signupRequest));
+	public ResponseEntity<ApiResponse> signup(final @RequestBody @Valid SignupRequest signupRequest) {
+		return ResponseEntity.ok(accountService.signUp(signupRequest));
 	}
 
 	//로그인
 	@PostMapping("/signin")
-	public ResponseEntity<ApiResponse> signIn(@RequestBody LoginRequest loginRequest) {
-		String[] token = userService.signIn(loginRequest).split(",");
+	public ResponseEntity<ApiResponse> login(@RequestBody LoginCommand loginCommand) {
+		JwtToken jwtToken = accountService.login(loginCommand);
 		HttpHeaders headers = new HttpHeaders();
-		headers.setBearerAuth(token[0]);
-		headers.add("Set-Cookie", String.format("rfToken=%s; Max-Age=604800; Path=/; HttpOnly=true;", token[1]));
+		headers.setBearerAuth(jwtToken.getAccessToken());
+		headers.add("Set-Cookie", String.format("rfToken=%s; Max-Age=604800; Path=/; HttpOnly=true;", jwtToken.getRefreshToken()));
 		return ResponseEntity.ok().headers(headers).body(ApiResponse.ok("로그인 완료"));
 	}
 
 	//로그아웃
 	@PostMapping("/signout")
-	public ResponseEntity<ApiResponse> signOut(@AuthenticationPrincipal User user) {
-		userService.signOut(user);
-		HttpHeaders headers = new HttpHeaders();
-		//accessToken 을 cookie에 넣기
-		headers.add("Set-Cookie",
-			String.format("Authorization=%s; Max-Age=0; Path=/page;", "Bearer " + ""));
-
-		//RefreshToken 을 cookie에 넣기
-		headers.add("Set-Cookie", String.format("rfToken=%s; Max-Age=0; Path=/; HttpOnly=true;", ""));
-
-		headers.setLocation(URI.create("/page/indexPage"));
-		return new ResponseEntity<>(headers, HttpStatus.OK);
+	public ResponseEntity<ApiResponse> logout(@AuthenticationPrincipal User user) {
+		accountService.logout(user.getId());
+		return new ResponseEntity<>(LogoutHeader.of(), HttpStatus.OK);
 	}
 
 	//회원탈퇴
 	@PostMapping("/withdraw")
-	public ResponseEntity<ApiResponse> withdraw(@RequestBody WithdrawRequest withdrawRequest,
-		@AuthenticationPrincipal User user) {
-		return ResponseEntity.ok(userService.withdraw(user, withdrawRequest));
+	public ResponseEntity<ApiResponse> withdraw(@AuthenticationPrincipal User user) {
+		return ResponseEntity.ok(accountService.withdraw(user.getId()));
 	}
 
 	//프로필 정보 수정
@@ -87,20 +78,20 @@ public class UserController {
 		@RequestPart(value = "file") MultipartFile file,
 		@RequestPart(value = "dto") ProfileRequest profileRequest,
 		@AuthenticationPrincipal User user) throws IOException {
-		return ResponseEntity.ok(userService.updateProfile(user, profileRequest, file));
+		return ResponseEntity.ok(profileService.updateProfile(user, profileRequest, file));
 	}
 
 	//내 프로필 조회
 	@GetMapping("/profile")
 	public ResponseEntity<ApiResponse> getMyProfile(@AuthenticationPrincipal
 	User user) {
-		return ResponseEntity.ok(userService.getMyProfile(user));
+		return ResponseEntity.ok(profileService.getMyProfile(user));
 	}
 
 	//상대 유저 프로필 조회
 	@GetMapping("/profile/{userId}")
 	public ResponseEntity<ApiResponse> getOtherProfile(@PathVariable Long userId) {
-		return ResponseEntity.ok(userService.getOtherProfile(userId));
+		return ResponseEntity.ok(profileService.getOtherProfile(userId));
 	}
 
 	//index페이지에서 로그인한 유저인지 확인

@@ -21,6 +21,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.example.party.global.util.JwtProvider;
+import com.example.party.redis.RedisService;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
@@ -28,20 +29,19 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class JwtVerificationFilter extends OncePerRequestFilter {
 	private final UserDetailsService userDetailsService;
-	private final RedisTemplate<String, String> redisTemplate;
+	private final RedisService redisService;
 
 	@Override // 로그인시 referer 사용 고려
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
 		FilterChain filterChain) throws ServletException, IOException {
-		ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
 
 		JwtProvider.resolveToken(request)
 			.ifPresent((token) -> {
 				try {
 
 					JwtProvider.validationToken(token);
-					Long id = JwtProvider.getUserIdFromToken(token);
-					if (valueOperations.get("rTKey" + id) == null) {
+					Long userId = JwtProvider.getUserIdFromToken(token);
+					if (redisService.existsRefreshToken(userId)) {
 						JwtProvider.processExpire(token);
 						throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다.");
 					}
@@ -50,27 +50,24 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
 
 				} catch (ExpiredJwtException eje) {
 					Arrays.stream(request.getCookies())
-						.filter(cookie -> Objects.equals(cookie.getName(), "rfToken"))
+						.filter(cookie -> Objects.equals(cookie.getName(), RedisService.RT_TOKEN))
 						.findFirst()
 						.ifPresent(cookie -> {
 							String refreshToken = cookie.getValue();
-							Long id = JwtProvider.getUserIdFromToken(refreshToken);
-							String savedRefreshToken = valueOperations.get("rTKey" + id);
+							Long userId = JwtProvider.getUserIdFromToken(refreshToken);
 
-							if (!refreshToken.equals(savedRefreshToken) || JwtProvider.validateExpire(
-								savedRefreshToken)) { // 앞조건 더 생각해볼 것
-								redisTemplate.delete("rTKey" + id);
-								throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다.", eje);
-							}
+							redisService.getRefreshToken(userId)
+								.ifPresent(savedRefreshToken -> {
+									if (!refreshToken.equals(savedRefreshToken) || JwtProvider.validateExpire(
+										savedRefreshToken)) {
+										redisService.deleteRefreshToken(userId);
+										throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "유효하지 않은 토큰입니다.", eje);
+									}
+								});
 
 							String email = JwtProvider.getEmailFromToken(refreshToken);
-							String newAccessToken = JwtProvider.accessToken(email, id);
-							response.setHeader(JwtProvider.AUTHORIZATION_HEADER, "Bearer " + newAccessToken);
-							System.out.println("==============");
-							System.out.println("새로운 토큰 발행");
-							System.out.println("기존 토큰 " + token);
-							System.out.println("새로운 토큰 " + newAccessToken);
-							System.out.println("==============");
+							String newAccessToken = JwtProvider.accessToken(email, userId);
+							response.setHeader(JwtProvider.AUTHORIZATION_HEADER, JwtProvider.BEARER_PREFIX + newAccessToken);
 							setAuthentication(email);
 						});
 				}

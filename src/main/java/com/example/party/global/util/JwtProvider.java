@@ -22,10 +22,10 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class JwtProvider {
 	public static final String AUTHORIZATION_HEADER = "Authorization";
-	public static final String BEARER_PREFIX = "Bearer";
+	public static final String BEARER_PREFIX = "Bearer ";
 	private static final Key KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256); // 임시로 작성해놓았습니다. 의견주시면 감사하겠습니다.
-	private static final int expire = 1000;//30분
-	private static final Long refreshExpire = 7 * 24 * 60 * 60 * 1000L; //1주일
+	public static final Long expire = 60 * 30 * 1000L;//30분
+	public static final Long refreshExpire = 7 * 24 * 60 * 60 * 1000L; //1주일
 
 	public static String accessToken(String email, Long userId) {
 		Date curDate = new Date();
@@ -41,6 +41,22 @@ public class JwtProvider {
 			.setExpiration(expireDate)
 			.signWith(KEY)
 			.compact();
+	}
+
+	public static String generateToken(String email, Long userId, Long expire) {
+		Date curDate = new Date();
+		Date expireDate = new Date(curDate.getTime() + expire);
+		HashMap<String, Object> header = new HashMap<>();
+		header.put("typ", "JWT");
+		header.put("alg", "HS256");
+		return Jwts.builder()
+				.setHeader(header)
+				.setSubject(email)
+				.claim("id", userId)
+				.setIssuedAt(curDate)
+				.setExpiration(expireDate)
+				.signWith(KEY)
+				.compact();
 	}
 
 	public static String refreshToken(String email, Long userId) {
@@ -63,7 +79,7 @@ public class JwtProvider {
 		String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
 
 		if (bearerToken != null && bearerToken.startsWith(BEARER_PREFIX)) {
-			return Optional.of(bearerToken.substring(6));
+			return Optional.of(bearerToken.substring(7));
 		}
 
 		return Optional.empty();

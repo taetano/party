@@ -6,4 +6,9 @@ public enum Status {
 	NO_SHOW_REPORTING, //노쇼체크가 가능기간 = ( 마감시간 ~ 모임시간 + 1시간 )
 	PROCESSING, //노쇼체크 결산
 	END //종료 [1](인원이 차지 않은경우) & 종료 [2](모임의 노쇼체크완료된)
+	;
+
+	public boolean isFinding() {
+		return this == FINDING;
+	}
 }

@@ -79,26 +79,10 @@ public class User extends TimeStamped implements UserDetails {
 	)
 	private Set<PartyPost> likePartyPosts;
 
-	public String getProfileImg() {
-		return this.profile.getProfileImg();
-	}
-
-	public String getComment() {
-		return this.profile.getComment();
-	}
-
-	public int getNoShowCnt() {
-		return this.profile.getNoShowCnt();
-	}
-
-	public int getParticipationCnt() {
-		return this.profile.getParticipationCnt();
-	}
-
 	//일반생성자
-	public User(SignupRequest signupRequest, String password) {
+	public User(SignupRequest signupRequest, String encodedPassword) {
 		this.email = signupRequest.getEmail();
-		this.password = password;
+		this.password = encodedPassword;
 		this.nickname = signupRequest.getNickname();
 		this.role = UserRole.ROLE_USER;
 		this.status = Status.ACTIVE;
@@ -116,6 +100,26 @@ public class User extends TimeStamped implements UserDetails {
 		this.profile = new Profile();
 	}
 
+    public static User createUser(SignupRequest signupRequest, String encodedPassword) {
+		return new User(signupRequest, encodedPassword);
+    }
+
+    public String getProfileImg() {
+		return this.profile.getProfileImg();
+	}
+
+	public String getComment() {
+		return this.profile.getComment();
+	}
+
+	public int getNoShowCnt() {
+		return this.profile.getNoShowCnt();
+	}
+
+	public int getParticipationCnt() {
+		return this.profile.getParticipationCnt();
+	}
+
 	//카카오 유저id 업데이트
 	public User kakaoIdUpdate(Long kakaoId) {
 		this.kakaoId = kakaoId;
@@ -126,10 +130,6 @@ public class User extends TimeStamped implements UserDetails {
 		this.role = UserRole.ROLE_ADMIN;
 	}
 
-	public void DormantState() {
-		this.status = Status.DORMANT;
-	}
-
 	public void setSuspended() {
 		this.status = Status.SUSPENDED;
 	}
@@ -137,6 +137,7 @@ public class User extends TimeStamped implements UserDetails {
 	public void setActive() {
 		this.status = Status.ACTIVE;
 	}
+	public void setDormant() {this.status = status.getDormant();}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -201,5 +202,9 @@ public class User extends TimeStamped implements UserDetails {
 		User user = (User)o;
 
 		return id.equals(user.id);
+	}
+
+	public boolean isDormant() {
+		return this.status.isDormant();
 	}
 }

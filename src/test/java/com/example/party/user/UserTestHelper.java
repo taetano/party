@@ -1,6 +1,6 @@
 package com.example.party.user;
 
-import com.example.party.user.dto.LoginRequest;
+import com.example.party.user.dto.LoginCommand;
 import com.example.party.user.dto.ProfileRequest;
 import com.example.party.user.dto.SignupRequest;
 import com.example.party.user.dto.WithdrawRequest;
@@ -14,8 +14,8 @@ public class UserTestHelper {
 		);
 	}
 
-	public static LoginRequest loginRequest() {
-		return new LoginRequest(
+	public static LoginCommand loginRequest() {
+		return new LoginCommand(
 			"test@eamil.com",
 			"password1!"
 		);

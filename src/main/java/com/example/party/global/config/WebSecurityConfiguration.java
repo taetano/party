@@ -3,6 +3,8 @@ package com.example.party.global.config;
 import com.example.party.global.security.JwtAccessDeniedHandler;
 import com.example.party.global.security.JwtEntryPoint;
 import com.example.party.global.security.JwtVerificationFilter;
+import com.example.party.redis.RedisService;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +27,7 @@ public class WebSecurityConfiguration {
 	public static final String[] URL_ROLE_USER_ADMIN = "/api/restriction/**,/api/users/**,/api/party-posts/**,/api/rooms,chatting".split(
 		",");
 	private final UserDetailsService userDetailsService;
-	private final RedisTemplate<String, String> redisTemplate;
+	private final RedisService redisService;
 
 	@Bean
 	public JwtEntryPoint entryPoint() {
@@ -39,7 +41,7 @@ public class WebSecurityConfiguration {
 
 	@Bean
 	public JwtVerificationFilter jwtVerificationFilter() {
-		return new JwtVerificationFilter(userDetailsService, redisTemplate);
+		return new JwtVerificationFilter(userDetailsService, redisService);
 	}
 
 	@Bean

@@ -8,9 +8,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
 
-import org.hamcrest.core.IsNull;
+import com.example.party.user.service.AccountService;
+import com.example.party.user.service.ProfileService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -20,22 +20,18 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.multipart.MultipartFile;
 
+import com.example.party.JwtToken;
 import com.example.party.TestHelper;
 import com.example.party.global.common.ApiResponse;
-import com.example.party.partypost.PartyPostTestHelper;
 import com.example.party.user.UserTestHelper;
-import com.example.party.user.dto.LoginRequest;
-import com.example.party.user.dto.ProfileRequest;
+import com.example.party.user.dto.LoginCommand;
 import com.example.party.user.dto.SignupRequest;
 import com.example.party.user.dto.WithdrawRequest;
 import com.example.party.user.entity.User;
 import com.example.party.user.service.KakaoService;
-import com.example.party.user.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @ActiveProfiles("test")
@@ -46,7 +42,9 @@ class UserControllerTest {
 	@MockBean
 	private KakaoService kakaoService;
 	@MockBean
-	private UserService userService;
+	private AccountService accountService;
+	@MockBean
+	private ProfileService profileService;
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -66,7 +64,7 @@ class UserControllerTest {
 		//  given
 
 		//  when
-		when(userService.signUp(any(SignupRequest.class)))
+		when(accountService.signUp(any(SignupRequest.class)))
 			.thenReturn(ApiResponse.ok("회원가입 완료"));
 
 		mockMvc.perform(post(uri("/signup"))
@@ -79,16 +77,16 @@ class UserControllerTest {
 			.andExpect(jsonPath("$.code").value(200))
 			.andExpect(jsonPath("$.msg").isString());
 		//  then
-		verify(userService).signUp(any(SignupRequest.class));
+		verify(accountService).signUp(any(SignupRequest.class));
 	}
 
 	@Test
 	void signIn() throws Exception {
 		//  given
-
+		JwtToken jwtToken = mock(JwtToken.class);
 		//  when
-		when(userService.signIn(any(LoginRequest.class)))
-			.thenReturn("accessToken,refreshToken");
+		when(accountService.login(any(LoginCommand.class)))
+			.thenReturn(jwtToken);
 
 		mockMvc.perform(post(uri("/signin"))
 				.contentType(MediaType.APPLICATION_JSON)
@@ -102,7 +100,7 @@ class UserControllerTest {
 			.andExpect(header().string(AUTHORIZATION_HEADER, "Bearer accessToken"))
 			.andExpect(header().exists("Set-Cookie"));
 		//  then
-		verify(userService).signIn(any(LoginRequest.class));
+		verify(accountService).login(any(LoginCommand.class));
 	}
 
 	@Test
@@ -110,7 +108,7 @@ class UserControllerTest {
 		//  given
 		TestHelper.withoutSecurity();
 		//  when
-		when(userService.signOut(any(User.class)))
+		when(accountService.logout(anyLong()))
 			.thenReturn(ApiResponse.ok("로그아웃 완료"));
 
 		mockMvc.perform(post(uri("/signout"))
@@ -119,7 +117,7 @@ class UserControllerTest {
 			.andExpect(cookie().value("rfToken", ""))
 			.andExpect(cookie().value(AUTHORIZATION_HEADER, "Bearer"));
 		//  then
-		verify(userService).signOut(any(User.class));
+		verify(accountService).logout(anyLong());
 	}
 
 	@Test
@@ -127,7 +125,7 @@ class UserControllerTest {
 		//  given
 		TestHelper.withoutSecurity();
 		//  when
-		when(userService.withdraw(any(User.class), any(WithdrawRequest.class)))
+		when(accountService.withdraw(anyLong()))
 			.thenReturn(ApiResponse.ok("회원탈퇴 완료"));
 
 		mockMvc.perform(post(uri("/withdraw"))
@@ -140,7 +138,7 @@ class UserControllerTest {
 			.andExpect(jsonPath("$.code").value(200))
 			.andExpect(jsonPath("$.msg").isString());
 		//  then
-		verify(userService).withdraw(any(User.class), any(WithdrawRequest.class));
+		verify(accountService).withdraw(anyLong());
 	}
 
 	// @Test
@@ -173,7 +171,7 @@ class UserControllerTest {
 		//  given
 		TestHelper.withoutSecurity();
 		//  when
-		when(userService.getMyProfile(any(User.class)))
+		when(profileService.getMyProfile(any(User.class)))
 			.thenReturn(ApiResponse.ok("내 프로필 조회"));
 
 		mockMvc.perform(get(uri("/profile"))
@@ -182,7 +180,7 @@ class UserControllerTest {
 			.andExpect(jsonPath("$.code").value(200))
 			.andExpect(jsonPath("$.msg").isString());
 		//  then
-		verify(userService).getMyProfile(any(User.class));
+		verify(profileService).getMyProfile(any(User.class));
 	}
 
 	@Test
@@ -190,7 +188,7 @@ class UserControllerTest {
 		//  given
 
 		//  when
-		when(userService.getOtherProfile(anyLong()))
+		when(profileService.getOtherProfile(anyLong()))
 			.thenReturn(ApiResponse.ok("타 프로필 조회"));
 
 		mockMvc.perform(get(uri("/profile/995"))
@@ -199,7 +197,7 @@ class UserControllerTest {
 			.andExpect(jsonPath("$.code").value(200))
 			.andExpect(jsonPath("$.msg").isString());
 		//  then
-		verify(userService).getOtherProfile(anyLong());
+		verify(profileService).getOtherProfile(anyLong());
 	}
 
 	@Test
