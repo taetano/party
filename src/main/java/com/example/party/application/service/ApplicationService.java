@@ -10,7 +10,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.party.application.dto.AcceptApplicationCommand;
 import com.example.party.application.dto.ApplicationResponse;
+import com.example.party.application.dto.CancelApplicationCommand;
+import com.example.party.application.dto.CreateApplicationCommand;
+import com.example.party.application.dto.GetApplicationCommand;
+import com.example.party.application.dto.RejectApplicationCommand;
 import com.example.party.application.entity.Application;
 import com.example.party.application.exception.ApplicationNotFoundException;
 import com.example.party.application.repository.ApplicationRepository;
@@ -21,6 +26,7 @@ import com.example.party.partypost.entity.PartyPost;
 import com.example.party.partypost.exception.PartyPostNotFoundException;
 import com.example.party.partypost.repository.PartyPostRepository;
 import com.example.party.user.entity.User;
+import com.example.party.user.exception.UserNotFoundException;
 import com.example.party.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -37,36 +43,28 @@ public class ApplicationService implements IApplicationService {
 
 	//모집글에 참가 신청
 	@Override
-	public ApiResponse createApplication(Long partyPostId, User user) {
-		//0. 받아온 user 를 영속성 컨텍스트에 저장
-		User user1 = userRepository.save(user);
+	public ApiResponse createApplication(CreateApplicationCommand command) {
+		User user = userRepository.findById(command.getUserId())
+			.orElseThrow(UserNotFoundException::new);
 
-		//1. partyPost 불러오기
-		PartyPost partyPost = partyPostRepository.findById(partyPostId).orElseThrow(
-			PartyPostNotFoundException::new
-		);
-		//2. Application 이 작성 가능한지 검증
-		applicationValidator.validationApplicationBeforeCreation(partyPost, user1);
-		//3. Application 객체 생성
-		Application application = new Application(user1, partyPost);
+		PartyPost partyPost = partyPostRepository.findById(command.getPartyPostId())
+			.orElseThrow(PartyPostNotFoundException::new);
 
-		//4. repository 에 save
+		applicationValidator.validationApplicationBeforeCreation(partyPost, user);
+
+		Application application = new Application(user, partyPost);
+
 		applicationRepository.save(application);
 
-		//5. 각 객체의 List 에 Application 저장
-		partyPost.addApplication(application);
-		user1.addApplication(application);
-
-		//6.  DataResponseDto 생성 후 return
 		return ApiResponse.ok("참가 신청 완료");
 	}
 
 	//참가신청 취소
 	@Override
-	public ApiResponse cancelApplication(Long applicationId, User user) {
-		Application application = getApplication(applicationId);
+	public ApiResponse cancelApplication(CancelApplicationCommand command) {
+		Application application = getApplication(command.getApplicationId());
 
-		if (!application.isWrittenByMe(user.getId())) {
+		if (!application.isWrittenByMe(command.getUserId())) {
 			throw new ForbiddenException();
 		}
 		application.cancel();
@@ -77,20 +75,19 @@ public class ApplicationService implements IApplicationService {
 	//모집글의 참가신청 목록 조회(파티장만 조회가능)
 	@Transactional(readOnly = true)
 	@Override
-	public DataApiResponse<ApplicationResponse> getApplications(Long partPostId, User user) {
-		PartyPost partyPost = partyPostRepository.findById(partPostId)
+	public DataApiResponse<ApplicationResponse> getApplications(GetApplicationCommand command) {
+		PartyPost partyPost = partyPostRepository.findById(command.getPartyPostId())
 			.orElseThrow(PartyPostNotFoundException::new);
 
-		if (!partyPost.isWrittenByMe(user.getId())) {
+		if (!partyPost.isWrittenByMe(command.getUserId())) {
 			throw new ForbiddenException();
 		}
 
-		Pageable pageable = PageRequest.of(0, 10, Sort.by("createdAt").descending());
 		Page<Application> applications = applicationRepository.findAllByPartyPostAndCancelIsFalse(
 			partyPost,
-			pageable);
+			command.getPageable());
 
-		if (applications.getContent().size() == 0) {
+		if (applications.getContent().size() == 0) { // 제거 대상
 			return DataApiResponse.ok("참가신청자 목록 조회 완료", Collections.emptyList());
 		}
 
@@ -100,10 +97,10 @@ public class ApplicationService implements IApplicationService {
 
 	//(파티장) 참가신청 수락
 	@Override
-	public ApiResponse acceptApplication(Long applicationId, User user) {
-		Application application = getApplication(applicationId);
+	public ApiResponse acceptApplication(AcceptApplicationCommand command) {
+		Application application = getApplication(command.getApplicationId());
 
-		if (!application.isSendToMe(user.getId())) {
+		if (!application.isSendByMe(command.getUserId())) {
 			throw new ForbiddenException();
 		}
 
@@ -114,10 +111,10 @@ public class ApplicationService implements IApplicationService {
 
 	//(파티장) 참가신청 거부
 	@Override
-	public ApiResponse rejectApplication(Long applicationId, User user) {
-		Application application = getApplication(applicationId);
+	public ApiResponse rejectApplication(RejectApplicationCommand command) {
+		Application application = getApplication(command.getApplicationId());
 
-		if (!application.isSendToMe(user.getId())) {
+		if (!application.isSendByMe(command.getUserId())) {
 			throw new ForbiddenException();
 		}
 

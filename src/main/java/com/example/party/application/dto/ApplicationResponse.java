@@ -20,10 +20,10 @@ public class ApplicationResponse {
 
 	public ApplicationResponse(Application application) {
 		this.id = application.getId();
-		this.userId = application.getUser().getId();
-		this.nickname = application.getNickname();
-		this.profileImg = application.getProfileImg();
-		this.noShowCnt = application.getNoShowCnt();
+		this.userId = application.getWriterId();
+		this.nickname = application.getWriterName();
+		this.profileImg = application.getWriterProfileImg();
+		this.noShowCnt = application.getWriterNoShowCnt();
 		this.createdAt = application.getCreatedAt();
 		this.status = changeApplicationStatusToKorean(application.getStatus());
 		this.cancel = application.isCancel();

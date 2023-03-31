@@ -53,6 +53,8 @@ public class Application extends TimeStamped {
 		this.status = ApplicationStatus.PENDING;
 		this.user = user;
 		this.partyPost = partyPost;
+		this.user.addApplication(this);
+		this.partyPost.addApplication(this);
 	}
 
 	public boolean isWrittenByMe(Long userId) {
@@ -62,34 +64,37 @@ public class Application extends TimeStamped {
 	public void cancel() {
 		this.cancel = true;
 	}
+	public Long getWriterId() {
+		return this.user.getId();
+	}
 
-	public String getNickname() {
+	public String getWriterName() {
 		return this.user.getNickname();
 	}
 
-	public String getProfileImg() {
+	public String getWriterProfileImg() {
 		return this.user.getProfileImg();
 	}
 
-	public int getNoShowCnt() {
+	public int getWriterNoShowCnt() {
 		return this.user.getNoShowCnt();
 	}
 
-	public boolean isSendToMe(Long userId) {
-		return Objects.equals(this.partyPost.getUser().getId(), userId);
+	public boolean isSendByMe(Long userId) {
+		return Objects.equals(this.partyPost.getWriterId(), userId);
 	}
 
 	public void accept() {
-		this.status = ApplicationStatus.ACCEPT;
+		this.status = ApplicationStatus.accept();
 		this.user.increaseParticipationCnt();
 		this.partyPost.increaseAcceptedCnt();
 	}
 
 	public void reject() {
-		this.status = ApplicationStatus.REJECT;
+		this.status = ApplicationStatus.reject();
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public boolean isPending() {
+		return this.status.isPending();
 	}
 }

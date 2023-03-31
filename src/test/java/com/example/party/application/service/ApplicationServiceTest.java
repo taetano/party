@@ -16,7 +16,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import com.example.party.application.dto.AcceptApplicationCommand;
 import com.example.party.application.dto.ApplicationResponse;
+import com.example.party.application.dto.CancelApplicationCommand;
+import com.example.party.application.dto.CreateApplicationCommand;
+import com.example.party.application.dto.GetApplicationCommand;
+import com.example.party.application.dto.RejectApplicationCommand;
 import com.example.party.application.entity.Application;
 import com.example.party.application.exception.ApplicationNotFoundException;
 import com.example.party.application.repository.ApplicationRepository;
@@ -64,7 +69,7 @@ class ApplicationServiceTest {
 		@DisplayName("모집글에 참가신청을 한다")
 		void createApplication() {
 			//  given
-
+			CreateApplicationCommand command = mock(CreateApplicationCommand.class);
 			//  when
 			when(userRepository.save(any(User.class))).thenReturn(user);
 			when(partyPostRepository.findById(anyLong())).thenReturn(Optional.of(partyPost));
@@ -72,7 +77,7 @@ class ApplicationServiceTest {
 				.validationApplicationBeforeCreation(any(PartyPost.class), any(User.class));
 			when(applicationRepository.save(any(Application.class))).thenReturn(application);
 
-			ApiResponse result = applicationService.createApplication(partyPost.getId(), user);
+			ApiResponse result = applicationService.createApplication(command);
 			//  then
 			verify(userRepository).save(any(User.class));
 			verify(partyPostRepository).findById(anyLong());
@@ -88,11 +93,12 @@ class ApplicationServiceTest {
 		@DisplayName("모집글에 지원한 참가신청을 취소 한다")
 		void cancelApplication() {
 			//  given
+			CancelApplicationCommand command = mock(CancelApplicationCommand.class);
 			//  when
 			when(applicationRepository.findById(anyLong())).thenReturn(Optional.of(application));
 			when(application.isWrittenByMe(anyLong())).thenReturn(true);
 
-			ApiResponse result = applicationService.cancelApplication(application.getId(), user);
+			ApiResponse result = applicationService.cancelApplication(command);
 
 			//  then
 			verify(applicationRepository).findById(anyLong());
@@ -107,15 +113,14 @@ class ApplicationServiceTest {
 		void getApplications() {
 			//  given
 			Page<Application> applications = mock(Page.class);
-
+			GetApplicationCommand command = mock(GetApplicationCommand.class);
 			//  when
 			when(partyPostRepository.findById(anyLong())).thenReturn(Optional.of(partyPost));
 			when(partyPost.isWrittenByMe(anyLong())).thenReturn(true);
 			when(applicationRepository.findAllByPartyPostAndCancelIsFalse(any(PartyPost.class), any(Pageable.class)))
 				.thenReturn(applications);
 
-			DataApiResponse<ApplicationResponse> result = applicationService.getApplications(partyPost.getId(),
-				user);
+			DataApiResponse<ApplicationResponse> result = applicationService.getApplications(command);
 
 			//  then
 			verify(partyPostRepository).findById(anyLong());
@@ -130,13 +135,13 @@ class ApplicationServiceTest {
 		@DisplayName("내가 작성한 모집글에 신청한 하나의 참가신청서를 참가수락한다")
 		void acceptApplication() {
 			//  given
-
+			AcceptApplicationCommand command = mock(AcceptApplicationCommand.class);
 			//  when
 			when(applicationRepository.findById(anyLong())).thenReturn(Optional.of(application));
-			when(application.isSendToMe(anyLong())).thenReturn(true);
+			when(application.isSendByMe(anyLong())).thenReturn(true);
 			doNothing().when(applicationValidator).validateApplicationStatus(any(Application.class));
 
-			ApiResponse result = applicationService.acceptApplication(application.getId(), user);
+			ApiResponse result = applicationService.acceptApplication(command);
 
 			//  then
 			verify(applicationRepository).findById(anyLong());
@@ -149,17 +154,17 @@ class ApplicationServiceTest {
 		@DisplayName("내가 작성한 모집글에 신청한 하나의 참가신청서를 참가거부한다")
 		void rejectApplication() {
 			//  given
-
+			RejectApplicationCommand command = mock(RejectApplicationCommand.class);
 			//  when
 			when(applicationRepository.findById(anyLong())).thenReturn(Optional.of(application));
-			when(application.isSendToMe(anyLong())).thenReturn(true);
+			when(application.isSendByMe(anyLong())).thenReturn(true);
 			doNothing().when(applicationValidator).validateApplicationStatus(any(Application.class));
 
-			ApiResponse result = applicationService.rejectApplication(application.getId(), user);
+			ApiResponse result = applicationService.rejectApplication(command);
 
 			//  then
 			verify(applicationRepository).findById(anyLong());
-			verify(application).isSendToMe(anyLong());
+			verify(application).isSendByMe(anyLong());
 			verify(application).reject();
 			assertThat(result.getCode()).isEqualTo(200);
 			assertThat(result.getMsg()).isEqualTo("참가 신청 거부 완료");
@@ -185,12 +190,12 @@ class ApplicationServiceTest {
 		@Test
 		void createApplication_PartyPostNotFoundException() {
 		//  given
-
+			CreateApplicationCommand command = mock(CreateApplicationCommand.class);
 		//  when
 			when(userRepository.save(any(User.class))).thenReturn(user);
 
 			var thrown = assertThatThrownBy(() ->
-				applicationService.createApplication(partyPost.getId(), user)
+				applicationService.createApplication(command)
 			);
 			//  then
 			verify(userRepository).save(any(User.class));
@@ -202,12 +207,13 @@ class ApplicationServiceTest {
 		@DisplayName("내가 신청하지 않은 신청서는 취소할 수 없다")
 		void cancelApplication_FORBIDDEN() {
 			//  given
+			CancelApplicationCommand command = mock(CancelApplicationCommand.class);
 			//  when
 			when(applicationRepository.findById(anyLong())).thenReturn(Optional.of(application));
 			when(application.isWrittenByMe(anyLong())).thenReturn(false);
 
 			var thrown = assertThatThrownBy(() -> {
-				applicationService.cancelApplication(application.getId(), user);
+				applicationService.cancelApplication(command);
 			});
 
 			//  then
@@ -219,10 +225,10 @@ class ApplicationServiceTest {
 		@Test
 		void getApplications_PartyPostNotFoundException() {
 			//  given
-
+			GetApplicationCommand command = mock(GetApplicationCommand.class);
 			//  when
 			var thrown = assertThatThrownBy(() -> {
-				applicationService.getApplications(partyPost.getId(), user);
+				applicationService.getApplications(command);
 			});
 
 			//  then
@@ -234,11 +240,12 @@ class ApplicationServiceTest {
 		@Test
 		void getApplications_FORBIDDEN() {
 			//  given
+			GetApplicationCommand command = mock(GetApplicationCommand.class);
 			//  when
 			when(partyPostRepository.findById(anyLong())).thenReturn(Optional.of(partyPost));
 
 			var thrown = assertThatThrownBy(() -> {
-				applicationService.getApplications(partyPost.getId(), user);
+				applicationService.getApplications(command);
 			});
 
 			//  then
@@ -251,28 +258,30 @@ class ApplicationServiceTest {
 		@Test
 		void acceptApplication_FORBIDDEN() {
 			//  given
+			AcceptApplicationCommand command = mock(AcceptApplicationCommand.class);
 			//  when
 			when(applicationRepository.findById(anyLong())).thenReturn(Optional.of(application));
 
 			var thrown = assertThatThrownBy(() -> {
-				applicationService.acceptApplication(partyPost.getId(), user);
+				applicationService.acceptApplication(command);
 			});
 
 			//  then
 			thrown.isInstanceOf(ForbiddenException.class)
 				.hasMessageContaining("허가되지 않은 요청입니다.");
 			verify(applicationRepository).findById(anyLong());
-			verify(application).isSendToMe(anyLong());
+			verify(application).isSendByMe(anyLong());
 		}
 
 		@Test
 		void rejectApplication_FORBIDDEN() {
 			//  given
+			RejectApplicationCommand command = mock(RejectApplicationCommand.class);
 			//  when
 			when(applicationRepository.findById(anyLong())).thenReturn(Optional.of(application));
 
 			var thrown = assertThatThrownBy(() -> {
-				applicationService.rejectApplication(application.getId(), user);
+				applicationService.rejectApplication(command);
 			});
 
 			//  then

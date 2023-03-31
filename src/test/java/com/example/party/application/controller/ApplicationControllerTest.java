@@ -27,6 +27,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import com.example.party.TestHelper;
+import com.example.party.application.dto.AcceptApplicationCommand;
+import com.example.party.application.dto.CancelApplicationCommand;
+import com.example.party.application.dto.CreateApplicationCommand;
+import com.example.party.application.dto.GetApplicationCommand;
+import com.example.party.application.dto.RejectApplicationCommand;
 import com.example.party.application.service.ApplicationService;
 import com.example.party.global.common.ApiResponse;
 import com.example.party.global.common.DataApiResponse;
@@ -62,14 +67,14 @@ class ApplicationControllerTest {
 			//  given
 
 			//  when
-			when(applicationService.createApplication(anyLong(), any(User.class)))
+			when(applicationService.createApplication(any(CreateApplicationCommand.class)))
 				.thenReturn(ApiResponse.ok("참가 신청 완료"));
 
 			mockMvc.perform(post(uri("/join/123")))
 				.andDo(print())
 				.andExpect(status().isOk());
 			//  then
-			verify(applicationService).createApplication(anyLong(), any(User.class));
+			verify(applicationService).createApplication(any(CreateApplicationCommand.class));
 		}
 
 		@DisplayName("나의 모임 참가 신청 취소하기")
@@ -78,14 +83,14 @@ class ApplicationControllerTest {
 			//  given
 
 			//  when
-			when(applicationService.cancelApplication(anyLong(), any(User.class)))
+			when(applicationService.cancelApplication(any(CancelApplicationCommand.class)))
 				.thenReturn(ApiResponse.ok("참가 신청 취소 완료"));
 
 			mockMvc.perform(post(uri("/cancel/999")))
 				.andDo(print())
 				.andExpect(status().isOk());
 			//  then
-			verify(applicationService).cancelApplication(anyLong(), any(User.class));
+			verify(applicationService).cancelApplication(any(CancelApplicationCommand.class));
 		}
 
 		@DisplayName("내가 주최한 모임의 지원한 사람의 목록을 가져온다.")
@@ -97,17 +102,17 @@ class ApplicationControllerTest {
 			mockMvc.perform(get("/api/applications/775"))
 				.andExpect(status().isOk());
 
-			when(applicationService.getApplications(anyLong(), any(User.class)))
+			when(applicationService.getApplications(any(GetApplicationCommand.class)))
 				.thenReturn(DataApiResponse.ok("참가신청자 목록 조회 완료", Collections.emptyList()));
 			//  then
-			verify(applicationService).getApplications(anyLong(), any(User.class));
+			verify(applicationService).getApplications(any(GetApplicationCommand.class));
 		}
 
 		@DisplayName("내가 주최한 모임의 지원자를 받아들인다.")
 		@Test
 		void acceptApplication() throws Exception {
 			//  given
-			given(applicationService.acceptApplication(anyLong(), any(User.class)))
+			given(applicationService.acceptApplication(any(AcceptApplicationCommand.class)))
 				.willReturn(ApiResponse.ok("테스트 성공"));
 
 			//  when
@@ -118,14 +123,14 @@ class ApplicationControllerTest {
 			actions.andDo(print())
 				.andExpect(status().isOk());
 
-			verify(applicationService).acceptApplication(anyLong(), any(User.class));
+			verify(applicationService).acceptApplication(any(AcceptApplicationCommand.class));
 		}
 
 		@DisplayName("내가 주최한 모임의 지원자를 거절한다.")
 		@Test
 		void rejectApplication() throws Exception {
 			//  given
-			given(applicationService.rejectApplication(anyLong(), any(User.class)))
+			given(applicationService.rejectApplication(any(RejectApplicationCommand.class)))
 				.willReturn(ApiResponse.ok("테스트 성공"));
 
 			//  when
@@ -136,7 +141,7 @@ class ApplicationControllerTest {
 			actions.andDo(print())
 				.andExpect(status().isOk());
 
-			verify(applicationService).rejectApplication(anyLong(), any(User.class));
+			verify(applicationService).rejectApplication(any(RejectApplicationCommand.class));
 		}
 	}
 
