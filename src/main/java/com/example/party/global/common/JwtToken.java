@@ -1,4 +1,4 @@
-package com.example.party;
+package com.example.party.global.common;
 
 import com.example.party.global.util.JwtProvider;
 import lombok.Getter;

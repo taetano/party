@@ -16,13 +16,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.example.party.JwtToken;
+import com.example.party.global.common.JwtToken;
 import com.example.party.global.common.ApiResponse;
 import com.example.party.user.dto.LoginCommand;
 import com.example.party.user.dto.SignupRequest;
 import com.example.party.user.entity.User;
 import com.example.party.user.exception.EmailOverlapException;
-import com.example.party.user.exception.ExistNicknameException;
 import com.example.party.user.repository.UserRepository;
 
 @ExtendWith(MockitoExtension.class)

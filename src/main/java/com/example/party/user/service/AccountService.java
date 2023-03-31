@@ -1,6 +1,6 @@
 package com.example.party.user.service;
 
-import com.example.party.JwtToken;
+import com.example.party.global.common.JwtToken;
 import com.example.party.global.common.ApiResponse;
 import com.example.party.global.exception.LoginException;
 import com.example.party.redis.RedisService;
