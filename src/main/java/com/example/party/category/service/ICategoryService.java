@@ -11,7 +11,7 @@ public interface ICategoryService {
 	ApiResponse createCategory(CategoryRequest request);
 
 	//카테고리 조회
-	DataApiResponse<CategoryResponse> getCategory();
+	DataApiResponse<CategoryResponse> getCategories();
 
 	//카테고리 수정
 	ApiResponse updateCategory(Long categoryId, CategoryRequest request);

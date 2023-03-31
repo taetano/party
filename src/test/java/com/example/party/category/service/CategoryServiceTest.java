@@ -26,7 +26,7 @@ import com.example.party.global.common.DataApiResponse;
 @ExtendWith(MockitoExtension.class)
 class CategoryServiceTest {
 	@Mock
-	private CategoryRepository categoryRepository;
+	private CategoryRepository jpaCategoryRepository;
 
 	@InjectMocks
 	private CategoryService categoryService;
@@ -45,12 +45,12 @@ class CategoryServiceTest {
 		//  given
 		//  when
 		when(categoryRequest.getName()).thenReturn("TEST");
-		when(categoryRepository.existsCategoryByName(anyString())).thenReturn(false);
+		when(jpaCategoryRepository.existsCategoryByName(anyString())).thenReturn(false);
 
 		ApiResponse result = categoryService.createCategory(categoryRequest);
 		//  then
-		verify(categoryRepository).existsCategoryByName(anyString());
-		verify(categoryRepository).save(any(Category.class));
+		verify(jpaCategoryRepository).existsCategoryByName(anyString());
+		verify(jpaCategoryRepository).save(any(Category.class));
 		assertThat(result.getCode()).isEqualTo(201);
 		assertThat(result.getMsg()).isEqualTo("카테고리 생성 완료");
 	}
@@ -59,11 +59,11 @@ class CategoryServiceTest {
 	void getCategory() {
 		//  given
 		//  when
-		when(categoryRepository.findAllByActiveIsTrue()).thenReturn(Collections.emptyList());
+		when(jpaCategoryRepository.findAllByActiveIsTrue()).thenReturn(Collections.emptyList());
 
-		DataApiResponse<CategoryResponse> result = categoryService.getCategory();
+		DataApiResponse<CategoryResponse> result = categoryService.getCategories();
 		//  then
-		verify(categoryRepository).findAllByActiveIsTrue();
+		verify(jpaCategoryRepository).findAllByActiveIsTrue();
 		assertThat(result.getCode()).isEqualTo(200);
 		assertThat(result.getMsg()).isEqualTo("카테고리 조회 완료");
 		assertThat(result.getData()).isEmpty();
@@ -73,14 +73,14 @@ class CategoryServiceTest {
 	void updateCategory() {
 		//  given
 		//  when
-		when(categoryRepository.findById(anyLong())).thenReturn(Optional.of(category));
+		when(jpaCategoryRepository.findById(anyLong())).thenReturn(Optional.of(category));
 		when(categoryRequest.getName()).thenReturn("TEST");
-		when(categoryRepository.existsCategoryByName(anyString())).thenReturn(false);
+		when(jpaCategoryRepository.existsCategoryByName(anyString())).thenReturn(false);
 
 		ApiResponse result = categoryService.updateCategory(category.getId(), categoryRequest);
 		//  then
-		verify(categoryRepository).findById(anyLong());
-		verify(categoryRepository).existsCategoryByName(anyString());
+		verify(jpaCategoryRepository).findById(anyLong());
+		verify(jpaCategoryRepository).existsCategoryByName(anyString());
 		verify(category).update(categoryRequest);
 		assertThat(result.getCode()).isEqualTo(200);
 		assertThat(result.getMsg()).isEqualTo("카테고리 수정 완료");
@@ -90,11 +90,11 @@ class CategoryServiceTest {
 	void deleteCategory() {
 		//  given
 		//  when
-		when(categoryRepository.findById(anyLong())).thenReturn(Optional.of(category));
+		when(jpaCategoryRepository.findById(anyLong())).thenReturn(Optional.of(category));
 
 		ApiResponse result = categoryService.deleteCategory(category.getId());
 		//  then
-		verify(categoryRepository).findById(anyLong());
+		verify(jpaCategoryRepository).findById(anyLong());
 		verify(category).deleteCategory();
 		assertThat(result.getCode()).isEqualTo(200);
 		assertThat(result.getMsg()).isEqualTo("카테고리 삭제 완료");
@@ -107,11 +107,11 @@ class CategoryServiceTest {
 		//  given
 		//  when
 		when(categoryRequest.getName()).thenReturn("TEST");
-		when(categoryRepository.existsCategoryByName(anyString())).thenReturn(true);
+		when(jpaCategoryRepository.existsCategoryByName(anyString())).thenReturn(true);
 		var thrown = assertThatThrownBy(
 			() -> categoryService.createCategory(categoryRequest));
 		//  then
-		verify(categoryRepository).existsCategoryByName(anyString());
+		verify(jpaCategoryRepository).existsCategoryByName(anyString());
 		thrown.isInstanceOf(DuplicateNameNotAllowException.class)
 			.hasMessageContaining(DuplicateNameNotAllowException.MSG);
 	}
@@ -121,14 +121,14 @@ class CategoryServiceTest {
 		//  given
 
 		//  when
-		when(categoryRepository.findById(anyLong())).thenReturn(Optional.of(category));
+		when(jpaCategoryRepository.findById(anyLong())).thenReturn(Optional.of(category));
 		when(categoryRequest.getName()).thenReturn("TEST");
-		when(categoryRepository.existsCategoryByName(anyString())).thenReturn(true);
+		when(jpaCategoryRepository.existsCategoryByName(anyString())).thenReturn(true);
 		var thrown = assertThatThrownBy(
 			() -> categoryService.updateCategory(category.getId(), categoryRequest));
 		//  then
-		verify(categoryRepository).findById(anyLong());
-		verify(categoryRepository).existsCategoryByName(anyString());
+		verify(jpaCategoryRepository).findById(anyLong());
+		verify(jpaCategoryRepository).existsCategoryByName(anyString());
 		thrown.isInstanceOf(DuplicateNameNotAllowException.class)
 			.hasMessageContaining(DuplicateNameNotAllowException.MSG);
 	}

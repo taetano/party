@@ -42,10 +42,13 @@ public class CategoryService implements ICategoryService {
 
 	//카테고리 전체 조회
 	@Override
-	public DataApiResponse<CategoryResponse> getCategory() {
+	public DataApiResponse<CategoryResponse> getCategories() {
 		List<Category> categoryList = categoryRepository.findAllByActiveIsTrue();
-		List<CategoryResponse> allCategoryList = categoryList.stream().map(
-			CategoryResponse::new).collect(Collectors.toList());
+
+		List<CategoryResponse> allCategoryList = categoryList.stream()
+			.map(CategoryResponse::new)
+			.collect(Collectors.toList());
+
 		return DataApiResponse.ok("카테고리 조회 완료", allCategoryList);
 	}
 
@@ -67,7 +70,7 @@ public class CategoryService implements ICategoryService {
 	@Override
 	public ApiResponse deleteCategory(Long categoryId) {
 		Category category = getCategory(categoryId);
-		category.deleteCategory();
+		category.deleteCategory(); // destroy
 		return ApiResponse.ok("카테고리 삭제 완료");
 	}
 

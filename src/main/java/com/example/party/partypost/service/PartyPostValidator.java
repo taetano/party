@@ -33,7 +33,7 @@ public class PartyPostValidator {
 		}
 
 		//3. 모집마감전인지 확인
-		if (!partyPost.beforeCloseDate(LocalDateTime.now())) {
+		if (!partyPost.beforeCloseDate()) {
 			throw new PartyPostNotDeletableException("모집마감시간이 지나면 모집글을 삭제할 수 없습니다");
 		}
 		//3. 참가신청한 모집자가 없는지 확인

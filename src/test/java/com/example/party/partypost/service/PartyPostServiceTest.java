@@ -25,7 +25,7 @@ import com.example.party.application.repository.ApplicationRepository;
 import com.example.party.category.entity.Category;
 import com.example.party.category.exception.CategoryNotActiveException;
 import com.example.party.category.exception.CategoryNotFoundException;
-import com.example.party.category.repository.CategoryRepository;
+import com.example.party.category.repository.JpaCategoryRepository;
 import com.example.party.global.common.ApiResponse;
 import com.example.party.global.common.DataApiResponse;
 import com.example.party.global.common.ItemApiResponse;
@@ -52,7 +52,7 @@ class PartyPostServiceTest {
 	@Mock
 	private ApplicationRepository applicationRepository;
 	@Mock
-	private CategoryRepository categoryRepository;
+	private JpaCategoryRepository jpaCategoryRepository;
 	@Mock
 	private PartyPostValidator partyPostValidator;
 	@InjectMocks
@@ -85,7 +85,7 @@ class PartyPostServiceTest {
 		when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
 		when(partyPostRequest.getPartyDate()).thenReturn("2023-02-16 12:00"); // 오류 뜰까?
 		when(partyPostRequest.getCategoryId()).thenReturn(999L);
-		when(categoryRepository.findById(anyLong())).thenReturn(Optional.of(category));
+		when(jpaCategoryRepository.findById(anyLong())).thenReturn(Optional.of(category));
 		when(category.isActive()).thenReturn(true);
 		when(partyPostRequest.getPartyAddress()).thenReturn("서울 마포구 연남동 567-34");
 		when(partyPostRequest.getPartyPlace()).thenReturn("파델라");
@@ -93,7 +93,7 @@ class PartyPostServiceTest {
 
 		ApiResponse result = partyPostService.createPartyPost(user, partyPostRequest);
 		//  then
-		verify(categoryRepository).findById(anyLong());
+		verify(jpaCategoryRepository).findById(anyLong());
 		verify(category).isActive();
 		verify(partyPostRepository).save(any(PartyPost.class));
 		assertThat(result.getCode()).isEqualTo(201);
@@ -169,7 +169,7 @@ class PartyPostServiceTest {
 		//  given
 
 		//  when
-		when(categoryRepository.findById(anyLong())).thenReturn(Optional.of(category));
+		when(jpaCategoryRepository.findById(anyLong())).thenReturn(Optional.of(category));
 		when(category.isActive()).thenReturn(true);
 		when(partyPostRepository.findByCategoryIdAndActiveIsTrue(anyLong(), any(Pageable.class))).thenReturn(
 			Collections.emptyList());
@@ -178,7 +178,7 @@ class PartyPostServiceTest {
 		DataApiResponse<PartyPostListResponse> result = partyPostService.searchPartyPostByCategory(
 			user, 999L, 99);
 		//  then
-		verify(categoryRepository).findById(anyLong());
+		verify(jpaCategoryRepository).findById(anyLong());
 		verify(category).isActive();
 		verify(partyPostRepository).findByCategoryIdAndActiveIsTrue(anyLong(), any(Pageable.class));
 		verify(partyPostValidator).filteringPosts(any(User.class), anyList());
@@ -225,13 +225,13 @@ class PartyPostServiceTest {
 
 		//  when
 		when(partyPostRepository.findById(anyLong())).thenReturn(Optional.of(partyPost));
-		when(categoryRepository.findById(anyLong())).thenReturn(Optional.of(category));
+		when(jpaCategoryRepository.findById(anyLong())).thenReturn(Optional.of(category));
 		when(partyPost.isWrittenByMe(anyLong())).thenReturn(true);
 
 		ApiResponse result = partyPostService.updatePartyPost(partyPost.getId(), updatePartyPostRequest, user);
 		//  then
 		verify(partyPostRepository).findById(anyLong());
-		verify(categoryRepository).findById(anyLong());
+		verify(jpaCategoryRepository).findById(anyLong());
 		verify(partyPost).isWrittenByMe(anyLong());
 		verify(partyPost).update(any(UpdatePartyPostRequest.class), any(Category.class));
 		assertThat(result.getCode()).isEqualTo(200);
@@ -363,7 +363,7 @@ class PartyPostServiceTest {
 				() -> partyPostService.createPartyPost(user, partyPostRequest));
 			//  then
 			verify(userRepository).findById(anyLong());
-			verify(categoryRepository).findById(anyLong());
+			verify(jpaCategoryRepository).findById(anyLong());
 			thrown.isInstanceOf(CategoryNotFoundException.class)
 				.hasMessage(CategoryNotFoundException.MSG);
 		}
@@ -376,13 +376,13 @@ class PartyPostServiceTest {
 			when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
 			when(partyPostRequest.getPartyDate()).thenReturn("2023-02-16 12:00"); // 오류 뜰까?
 			when(partyPostRequest.getCategoryId()).thenReturn(999L);
-			when(categoryRepository.findById(anyLong())).thenReturn(Optional.of(category));
+			when(jpaCategoryRepository.findById(anyLong())).thenReturn(Optional.of(category));
 			when(category.isActive()).thenReturn(false);
 
 			var thrown = assertThatThrownBy(
 				() -> partyPostService.createPartyPost(user, partyPostRequest));
 			//  then
-			verify(categoryRepository).findById(anyLong());
+			verify(jpaCategoryRepository).findById(anyLong());
 			verify(category).isActive();
 			thrown.isInstanceOf(CategoryNotActiveException.class)
 				.hasMessage(CategoryNotActiveException.MSG);
@@ -409,7 +409,7 @@ class PartyPostServiceTest {
 			var thrown = assertThatThrownBy(
 				() -> partyPostService.searchPartyPostByCategory(user, category.getId(), 999));
 			//  then
-			verify(categoryRepository).findById(anyLong());
+			verify(jpaCategoryRepository).findById(anyLong());
 			thrown.isInstanceOf(CategoryNotFoundException.class)
 				.hasMessage(CategoryNotFoundException.MSG);
 		}
@@ -419,12 +419,12 @@ class PartyPostServiceTest {
 			//  given
 
 			//  when
-			when(categoryRepository.findById(anyLong())).thenReturn(Optional.of(category));
+			when(jpaCategoryRepository.findById(anyLong())).thenReturn(Optional.of(category));
 
 			var thrown = assertThatThrownBy(
 				() -> partyPostService.searchPartyPostByCategory(user, category.getId(), 999));
 			//  then
-			verify(categoryRepository).findById(anyLong());
+			verify(jpaCategoryRepository).findById(anyLong());
 			verify(category).isActive();
 			thrown.isInstanceOf(CategoryNotActiveException.class)
 				.hasMessage(CategoryNotActiveException.MSG);
@@ -455,7 +455,7 @@ class PartyPostServiceTest {
 				() -> partyPostService.updatePartyPost(partyPost.getId(), updatePartyPostRequest, user));
 			//  then
 			verify(partyPostRepository).findById(anyLong());
-			verify(categoryRepository).findById(anyLong());
+			verify(jpaCategoryRepository).findById(anyLong());
 			thrown.isInstanceOf(CategoryNotFoundException.class)
 				.hasMessage(CategoryNotFoundException.MSG);
 		}
@@ -466,13 +466,13 @@ class PartyPostServiceTest {
 
 			//  when
 			when(partyPostRepository.findById(anyLong())).thenReturn(Optional.of(partyPost));
-			when(categoryRepository.findById(anyLong())).thenReturn(Optional.of(category));
+			when(jpaCategoryRepository.findById(anyLong())).thenReturn(Optional.of(category));
 
 			var thrown = assertThatThrownBy(
 				() -> partyPostService.updatePartyPost(partyPost.getId(), updatePartyPostRequest, user));
 			//  then
 			verify(partyPostRepository).findById(anyLong());
-			verify(categoryRepository).findById(anyLong());
+			verify(jpaCategoryRepository).findById(anyLong());
 			verify(partyPost).isWrittenByMe(anyLong());
 			thrown.isInstanceOf(IsNotWritterException.class)
 				.hasMessage(IsNotWritterException.MSG);

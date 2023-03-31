@@ -24,7 +24,6 @@ public class PartyPostController {
 		@RequestBody PartyPostRequest request, @AuthenticationPrincipal User user) {
 		return ResponseEntity.ok(partyPostService.createPartyPost(user, request));
 	}
-
 	//모집글 수정
 	@PatchMapping("/{party-postId}")
 	public ResponseEntity<ApiResponse> updatePartyPost(

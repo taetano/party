@@ -3,13 +3,17 @@ package com.example.party.category.repository;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+
 import com.example.party.category.entity.Category;
 
-public interface CategoryRepository {
+public interface JpaCategoryRepository extends JpaRepository<Category, Long>, CategoryRepository{
+
+	//카테고리 조회
 	List<Category> findAllByActiveIsTrue();
 
 	Optional<Category> findById(Long Id);
 
 	boolean existsCategoryByName(String name);
-	Category save(Category category);
+
 }

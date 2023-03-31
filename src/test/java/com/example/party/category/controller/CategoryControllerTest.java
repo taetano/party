@@ -74,7 +74,7 @@ class CategoryControllerTest {
 		void getCategory() throws Exception {
 			//  given
 			//  when
-			when(categoryService.getCategory())
+			when(categoryService.getCategories())
 				.thenReturn(DataApiResponse.ok("카테고리 조회 완료", Collections.emptyList()));
 
 			mockMvc.perform(get(uri("")))
@@ -84,7 +84,7 @@ class CategoryControllerTest {
 				.andExpect(jsonPath("$.data").isArray());
 
 			//  then
-			verify(categoryService).getCategory();
+			verify(categoryService).getCategories();
 		}
 
 		@Test

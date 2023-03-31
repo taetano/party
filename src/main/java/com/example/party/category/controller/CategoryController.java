@@ -35,7 +35,7 @@ public class CategoryController {
 	//카테고리 조회
 	@GetMapping("")
 	public ResponseEntity<DataApiResponse<CategoryResponse>> getCategory() {
-		return ResponseEntity.ok(categoryService.getCategory());
+		return ResponseEntity.ok(categoryService.getCategories());
 	}
 
 	//카테고리 수정
