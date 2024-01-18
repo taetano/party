@@ -72,8 +72,11 @@ class ApplicationServiceTest {
 		void createApplication() {
 			//  given
 			CreateApplicationCommand command = mock(CreateApplicationCommand.class);
+			User mockedUser = mock(User.class);
 			//  when
-			when(userRepository.save(any(User.class))).thenReturn(user);
+			when(userRepository.findById(anyLong())).thenReturn(Optional.of(mockedUser));
+			when(command.getPartyPostId()).thenReturn(1L);
+			when(command.getUserId()).thenReturn(1L);
 			when(partyPostRepository.findById(anyLong())).thenReturn(Optional.of(partyPost));
 			doNothing().when(applicationValidator)
 				.validationApplicationBeforeCreation(any(PartyPost.class), any(User.class));
@@ -81,12 +84,10 @@ class ApplicationServiceTest {
 
 			ApiResponse result = applicationService.createApplication(command);
 			//  then
-			verify(userRepository).save(any(User.class));
 			verify(partyPostRepository).findById(anyLong());
 			verify(applicationValidator).validationApplicationBeforeCreation(any(PartyPost.class), any(User.class));
 			verify(applicationRepository).save(any(Application.class));
 			verify(partyPost).addApplication(any(Application.class));
-			verify(user).addApplication(any(Application.class));
 			assertThat(result.getCode()).isEqualTo(200);
 			assertThat(result.getMsg()).isEqualTo("참가 신청 완료");
 		}
@@ -114,12 +115,16 @@ class ApplicationServiceTest {
 		@DisplayName("내가 작성한 모집글에 신청한 참가신청서들을 조회 한다")
 		void getApplications() {
 			//  given
+			Pageable mockedPage = mock(Pageable.class);
 			Page<Application> applications = mock(Page.class);
 			GetApplicationCommand command = mock(GetApplicationCommand.class);
 			//  when
+			when(command.getUserId()).thenReturn(1L);
+			when(command.getPartyPostId()).thenReturn(1L);
+			when(command.getPageable()).thenReturn(mockedPage);
 			when(partyPostRepository.findById(anyLong())).thenReturn(Optional.of(partyPost));
 			when(partyPost.isWrittenByMe(anyLong())).thenReturn(true);
-			when(applicationRepository.findAllByPartyPostAndCancelIsFalse(any(PartyPost.class), any(Pageable.class)))
+			when(applicationRepository.findAllByPartyPostAndCancelIsFalse(partyPost, mockedPage))
 				.thenReturn(applications);
 
 			DataApiResponse<ApplicationResponse> result = applicationService.getApplications(command);
@@ -192,15 +197,16 @@ class ApplicationServiceTest {
 		@Test
 		void createApplication_PartyPostNotFoundException() {
 		//  given
+			User mockedUser = mock(User.class);
 			CreateApplicationCommand command = mock(CreateApplicationCommand.class);
+			when(userRepository.findById(anyLong())).thenReturn(Optional.of(mockedUser));
 		//  when
-			when(userRepository.save(any(User.class))).thenReturn(user);
 
 			var thrown = assertThatThrownBy(() ->
 				applicationService.createApplication(command)
 			);
 			//  then
-			verify(userRepository).save(any(User.class));
+			verify(partyPostRepository).findById(anyLong());
 			thrown.isInstanceOf(PartyPostNotFoundException.class)
 				.hasMessageContaining(PartyPostNotFoundException.MSG);
 		}

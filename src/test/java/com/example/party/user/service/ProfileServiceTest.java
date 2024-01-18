@@ -58,7 +58,7 @@ public class ProfileServiceTest {
         when(profileRequest.getProfileImg()).thenReturn("profileImg");
         when(profileRequest.getComment()).thenReturn("comment");
         doNothing().when(user).updateProfile(any(ProfileRequest.class));
-        when(file.isEmpty()).thenReturn(true);
+//        when(file.isEmpty()).thenReturn(true);
 
         ApiResponse result = profileService.updateProfile(user, profileRequest, file);
         //  then

@@ -87,6 +87,7 @@ class UserControllerTest {
 		//  when
 		when(accountService.login(any(LoginCommand.class)))
 			.thenReturn(jwtToken);
+		when(jwtToken.getAccessToken()).thenReturn("accessToken");
 
 		mockMvc.perform(post(uri("/signin"))
 				.contentType(MediaType.APPLICATION_JSON)
@@ -115,7 +116,7 @@ class UserControllerTest {
 			)
 			.andExpect(status().isOk())
 			.andExpect(cookie().value("rfToken", ""))
-			.andExpect(cookie().value(AUTHORIZATION_HEADER, "Bearer"));
+			.andExpect(cookie().value(AUTHORIZATION_HEADER, ""));
 		//  then
 		verify(accountService).logout(anyLong());
 	}
