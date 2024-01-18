@@ -5,6 +5,8 @@ import static org.mockito.BDDMockito.*;
 
 import java.util.Optional;
 
+import com.example.party.service.ApplicationService;
+import com.example.party.service.ApplicationValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -16,23 +18,23 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.example.party.application.dto.AcceptApplicationCommand;
-import com.example.party.application.dto.ApplicationResponse;
-import com.example.party.application.dto.CancelApplicationCommand;
-import com.example.party.application.dto.CreateApplicationCommand;
-import com.example.party.application.dto.GetApplicationCommand;
-import com.example.party.application.dto.RejectApplicationCommand;
-import com.example.party.application.entity.Application;
-import com.example.party.application.exception.ApplicationNotFoundException;
-import com.example.party.application.repository.ApplicationRepository;
-import com.example.party.global.common.ApiResponse;
-import com.example.party.global.common.DataApiResponse;
-import com.example.party.global.exception.ForbiddenException;
-import com.example.party.partypost.entity.PartyPost;
-import com.example.party.partypost.exception.PartyPostNotFoundException;
-import com.example.party.partypost.repository.PartyPostRepository;
-import com.example.party.user.entity.User;
-import com.example.party.user.repository.UserRepository;
+import com.example.party.dto.request.AcceptApplicationCommand;
+import com.example.party.dto.response.ApplicationResponse;
+import com.example.party.dto.request.CancelApplicationCommand;
+import com.example.party.dto.request.CreateApplicationCommand;
+import com.example.party.dto.request.GetApplicationCommand;
+import com.example.party.dto.request.RejectApplicationCommand;
+import com.example.party.entity.Application;
+import com.example.party.exception.ApplicationNotFoundException;
+import com.example.party.repository.ApplicationRepository;
+import com.example.party.common.ApiResponse;
+import com.example.party.common.DataApiResponse;
+import com.example.party.exception.ForbiddenException;
+import com.example.party.entity.PartyPost;
+import com.example.party.exception.PartyPostNotFoundException;
+import com.example.party.repository.PartyPostRepository;
+import com.example.party.entity.User;
+import com.example.party.repository.UserRepository;
 
 // TODO: 2023/02/26
 // 주최자와 신청참가자로 테스트 출력을 나누는게 좋을 듯.

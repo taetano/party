@@ -7,6 +7,7 @@ import static org.mockito.Mockito.*;
 import java.util.Collections;
 import java.util.Optional;
 
+import com.example.party.service.CategoryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,14 +15,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.example.party.category.dto.CategoryRequest;
-import com.example.party.category.dto.CategoryResponse;
-import com.example.party.category.entity.Category;
-import com.example.party.category.exception.CategoryNotFoundException;
-import com.example.party.category.exception.DuplicateNameNotAllowException;
-import com.example.party.category.repository.CategoryRepository;
-import com.example.party.global.common.ApiResponse;
-import com.example.party.global.common.DataApiResponse;
+import com.example.party.dto.request.CategoryRequest;
+import com.example.party.dto.response.CategoryResponse;
+import com.example.party.entity.Category;
+import com.example.party.exception.CategoryNotFoundException;
+import com.example.party.exception.DuplicateNameNotAllowException;
+import com.example.party.repository.CategoryRepository;
+import com.example.party.common.ApiResponse;
+import com.example.party.common.DataApiResponse;
 
 @ExtendWith(MockitoExtension.class)
 class CategoryServiceTest {

@@ -5,7 +5,7 @@ import static org.mockito.Mockito.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import com.example.party.user.entity.User;
+import com.example.party.entity.User;
 
 public class TestHelper {
 	public static void withoutSecurity() {

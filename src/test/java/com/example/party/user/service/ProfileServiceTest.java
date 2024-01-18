@@ -1,15 +1,12 @@
 package com.example.party.user.service;
 
-import com.example.party.global.common.ApiResponse;
-import com.example.party.user.dto.LoginCommand;
-import com.example.party.user.dto.ProfileRequest;
-import com.example.party.user.dto.SignupRequest;
-import com.example.party.user.entity.Profile;
-import com.example.party.user.entity.User;
-import com.example.party.user.exception.EmailOverlapException;
-import com.example.party.user.exception.ExistNicknameException;
-import com.example.party.user.repository.ProfileRepository;
-import com.example.party.user.repository.UserRepository;
+import com.example.party.common.ApiResponse;
+import com.example.party.dto.request.ProfileRequest;
+import com.example.party.entity.Profile;
+import com.example.party.entity.User;
+import com.example.party.repository.ProfileRepository;
+import com.example.party.repository.UserRepository;
+import com.example.party.service.ProfileService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,7 +14,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,7 +22,6 @@ import java.io.IOException;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)

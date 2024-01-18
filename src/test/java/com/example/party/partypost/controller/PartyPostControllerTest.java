@@ -1,16 +1,17 @@
 package com.example.party.partypost.controller;
 
 import com.example.party.TestHelper;
-import com.example.party.global.common.ApiResponse;
-import com.example.party.global.common.DataApiResponse;
-import com.example.party.global.common.ItemApiResponse;
+import com.example.party.controller.PartyPostController;
+import com.example.party.common.ApiResponse;
+import com.example.party.common.DataApiResponse;
+import com.example.party.common.ItemApiResponse;
 import com.example.party.partypost.PartyPostTestHelper;
-import com.example.party.partypost.dto.PartyPostRequest;
-import com.example.party.partypost.dto.PartyPostResponse;
-import com.example.party.partypost.dto.UpdatePartyPostRequest;
-import com.example.party.partypost.entity.PartyPost;
-import com.example.party.partypost.service.PartyPostService;
-import com.example.party.user.entity.User;
+import com.example.party.dto.request.PartyPostRequest;
+import com.example.party.dto.response.PartyPostResponse;
+import com.example.party.dto.request.UpdatePartyPostRequest;
+import com.example.party.entity.PartyPost;
+import com.example.party.service.PartyPostService;
+import com.example.party.entity.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;

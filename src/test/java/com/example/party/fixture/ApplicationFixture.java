@@ -5,7 +5,7 @@
 // import org.springframework.data.domain.Page;
 // import org.springframework.data.domain.PageImpl;
 //
-// import com.example.party.application.entity.Application;
+// import com.example.party.entity.Application;
 //
 // public class ApplicationFixture {
 // 	public static Application application1() {

@@ -9,6 +9,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collections;
 
+import com.example.party.controller.CategoryController;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -23,10 +24,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.example.party.category.dto.CategoryRequest;
-import com.example.party.category.service.CategoryService;
-import com.example.party.global.common.ApiResponse;
-import com.example.party.global.common.DataApiResponse;
+import com.example.party.dto.request.CategoryRequest;
+import com.example.party.service.CategoryService;
+import com.example.party.common.ApiResponse;
+import com.example.party.common.DataApiResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @ActiveProfiles("test")

@@ -1,9 +1,9 @@
 package com.example.party.user;
 
-import com.example.party.user.dto.LoginCommand;
-import com.example.party.user.dto.ProfileRequest;
-import com.example.party.user.dto.SignupRequest;
-import com.example.party.user.dto.WithdrawRequest;
+import com.example.party.dto.request.LoginCommand;
+import com.example.party.dto.request.ProfileRequest;
+import com.example.party.dto.request.SignupRequest;
+import com.example.party.dto.request.WithdrawRequest;
 
 public class UserTestHelper {
 	public static SignupRequest signupRequest() {

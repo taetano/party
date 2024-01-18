@@ -10,6 +10,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collections;
 
+import com.example.party.controller.ApplicationController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -27,15 +28,14 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import com.example.party.TestHelper;
-import com.example.party.application.dto.AcceptApplicationCommand;
-import com.example.party.application.dto.CancelApplicationCommand;
-import com.example.party.application.dto.CreateApplicationCommand;
-import com.example.party.application.dto.GetApplicationCommand;
-import com.example.party.application.dto.RejectApplicationCommand;
-import com.example.party.application.service.ApplicationService;
-import com.example.party.global.common.ApiResponse;
-import com.example.party.global.common.DataApiResponse;
-import com.example.party.user.entity.User;
+import com.example.party.dto.request.AcceptApplicationCommand;
+import com.example.party.dto.request.CancelApplicationCommand;
+import com.example.party.dto.request.CreateApplicationCommand;
+import com.example.party.dto.request.GetApplicationCommand;
+import com.example.party.dto.request.RejectApplicationCommand;
+import com.example.party.service.ApplicationService;
+import com.example.party.common.ApiResponse;
+import com.example.party.common.DataApiResponse;
 
 @ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)

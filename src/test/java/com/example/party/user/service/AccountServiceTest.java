@@ -8,6 +8,7 @@ import static org.mockito.Mockito.*;
 import java.util.Optional;
 
 import com.example.party.redis.RedisService;
+import com.example.party.service.AccountService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,13 +17,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.example.party.global.common.JwtToken;
-import com.example.party.global.common.ApiResponse;
-import com.example.party.user.dto.LoginCommand;
-import com.example.party.user.dto.SignupRequest;
-import com.example.party.user.entity.User;
-import com.example.party.user.exception.EmailOverlapException;
-import com.example.party.user.repository.UserRepository;
+import com.example.party.common.JwtToken;
+import com.example.party.common.ApiResponse;
+import com.example.party.dto.request.LoginCommand;
+import com.example.party.dto.request.SignupRequest;
+import com.example.party.entity.User;
+import com.example.party.exception.EmailOverlapException;
+import com.example.party.repository.UserRepository;
 
 @ExtendWith(MockitoExtension.class)
 class AccountServiceTest {

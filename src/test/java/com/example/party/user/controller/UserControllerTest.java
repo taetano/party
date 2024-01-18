@@ -1,6 +1,6 @@
 package com.example.party.user.controller;
 
-import static com.example.party.global.util.JwtProvider.*;
+import static com.example.party.util.JwtProvider.*;
 import static java.lang.String.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -9,8 +9,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import com.example.party.user.service.AccountService;
-import com.example.party.user.service.ProfileService;
+import com.example.party.controller.UserController;
+import com.example.party.service.AccountService;
+import com.example.party.service.ProfileService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -23,14 +24,14 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.example.party.global.common.JwtToken;
+import com.example.party.common.JwtToken;
 import com.example.party.TestHelper;
-import com.example.party.global.common.ApiResponse;
+import com.example.party.common.ApiResponse;
 import com.example.party.user.UserTestHelper;
-import com.example.party.user.dto.LoginCommand;
-import com.example.party.user.dto.SignupRequest;
-import com.example.party.user.entity.User;
-import com.example.party.user.service.KakaoService;
+import com.example.party.dto.request.LoginCommand;
+import com.example.party.dto.request.SignupRequest;
+import com.example.party.entity.User;
+import com.example.party.service.KakaoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @ActiveProfiles("test")

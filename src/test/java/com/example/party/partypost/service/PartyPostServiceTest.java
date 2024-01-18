@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import com.example.party.service.PartyPostService;
+import com.example.party.service.PartyPostValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -20,28 +22,28 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Pageable;
 
-import com.example.party.application.entity.Application;
-import com.example.party.application.repository.ApplicationRepository;
-import com.example.party.category.entity.Category;
-import com.example.party.category.exception.CategoryNotActiveException;
-import com.example.party.category.exception.CategoryNotFoundException;
-import com.example.party.category.repository.JpaCategoryRepository;
-import com.example.party.global.common.ApiResponse;
-import com.example.party.global.common.DataApiResponse;
-import com.example.party.global.common.ItemApiResponse;
-import com.example.party.partypost.dto.MyPartyPostListResponse;
-import com.example.party.partypost.dto.PartyPostListResponse;
-import com.example.party.partypost.dto.PartyPostRequest;
-import com.example.party.partypost.dto.PartyPostResponse;
-import com.example.party.partypost.dto.UpdatePartyPostRequest;
-import com.example.party.partypost.entity.PartyPost;
-import com.example.party.partypost.exception.IsNotWritterException;
-import com.example.party.partypost.exception.PartyPostNotFoundException;
-import com.example.party.partypost.repository.PartyPostRepository;
-import com.example.party.partypost.type.Status;
-import com.example.party.user.entity.Profile;
-import com.example.party.user.entity.User;
-import com.example.party.user.repository.UserRepository;
+import com.example.party.entity.Application;
+import com.example.party.repository.ApplicationRepository;
+import com.example.party.entity.Category;
+import com.example.party.exception.CategoryNotActiveException;
+import com.example.party.exception.CategoryNotFoundException;
+import com.example.party.repository.JpaCategoryRepository;
+import com.example.party.common.ApiResponse;
+import com.example.party.common.DataApiResponse;
+import com.example.party.common.ItemApiResponse;
+import com.example.party.dto.response.MyPartyPostListResponse;
+import com.example.party.dto.response.PartyPostListResponse;
+import com.example.party.dto.request.PartyPostRequest;
+import com.example.party.dto.response.PartyPostResponse;
+import com.example.party.dto.request.UpdatePartyPostRequest;
+import com.example.party.entity.PartyPost;
+import com.example.party.exception.IsNotWritterException;
+import com.example.party.exception.PartyPostNotFoundException;
+import com.example.party.repository.PartyPostRepository;
+import com.example.party.enums.PartyStatus;
+import com.example.party.entity.Profile;
+import com.example.party.entity.User;
+import com.example.party.repository.UserRepository;
 
 @ExtendWith(MockitoExtension.class)
 class PartyPostServiceTest {
@@ -132,7 +134,7 @@ class PartyPostServiceTest {
 		when(user.getId()).thenReturn(1L);
 		when(user.getProfile()).thenReturn(profile);
 		when(profile.getProfileImg()).thenReturn("testImg");
-		when(partyPost.getStatus()).thenReturn(Status.FINDING);
+		when(partyPost.getPartyStatus()).thenReturn(PartyStatus.FINDING);
 		when(partyPost.getPartyDate()).thenReturn(LocalDateTime.now());
 		when(partyPost.getCloseDate()).thenReturn(LocalDateTime.now());
 
@@ -264,7 +266,7 @@ class PartyPostServiceTest {
 			List.of(partyPost));
 		when(partyPost.getUser()).thenReturn(user);
 		when(user.getId()).thenReturn(1L);
-		when(partyPost.getStatus()).thenReturn(Status.FINDING);
+		when(partyPost.getPartyStatus()).thenReturn(PartyStatus.FINDING);
 		when(partyPost.getPartyDate()).thenReturn(LocalDateTime.now());
 		when(partyPost.getCloseDate()).thenReturn(LocalDateTime.now());
 
@@ -289,7 +291,7 @@ class PartyPostServiceTest {
 		when(user.getId()).thenReturn(1L);
 		when(application.getPartyPost()).thenReturn(partyPost);
 		when(partyPost.getApplications()).thenReturn(List.of(application));
-		when(partyPost.getStatus()).thenReturn(Status.FINDING);
+		when(partyPost.getPartyStatus()).thenReturn(PartyStatus.FINDING);
 		when(partyPost.getPartyDate()).thenReturn(LocalDateTime.now());
 		when(partyPost.getCloseDate()).thenReturn(LocalDateTime.now());
 
@@ -335,7 +337,7 @@ class PartyPostServiceTest {
 		when(user.getProfile()).thenReturn(profile);
 		when(profile.getProfileImg()).thenReturn("testImg");
 		when(user.getNickname()).thenReturn("nickname");
-		when(partyPost.getStatus()).thenReturn(Status.FINDING);
+		when(partyPost.getPartyStatus()).thenReturn(PartyStatus.FINDING);
 		when(partyPost.getPartyDate()).thenReturn(LocalDateTime.now());
 		when(partyPost.getCloseDate()).thenReturn(LocalDateTime.now());
 
