@@ -32,12 +32,16 @@ public class CategoryService implements ICategoryService {
 	public ApiResponse createCategory(CategoryRequest request) {
 		Category category = new Category(request);
 
-		if (categoryRepository.existsCategoryByName(category.getName())) {
+		if (isExistsCategoryByName(category.getName())) {
 			throw new DuplicateNameNotAllowException();
 		}
 
 		categoryRepository.save(category);
 		return ApiResponse.create("카테고리 생성 완료");
+	}
+
+	public boolean isExistsCategoryByName(String category) {
+		return categoryRepository.existsCategoryByName(category);
 	}
 
 	//카테고리 전체 조회
@@ -57,7 +61,7 @@ public class CategoryService implements ICategoryService {
 	public ApiResponse updateCategory(Long categoryId, CategoryRequest request) {
 		Category category = getCategory(categoryId);
 
-		if (categoryRepository.existsCategoryByName(request.getName())) {
+		if (isExistsCategoryByName(request.getName())) {
 			throw new DuplicateNameNotAllowException();
 		}
 
