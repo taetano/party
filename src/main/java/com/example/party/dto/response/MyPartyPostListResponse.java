@@ -33,7 +33,7 @@ public class MyPartyPostListResponse {
 		this.closeDate = partyPost.getCloseDate().format(DateTimeFormatter.ofPattern("yy/MM/dd(E) a hh:mm"));
 		this.address = partyPost.getAddress();
 		this.joinMember = partyPost.getApplications().stream()
-			.filter(application -> !application.getUser().getId().equals(userId))
+			.filter(application -> !application.isWrittenByMe(userId))
 			.map(ApplicationResponse::new).collect(Collectors.toList());
 	}
 

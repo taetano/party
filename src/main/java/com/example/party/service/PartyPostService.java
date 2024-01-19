@@ -31,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -225,7 +226,7 @@ public class PartyPostService implements IPartyPostService {
 
         //2. partyPost DTO의 LIST 생성
         List<MyPartyPostListResponse> myPartyPostDtoList = myPartyPostList.stream()
-                .filter(partyPost -> partyPost.getUser().getId().equals(user.getId()))
+                .filter(partyPost -> partyPost.isWrittenByMe(user.getId()))
                 .map(partyPost -> new MyPartyPostListResponse(partyPost,user.getId())).collect(Collectors.toList());
 
         //3. DataResponseDto 생성 후 return
@@ -243,7 +244,7 @@ public class PartyPostService implements IPartyPostService {
         //2. partyPost DTO의 LIST 생성
         List<MyPartyPostListResponse> myApplicationDtoList = myApplicationList.stream()
                 .map(Application::getPartyPost)
-                .filter(partyPost -> !partyPost.getUser().getId().equals(user.getId()))
+                .filter(partyPost -> !partyPost.isWrittenByMe(user.getId()))
                 .map(partyPost -> new MyPartyPostListResponse(partyPost, user.getId())).collect(Collectors.toList());
 
         //3. DataResponseDto 생성 후 return
@@ -270,11 +271,14 @@ public class PartyPostService implements IPartyPostService {
     //Repository 에 저장된 값을 가져오는게 아닐 때 pageable 적용법을 몰라 일단 패스함
     public DataApiResponse<PartyPostListResponse> getLikePartyPost(User user) {
         User userIf = userRepository.save(user);
+        List<PartyPostListResponse> partyPost = null;
+
         if (userIf.getLikePartyPosts().isEmpty()) {
-            throw new NotFoundException();
+            partyPost = Collections.emptyList();
+        } else {
+            partyPost = userIf.getLikePartyPosts().stream()
+                    .map(PartyPostListResponse::new).collect(Collectors.toList());
         }
-        List<PartyPostListResponse> partyPost = userIf.getLikePartyPosts().stream()
-                .map(PartyPostListResponse::new).collect(Collectors.toList());
         return DataApiResponse.ok("좋아요 게시글 조회 완료", partyPost);
     }
 
