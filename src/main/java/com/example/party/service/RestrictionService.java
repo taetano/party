@@ -84,10 +84,6 @@ public class RestrictionService {
         Pageable pageable = PageRequest.of(page, 10);
         List<Block> blocks = blockRepository.findAllByBlockerId(user.getId(), pageable);
 
-        if (blocks.size() == 0) {
-            throw new BadRequestException("차단한 유저가 없습니다");
-        }
-
         List<BlockResponse> blockResponse = blocks.stream().map(BlockResponse::new).collect(Collectors.toList());
         return DataApiResponse.ok("조회 성공", blockResponse);
     }
@@ -108,7 +104,9 @@ public class RestrictionService {
     public ApiResponse createReportPost(User user, ReportPostRequest request) {
         PartyPost partyPost = partyPostRepository.findByIdAndActiveIsTrue(request.getPostId())
                 .orElseThrow(PartyPostNotFoundException::new);
-        isMySelf(user, partyPost.getUser().getId());
+        if (partyPost.isWrittenByMe(user.getId())) {
+            throw new BadRequestException("본인 아이디입니다");
+        }
         // 이미 신고한 이력이 있는지 체크
         checkExistingData(user.getId(), null, partyPost.getId());
         ReportPost reportsPost = new ReportPost(user, request, partyPost);
