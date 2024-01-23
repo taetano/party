@@ -1,11 +1,11 @@
 package com.example.party.service;
 
 import com.example.party.dto.response.PartyPostListResponse;
-import com.example.party.entity.PartyPost;
-import com.example.party.exception.PartyPostNotDeletableException;
 import com.example.party.entity.Block;
-import com.example.party.repository.BlockRepository;
+import com.example.party.entity.PartyPost;
 import com.example.party.entity.User;
+import com.example.party.exception.PartyPostNotDeletableException;
+import com.example.party.repository.BlockRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,11 +17,11 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class PartyPostValidator {
-	private final BlockRepository blockRepository;
+    private final BlockRepository blockRepository;
 
-	//private 메소드
-	//삭제가능여부 확인
-	public void canDeletePartyPost(User user, PartyPost partyPost) {
+    //private 메소드
+    //삭제가능여부 확인
+    public void canDeletePartyPost(User user, PartyPost partyPost) {
 		//1. 작성자인지 확인
 		if (!partyPost.isWrittenByMe(user.getId())) {
 			throw new PartyPostNotDeletableException("작성자만 모집글을 삭제할 수 있습니다");
@@ -37,32 +37,31 @@ public class PartyPostValidator {
 		}
 		//3. 참가신청한 모집자가 없는지 확인
 		if (!partyPost.haveNoApplications()) {
-			if (!partyPost.isWrittenByMe(user.getId()))
-				throw new PartyPostNotDeletableException("참가신청자가 있는 경우 삭제할 수 없습니다");
+			throw new PartyPostNotDeletableException("참가신청자가 있는 경우 삭제할 수 없습니다");
 		}
 	}
 
-	//blockedList 검열
-	public List<PartyPostListResponse> filteringPosts(User user, List<PartyPost> partyPostList) {
-		List<Block> blockedList = blockRepository.findAllByBlockerId(user.getId());
-		Iterator<PartyPost> iterator = partyPostList.iterator();
-		List<PartyPost> partyPostList_temp = new ArrayList<>();
+        //blockedList 검열
+        public List<PartyPostListResponse> filteringPosts(User user, List<PartyPost> partyPostList){
+            List<Block> blockedList = blockRepository.findAllByBlockerId(user.getId());
+            Iterator<PartyPost> iterator = partyPostList.iterator();
+            List<PartyPost> partyPostList_temp = new ArrayList<>();
 
-		if (blockedList.size() > 0) {
-			while (iterator.hasNext()) {
-				PartyPost post = iterator.next();
-				for (Block block : blockedList) {
-					if (post.getUser().getId().equals(block.getBlocked().getId())) {
-						partyPostList_temp.add(post);
-						iterator.remove();
-					}
-				}
-			}
-			partyPostList.removeAll(partyPostList_temp);
-		} else {
-			return partyPostList.stream().map(PartyPostListResponse::new).collect(Collectors.toList());
-		}
-		return partyPostList.stream()
-				.map(PartyPostListResponse::new).collect(Collectors.toList());
-	}
-}
+            if (blockedList.size() > 0) {
+                while (iterator.hasNext()) {
+                    PartyPost post = iterator.next();
+                    for (Block block : blockedList) {
+                        if (post.getUser().getId().equals(block.getBlocked().getId())) {
+                            partyPostList_temp.add(post);
+                            iterator.remove();
+                        }
+                    }
+                }
+                partyPostList.removeAll(partyPostList_temp);
+            } else {
+                return partyPostList.stream().map(PartyPostListResponse::new).collect(Collectors.toList());
+            }
+            return partyPostList.stream()
+                    .map(PartyPostListResponse::new).collect(Collectors.toList());
+        }
+    }
